@@ -5,13 +5,13 @@ var getMenu = function (dataObject) {
 getMenu.prototype = {
     menu: '',
     MenuContent: function () {
-        console.log(this.menu);
-        $("#menus").html(this.menu);
+        var menuStyle = useGetAjax(configObject.menuProcess,this.menu);
+        $("#menus").html(menuStyle.menu);
         //return this.menu;
     }
 };
 $(function(){
-  var positionObject = {position:"3502"};
+  var positionObject = useGetAjax(configObject.getPosition);
   var menus = new getMenu(positionObject);
   menus.MenuContent();
 });
@@ -32,7 +32,7 @@ function useGetAjax(url, data){
        success: function(rs){
            //console.log(rs);
            if(rs.status){
-               result = rs.menu;
+               result = rs;
            }else{
                console.log(rs.msg);
            }
