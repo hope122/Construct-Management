@@ -1,7 +1,7 @@
 var configObject = {
-    "LoginUrl": "http://127.0.0.1:99/login",
+    "LoginUrl": "http://211.21.170.18:99/login",
     "processLoginUrl": "menter/setlogin",
-    "getmenu": "http://127.0.0.1:99/pageaction/getmenu",
+    "getmenu": "http://211.21.170.18:99/pageaction/getmenu",
     "menuProcess": "pageaction/menuprocess",
     "getPosition": "pageaction/acposition"
 };
