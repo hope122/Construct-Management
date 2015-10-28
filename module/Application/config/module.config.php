@@ -78,6 +78,20 @@ return array(
 					),
 				),
 			),
+            'Lang' => array(
+                'type'    => 'segment',
+                'options' => array(
+                    'route'    => '/lang[/:action]',
+                    'constraints' => array(
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
+                    ),
+                    'defaults' => array(
+                       'controller' => 'Application\Controller\Lang',
+                       'action'     => 'index',
+                    ),
+                ),
+            ),
         ),
     ),
     'service_manager' => array(
@@ -89,21 +103,12 @@ return array(
             'translator' => 'Zend\Mvc\Service\TranslatorServiceFactory',
         ),
     ),
-    'translator' => array(
-        'locale' => 'en_US',
-        'translation_file_patterns' => array(
-            array(
-                'type'     => 'gettext',
-                'base_dir' => __DIR__ . '/../language',
-                'pattern'  => '%s.mo',
-            ),
-        ),
-    ),
     'controllers' => array(
         'invokables' => array(
             'Application\Controller\Index' => 'Application\Controller\IndexController',
             'Application\Controller\Menter' => 'Application\Controller\MenterController',
             'Application\Controller\Pageaction' => 'Application\Controller\PageactionController',
+            'Application\Controller\Lang' => 'Application\Controller\LangController',
         ),
     ),
     'view_manager' => array(
