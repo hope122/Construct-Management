@@ -78,20 +78,6 @@ return array(
 					),
 				),
 			),
-            'Lang' => array(
-                'type'    => 'segment',
-                'options' => array(
-                    'route'    => '/lang[/:action]',
-                    'constraints' => array(
-                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'id'     => '[0-9]+',
-                    ),
-                    'defaults' => array(
-                       'controller' => 'Application\Controller\Lang',
-                       'action'     => 'index',
-                    ),
-                ),
-            ),
         ),
     ),
     'service_manager' => array(
@@ -108,7 +94,6 @@ return array(
             'Application\Controller\Index' => 'Application\Controller\IndexController',
             'Application\Controller\Menter' => 'Application\Controller\MenterController',
             'Application\Controller\Pageaction' => 'Application\Controller\PageactionController',
-            'Application\Controller\Lang' => 'Application\Controller\LangController',
         ),
     ),
     'view_manager' => array(

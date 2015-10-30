@@ -10,6 +10,7 @@ getMenu.prototype = {
         //return this.menu;
     }
 };
+
 $(function(){
   var positionObject = useGetAjax(configObject.getPosition);
   var menus = new getMenu(positionObject);
