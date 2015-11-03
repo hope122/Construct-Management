@@ -64,6 +64,62 @@ return array(
 					),
 				),
 			),
+            	'editorpage' => array(
+				'type'    => 'segment',
+				'options' => array(
+					'route'    => '/editorpage[/:action]',
+					'constraints' => array(
+						'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+						'id'     => '[0-9]+',
+					),
+					'defaults' => array(
+						'controller' => 'Application\Controller\Editorpage',
+						'action'     => 'index',
+					),
+				),
+			),
+            	'material' => array(
+				'type'    => 'segment',
+				'options' => array(
+					'route'    => '/material[/:action]',
+					'constraints' => array(
+						'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+						'id'     => '[0-9]+',
+					),
+					'defaults' => array(
+						'controller' => 'Application\Controller\material',
+						'action'     => 'index',
+					),
+				),
+			),
+            'qc' => array(
+				'type'    => 'segment',
+				'options' => array(
+					'route'    => '/qc[/:action]',
+					'constraints' => array(
+						'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+						'id'     => '[0-9]+',
+					),
+					'defaults' => array(
+						'controller' => 'Application\Controller\qc',
+						'action'     => 'index',
+					),
+				),
+			),
+			'typeunit' => array(
+				'type'    => 'segment',
+				'options' => array(
+					'route'    => '/typeunit',
+					'constraints' => array(
+						'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+						'id'     => '[0-9]+',
+					),
+					'defaults' => array(
+						'controller' => 'Application\Controller\Editorpage',
+						'action'     => 'typeunit',
+					),
+				),
+			),
 			'Pageaction' => array(
 				'type'    => 'segment',
 				'options' => array(
@@ -104,6 +160,10 @@ return array(
             'Application\Controller\Index' => 'Application\Controller\IndexController',
             'Application\Controller\Menter' => 'Application\Controller\MenterController',
             'Application\Controller\Pageaction' => 'Application\Controller\PageactionController',
+            'Application\Controller\Editorpage' => 'Application\Controller\EditorpageController',
+            'Application\Controller\Material' => 'Application\Controller\MaterialController',
+              'Application\Controller\QC' => 'Application\Controller\QCController'
+
         ),
     ),
     'view_manager' => array(
