@@ -31,6 +31,8 @@ class MenterController extends AbstractActionController
                         $position .= $content["position_uid"].',';
                     }
                     $position = substr($position,0,strlen($position)-1);
+                }else{
+                    $position = 0;
                 }
                 $_SESSION["uuid"] = $_POST["uuid"];
                 $_SESSION["userName"] = $_POST["name"];
