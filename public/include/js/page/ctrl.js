@@ -44,6 +44,18 @@ function logoutEven(){
 		}
 	});
 }
+
+function getPageContents(){
+    $.ajax({
+        url: 'menter/logout',
+        type:"POST",
+        async: false,
+        success: function(rs){
+            location.href = './';
+        }
+    });
+}
+
 var GetParameters = function () {
   // This function is anonymous, is executed immediately and 
   // the return value is assigned to QueryString!
