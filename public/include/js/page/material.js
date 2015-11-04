@@ -19,9 +19,11 @@ $(function(){
              $('#inp_prjuid').val(0);
         }
     });
+  
     $("#inp_supply").change(function() {
         var suid=$(this).val();
-         $.get(pageurl+'material/getprjuid',{ suid: suid},function(data){
+    
+        $.get(pageurl+'material/getprjuid',{ suid: suid},function(data){
                 $("#inp_prjuid").empty();
                 $("#inp_prjuid").append(data);
             });
