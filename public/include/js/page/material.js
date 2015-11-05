@@ -1,9 +1,11 @@
+var apurl='http://127.0.0.1:88/'
+var pageurl='http://127.0.0.1:168/'
 $(function(){
     $("#inp_prjuid").change(function() {
         var uid=$(this).val();
 
         if(uid!=0){
-            $.get(configObject.MaterialGetData,{ type: "qu_materiel",uid:uid},function(data){
+            $.get(apurl+'material/getdbdata',{ type: "qu_materiel",uid:uid},function(data){
                 
                 var o=jQuery.parseJSON(data);
                
@@ -17,11 +19,9 @@ $(function(){
              $('#inp_prjuid').val(0);
         }
     });
-  
     $("#inp_supply").change(function() {
         var suid=$(this).val();
-    
-        $.get('/material/getprjuid',{ suid: suid},function(data){
+         $.get(pageurl+'material/getprjuid',{ suid: suid},function(data){
                 $("#inp_prjuid").empty();
                 $("#inp_prjuid").append(data);
             });
@@ -50,7 +50,7 @@ function chkinp(){
         alert('資料不完整！');
         }else{
             $.ajax({
-               url: configObject.MaterialInsert,
+               url: apurl+'material/dbinsert',
                type: "POST",
                data: d,
                async:       false,
@@ -91,7 +91,7 @@ function chk_order(){
         r=confirm('確認資料：\n'+str);
         if(r){
                $.ajax({
-                   url: configObject.MaterialModify,
+                   url: apurl+'material/dbmodify',
                    type: "POST",
                    data: d,
                    async:false,
@@ -114,7 +114,7 @@ function chk_order(){
 
 function send_qclist(arr){
      $.ajax({
-       url: configObject.QCInsert,
+       url: apurl+'qc/dbinsert',
        type: "POST",
        data: {type:"qc_checklist",arr:arr},
        async:false,

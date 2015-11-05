@@ -22,55 +22,61 @@ class PageactionController extends AbstractActionController
         return new ViewModel($this->viewContnet);
     }
 	//取得選單
-	public function getmenuAction()
+	public function menuprocessAction()
     {
-        //session_start();
 		$VTs = new clsSystem;
 		$VTs->initialization();
 		
 		//-----BI開始-----
 		$action = array();
 		$action["status"] = false;
-		//if(!empty($_SESSION["position"])){
+        //$action["debug"] = $_POST;
+		if(!empty($_POST["menu"])){
 			//取得Classroom系統權限
-			$strSQL = "select uid,nid,parent_layer,class_style,href,click_action from sys_menu ";
-            if($_SESSION["position"]){
-                $strSQL .= "where (".$this->PositionStr2SQLCondition($_SESSION["position"]).") or (position like ('%0%')) ";
-            }else{
-                $strSQL .= "where (position like ('%0%')) ";
-            }
-			$strSQL .= "order by sequence,uid asc";
-			$data = $VTs->QueryData($strSQL);
+            
+			$data = $_POST["menu"];
 			//取得選單
 			$cpPath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\styles\\menu\\creatParents.html";
 			$cPath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\styles\\menu\\content.html";
 			$oPath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\styles\\menu\\otherContent.html";
+            
 			$creatParentStyle = $VTs->GetHtmlContent($cpPath);
 			$contentStyle = $VTs->GetHtmlContent($cPath);
 			$otherContentStyle = $VTs->GetHtmlContent($oPath);
+            
 			//$action["menu"] = $data;
 			$action["menu"] = $this->CreatMenuContent($data, $creatParentStyle, $contentStyle, $otherContentStyle);
+            //$action["menu"] = $_POST;
 			$action["status"] = true;
-		//}else{
-		//	$action["msg"] = 'Please Login and Try Again!';
-		//}
+		}else{
+			$action["msg"] = 'Menu Array Error!';
+		}
 		$pageContent = $VTs->Data2Json($action);
 		//-----BI結束-----
 		$VTs = null;
 		$this->viewContnet['pageContent'] = $pageContent;
         return new ViewModel($this->viewContnet);
     }
-	
-	//產生權限判別式
-	private function PositionStr2SQLCondition($postionStr){
-		$tmpArr = explode(",",$postionStr);
-		$tmpSQL = '';
-		foreach($tmpArr as $content){
-			$tmpSQL .= "position like ('%".$content."%') or ";
-		}
-		$tmpSQL = substr($tmpSQL,0,strlen($tmpSQL)-3);
-		return $tmpSQL;
-	}
+    
+    //取得帳號權限
+    public function acpositionAction(){
+        $VTs = new clsSystem;
+        $VTs->initialization();
+        //-----BI開始-----
+        $action = array();
+        $action["status"] = true;
+        if(!empty($_SESSION["position"])){
+            $action["position"] = $_SESSION["position"];
+        }else{
+            $action["position"] = 0;
+        }
+        $pageContent = $VTs->Data2Json($action);
+        //-----BI結束-----
+        $VTs = null;
+        $this->viewContnet['pageContent'] = $pageContent;
+        return new ViewModel($this->viewContnet);
+
+    }
 	
 	//產生選單
 	private function CreatMenuContent($MenuData, $creatParentStyle, $contentStyle, $otherContentStyle){
