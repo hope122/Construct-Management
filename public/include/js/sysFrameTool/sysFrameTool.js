@@ -10,21 +10,21 @@ sysFrameItem.prototype = {
     aClass: '',
     actionType: '',
     showAction: function () {
-        $("."+this.aClass).show();
+        $("."+aClass).show();
     },
     hideAction: function () {
-        $("."+this.aClass).hide();
+        $("."+aClass).hide();
     },
     getInputAction: function(){
         var ItemData = {};
-        $("."+this.aClass).each(function(i,v){
+        $("."+aClass).each(function(i,v){
            ItemData.i = v;
         });
         return ItemData;
     },
     getItemIDAction: function(){
         if(actionType){
-            $("."+this.aClass).prop("id").replace(this.actionType+'Act');
+            $("."+aClass).prop("id").replace(actionType+'Act');
         }else{
             console.log('actionType is not set');
         }
