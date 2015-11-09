@@ -8,7 +8,7 @@ socket.on('chatMsg', function(data) {
 });
 
 socket.on('conn', function (data) {
-
+          console.log(data);
     var postdata = {
         'uid': loginArr["uuid"],
         'userName' : loginArr["loginName"]
