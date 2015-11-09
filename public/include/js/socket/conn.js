@@ -1,4 +1,4 @@
-var socket = io.connect('http://211.21.170.18:7077');
+var socket = io.connect(configObject.socketConn);
 var systemID = '';
 
 socket.on('chatMsg', function(data) {

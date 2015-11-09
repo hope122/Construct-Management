@@ -14,5 +14,6 @@ var configObject = {
     "QCInsert":apurl+"/qc/dbinsert",
     "QCModify":apurl+"/qc/dbmodify",
     "QCDelete":apurl+"/qc/dbdelete",
-    "getPosition": "pageaction/acposition"
+    "getAcInfo": "pageaction/acinfo",
+    "socketConn": "http://211.21.170.18:7077"
 };
