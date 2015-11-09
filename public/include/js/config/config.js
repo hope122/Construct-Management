@@ -14,5 +14,8 @@ var configObject = {
     "QCInsert":apurl+"/qc/dbinsert",
     "QCModify":apurl+"/qc/dbmodify",
     "QCDelete":apurl+"/qc/dbdelete",
-    "getPosition": "pageaction/acposition"
+    "logbookGetData":apurl+"/logbook/getdbdata",
+    "logbookInsert":apurl+"/logbook/dbinsert",
+    "logbookModify":apurl+"/logbook/dbmodify",
+    "getPosition": "pageaction/acposition",
 };

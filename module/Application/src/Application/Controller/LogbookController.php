@@ -13,7 +13,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use System_APService\clsSystem;
 
-class QCController extends AbstractActionController
+class LogbookController extends AbstractActionController
 {
 	//不執行任何動作
 	public function indexAction()
@@ -22,30 +22,87 @@ class QCController extends AbstractActionController
 		$VTs = new clsSystem;
 		$VTs->initialization();
 		
-		//-----BI開始-----  index QC審查首頁
-        //    $apurl='http://211.21.170.18:99';
-        $apurl='http://127.0.0.1:88';
-        $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\styles\\qc\\index.html";
-        $trpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\styles\\qc\\tr.html";
+		//-----BI開始-----  index logbook施工日誌首頁
+        
+        //設定apurl
+            $apurl='http://211.21.170.18:99';
+//        $apurl='http://127.0.0.1:88';
+        //取得主頁html
+        $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\index.html";
         $html=$VTs->GetHtmlContent($mpath);
-        $tr=$VTs->GetHtmlContent($trpath);
- 
-        $arr_data = $VTs->json2data($VTs->UrlDataGet($apurl."/qc/getdbdata"));
+        //取得編號
+        $no= $VTs->json2data($VTs->UrlDataGet($apurl."/logbook/getdbdata?type=getno"));
+        if($no == null){
+            $html=str_replace("@@no@@",1,$html);
+        }else{
+            $html=str_replace("@@no@@",$no[0]->no+1,$html);
+        }
+        //取得天氣列表
+        $arr_weather= $VTs->json2data($VTs->UrlDataGet($apurl."/logbook/getdbdata?type=weather"));
+        $whtml='';
+        foreach($arr_weather as $weather){
+            $whtml.="<option value=".$weather->uid.">".$weather->name."</option>";
+        }
+        $html=str_replace("@@woption@@",$whtml,$html);
+        //取得調表日期
+        $html=str_replace("@@year@@",date('Y'),$html);
+        $html=str_replace("@@month@@",date('m'),$html);
+        $html=str_replace("@@day@@",date('d'),$html);
+        $weekarray=array("日","一","二","三","四","五","六");
+        $html=str_replace("@@week@@",$weekarray[date('w')],$html);
+        //取得表頭項目
+        $head= $VTs->json2data($VTs->UrlDataGet($apurl."/logbook/getdbdata?type=project&uid=1"));
+//        print_r($head);
+        $html=str_replace("@@prjname@@",$head[0]->prjname,$html);
+        $html=str_replace("@@supplyname@@",$head[0]->supplyname,$html);
+        $html=str_replace("@@pday@@",$head[0]->pday,$html);
+        $aday=round((strtotime(date("Y-m-d"))-strtotime($head[0]->start))/3600/24);
+        $html=str_replace("@@aday@@",$aday,$html);
+        $sday=$head[0]->pday-$aday+$head[0]->cday;
+        $html=str_replace("@@sday@@",$sday,$html);
+        $html=str_replace("@@cday@@",$head[0]->cday,$html);
+        $html=str_replace("@@start@@",$head[0]->start,$html);
+        $html=str_replace("@@end@@",$head[0]->end,$html);
+      
+        //取得施工進度
+        // （暫無資料
+        $tr1="<tr><td COLSPAN=2 ></td><td></td><td></td><td></td><td></td><td COLSPAN=2></td> </tr>";
+        $html=str_replace("@@tr1@@",$tr1,$html);
+        //取得材料管理
+        $trpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\tr2.html";
+        $trhtml=$VTs->GetHtmlContent($trpath);
+        $arr_materiel= $VTs->json2data($VTs->UrlDataGet($apurl."/logbook/getdbdata?type=materielcount"));
+//        print_r($arr_materiel);
+        $strhtml='';
+        foreach($arr_materiel as $materiel){
+            $tr=$trhtml;
+            $tr=str_replace("@@name@@",$materiel->name,$tr);
+            $tr=str_replace("@@unit@@",$materiel->unit,$tr);
+            $tr=str_replace("@@pcount@@",$materiel->pcount,$tr);
+            $tr=str_replace("@@incount@@",$materiel->incount,$tr);
+            $tr=str_replace("@@count@@",$materiel->count,$tr);
+            $strhtml.=$tr;
+        }
+        $html=str_replace("@@tr2@@",$strhtml,$html);
+        //取得人員機具管理
+        $trpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\tr3.html";
+        $trhtml=$VTs->GetHtmlContent($trpath);
+        $arr_workcount= $VTs->json2data($VTs->UrlDataGet($apurl."/logbook/getdbdata?type=workcount"));
+//        print_r($arr_workcount);
+        $strhtml='';
+        foreach($arr_workcount as $workcount){
+            $tr=$trhtml;
+            $tr=str_replace("@@name@@",$workcount->name,$tr);
+            $tr=str_replace("@@count@@",$workcount->count,$tr);
+            $strhtml.=$tr;
+        }
+        $html=str_replace("@@tr3@@",$strhtml,$html);
+        //印出頁面
+//        $arr_data = $VTs->json2data($VTs->UrlDataGet($apurl."/qc/getdbdata"));
         
 //        print_r($arr_data);
         $str='';
-        foreach($arr_data as $index=>$data) {
-            $trs=$tr;
-            $trs=str_replace('@@id@@',$index+1,$trs);
-            $trs=str_replace('@@chkdata@@',$data->typename,$trs);
-            $trs=str_replace('@@date@@',$data->date,$trs);
-            $trs=str_replace('@@datec@@',$data->datec,$trs);
-            $trs=str_replace('@@isok@@',$data->isok,$trs);
-            $trs=str_replace('@@img@@',$data->imgid,$trs);
-            $trs=str_replace('@@remark@@',$data->remark,$trs);
-            $str.=$trs;
-        }
-        $html=str_replace('@@tr@@',$str,$html);
+            $html=str_replace('@@tr@@',$str,$html);
         
 
                 $pageContent=$html;
