@@ -1,5 +1,6 @@
 var socket = io.connect(configObject.socketConn);
 var systemID = '';
+var uuid = '',userName = '';
 getAcInfo();
 
 socket.on('chatMsg', function(data) {
@@ -9,10 +10,9 @@ socket.on('chatMsg', function(data) {
 });
 
 socket.on('conn', function (data) {
-    console.log(data);
     var postdata = {
-        'uid': loginArr["uuid"],
-        'userName' : loginArr["loginName"]
+        'uid': uuid,
+        'userName' : userName
     }
     systemID = data.systemID;
     socket.emit('login', postdata,function(result){});
@@ -20,13 +20,15 @@ socket.on('conn', function (data) {
 });
 
 function getAcInfo(){
-    $.ajax({
-        url: configObject.getAcInfo,
+   $.ajax({
+        url: location.protocol+"//"+location.host+"/"+configObject.getAcInfo,
         type: "POST",
-        //data: pram,
+        async:false,
         dataType: "JSON",
         success: function(rs){
-           console.log(rs);
+           uuid = rs.uuid;
+           userName = rs.userName;
+           //console.log(rs);
         }
     });
 }
