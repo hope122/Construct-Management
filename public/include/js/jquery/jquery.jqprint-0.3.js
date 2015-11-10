@@ -19,7 +19,7 @@
  
  var $element = (this instanceof jQuery) ? this : $(this);
  
- if (opt.operaSupport && $.browser.opera)
+ if (opt.operaSupport)
  {
  var tab = window.open("","jqPrint-preview");
  tab.document.open();
