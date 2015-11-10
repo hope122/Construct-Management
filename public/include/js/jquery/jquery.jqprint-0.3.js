@@ -19,22 +19,14 @@
  
  var $element = (this instanceof jQuery) ? this : $(this);
  
- if (opt.operaSupport)
- {
- var tab = window.open("","jqPrint-preview");
- tab.document.open();
- 
- var doc = tab.document;
- }
- else
- {
+
  var $iframe = $("<iframe  />");
  
  if (!opt.debug) { $iframe.css({ position: "absolute", width: "0px", height: "0px", left: "-600px", top: "-600px" }); }
  
  $iframe.appendTo("body");
  var doc = $iframe[0].contentWindow.document;
- }
+ 
  
  if (opt.importCSS)
  {
