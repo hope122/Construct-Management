@@ -17,7 +17,7 @@ var configObject = {
 	"getPosition": "pageaction/acposition",
     
 	"SARGetworkerdata": "pageaction/acposition",
-	"SARRecordAttendance": apurl+"/sar/recordattendance"
+	"SARRecordAttendance": apurl+"/sar/recordattendance",
 
     "logbookGetData":apurl+"/logbook/getdbdata",
     "logbookInsert":apurl+"/logbook/dbinsert",
