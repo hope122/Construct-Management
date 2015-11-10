@@ -18,4 +18,6 @@ var configObject = {
     "logbookInsert":apurl+"/logbook/dbinsert",
     "logbookModify":apurl+"/logbook/dbmodify",
     "getPosition": "pageaction/acposition",
+    "getAcInfo": "pageaction/acinfo",
+    "socketConn": "http://211.21.170.18:7077",
 };
