@@ -1,0 +1,66 @@
+<html>
+  <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script src="include/js/socket/socket.io.js"></script>
+    <script src="include/js/jquery/jquery-1.11.3.min.js"></script>
+    <script src="include/js/toastmessage/jquery.toastmessage.js"></script>
+    <link rel="stylesheet" href="include/css/jquery.toastmessage.css">
+	<style>
+		#chart{
+			width: 300px;
+			height: 500px;
+			border: 1px solid #000;
+		}
+	</style>
+    <script>
+        function showNoticeToast(msg) {
+            $().toastmessage('showNoticeToast', msg);
+        }
+    </script>
+  </head>
+  <body>
+    <script>
+	$(function(){
+		$("#userName").html(userName);
+	});
+	var socket = io.connect('http://211.21.170.18:7077');
+	var d = new Date(), uid = d.getTime(), userName = uid;
+
+	socket.on('chatMsg', function(data) {
+		var nowContent = $('#chart').html();
+        var msgStr = data.userName+':'+data.msg+'<br/>';
+              console.log(data);
+              if(data.uid != uid){
+                  showNoticeToast(data.userName+':<br/>'+data.msg);
+              }
+		$('#chart').html(nowContent+msgStr);
+	});
+	  
+	socket.on('conn', function (data) {
+		
+		var postdata = {
+
+			'uid': uid,     //用户id
+
+			'userName' : userName   //用户昵称
+
+		}
+		
+		socket.emit('login', postdata,function(result){});
+
+	});
+	  
+	  function send(){
+		socket.emit('chatMsg', {'msg':$('#text').val(),'uid':uid,'name':userName});
+		//$('#text').val('');
+	  }
+    </script>
+    <div id="date"></div>
+	<div id="chart"></div>
+	姓名:
+	<span id="userName"></span><br/>
+	內容:<br/>
+    <textarea id="text" width="200" height="300"></textarea>
+	<input type="button" value="Send" onclick="send();" />
+  </body>
+</html>
