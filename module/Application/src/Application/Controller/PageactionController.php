@@ -77,6 +77,28 @@ class PageactionController extends AbstractActionController
         return new ViewModel($this->viewContnet);
 
     }
+    
+    //取得帳號資訊(須登入後才可以使用)
+    public function acinfoAction(){
+        $VTs = new clsSystem;
+        $VTs->initialization();
+        //-----BI開始-----
+        $action = array();
+        $action["status"] = false;
+        if(!empty($_SESSION["uuid"]) and !empty($_SESSION["userName"])){
+            $action["uuid"] = $_SESSION["uuid"];
+            $action["userName"] = $_SESSION["userName"];
+            $action["status"] = true;
+        }else{
+            $action["msg"] = 'Please Login Again!';
+        }
+        $pageContent = $VTs->Data2Json($action);
+        //-----BI結束-----
+        $VTs = null;
+        $this->viewContnet['pageContent'] = $pageContent;
+        return new ViewModel($this->viewContnet);
+        
+    }
 	
 	//產生選單
 	private function CreatMenuContent($MenuData, $creatParentStyle, $contentStyle, $otherContentStyle){

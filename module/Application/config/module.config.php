@@ -106,6 +106,20 @@ return array(
 					),
 				),
 			),
+            'logbook' => array(
+				'type'    => 'segment',
+				'options' => array(
+					'route'    => '/logbook[/:action]',
+					'constraints' => array(
+						'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+						'id'     => '[0-9]+',
+					),
+					'defaults' => array(
+						'controller' => 'Application\Controller\logbook',
+						'action'     => 'index',
+					),
+				),
+			),
 			'typeunit' => array(
 				'type'    => 'segment',
 				'options' => array(
@@ -152,7 +166,8 @@ return array(
             'Application\Controller\Pageaction' => 'Application\Controller\PageactionController',
             'Application\Controller\Editorpage' => 'Application\Controller\EditorpageController',
             'Application\Controller\Material' => 'Application\Controller\MaterialController',
-              'Application\Controller\QC' => 'Application\Controller\QCController'
+            'Application\Controller\QC' => 'Application\Controller\QCController',
+            'Application\Controller\Logbook' => 'Application\Controller\LogbookController',
 
         ),
     ),

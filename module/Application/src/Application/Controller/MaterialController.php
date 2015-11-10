@@ -15,6 +15,7 @@ use System_APService\clsSystem;
 
 class MaterialController extends AbstractActionController
 {
+
 	//不執行任何動作
 	public function indexAction()
     {
@@ -24,22 +25,24 @@ class MaterialController extends AbstractActionController
 	//取得選單
     public function ApplicationAction()
     {
+        
         //session_start();
 		$VTs = new clsSystem;
 		$VTs->initialization();
 		
 		//-----BI開始-----  Application材料申請頁面
         
+            //    $apurl='http://211.21.170.18:99';
+                $apurl='http://127.0.0.1:88';
                 $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\styles\\material\\application.html";
-        
                 $html=$VTs->GetHtmlContent($mpath);
-                $d_type_a = $VTs->json2data($VTs->UrlDataGet("http://211.21.170.18:99/material/getdbdata?type=su_supply"));
+                $d_type_a = $VTs->json2data($VTs->UrlDataGet($apurl."/material/getdbdata?type=su_supply"));
                 $str='';
                 foreach($d_type_a as $opData) {
                     $str.='<option value='.$opData->uid.'>'.$opData->name.'</option>';
                     }
                 $html=str_replace('@@opt_supply@@',$str,$html);
-                $ls_petition= $VTs->json2data($VTs->UrlDataGet("http://211.21.170.18:99/material/getdbdata?type=el_petition"));
+                $ls_petition= $VTs->json2data($VTs->UrlDataGet($apurl."/material/getdbdata?type=el_petition"));
         
                 if($ls_petition==null){
                     $ls='無資料';
@@ -88,11 +91,13 @@ class MaterialController extends AbstractActionController
 		$VTs->initialization();
 		
 		//-----BI開始-----  get prjuid 傳入廠商ＩＤ 回傳品項html option內容
+            //    $apurl='http://211.21.170.18:99';
+            $apurl='http://127.0.0.1:88';
             //取得廠商ID
             $suid=$_GET['suid'];
             //廠商id傳入ap 取得品項陣列
-            $arr_prj_material = $VTs->json2data($VTs->UrlDataGet("http://211.21.170.18:99/material/getdbdata?type=prj_materiel&suid=".$suid));
-            print_r($arr_prj_material);
+            $arr_prj_material = $VTs->json2data($VTs->UrlDataGet($apurl."/material/getdbdata?type=prj_materiel&suid=".$suid));
+//            print_r($arr_prj_material);
       
             //陣列組成html
             $html="<option value=0>請選擇</option>";

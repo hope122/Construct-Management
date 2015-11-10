@@ -100,7 +100,7 @@ function chk_order(){
 //                    console.log(rs);
                         send_qclist(arr);
                         alert('送出訂單！');
-                        location.reload();
+//                        location.reload();
                    },
                    error: function(e){
                         alert('儲存失敗！');
@@ -113,6 +113,7 @@ function chk_order(){
 }
 
 function send_qclist(arr){
+    console.log(arr);
      $.ajax({
        url: configObject.QCInsert,
        type: "POST",
