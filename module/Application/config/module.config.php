@@ -181,12 +181,8 @@ return array(
             'Application\Controller\Editorpage' => 'Application\Controller\EditorpageController',
             'Application\Controller\Material' => 'Application\Controller\MaterialController',
             'Application\Controller\QC' => 'Application\Controller\QCController',
-<<<<<<< HEAD
             'Application\Controller\SAR' => 'Application\Controller\SARController'
-=======
             'Application\Controller\Logbook' => 'Application\Controller\LogbookController',
->>>>>>> origin/master
-
         ),
     ),
     'view_manager' => array(
