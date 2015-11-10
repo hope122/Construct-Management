@@ -16,7 +16,7 @@ var configObject = {
     "QCDelete":apurl+"/qc/dbdelete",
 	"getPosition": "pageaction/acposition",
     
-	"SARGetworkerdata": "pageaction/acposition",
+	"SARGetworkerdata": apurl+"/sar/getworkerdata",
 	"SARRecordAttendance": apurl+"/sar/recordattendance",
 
     "logbookGetData":apurl+"/logbook/getdbdata",
