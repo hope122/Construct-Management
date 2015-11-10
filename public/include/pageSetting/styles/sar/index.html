@@ -1,0 +1,62 @@
+<head>
+<title>人員出勤紀錄</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script src="/include/js/jquery/jquery-1.11.3.min.js"></script>
+	<script src="/include/js/config/config.js"></script>
+    <script src="/include/js/page/SAR.js"></script>
+    <!---->
+	<style type="text/css">
+        .css_table {
+			/*display:table;*/
+          }
+        .css_tr {
+            display: table-row;
+			align: left;
+          }
+        .css_td {
+			display: table-cell;
+          }
+    </style>
+</head>
+
+<div class='css_table' align='center' style='margin: 0px auto;'>
+
+    <div class="css_tr">
+        <div class="css_td">
+			<form method="post" onsubmit="return false;">
+				<input type="text" placeholder="請輸入身分證號" id="ID" name="ID" size="10" onkeypress="runScript(event)" >
+				<input type="button" id="ID_check" value="確認" onclick="submitCheck()" >
+				<select id="check_type">
+					<option value=1 selected>進場</option>
+					<option value=2 >離場</option>
+				</select>
+			</form>
+		</div>
+    </div>	
+	
+	<hr>
+	
+	<div class="css_tr" >
+        <!--<div class="css_td" >@@Identity@@</div>-->
+        <div class="css_td" >
+			<div class="css_tr" >
+				<div class="css_td" >
+					姓名：<label id="name"></label>　
+					性別：<label id="sex"></label>　
+					生日：<label id="birthday"></label>　
+				</div>
+			</div>
+			<div class="css_tr" >
+				<div class="css_td" >
+					工種：<label id="type"></label>
+				</div>
+			</div>
+			<div class="css_tr" >
+				<div class="css_td" >
+					廠商：<label id="supply"></label>
+				</div>
+			</div>
+		</div>
+    </div>
+	
+</div>
