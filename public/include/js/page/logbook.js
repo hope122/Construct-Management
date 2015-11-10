@@ -1,3 +1,7 @@
+
+function print(){
+    $("#pr").jqprint();
+}
 function chkinp(){
     var chk=true;
     var d='';
