@@ -30,9 +30,49 @@ class SARController extends AbstractActionController
 		$VTs->initialization();
 		
 		//-----BI開始-----  
-			$mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\styles\\sar\\index.html";
+			$mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\sar\\index.html";
 			$html=$VTs->GetHtmlContent($mpath);
 			
+			$pageContent = $html;
+        //-----BI結束-----
+        
+		//關閉資料庫連線
+        $VTs->DBClose();
+        
+		//釋放
+		$VTs = null;
+		$this->viewContnet['pageContent'] = $pageContent;
+		
+        return new ViewModel($this->viewContnet);
+	}
+	
+	//人員出勤報表
+	public function SARReportAction()
+	{
+		//session_start();
+		$VTs = new clsSystem;
+		$VTs->initialization();
+		
+		//-----BI開始-----
+			//$apurl='http://211.21.170.18:99';
+			$apurl='http://127.0.0.1:99';
+			
+			$mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\sar\\report.html";
+			$html=$VTs->GetHtmlContent($mpath);
+			
+			$listpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\sar\\reportList.html";
+			$tr=$VTs->GetHtmlContent($listpath);
+			
+			$dataList= $VTs->json2data($VTs->UrlDataGet($apurl."/sar/report"));
+			//$VTs->debug($dataList);
+			foreach($dataList as $data) {
+				$trs.=$tr;
+                $trs=str_replace('@@supply_name@@',$data->supply_name,$trs);
+				$trs=str_replace('@@work_type@@',$data->work_type,$trs);
+                $trs=str_replace('@@count@@',$data->w_count,$trs);
+			}
+			
+			$html = str_replace('@@data_list@@',$trs,$html);
 			$pageContent = $html;
         //-----BI結束-----
         

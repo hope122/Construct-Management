@@ -4,7 +4,7 @@ $(function(){
 
 function submitCheck(){
 	if($("#ID").val()!=""){
-		//alert($("#ID").val());
+		//console.log("send ID: "+$("#ID").val());
 		$.ajax({
 			url: configObject.SARGetworkerdata,
 			//url: "http://127.0.0.1:99/sar/getworkerdata",
@@ -15,27 +15,27 @@ function submitCheck(){
             success: 
 				function(rs){
 					//console.log(rs);
-					if(rs){
+					if(rs.status){
 						
 						//顯示人員資料
-						$("#name").text(rs[0]["name"]);
-						$("#sex").text(rs[0]["sex"]);
-						$("#birthday").text(rs[0]["birthday"]);
-						$("#type").text(rs[0]["work_name"]);
-						$("#supply").text(rs[0]["su_name"]);
+						$("#name").text(rs.sar.name);
+						$("#sex").text(rs.sar.sex);
+						$("#birthday").text(rs.sar.birthday);
+						$("#type").text(rs.sar.work_name);
+						$("#supply").text(rs.sar.su_name);
 						
 						//紀錄出勤時間
 						//console.log($("#check_type").val())
 						recordAttendance($("#check_type").val());
 						
 					}else{
-						alert("查無此人");
+						alert(rs.msg);
 						$("#name").text("");
-						$("#gender").text("");
+						$("#sex").text("");
 						$("#birthday").text("");
 						$("#type").text("");
 						$("#supply").text("");
-					}
+					} 
 				},
             error: 
 				function(e){
@@ -53,17 +53,12 @@ function recordAttendance(check_type){
 		url: configObject.SARRecordAttendance,
 		//url: "http://127.0.0.1:99/sar/recordattendance",
         type: "POST",
-		data: { ID:$("#ID").val(), check_type:check_type},
+		data: { ID:$("#ID").val(), check_type:check_type },
 		dataType: "JSON",
 		async:false,
         success: 
 			function(rs){
-				console.log(rs);
-				if(rs){
-					
-				}else{
-					
-				}
+				//console.log(rs);
 			},
         error: 
 			function(e){
