@@ -39,7 +39,7 @@
 		//使用cmd執行指令
 		public function cmdExecute($sCommand){
 			try{
-				shell_exe($sCommand);
+				return shell_exec($sCommand);
 			}catch(Exception $error){
 				return false;
 			}
@@ -147,7 +147,48 @@
 			}
 			return true;  
 		}
-		
+        
+		//產生ＰＤＦ檔案
+        public function Page2PDF($ChangePagePagth , $saveFileName, $zoom){
+            $OSCommand = 'ver';
+            $OS = $this->cmdExecute($OSCommand);
+            if($zoom > 1 || $zoom < 1){
+                $zoomStr = '--zoom '.$zoom;
+            }
+            $wkhtmltopdfPath = dirname(__DIR__).'\\..\\..\\';
+            //return dirname(__DIR__);
+            //是ＷＩＮＤＯＷＳ
+            if($OS){
+                //組合指令
+                $wkhtmltopdfPath = $wkhtmltopdfPath.'windows_wkhtmltopdf\\wkhtmltopdf.exe';
+            }else{//不是ＷＩＮＤＯＷＳ
+                //MAC OSX
+                $OSCommand = 'sw_vers';
+                $OS = $this->cmdExecute($OSCommand);
+                //是ＭＡＣ ＯＳＸ
+                if($OS){
+                    //組合指令
+                    $wkhtmltopdfPath = str_replace("\\","/",$wkhtmltopdfPath);
+                    $wkhtmltopdfPath = $wkhtmltopdfPath.'mac_wkhtmltopdf/wkhtmltopdf';
+                }
+            }
+            
+            if(file_exists($wkhtmltopdfPath)){
+                if(strpos($saveFileName,".pdf") === false){
+                    $saveFileName .= ".pdf";
+                }
+                $saveFileName = str_replace("\\","/",$saveFileName);
+                $pdfCommand = $wkhtmltopdfPath.' '.$zoomStr.' '.$ChangePagePagth.' '.$saveFileName;
+                try{
+                    return $this->cmdExecute($pdfCommand);
+                }catch(Exception $error){
+                    return false;
+                }
+            }else{
+                return $wkhtmltopdfPath.' file is not exists';
+            }
+        }
+        
 		//寫LOG檔 ThreadLog(clsName, funName, sDescribe = "", sEventDescribe = "", iErr = 0) ??放哪???
 		public function ThreadLog($clsName, $funName, $sDescribe = "", $sEventDescribe = "", $iErr = 0){
 			
