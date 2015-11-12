@@ -1,4 +1,5 @@
 $(function(){
+  
     $("#inp_prjuid").change(function() {
         var uid=$(this).val();
 
@@ -26,7 +27,7 @@ $(function(){
                 $("#inp_prjuid").append(data);
             });
         });
-
+    getlist();
 });
 
 function chkinp(){
@@ -48,7 +49,7 @@ function chkinp(){
 //    console.log(d);
     if(!chk){
         alert('資料不完整！');
-        }else{
+    }else{
             $.ajax({
                url: configObject.MaterialInsert,
                type: "POST",
@@ -58,7 +59,7 @@ function chkinp(){
                success: function(rs){
 //                console.log(rs);
                     alert('新增成功！');
-                      location.reload();
+                    getlist();
                },
                error: function(e){
                     alert('儲存失敗！');
@@ -125,4 +126,11 @@ function send_qclist(arr){
        }
     });
 
+}
+
+function getlist(){
+    $("#list").empty();
+    $.get("/material/getlist", function(result){
+        $("#list").append(result);
+    });
 }
