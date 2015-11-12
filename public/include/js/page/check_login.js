@@ -9,8 +9,6 @@ function checkUserLogin(){
 		async: false,
         dataType: "JSON",
 		success: function(rs){
-           console.log(rs);
-           console.log(location.origin);
            if(!rs.status){
                location.href = location.origin;
            }
