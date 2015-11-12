@@ -21,7 +21,7 @@ socket.on('conn', function (data) {
 
 function getAcInfo(){
    $.ajax({
-        url: location.protocol+"//"+location.host+"/"+configObject.getAcInfo,
+        url: configObject.getAcInfo,
         type: "POST",
         async:false,
         dataType: "JSON",
