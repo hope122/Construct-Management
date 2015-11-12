@@ -6,9 +6,11 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<!--[if lte IE 8]><script src="../include/strongly/assets/js/ie/html5shiv.js"></script><![endif]-->
 		<link rel="stylesheet" href="../include/strongly/assets/css/main.css" />
+        <link rel="stylesheet" href="../include/css/jquery-ui.min.css" />
 		<!--[if lte IE 8]><link rel="stylesheet" href="../include/strongly/assets/css/ie8.css" /><![endif]-->
 		<!-- Scripts -->
 		<script src="../include/strongly/assets/js/jquery.min.js"></script>
+        <script src="../include/js/jquery/jquery-ui.min.js"></script>
 		<script src="../include/strongly/assets/js/jquery.dropotron.min.js"></script>
 		<script src="../include/strongly/assets/js/skel.min.js"></script>
 		<script src="../include/strongly/assets/js/skel-viewport.min.js"></script>
@@ -24,29 +26,33 @@
             $(function(){
               getLan();
             });
+			 $(function() {
+				$( "#radio" ).buttonset();
+			});
         </script>
 		
 		<script src="/include/js/page/sar.js"></script>
 
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 		<style type="text/css">
-		.css_table {
-			display:table;
-		}
-		
-		.css_tr {
-			display: table-row;
-		}
-		
-		.css_td {
-			display: table-cell;
-		}
-		
-		.check {
-			display: none;
-			background-color: Green;
-			color: Red;
-		}
-	</style>
+			.css_table {
+				display:table;
+			}
+			
+			.css_tr {
+				display: table-row;
+			}
+			
+			.css_td {
+				display: table-cell;
+			}
+			
+			.check {
+				display: none;
+				background-color: Green;
+				color: Red;
+			}
+		</style>
 	</head>
 	<body class="homepage">
 		<div id="page-wrapper">
@@ -92,8 +98,10 @@
 																<option value=1 selected>進場</option>
 																<option value=2 >離場</option>
 															</select>-->
-															<input type="radio" id="radio1" name="radio" checked="checked"><label for="radio1">進場</label>
-															<input type="radio" id="radio2" name="radio"><label for="radio2">離場</label>　
+															<span id="radio">
+																<input type="radio" id="radio1" name="radio" checked="checked" value="1"><label for="radio1">進場</label>
+																<input type="radio" id="radio2" name="radio" value="2"><label for="radio2">出場</label>
+															</span><!---->
 															<input type="text" placeholder="請輸入身分證號" id="ID" name="ID" size="20" onkeypress="runScript(event)" >　
 															<input type="button" id="ID_check" value="確認" onclick="submitCheck()">	
 														<!--</form>-->

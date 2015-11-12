@@ -3,7 +3,9 @@ $(function(){
 })
 
 function submitCheck(){
+	//console.log($("input[name=radio]:checked").val());
 	if($("#ID").val()!=""){
+		
 		//console.log("send ID: "+$("#ID").val());
 		$.ajax({
 			//url: configObject.SARGetworkerdata,
@@ -64,7 +66,8 @@ function submitCheck(){
 
 						//紀錄出勤時間
 						//console.log($("#check_type").val())
-						recordAttendance($("#check_type").val());
+						//recordAttendance($("#check_type").val());
+						recordAttendance($("input[name=radio]:checked").val());
 						
 					}else{
 						$("#name").text("");
@@ -92,8 +95,8 @@ function submitCheck(){
 function recordAttendance(check_type){
 	//alert(check_type);
 	$.ajax({
-		url: configObject.SARRecordAttendance,
-		//url: "http://127.0.0.1:99/sar/recordattendance",
+		//url: configObject.SARRecordAttendance,
+		url: "http://127.0.0.1:99/sar/recordattendance",
         type: "POST",
 		data: { ID:$("#ID").val(), check_type:check_type },
 		dataType: "JSON",
@@ -105,6 +108,7 @@ function recordAttendance(check_type){
 			},
         error: 
 			function(e){
+				alert("沒點到名")
 				//console.log(e);
 			}
 	});
