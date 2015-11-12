@@ -32,16 +32,20 @@ class MaterialController extends AbstractActionController
 		
 		//-----BI開始-----  Application材料申請頁面
         
-            //    $apurl='http://211.21.170.18:99';
-                $apurl='http://127.0.0.1:88';
+                $apurl='http://211.21.170.18:99';
+//                $apurl='http://127.0.0.1:88';
                 $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\styles\\material\\application.html";
                 $html=$VTs->GetHtmlContent($mpath);
                 $d_type_a = $VTs->json2data($VTs->UrlDataGet($apurl."/material/getdbdata?type=su_supply"));
                 $str='';
-                foreach($d_type_a as $opData) {
-                    $str.='<option value='.$opData->uid.'>'.$opData->name.'</option>';
-                    }
-                $html=str_replace('@@opt_supply@@',$str,$html);
+                if($d_type_a==null){
+                     $html=str_replace('@@opt_supply@@','',$html);
+                }else{
+                    foreach($d_type_a as $opData) {
+                        $str.='<option value='.$opData->uid.'>'.$opData->name.'</option>';
+                        }
+                    $html=str_replace('@@opt_supply@@',$str,$html);
+                }
                 $ls_petition= $VTs->json2data($VTs->UrlDataGet($apurl."/material/getdbdata?type=el_petition"));
         
                 if($ls_petition==null){
@@ -101,8 +105,10 @@ class MaterialController extends AbstractActionController
       
             //陣列組成html
             $html="<option value=0>請選擇</option>";
-            foreach($arr_prj_material as $prj){
-                $html.="<option value=".$prj->uid.">".$prj->name."</option>";
+            if(!$arr_prj_material==null){
+                foreach($arr_prj_material as $prj){
+                    $html.="<option value=".$prj->uid.">".$prj->name."</option>";
+                }
             }
             //印出html
             $pageContent=$html;
