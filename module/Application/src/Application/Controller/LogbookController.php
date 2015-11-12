@@ -25,8 +25,8 @@ class LogbookController extends AbstractActionController
 		//-----BI開始-----  index logbook施工日誌首頁
         
         //設定apurl
-//            $apurl='http://211.21.170.18:99';
-        $apurl='http://127.0.0.1:88';
+            $apurl='http://211.21.170.18:99';
+//        $apurl='http://127.0.0.1:88';
         //取得主頁html
         $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\index.html";
         $html=$VTs->GetHtmlContent($mpath);
@@ -166,8 +166,8 @@ class LogbookController extends AbstractActionController
 		//-----BI開始-----  get prjuid 傳入廠商ＩＤ 回傳品項html option內容
         //            $apurl='http://211.21.170.18:99';
         $url=$_GET['url'];
-        $VTs->Page2PDF($url, savePath('/pdf'));
-    
+        $VTs->Page2PDF($url,dirname(__DIR__) . "\\..\\..\\..\\..\\public\\test.pdf");
+        echo "<script>window.close();</script>";
 
       
         
@@ -188,8 +188,8 @@ class LogbookController extends AbstractActionController
 		$VTs->initialization();
 		
 		//-----BI開始-----  get prjuid 傳入廠商ＩＤ 回傳品項html option內容
-        //            $apurl='http://211.21.170.18:99';
-        $apurl='http://127.0.0.1:88';
+                    $apurl='http://211.21.170.18:99';
+//        $apurl='http://127.0.0.1:88';
         $data=$_POST;
         $re=$VTs->UrlDataPost($apurl."/logbook/dbmodify",$_POST);
         print_r($re);

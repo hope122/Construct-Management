@@ -6,8 +6,13 @@
     <script src="/include/js/page/logbook.js"></script>
     <script src="/include/js/config/config.js"></script>
 </head>
+    <div align='left'>
+    <input align='center' onclick='print();' type='button' value='列印'>
+    <input align='center' onclick='save();' type='button' value='存檔'>
+</div>
 <div id='pr'>
     <div align='center'>建築工程施工日誌</div>
+
     <div align='center'>
     <input type='hidden' id='data' value="no=@@no@@&date=@@year@@-@@month@@-@@day@@&week=@@week@@&">
     <div>報表編號：@@no@@</div>
@@ -87,8 +92,5 @@
         @@tr3@@
     </table>
     <br>
-<div align='center'>
-    <input align='center' onclick='print();' type='button' value='列印'>
-    <input align='center' onclick='save();' type='button' value='存檔'>
-</div>
+
 </div>
