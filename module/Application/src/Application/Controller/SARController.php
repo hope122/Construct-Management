@@ -65,11 +65,17 @@ class SARController extends AbstractActionController
 			
 			$dataList= $VTs->json2data($VTs->UrlDataGet($apurl."/sar/report"));
 			//$VTs->debug($dataList);
-			foreach($dataList as $data) {
-				$trs.=$tr;
-                $trs=str_replace('@@supply_name@@',$data->supply_name,$trs);
-				$trs=str_replace('@@work_type@@',$data->work_type,$trs);
-                $trs=str_replace('@@count@@',$data->w_count,$trs);
+			
+			$trs = "";
+			if(!empty($dataList)){
+				foreach($dataList as $data) {
+					$trs.=$tr;
+					$trs=str_replace('@@supply_name@@',$data->supply_name,$trs);
+					$trs=str_replace('@@work_type@@',$data->work_type,$trs);
+					$trs=str_replace('@@count@@',$data->w_count,$trs);
+				}
+			}else{
+				$trs = "無資料";
 			}
 			
 			$html = str_replace('@@data_list@@',$trs,$html);
