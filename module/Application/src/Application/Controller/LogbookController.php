@@ -125,5 +125,35 @@ class LogbookController extends AbstractActionController
 		$this->viewContnet['pageContent'] = $pageContent;
         return new ViewModel($this->viewContnet);
     }
+       public function setcontentsAction()
+    {
+        //session_start();
+		$VTs = new clsSystem;
+		$VTs->initialization();
+		
+		//-----BI開始-----  get prjuid 傳入廠商ＩＤ 回傳品項html option內容
+            //    $apurl='http://211.21.170.18:99';
+            $apurl='http://127.0.0.1:88';
+            //取得廠商ID
+            $suid=$_GET['suid'];
+            //廠商id傳入ap 取得品項陣列
+            $arr_prj_material = $VTs->json2data($VTs->UrlDataGet($apurl."/material/getdbdata?type=prj_materiel&suid=".$suid));
+//            print_r($arr_prj_material);
+      
+            //陣列組成html
+            $html="<option value=0>請選擇</option>";
+            foreach($arr_prj_material as $prj){
+                $html.="<option value=".$prj->uid.">".$prj->name."</option>";
+            }
+            //印出html
+            $pageContent=$html;
+        //-----BI結束-----
+         //關閉資料庫連線
+        $VTs->DBClose();
+        //釋放
+		$VTs = null;
+		$this->viewContnet['pageContent'] = $pageContent;
+        return new ViewModel($this->viewContnet);
+    }
 
 }

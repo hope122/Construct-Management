@@ -1,6 +1,6 @@
 
 function print(){
-    $("#pr").jqprint();
+    $("#pr").printArea();
 }
 function chkinp(){
     var chk=true;

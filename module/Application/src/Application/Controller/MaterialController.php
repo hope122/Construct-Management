@@ -38,10 +38,14 @@ class MaterialController extends AbstractActionController
                 $html=$VTs->GetHtmlContent($mpath);
                 $d_type_a = $VTs->json2data($VTs->UrlDataGet($apurl."/material/getdbdata?type=su_supply"));
                 $str='';
-                foreach($d_type_a as $opData) {
-                    $str.='<option value='.$opData->uid.'>'.$opData->name.'</option>';
-                    }
-                $html=str_replace('@@opt_supply@@',$str,$html);
+                if($d_type_a==null){
+                     $html=str_replace('@@opt_supply@@','',$html);
+                }else{
+                    foreach($d_type_a as $opData) {
+                        $str.='<option value='.$opData->uid.'>'.$opData->name.'</option>';
+                        }
+                    $html=str_replace('@@opt_supply@@',$str,$html);
+                }
                 $ls_petition= $VTs->json2data($VTs->UrlDataGet($apurl."/material/getdbdata?type=el_petition"));
         
                 if($ls_petition==null){
@@ -101,8 +105,10 @@ class MaterialController extends AbstractActionController
       
             //陣列組成html
             $html="<option value=0>請選擇</option>";
-            foreach($arr_prj_material as $prj){
-                $html.="<option value=".$prj->uid.">".$prj->name."</option>";
+            if(!$arr_prj_material==null){
+                foreach($arr_prj_material as $prj){
+                    $html.="<option value=".$prj->uid.">".$prj->name."</option>";
+                }
             }
             //印出html
             $pageContent=$html;
