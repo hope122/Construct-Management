@@ -1747,7 +1747,7 @@
 /* Copyright */
 
 	#copyright {
-		border-top: solid 2px #e5e5e5;
+		/*border-top: solid 2px #e5e5e5;*/
 		text-align: center;
 	}
 
@@ -1839,9 +1839,9 @@
 				padding: 6em 0 6em 0;
 			}
 
-			#footer-wrapper {
+			/*#footer-wrapper {
 				padding: 6em 0 8em 0;
-			}
+			}*/
 
 		/* Header */
 
@@ -2019,7 +2019,7 @@
 		/* Copyright */
 
 			#copyright {
-				margin-top: 6em;
+				/*margin-top: 6em;*/
 				padding-top: 4em;
 			}
 
@@ -2108,7 +2108,7 @@
 		/* Copyright */
 
 			#copyright {
-				margin-top: 5em;
+				/*margin-top: 5em;*/
 				padding-top: 2em;
 			}
 
@@ -2482,7 +2482,7 @@
 		/* Copyright */
 
 			#copyright {
-				margin-top: 2em;
+				/*margin-top: 2em;*/
 				padding-top: 2em;
 			}
 
