@@ -34,7 +34,7 @@ class MaterialController extends AbstractActionController
         
                 $apurl='http://211.21.170.18:99';
 //                $apurl='http://127.0.0.1:88';
-                $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\styles\\material\\application.html";
+                $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\material\\application.html";
                 $html=$VTs->GetHtmlContent($mpath);
                 $d_type_a = $VTs->json2data($VTs->UrlDataGet($apurl."/material/getdbdata?type=su_supply"));
                 $str='';
@@ -46,38 +46,8 @@ class MaterialController extends AbstractActionController
                         }
                     $html=str_replace('@@opt_supply@@',$str,$html);
                 }
-                $ls_petition= $VTs->json2data($VTs->UrlDataGet($apurl."/material/getdbdata?type=el_petition"));
         
-                if($ls_petition==null){
-                    $ls='無資料';
-                }else{
-                    $ls_path=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\styles\\material\\list.html";
-                    $tr_path=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\styles\\material\\tr.html";
-                    $ls=$VTs->GetHtmlContent($ls_path);
-                    $tr=$VTs->GetHtmlContent($tr_path);
-                    $trstr='';
-//                    print_r($ls_petition);
-                    foreach($ls_petition as  $id => $lsData) {
-                        $trs=$tr;
-                        $trs=str_replace('@@id@@',$id+1,$trs);
-                        $trs=str_replace('@@supply@@',$lsData->su_name,$trs);
-                        $trs=str_replace('@@name@@',$lsData->ma_name,$trs);
-                        $trs=str_replace('@@intime@@',$lsData->date,$trs);
-                        $trs=str_replace('@@place@@',$lsData->place,$trs);
-                        $trs=str_replace('@@count@@',$lsData->count,$trs);
-                        if($lsData->check==1){
-                            $str_order='已確認';
-                        }else{
-                            $str_order="<input type='checkbox' class='cls_order' value=".$lsData->uid.">";
-                        }
-                        $trs=str_replace('@@order@@',$str_order,$trs);
-                        $trs=str_replace('@@uid@@',$lsData->uid,$trs);
-                        $trstr.=$trs;
-                    }
-                    $ls=str_replace('@@tr@@',$trstr,$ls);
-                    
-                }
-                $html=str_replace('@@list@@',$ls,$html);
+        
         
                 $pageContent=$html;
         //-----BI結束-----
@@ -120,5 +90,54 @@ class MaterialController extends AbstractActionController
 		$this->viewContnet['pageContent'] = $pageContent;
         return new ViewModel($this->viewContnet);
     }
-
+   public function getlistAction()
+    {
+        //session_start();
+		$VTs = new clsSystem;
+		$VTs->initialization();
+		
+		//-----BI開始-----  get prjuid 傳入廠商ＩＤ 回傳品項html option內容
+                        $apurl='http://211.21.170.18:99';
+//                $apurl='http://127.0.0.1:88';
+            $ls_petition= $VTs->json2data($VTs->UrlDataGet($apurl."/material/getdbdata?type=el_petition"));
+                if($ls_petition==null){
+                    $ls='無資料';
+                }else{
+                    $ls_path=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\styles\\material\\list.html";
+                    $tr_path=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\styles\\material\\tr.html";
+                    $ls=$VTs->GetHtmlContent($ls_path);
+                    $tr=$VTs->GetHtmlContent($tr_path);
+                    $trstr='';
+//                    print_r($ls_petition);
+                    foreach($ls_petition as  $id => $lsData) {
+                        $trs=$tr;
+                        $trs=str_replace('@@id@@',$id+1,$trs);
+                        $trs=str_replace('@@supply@@',$lsData->su_name,$trs);
+                        $trs=str_replace('@@name@@',$lsData->ma_name,$trs);
+                        $trs=str_replace('@@intime@@',$lsData->date,$trs);
+                        $trs=str_replace('@@place@@',$lsData->place,$trs);
+                        $trs=str_replace('@@count@@',$lsData->count,$trs);
+                        if($lsData->check==1){
+                            $str_order='已確認';
+                        }else{
+                            $str_order="<input type='checkbox' class='cls_order' value=".$lsData->uid.">";
+                        }
+                        $trs=str_replace('@@order@@',$str_order,$trs);
+                        $trs=str_replace('@@uid@@',$lsData->uid,$trs);
+                        $trstr.=$trs;
+                    }
+                    $ls=str_replace('@@tr@@',$trstr,$ls);
+                    
+                }
+//                $html=str_replace('@@list@@',$ls,$html);
+            //印出html
+            $pageContent=$ls;
+        //-----BI結束-----
+         //關閉資料庫連線
+        $VTs->DBClose();
+        //釋放
+		$VTs = null;
+		$this->viewContnet['pageContent'] = $pageContent;
+        return new ViewModel($this->viewContnet);
+    }
 }
