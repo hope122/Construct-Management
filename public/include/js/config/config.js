@@ -18,14 +18,32 @@ var configObject = {
     "QCInsert":apurl+"/qc/dbinsert",
     "QCModify":apurl+"/qc/dbmodify",
     "QCDelete":apurl+"/qc/dbdelete",
+<<<<<<< Updated upstream
 	"getPosition": originUrl+"pageaction/acposition",
 	"SARGetworkerdata": apurl+"/sar/getworkerdata",
 	"SARRecordAttendance": apurl+"/sar/recordattendance",
+=======
+<<<<<<< Updated upstream
+	"getPosition": "pageaction/acposition",
+    
+	"SARGetworkerdata": apurl+"/sar/getworkerdata",
+	"SARRecordAttendance": apurl+"/sar/recordattendance",
+
+=======
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
     "logbookGetData":apurl+"/logbook/getdbdata",
     "logbookInsert":apurl+"/logbook/dbinsert",
     "logbookModify":apurl+"/logbook/dbmodify",
     "getPosition": originUrl+"pageaction/acposition",
     "getAcInfo": originUrl+"pageaction/acinfo",
     "socketConn": "http://211.21.170.18:7077",
+<<<<<<< Updated upstream
 
+=======
+=======
+    "getPosition": "pageaction/acposition",
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 };
