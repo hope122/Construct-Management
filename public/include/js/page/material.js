@@ -24,6 +24,9 @@ $(function(){
                 $("#inp_prjuid").append(data);
             });
         });
+    $("#inp_date").datepicker({
+        dateFormat: 'yy-mm-dd'
+    });
     getlist();
 });
 
