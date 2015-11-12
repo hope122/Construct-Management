@@ -2,6 +2,11 @@
 function print(){
     $("#pr").printArea();
 }
+
+function save(){
+    window.open('http://127.0.0.1:168/logbook/savepdffile?url=http://127.0.0.1:168/logbook', 'save');
+}
+
 function chkinp(){
     var chk=true;
     var d='';
@@ -18,7 +23,6 @@ function chkinp(){
        
     });
     d = d.substring(0,d.length-1);
-
     console.log(d);
     if(!chk){
         alert('資料不完整！');

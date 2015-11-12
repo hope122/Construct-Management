@@ -1,3 +1,6 @@
+
+//var apurl="http://211.21.170.18:99";
+//var apurl="http://127.0.0.1:88";
 var apurl="http://211.21.170.18:99";
 //var apurl="http://127.0.0.1:88";
 var originUrl = location.origin+'/';
