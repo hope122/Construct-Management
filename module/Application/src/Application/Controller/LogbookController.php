@@ -25,8 +25,8 @@ class LogbookController extends AbstractActionController
 		//-----BI開始-----  index logbook施工日誌首頁
         
         //設定apurl
-//            $apurl='http://211.21.170.18:99';
-        $apurl='http://127.0.0.1:88';
+            $apurl='http://211.21.170.18:99';
+//        $apurl='http://127.0.0.1:88';
         //取得主頁html
         $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\index.html";
         $html=$VTs->GetHtmlContent($mpath);
@@ -132,19 +132,20 @@ class LogbookController extends AbstractActionController
 		$VTs->initialization();
 		
 		//-----BI開始-----  get prjuid 傳入廠商ＩＤ 回傳品項html option內容
-            //    $apurl='http://211.21.170.18:99';
             $apurl='http://127.0.0.1:88';
-            //取得廠商ID
-            $suid=$_GET['suid'];
-            //廠商id傳入ap 取得品項陣列
-            $arr_prj_material = $VTs->json2data($VTs->UrlDataGet($apurl."/material/getdbdata?type=prj_materiel&suid=".$suid));
-//            print_r($arr_prj_material);
+        //取得主頁html
+            $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\setcontents.html";
+  $html=$VTs->GetHtmlContent($mpath);
       
-            //陣列組成html
-            $html="<option value=0>請選擇</option>";
-            foreach($arr_prj_material as $prj){
-                $html.="<option value=".$prj->uid.">".$prj->name."</option>";
-            }
+        //取得天氣列表
+        $arr_weather= $VTs->json2data($VTs->UrlDataGet($apurl."/logbook/getdbdata?type=weather"));
+        $whtml='';
+        foreach($arr_weather as $weather){
+            $whtml.="<option value=".$weather->uid.">".$weather->name."</option>";
+        }
+        $html=str_replace("@@woption@@",$whtml,$html);
+        
+        
             //印出html
             $pageContent=$html;
         //-----BI結束-----
@@ -154,6 +155,56 @@ class LogbookController extends AbstractActionController
 		$VTs = null;
 		$this->viewContnet['pageContent'] = $pageContent;
         return new ViewModel($this->viewContnet);
+    }
+    
+    public function savepdffileAction()
+    {
+        //session_start();
+		$VTs = new clsSystem;
+		$VTs->initialization();
+		
+		//-----BI開始-----  get prjuid 傳入廠商ＩＤ 回傳品項html option內容
+        //            $apurl='http://211.21.170.18:99';
+        $url=$_GET['url'];
+        $VTs->Page2PDF($url,dirname(__DIR__) . "\\..\\..\\..\\..\\public\\test.pdf");
+        echo "<script>window.close();</script>";
+
+      
+        
+            //印出html
+//            $pageContent=$html;
+        //-----BI結束-----
+         //關閉資料庫連線
+        $VTs->DBClose();
+        //釋放
+		$VTs = null;
+//		$this->viewContnet['pageContent'] = $pageContent;
+//        return new ViewModel($this->viewContnet);
+    }
+    public function saveAction()
+    {
+        //session_start();
+		$VTs = new clsSystem;
+		$VTs->initialization();
+		
+		//-----BI開始-----  get prjuid 傳入廠商ＩＤ 回傳品項html option內容
+                    $apurl='http://211.21.170.18:99';
+//        $apurl='http://127.0.0.1:88';
+        $data=$_POST;
+        $re=$VTs->UrlDataPost($apurl."/logbook/dbmodify",$_POST);
+        print_r($re);
+
+      
+        
+            //印出html
+//            $pageContent=$html;
+        //-----BI結束-----
+         //關閉資料庫連線
+        $VTs->DBClose();
+        //釋放
+		$VTs = null;
+//		$this->viewContnet['pageContent'] = $pageContent;
+//        return new ViewModel($this->viewContnet);
     }
 
 }
