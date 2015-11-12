@@ -1,4 +1,4 @@
-    var redirect_url;
+var redirect_url;
 var login_code;
 
 $(function(){
