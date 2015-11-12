@@ -54,8 +54,8 @@ class SARController extends AbstractActionController
 		$VTs->initialization();
 		
 		//-----BI開始-----
-			//$apurl='http://211.21.170.18:99';
-			$apurl='http://127.0.0.1:99';
+			$apurl='http://211.21.170.18:99';
+			//$apurl='http://127.0.0.1:99';
 			
 			$mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\sar\\report.html";
 			$html=$VTs->GetHtmlContent($mpath);
