@@ -14,10 +14,16 @@ var configObject = {
     "QCInsert":apurl+"/qc/dbinsert",
     "QCModify":apurl+"/qc/dbmodify",
     "QCDelete":apurl+"/qc/dbdelete",
+	"getPosition": "pageaction/acposition",
+    
+	"SARGetworkerdata": apurl+"/sar/getworkerdata",
+	"SARRecordAttendance": apurl+"/sar/recordattendance",
+
     "logbookGetData":apurl+"/logbook/getdbdata",
     "logbookInsert":apurl+"/logbook/dbinsert",
     "logbookModify":apurl+"/logbook/dbmodify",
     "getPosition": "pageaction/acposition",
     "getAcInfo": "pageaction/acinfo",
     "socketConn": "http://211.21.170.18:7077",
+
 };
