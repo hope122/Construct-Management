@@ -32,8 +32,8 @@ class MaterialController extends AbstractActionController
 		
 		//-----BI開始-----  Application材料申請頁面
         
-            //    $apurl='http://211.21.170.18:99';
-                $apurl='http://127.0.0.1:88';
+                $apurl='http://211.21.170.18:99';
+//                $apurl='http://127.0.0.1:88';
                 $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\styles\\material\\application.html";
                 $html=$VTs->GetHtmlContent($mpath);
                 $d_type_a = $VTs->json2data($VTs->UrlDataGet($apurl."/material/getdbdata?type=su_supply"));
