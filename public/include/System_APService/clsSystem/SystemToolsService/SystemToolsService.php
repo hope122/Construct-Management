@@ -152,6 +152,7 @@
         public function Page2PDF($ChangePagePagth , $saveFileName, $zoom){
             $OSCommand = 'ver';
             $OS = $this->cmdExecute($OSCommand);
+            $zoomStr = '';
             if($zoom > 1 || $zoom < 1){
                 $zoomStr = '--zoom '.$zoom;
             }
