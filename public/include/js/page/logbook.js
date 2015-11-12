@@ -18,7 +18,6 @@ function chkinp(){
        
     });
     d = d.substring(0,d.length-1);
-
     console.log(d);
     if(!chk){
         alert('資料不完整！');

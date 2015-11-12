@@ -8,18 +8,70 @@
 </head>
 <div id='pr'>
     <div align='center'>建築工程施工日誌</div>
-    <div align='center'>
-       <div>本日天氣：<span>上午：<select id='amwather' class='cls_input'><option value=0>請輸入</option></select></span> &nbsp;&nbsp;<span>下午：<select id='pmwather' class='cls_input'><option value=0>請輸入</option></select></span>
-    </div>
-    <table align='center' style="border:5px;" rules="all" cellpadding='10';>
-        <tr>
-            <td>
-                本日施工項目是否有須依「營造專業工程特定施工項目應置之技術士種類、比率或人數標準表」規定應設置技術士之專業工程：<input type=>有
-            </td>
-        </tr>
-    </table>
     <br>
-<div align='center'>
-    <input align='center' onclick='print();' type='button' value='列印'>
-</div>
+    <form action='/logbook/save' method="post">
+        <div align='center'>
+           <div>本日天氣：<span>上午：<select name='amwather' class='cls_input'><option value=0>請輸入</option>@@woption@@</select></span> &nbsp;&nbsp;<span>下午：<select name='pmwather' class='cls_input'><option value=0>請輸入</option>@@woption@@</select></span>
+        </div>
+        <br>
+        <table align='center' style="border:5px;" rules="all" cellpadding='10';>
+            <tr>
+                <td>
+                    本日施工項目是否有須依「營造專業工程特定施工項目應置之技術士種類、比率或人數標準表」規定應設置技術士之專業工程：&nbsp;&nbsp;&nbsp;&nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td align='right'>
+                    <input name='fourth' type='checkbox' value=1>有</input><input name='fourth' type='checkbox' value=0>無</input>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    工地勞工安全衛生事項之督導、公共環境與安全之維護及其他工地行政事項：
+                </td>
+                
+            </tr>
+             <tr>
+                <td align='center'>
+                    <textarea  rows="5" cols="100" name='fifth'></textarea>
+                </td>
+            </tr>
+              <tr>
+                <td>
+                    施工取樣試驗紀錄：
+                </td>
+                
+            </tr>
+             <tr>
+                <td align='center'>
+                    <textarea  rows="5" cols="100" name='sixth'></textarea>
+                </td>
+            </tr>
+              <tr>
+                <td>
+                    通知協力廠商辦理事項：
+                </td>
+                
+            </tr>
+             <tr>
+                <td align='center'>
+                    <textarea  rows="5" cols="100" name='seventh'></textarea>
+                </td>
+            </tr>
+              <tr>
+                <td>
+                    重要事項紀錄：
+                </td>
+                
+            </tr>
+             <tr>
+                <td align='center'>
+                    <textarea  rows="5" cols="100" name='eighth'></textarea>
+                </td>
+            </tr>
+        </table>
+        <br>
+        <input type="submit" value="送出">
+    </form>
+    
 </div>
