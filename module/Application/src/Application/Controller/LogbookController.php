@@ -46,7 +46,8 @@ class LogbookController extends AbstractActionController
 //        $html=str_replace("@@woption@@",$whtml,$html);
         //取得資料資訊
         $diary_info= $VTs->json2data($VTs->UrlDataGet($apurl."/logbook/getdbdata?type=diary_info&uid=1"));
-        
+        print_r($diary_info);
+        exit;
         $html=str_replace("@@amweather@@",$diary_info[0]->amweather,$html);
         $html=str_replace("@@pmweather@@",$diary_info[0]->pmweather,$html);
         $html=str_replace("@@week@@",$diary_info[0]->week,$html);

@@ -58,6 +58,7 @@ function chkinp(){
                //dataType: "JSON",
                success: function(rs){
 //                console.log(rs);
+                    socket.emit('chatMsg', {'msg':'材料申請通知','uid':uuid,'name':userName});
                     alert('新增成功！');
                     getlist();
                },
