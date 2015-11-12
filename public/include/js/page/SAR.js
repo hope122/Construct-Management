@@ -14,16 +14,25 @@ function submitCheck(){
 			async:false,
             success: 
 				function(rs){
-					//console.log(rs);
+					console.log(rs);
 					if(rs.status){
 						
 						//顯示人員資料
-						$("#name").text(rs.sar.name);
-						$("#sex").text(rs.sar.sex);
-						$("#birthday").text(rs.sar.birthday);
-						$("#type").text(rs.sar.work_name);
-						$("#supply").text(rs.sar.su_name);
-						
+						//console.log(rs.sar.work_name===undefined);
+						if(rs.sar.work_name===undefined){
+							$("#name").text(rs.sar.name);
+							$("#sex").text(rs.sar.sex);
+							$("#birthday").text(rs.sar.birthday);
+							$("#type").text("");
+							$("#supply").text("");
+						}else{
+							$("#name").text(rs.sar.name);
+							$("#sex").text(rs.sar.sex);
+							$("#birthday").text(rs.sar.birthday);
+							$("#type").text(rs.sar.work_name);
+							$("#supply").text(rs.sar.su_name);
+						}
+
 						//紀錄出勤時間
 						//console.log($("#check_type").val())
 						recordAttendance($("#check_type").val());
