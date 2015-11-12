@@ -226,11 +226,11 @@
 					break;
 					//日期轉時間秒數?
 					case "CTime":
-						$dateStr = strtotime($Date);
+						$dateStr = Date("Y-m-d");
 					break;
 					//取得現在時間秒數?
 					case "CTime_Now":
-						$dateStr = time();
+						$dateStr = Date("Y-m-d H:i:s");
 					break;
 				}
 				return $dateStr;

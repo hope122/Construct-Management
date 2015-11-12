@@ -1,3 +1,7 @@
+
+function print(){
+    $("#pr").printArea();
+}
 function chkinp(){
     var chk=true;
     var d='';
