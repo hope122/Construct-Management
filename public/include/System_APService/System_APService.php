@@ -166,7 +166,7 @@
 		
 		//使用cmd執行指令
 		public function cmdExecute($sCommand){
-			$this->SystemToolsService->cmdExecute($sCommand);
+			return $this->SystemToolsService->cmdExecute($sCommand);
 		}
 		
 		//建立資料夾 CreateDirectory(sPath)
@@ -199,6 +199,12 @@
 			$this->SystemToolsService->DelField($sFieldPath);
 		}
 		
+        //產生ＰＤＦ檔案
+        public function Page2PDF($ChangePagePagth , $saveFileName, $zoom = 1){
+            return $this->SystemToolsService->Page2PDF($ChangePagePagth , $saveFileName, $zoom);
+        }
+        
+        
 		//寫LOG檔 ThreadLog(clsName, funName, sDescribe = "", sEventDescribe = "", iErr = 0) ??放哪???
 		public function ThreadLog($clsName, $funName, $sDescribe = "", $sEventDescribe = "", $iErr = 0){
 			$this->SystemToolsService->ThreadLog($clsName, $funName, $sDescribe, $sEventDescribe, $iErr);
