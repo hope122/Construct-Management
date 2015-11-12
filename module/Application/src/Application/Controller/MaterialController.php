@@ -99,12 +99,13 @@ class MaterialController extends AbstractActionController
 		//-----BI開始-----  get prjuid 傳入廠商ＩＤ 回傳品項html option內容
                         $apurl='http://211.21.170.18:99';
 //                $apurl='http://127.0.0.1:88';
+
             $ls_petition= $VTs->json2data($VTs->UrlDataGet($apurl."/material/getdbdata?type=el_petition"));
                 if($ls_petition==null){
                     $ls='無資料';
                 }else{
-                    $ls_path=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\styles\\material\\list.html";
-                    $tr_path=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\styles\\material\\tr.html";
+                    $ls_path=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\material\\list.html";
+                    $tr_path=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\material\\tr.html";
                     $ls=$VTs->GetHtmlContent($ls_path);
                     $tr=$VTs->GetHtmlContent($tr_path);
                     $trstr='';
