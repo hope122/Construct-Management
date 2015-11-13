@@ -67,7 +67,9 @@ class MaterialController extends AbstractActionController
 		//-----BI開始-----  get prjuid 傳入廠商ＩＤ 回傳品項html option內容
                 $apurl='http://211.21.170.18:99';
 //            $apurl='http://127.0.0.1:88';
-            //取得廠商ID
+            //    $apurl='http://211.21.170.18:99';
+            $apurl='http://127.0.0.1:88';
+                //取得廠商ID
             $suid=$_GET['suid'];
             //廠商id傳入ap 取得品項陣列
             $arr_prj_material = $VTs->json2data($VTs->UrlDataGet($apurl."/material/getdbdata?type=prj_materiel&suid=".$suid));

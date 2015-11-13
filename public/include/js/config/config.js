@@ -21,11 +21,14 @@ var configObject = {
 	"getPosition": originUrl+"pageaction/acposition",
 	"SARGetworkerdata": apurl+"/sar/getworkerdata",
 	"SARRecordAttendance": apurl+"/sar/recordattendance",
+	"getPosition": "pageaction/acposition",
+	"SARGetworkerdata": apurl+"/sar/getworkerdata",
+	"SARRecordAttendance": apurl+"/sar/recordattendance",
     "logbookGetData":apurl+"/logbook/getdbdata",
     "logbookInsert":apurl+"/logbook/dbinsert",
     "logbookModify":apurl+"/logbook/dbmodify",
     "getPosition": originUrl+"pageaction/acposition",
     "getAcInfo": originUrl+"pageaction/acinfo",
     "socketConn": "http://211.21.170.18:7077",
-
+    "getPosition": "pageaction/acposition",
 };

@@ -5,9 +5,7 @@ $(function(){
 
         if(uid!=0){
             $.get(configObject.MaterialGetData,{ type: "qu_materiel",uid:uid},function(data){
-                
                 var o=jQuery.parseJSON(data);
-               
                 $('#inp_total').val((o[0].count==null)?0:o[0].count);
                 $('#inp_finished').val((o[0].count_in==null)?0:o[0].count_in);
                 $('#inp_prjuid').val((o[0]. uid==null)?0:o[0].uid);
@@ -21,12 +19,14 @@ $(function(){
   
     $("#inp_supply").change(function() {
         var suid=$(this).val();
-    
         $.get('/material/getprjuid',{ suid: suid},function(data){
                 $("#inp_prjuid").empty();
                 $("#inp_prjuid").append(data);
             });
         });
+    $("#inp_date").datepicker({
+        dateFormat: 'yy-mm-dd'
+    });
     getlist();
 });
 
@@ -58,6 +58,7 @@ function chkinp(){
                //dataType: "JSON",
                success: function(rs){
 //                console.log(rs);
+                    socket.emit('chatMsg', {'msg':'材料申請通知','uid':uuid,'name':userName});
                     alert('新增成功！');
                     getlist();
                },
