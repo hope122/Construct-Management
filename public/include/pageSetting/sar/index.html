@@ -52,6 +52,12 @@
 				background-color: Green;
 				color: Red;
 			}
+			
+			.uncheck {
+				display: none;
+				background-color: Red;
+				color: Green;
+			}
 		</style>
 	</head>
 	<body class="homepage">
@@ -93,7 +99,6 @@
 											<div class='css_table' align='center' style='margin: 0px auto;'>
 												<div class="css_tr">
 													<div class="css_td 3u 12u(mobile)">
-														<!--<form method="post" onsubmit="return false;">-->
 															<!--<select id="check_type">
 																<option value=1 selected>進場</option>
 																<option value=2 >離場</option>
@@ -104,7 +109,6 @@
 															</span><!---->
 															<input type="text" placeholder="請輸入身分證號" id="ID" name="ID" size="20" onkeypress="runScript(event)" >　
 															<input type="button" id="ID_check" value="確認" onclick="submitCheck()">	
-														<!--</form>-->
 													</div>
 												</div>	
 												
@@ -148,7 +152,12 @@
 														</span>
 													</div>
 												</div>
-												<div class="css_tr"><span class="check" id="check" >已點名</span></div>
+												<div class="css_tr">
+													<div class="css_td">
+														<span class="check" id="check" >已點名</span>
+														<span class="uncheck" id="uncheck" >未點名</span>
+													</div>
+												</div>
 											</div>
 											
 											

@@ -3,10 +3,8 @@ $(function(){
 })
 
 function submitCheck(){
-	//console.log($("input[name=radio]:checked").val());
-	if($("#ID").val()!=""){
-		
-		//console.log("send ID: "+$("#ID").val());
+	//console.log("send ID: "+$("#ID").val());
+	if($("#ID").val()!=""){		
 		$.ajax({
 			//url: configObject.SARGetworkerdata,
 			url: "http://127.0.0.1:99/sar/getworkerdata",
@@ -24,49 +22,42 @@ function submitCheck(){
 						
 						switch(rs.info_type){
 							case "worker":
+								//塞入資料
 								$("#name").text(rs.sar.name);
 								$("#sex").text(rs.sar.sex);
 								$("#birthday").text(rs.sar.birthday);
 								$("#type").text(rs.sar.work_name);
 								$("#supply").text(rs.sar.su_name);
+								
+								//顯示
 								$("#info").show();
 								$("#worker_info").show();
 								$("#employee_info").hide();
+								
 								break;
 							case "employee":
+								
+								//塞入資料
 								$("#name").text(rs.sar.name);
 								$("#sex").text(rs.sar.sex);
 								$("#birthday").text(rs.sar.birthday);
-								$("#org").text("");
-								$("#position").text("");
+								$("#org").text(rs.sar.office_name);
+								$("#position").text(rs.sar.position_name);
+								
+								//顯示
 								$("#info").show();
 								$("#employee_info").show();
 								$("#worker_info").hide();
+								
 								break;
 							default:
 						}
-						// if(rs.sar.work_name===undefined){
-							// $("#name").text(rs.sar.name);
-							// $("#sex").text(rs.sar.sex);
-							// $("#birthday").text(rs.sar.birthday);
-							// $("#org").text("");
-							// $("#position").text("");
-							// $("#info").show();
-							// $("#employee_info").show();
-							
-						// }else{
-							// $("#name").text(rs.sar.name);
-							// $("#sex").text(rs.sar.sex);
-							// $("#birthday").text(rs.sar.birthday);
-							// $("#type").text(rs.sar.work_name);
-							// $("#supply").text(rs.sar.su_name);
-							// $("#info").show();
-							// $("#worker_info").show();
-						// }
 
 						//紀錄出勤時間
 						//console.log($("#check_type").val())
 						//recordAttendance($("#check_type").val());
+						
+						//console.log($("input[name=radio]:checked").val());
 						recordAttendance($("input[name=radio]:checked").val());
 						
 					}else{
@@ -84,7 +75,8 @@ function submitCheck(){
 				},
             error: 
 				function(e){
-					location.reload();
+					//location.reload();
+					console.log(e);
 				}
         });
     }else{
@@ -105,10 +97,13 @@ function recordAttendance(check_type){
 			function(rs){
 				//console.log(rs);
 				$("#check").show();
+				$("#uncheck").hide();
 			},
         error: 
 			function(e){
-				alert("沒點到名")
+				$("#uncheck").show();
+				$("#check").hide();
+				
 				//console.log(e);
 			}
 	});
