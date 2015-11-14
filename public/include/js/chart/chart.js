@@ -3,25 +3,29 @@ var chartData = null;
 //載入折線圖,長條圖
 google.load('visualization', '1.1', {packages: ['corechart','bar']});
 
-function getChartData(url,urlMethod,sendData,chartType,drawItemID,setUnitArr){
+function createChart(options){
     $.ajax({
-        url: url,
-        type: urlMethod,
-        data: sendData,
+        url: options.url,
+        type: options.urlMethod,
+        data: options.sendData,
         dataType: "JSON",
         async: false,
         success: function(rs){
-            chartData = resetData(rs,setUnitArr);
-            setDraw(setUnitArr,chartData,drawItemID);
+            if(rs.length > 0){
+                chartData = resetData(rs,options);
+                setDraw(options,chartData);
+            }else{
+                $("#"+options.drawItemID).html("Chart Data is Empty!");
+            }
         }
     });
     //return chartData;
 }
 
-function resetData(chartData,setUnitArr){
+function resetData(chartData,options){
     var titleArr = [];
     //底部項目名稱
-    titleArr[0] = setUnitArr.bottomTitle;
+    titleArr[0] = options.bottomTitle;
     
     var contentArr = [];
     //對應的ＩＮＤＥＸ暫存陣列
@@ -60,36 +64,25 @@ function checkInArray(data,Arr){
     return false;
 }
 
-function setDraw(setUnitArr,dataArr,drawItemID){
-    
-    /*var dataArr = [
-        ["month","kWT","kWT2"],
-        ["1",68085,40000],
-        ["2",42813,30000],
-        ["3",92895,100000],
-        ["4",111566,80000],
-        ["5",144461,300000],
-        ["6",189448,200000],
-        ["7",79089,80000],
-        ["8",155500,null]
-    ];*/
+function setDraw(options,dataArr){
     google.setOnLoadCallback(function(){
-        drawChart(setUnitArr,dataArr,drawItemID);
+        drawChart(options,dataArr);
     });
 }
 
-function putData(worksidIndexArr,worksid){
+function putData(worksidIndexArr,suid){
     for(var key in worksidIndexArr){
-        if(worksidIndexArr[key] == worksid){
+        if(worksidIndexArr[key] == suid){
             return key;
         }
     }
     return false;
 }
 
-function drawChart(setUnitArr,dataArr,drawItemID) {
-    var data = google.visualization.arrayToDataTable(dataArr);
-    var options = {
+function drawChart(options,dataArr) {
+    var chart, 
+    data = google.visualization.arrayToDataTable(dataArr),
+    chartOptions = {
         //curveType: 'function',
         legend: { position: 'bottom' },
         width: "100%",
@@ -97,23 +90,24 @@ function drawChart(setUnitArr,dataArr,drawItemID) {
         pointSize: 7,
         pointsVisible: true,
         hAxis: {
-          title: setUnitArr.bottomTitle
+          title: options.bottomTitle
         },
         vAxis: {
-          title: setUnitArr.unitTitle
+          title: options.unitTitle
         },
-    };
-    var chart;
-    switch(setUnitArr.drawType){
+    },
+    drawItemID = document.getElementById(options.drawItemID);
+
+    switch(options.drawType){
         case "LineChart":
-            chart = new google.visualization.LineChart(document.getElementById(drawItemID));
+            chart = new google.visualization.LineChart(drawItemID);
         break;
         case "ColumnChart":
-            chart = new google.visualization.ColumnChart(document.getElementById(drawItemID));
+            chart = new google.visualization.ColumnChart(drawItemID);
         break;
         default:
-            chart = new google.visualization.ColumnChart(document.getElementById(drawItemID));
+            chart = new google.visualization.ColumnChart(drawItemID);
         break;
     }
-    chart.draw(data, options);
+    chart.draw(data, chartOptions);
 }
