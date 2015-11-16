@@ -4,6 +4,7 @@ $(function(){
 
 function submitCheck(){
 	//console.log("send ID: "+$("#ID").val());
+	//console.log($("#switch_type").val());
 	if($("#ID").val()!=""){		
 		$.ajax({
 			//url: configObject.SARGetworkerdata,
@@ -58,7 +59,10 @@ function submitCheck(){
 						//recordAttendance($("#check_type").val());
 						
 						//console.log($("input[name=radio]:checked").val());
-						recordAttendance($("input[name=radio]:checked").val());
+						//recordAttendance($("input[name=radio]:checked").val());
+						
+						//console.log($("#switch_type").val());
+						recordAttendance($("#switch_type").val());
 						
 					}else{
 						$("#name").text("");
@@ -70,8 +74,13 @@ function submitCheck(){
 						$("#worker_info").hide();
 						$("#employee_info").hide();
 						$("#check").hide();
+						$("#uncheck").hide();
+						$("#in").hide();
+						$("#out").hide();
 						alert(rs.msg);
 					} 
+					$("#ID").val("");
+					$("#ID").focus();
 				},
             error: 
 				function(e){
@@ -98,6 +107,17 @@ function recordAttendance(check_type){
 				//console.log(rs);
 				$("#check").show();
 				$("#uncheck").hide();
+				switch(check_type){
+					case "1":
+						$("#in").show();
+						$("#out").hide();
+						break;
+					case "2":
+						$("#out").show();
+						$("#in").hide();
+						break;
+					default:
+				}
 			},
         error: 
 			function(e){
