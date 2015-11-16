@@ -43,13 +43,22 @@ function resetData(chartData,options){
             tmpContentArr[v.worksid][0] = v.work_type
             tmpContentTitleArr[tmpContentTitleArr.length] = v.work_type;
         }
-
         tmpContentArr[v.worksid][putData(worksidIndexArr,v.suid)] = parseInt(v.w_count);
     });
+    //console.log(chartData,titleArr,tmpContentArr);
     //開始組合
-    var relData = [];
+    var relData = [], totalItem = 0;
     relData[0] = titleArr;
+    totalItem = titleArr.length;
     for(var worksid in tmpContentArr){
+        if(tmpContentArr[worksid].length != totalItem){
+            //將不對稱的部份補上0
+            for(i=1;i <= totalItem-1;i++){
+                if(typeof tmpContentArr[worksid][i] == "undefined"){
+                    tmpContentArr[worksid][i] = 0;
+                }
+            }
+        }
         relData[relData.length] = tmpContentArr[worksid];
     }
     return relData;
@@ -72,8 +81,8 @@ function setDraw(options,dataArr){
 
 function putData(worksidIndexArr,suid){
     for(var key in worksidIndexArr){
-        if(worksidIndexArr[key] == suid){
-            return key;
+        if(key == parseInt(suid)){
+            return parseInt(worksidIndexArr[key]);
         }
     }
     return false;
@@ -104,6 +113,7 @@ function drawChart(options,dataArr) {
         break;
         case "ColumnChart":
             chart = new google.visualization.ColumnChart(drawItemID);
+            chartOptions.isStacked = true;
         break;
         default:
             chart = new google.visualization.ColumnChart(drawItemID);
