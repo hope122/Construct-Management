@@ -1,0 +1,25 @@
+<html>
+  <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script src="include/js/jquery/jquery-1.11.3.min.js"></script>
+    <script src="https://www.google.com/jsapi"></script>
+    <script src="include/js/chart/chart.js"></script>
+    <script>
+      $(function(){
+        var options = {
+          url: "http://211.21.170.18:99/sar/report",
+          urlMethod: "GET",
+          sendData: {},
+          drawItemID: 'testChart',
+          unitTitle:"人次",
+          bottomTitle:"工種",
+          drawType:"ColumnChart" //drawType 可使用 ColumnChart、LineChart 兩種
+        };
+        createChart(options);
+      });
+    </script>
+  </head>
+  <body>
+    <div id="testChart"></div>
+  </body>
+</html>
