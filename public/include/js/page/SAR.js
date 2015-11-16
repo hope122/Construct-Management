@@ -7,8 +7,8 @@ function submitCheck(){
 	//console.log($("#switch_type").val());
 	if($("#ID").val()!=""){		
 		$.ajax({
-			//url: configObject.SARGetworkerdata,
-			url: "http://127.0.0.1:99/sar/getworkerdata",
+			url: configObject.SARGetworkerdata,
+			//url: "http://127.0.0.1:99/sar/getworkerdata",
             type: "POST",
 			data: "ID="+$("#ID").val(),
 			dataType: "JSON",
@@ -96,8 +96,8 @@ function submitCheck(){
 function recordAttendance(check_type){
 	//alert(check_type);
 	$.ajax({
-		//url: configObject.SARRecordAttendance,
-		url: "http://127.0.0.1:99/sar/recordattendance",
+		url: configObject.SARRecordAttendance,
+		//url: "http://127.0.0.1:99/sar/recordattendance",
         type: "POST",
 		data: { ID:$("#ID").val(), check_type:check_type },
 		dataType: "JSON",
