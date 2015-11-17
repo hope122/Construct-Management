@@ -21,7 +21,7 @@ class QCController extends AbstractActionController
 		 //session_start();
 		$VTs = new clsSystem;
 		$VTs->initialization();
-		
+        try{
 		//-----BI開始-----  index QC審查首頁
         //    $apurl='http://211.21.170.18:99';
         $apurl='http://127.0.0.1:88';
@@ -50,6 +50,10 @@ class QCController extends AbstractActionController
 
                 $pageContent=$html;
         //-----BI結束-----
+        }catch(Exception $error){
+            //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
+            $VTs->WriteLog("IndexController", "indexAction", $error->getMessage());
+        }
          //關閉資料庫連線
         $VTs->DBClose();
         //釋放
@@ -62,7 +66,7 @@ class QCController extends AbstractActionController
 		 //session_start();
 		$VTs = new clsSystem;
 		$VTs->initialization();
-		
+      try{
 		//-----BI開始-----  index QC審查首頁
            $apurl='http://211.21.170.18:99';
         // $apurl='http://127.0.0.1:88';
@@ -90,6 +94,10 @@ class QCController extends AbstractActionController
 
                 $pageContent=$html;
         //-----BI結束-----
+        }catch(Exception $error){
+            //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
+            $VTs->WriteLog("IndexController", "indexAction", $error->getMessage());
+        }
          //關閉資料庫連線
         $VTs->DBClose();
         //釋放

@@ -29,7 +29,7 @@ class MaterialController extends AbstractActionController
         //session_start();
 		$VTs = new clsSystem;
 		$VTs->initialization();
-		
+        try{
 		//-----BI開始-----  Application材料申請頁面
         
                 $apurl='http://211.21.170.18:99';
@@ -51,6 +51,10 @@ class MaterialController extends AbstractActionController
         
                 $pageContent=$html;
         //-----BI結束-----
+        }catch(Exception $error){
+            //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
+            $VTs->WriteLog("IndexController", "indexAction", $error->getMessage());
+        }
          //關閉資料庫連線
         $VTs->DBClose();
         //釋放
@@ -65,6 +69,7 @@ class MaterialController extends AbstractActionController
 		$VTs->initialization();
 		
 		//-----BI開始-----  get prjuid 傳入廠商ＩＤ 回傳品項html option內容
+        try{
                 $apurl='http://211.21.170.18:99';
 //            $apurl='http://127.0.0.1:88';
             //    $apurl='http://211.21.170.18:99';
@@ -85,6 +90,10 @@ class MaterialController extends AbstractActionController
             //印出html
             $pageContent=$html;
         //-----BI結束-----
+        }catch(Exception $error){
+            //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
+            $VTs->WriteLog("IndexController", "indexAction", $error->getMessage());
+        }
          //關閉資料庫連線
         $VTs->DBClose();
         //釋放
@@ -99,6 +108,7 @@ class MaterialController extends AbstractActionController
 		$VTs->initialization();
 		
 		//-----BI開始-----  get prjuid 傳入廠商ＩＤ 回傳品項html option內容
+        try{
                         $apurl='http://211.21.170.18:99';
 //                $apurl='http://127.0.0.1:88';
 
@@ -136,6 +146,10 @@ class MaterialController extends AbstractActionController
             //印出html
             $pageContent=$ls;
         //-----BI結束-----
+        }catch(Exception $error){
+            //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
+            $VTs->WriteLog("IndexController", "indexAction", $error->getMessage());
+        }
          //關閉資料庫連線
         $VTs->DBClose();
         //釋放
