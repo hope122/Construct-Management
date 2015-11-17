@@ -162,6 +162,20 @@ return array(
 					),
 				),
 			),
+			'usermanage' => array(
+				'type'    => 'segment',
+				'options' => array(
+					'route'    => '/usermanage[/:action]',
+					'constraints' => array(
+						'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+						'id'     => '[0-9]+',
+					),
+					'defaults' => array(
+						'controller' => 'Application\Controller\usermanage',
+						'action'     => 'index',
+					),
+				),
+			),
         ),
     ),
     'service_manager' => array(
@@ -183,6 +197,7 @@ return array(
             'Application\Controller\QC' => 'Application\Controller\QCController',
             'Application\Controller\SAR' => 'Application\Controller\SARController',
             'Application\Controller\Logbook' => 'Application\Controller\LogbookController',
+            'Application\Controller\UserManage' => 'Application\Controller\UserManageController'
         ),
     ),
     'view_manager' => array(

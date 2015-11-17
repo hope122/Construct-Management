@@ -30,9 +30,9 @@ class SARController extends AbstractActionController
 		$VTs->initialization();
 		try{
 			//-----BI開始-----  
-				$mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\sar\\index.html";
-				$html=$VTs->GetHtmlContent($mpath);
-				
+				$mpath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\sar\\index.html";
+				$html = $VTs->GetHtmlContent($mpath);
+				$html = str_replace("@@userName@@",$_SESSION["userName"],$html);
 				$pageContent = $html;
 			//-----BI結束-----
         }catch(Exception $error){
@@ -65,11 +65,11 @@ class SARController extends AbstractActionController
 					$apurl='http://211.21.170.18:99';
 					//$apurl='http://127.0.0.1:99';
 					
-					$mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\sar\\report.html";
-					$html=$VTs->GetHtmlContent($mpath);
-					
-					$listpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\sar\\reportList.html";
-					$tr=$VTs->GetHtmlContent($listpath);
+					$mpath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\sar\\report.html";
+					$html = $VTs->GetHtmlContent($mpath);
+					$html = str_replace("@@userName@@",$_SESSION["userName"],$html);
+					$listpath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\sar\\reportList.html";
+					$tr = $VTs->GetHtmlContent($listpath);
 					
 					//$dataList= $VTs->json2data($VTs->UrlDataGet($apurl."/sar/report"));
 					//$VTs->debug($dataList);

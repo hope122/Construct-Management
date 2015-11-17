@@ -5,6 +5,9 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<!--[if lte IE 8]><script src="../include/strongly/assets/js/ie/html5shiv.js"></script><![endif]-->
+		<link href="../include/css/bootstrap.css" rel="stylesheet">
+		<link href="../include/css/bootstrap-switch.css" rel="stylesheet">
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 		<link rel="stylesheet" href="../include/strongly/assets/css/main.css" />
         <link rel="stylesheet" href="../include/css/jquery-ui.min.css" />
 		<!--[if lte IE 8]><link rel="stylesheet" href="../include/strongly/assets/css/ie8.css" /><![endif]-->
@@ -22,12 +25,15 @@
         <script src="../include/js/page/check_login.js"></script>
         <script src="../include/js/page/topMenu.js"></script>
 		<script src="../include/strongly/assets/js/main.js"></script>
+		<script src="/include/js/page/sar.js"></script>
+		<script src="../include/js/bootstrap/bootstrap-switch.js"></script>
         <script>
             $(function(){
-              getLan();
+				getLan();
+				$("#radio").buttonset();
+				$("[name='switch']").bootstrapSwitch();
             });
         </script>
-		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 		<style type="text/css">
 			.css_table {
 				display:table;
@@ -40,19 +46,7 @@
 			.css_td {
 				display: table-cell;
 			}
-		</style>
-		
-		<script src="/include/js/page/sar.js"></script>
-		<link href="../include/css/bootstrap.css" rel="stylesheet">
-		<link href="../include/css/bootstrap-switch.css" rel="stylesheet">
-		<script src="../include/js/bootstrap/bootstrap-switch.js"></script>
-		<script>
-			$(function() {
-				$( "#radio" ).buttonset();
-				$("[name='switch']").bootstrapSwitch();
-			});
-		</script>
-		<style>
+			
 			.check, .in{
 				display: none;
 				background-color: #66FF66;
@@ -68,7 +62,6 @@
 			.txt{
 				font-size: 20px;
 			}
-			
 		</style>
 	</head>
 	<body class="homepage">
