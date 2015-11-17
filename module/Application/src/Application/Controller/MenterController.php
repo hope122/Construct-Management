@@ -18,37 +18,42 @@ class MenterController extends AbstractActionController
     public function setloginAction(){
         $VTs = new clsSystem;
         $VTs->initialization();
-        //-----BI開始-----
-        $pArr = array();
-        $pArr["status"] = false;
-        if(!empty($_POST)){
-            if($_POST["status"]){
-                $strSQL = "select * from acl_account_position_list where uuid = '".$_POST["uuid"]."'";
-                $data = $VTs->QueryData($strSQL);
-                $position = '';
-                if(!empty($data)){
-                    foreach($data as $content){
-                        $position .= $content["position_uid"].',';
+        try{
+            //-----BI開始-----
+            $pArr = array();
+            $pArr["status"] = false;
+            if(!empty($_POST)){
+                if($_POST["status"]){
+                    $strSQL = "select * from acl_account_position_list where uuid = '".$_POST["uuid"]."'";
+                    $data = $VTs->QueryData($strSQL);
+                    $position = '';
+                    if(!empty($data)){
+                        foreach($data as $content){
+                            $position .= $content["position_uid"].',';
+                        }
+                        $position = substr($position,0,strlen($position)-1);
+                    }else{
+                        $position = 0;
                     }
-                    $position = substr($position,0,strlen($position)-1);
+                    $_SESSION["uuid"] = $_POST["uuid"];
+                    $_SESSION["userName"] = $_POST["name"];
+                    $_SESSION["ac"] = $_POST["userAc"];
+                    $_SESSION["position"] = $position;
+                    $pArr["status"] = true;
                 }else{
-                    $position = 0;
+                    $pArr["msg"] = 'This Login is False';
+                    $pArr["code"] = 2;
                 }
-                $_SESSION["uuid"] = $_POST["uuid"];
-                $_SESSION["userName"] = $_POST["name"];
-                $_SESSION["ac"] = $_POST["userAc"];
-                $_SESSION["position"] = $position;
-                $pArr["status"] = true;
             }else{
-                $pArr["msg"] = 'This Login is False';
-                $pArr["code"] = 2;
+                $pArr["msg"] = 'This Status is False';
+                $pArr["code"] = 1;
             }
-        }else{
-            $pArr["msg"] = 'This Status is False';
-            $pArr["code"] = 1;
+            $pageContent = $VTs->Data2Json($pArr);
+            //----BI結束----
+        }catch(Exception $error){
+            //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
+            $VTs->WriteLog("MenterController", "setloginAction", $error->getMessage());
         }
-        $pageContent = $VTs->Data2Json($pArr);
-        //----BI結束----
         $VTs->DBClose();
         $VTs = null;
         $this->viewContnet['pageContent'] = $pageContent;
