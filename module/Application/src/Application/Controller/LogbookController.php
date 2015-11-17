@@ -21,7 +21,7 @@ class LogbookController extends AbstractActionController
 		 //session_start();
 		$VTs = new clsSystem;
 		$VTs->initialization();
-		
+        try{
 		//-----BI開始-----  index logbook施工日誌首頁
         
         //設定apurl
@@ -46,8 +46,6 @@ class LogbookController extends AbstractActionController
 //        $html=str_replace("@@woption@@",$whtml,$html);
         //取得資料資訊
         $diary_info= $VTs->json2data($VTs->UrlDataGet($apurl."/logbook/getdbdata?type=diary_info&uid=1"));
-        print_r($diary_info);
-        exit;
         $html=str_replace("@@amweather@@",$diary_info[0]->amweather,$html);
         $html=str_replace("@@pmweather@@",$diary_info[0]->pmweather,$html);
         $html=str_replace("@@week@@",$diary_info[0]->week,$html);
@@ -119,6 +117,10 @@ class LogbookController extends AbstractActionController
 
                 $pageContent=$html;
         //-----BI結束-----
+        }catch(Exception $error){
+            //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
+            $VTs->WriteLog("IndexController", "indexAction", $error->getMessage());
+        }
          //關閉資料庫連線
         $VTs->DBClose();
         //釋放
@@ -131,7 +133,7 @@ class LogbookController extends AbstractActionController
         //session_start();
 		$VTs = new clsSystem;
 		$VTs->initialization();
-		
+        try{
 		//-----BI開始-----  get prjuid 傳入廠商ＩＤ 回傳品項html option內容
             $apurl='http://127.0.0.1:88';
         //取得主頁html
@@ -150,6 +152,10 @@ class LogbookController extends AbstractActionController
             //印出html
             $pageContent=$html;
         //-----BI結束-----
+        }catch(Exception $error){
+            //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
+            $VTs->WriteLog("IndexController", "indexAction", $error->getMessage());
+        }
          //關閉資料庫連線
         $VTs->DBClose();
         //釋放
@@ -163,7 +169,7 @@ class LogbookController extends AbstractActionController
         //session_start();
 		$VTs = new clsSystem;
 		$VTs->initialization();
-		
+        try{
 		//-----BI開始-----  get prjuid 傳入廠商ＩＤ 回傳品項html option內容
         //            $apurl='http://211.21.170.18:99';
         $url=$_GET['url'];
@@ -175,6 +181,10 @@ class LogbookController extends AbstractActionController
             //印出html
 //            $pageContent=$html;
         //-----BI結束-----
+        }catch(Exception $error){
+            //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
+            $VTs->WriteLog("IndexController", "indexAction", $error->getMessage());
+        }
          //關閉資料庫連線
         $VTs->DBClose();
         //釋放
