@@ -64,29 +64,28 @@ class QCController extends AbstractActionController
 		$VTs->initialization();
 		
 		//-----BI開始-----  index QC審查首頁
-        //    $apurl='http://211.21.170.18:99';
-        $apurl='http://127.0.0.1:88';
+           $apurl='http://211.21.170.18:99';
+        // $apurl='http://127.0.0.1:88';
         $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\qc\\photolist.html";
 //        $trpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\styles\\qc\\tr.html";
         $html=$VTs->GetHtmlContent($mpath);
 //        $tr=$VTs->GetHtmlContent($trpath);
  
-//        $arr_data = $VTs->json2data($VTs->UrlDataGet($apurl."/qc/getdbdata"));
+       $arr_list = $VTs->json2data($VTs->UrlDataGet($apurl."/qc/getdbdata?type=qc_checklist"));
         
-//        print_r($arr_data);
+        // print_r($arr_list);
 //        $str='';
-//        foreach($arr_data as $index=>$data) {
-//            $trs=$tr;
-//            $trs=str_replace('@@id@@',$index+1,$trs);
-//            $trs=str_replace('@@chkdata@@',$data->typename,$trs);
-//            $trs=str_replace('@@date@@',$data->date,$trs);
-//            $trs=str_replace('@@datec@@',$data->datec,$trs);
-//            $trs=str_replace('@@isok@@',$data->isok,$trs);
-//            $trs=str_replace('@@img@@',$data->imgid,$trs);
-//            $trs=str_replace('@@remark@@',$data->remark,$trs);
-//            $str.=$trs;
-//        }
-//        $html=str_replace('@@tr@@',$str,$html);
+       foreach($arr_list as $data) {
+            
+            if(!empty($data->imgid)){
+                $arr=array("qcid"=>$data->imgid);
+                print_r($arr);
+                $imginfo = $VTs->json2data($VTs->UrlDataPost($apurl."/pageaction/getqcimglist",$arr));
+                print_r($imginfo);
+            }
+   
+       }
+       // $html=str_replace('@@tr@@',$str,$html);
         
 
                 $pageContent=$html;

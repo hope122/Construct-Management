@@ -15,6 +15,7 @@ var configObject = {
     "MaterialModify":apurl+"/material/dbmodify",
     "MaterialDelete":apurl+"/material/dbdelete",
     "MaterialGetData":apurl+"/material/getdbdata",
+    "QCGetData":apurl+"/qc/getdbdata",
     "QCInsert":apurl+"/qc/dbinsert",
     "QCModify":apurl+"/qc/dbmodify",
     "QCDelete":apurl+"/qc/dbdelete",
