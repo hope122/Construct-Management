@@ -3,13 +3,12 @@ $(function(){
 })
 
 function submitCheck(){
-	//console.log($("input[name=radio]:checked").val());
-	if($("#ID").val()!=""){
-		
-		//console.log("send ID: "+$("#ID").val());
+	//console.log("send ID: "+$("#ID").val());
+	//console.log($("#switch_type").val());
+	if($("#ID").val()!=""){		
 		$.ajax({
-			//url: configObject.SARGetworkerdata,
-			url: "http://127.0.0.1:99/sar/getworkerdata",
+			url: configObject.SARGetworkerdata,
+			//url: "http://127.0.0.1:99/sar/getworkerdata",
             type: "POST",
 			data: "ID="+$("#ID").val(),
 			dataType: "JSON",
@@ -24,50 +23,46 @@ function submitCheck(){
 						
 						switch(rs.info_type){
 							case "worker":
+								//塞入資料
 								$("#name").text(rs.sar.name);
 								$("#sex").text(rs.sar.sex);
 								$("#birthday").text(rs.sar.birthday);
 								$("#type").text(rs.sar.work_name);
 								$("#supply").text(rs.sar.su_name);
+								
+								//顯示
 								$("#info").show();
 								$("#worker_info").show();
 								$("#employee_info").hide();
+								
 								break;
 							case "employee":
+								
+								//塞入資料
 								$("#name").text(rs.sar.name);
 								$("#sex").text(rs.sar.sex);
 								$("#birthday").text(rs.sar.birthday);
-								$("#org").text("");
-								$("#position").text("");
+								$("#org").text(rs.sar.office_name);
+								$("#position").text(rs.sar.position_name);
+								
+								//顯示
 								$("#info").show();
 								$("#employee_info").show();
 								$("#worker_info").hide();
+								
 								break;
 							default:
 						}
-						// if(rs.sar.work_name===undefined){
-							// $("#name").text(rs.sar.name);
-							// $("#sex").text(rs.sar.sex);
-							// $("#birthday").text(rs.sar.birthday);
-							// $("#org").text("");
-							// $("#position").text("");
-							// $("#info").show();
-							// $("#employee_info").show();
-							
-						// }else{
-							// $("#name").text(rs.sar.name);
-							// $("#sex").text(rs.sar.sex);
-							// $("#birthday").text(rs.sar.birthday);
-							// $("#type").text(rs.sar.work_name);
-							// $("#supply").text(rs.sar.su_name);
-							// $("#info").show();
-							// $("#worker_info").show();
-						// }
 
 						//紀錄出勤時間
 						//console.log($("#check_type").val())
 						//recordAttendance($("#check_type").val());
-						recordAttendance($("input[name=radio]:checked").val());
+						
+						//console.log($("input[name=radio]:checked").val());
+						//recordAttendance($("input[name=radio]:checked").val());
+						
+						//console.log($("#switch_type").val());
+						recordAttendance($("#switch_type").val());
 						
 					}else{
 						$("#name").text("");
@@ -79,12 +74,18 @@ function submitCheck(){
 						$("#worker_info").hide();
 						$("#employee_info").hide();
 						$("#check").hide();
+						$("#uncheck").hide();
+						$("#in").hide();
+						$("#out").hide();
 						alert(rs.msg);
 					} 
+					$("#ID").val("");
+					$("#ID").focus();
 				},
             error: 
 				function(e){
-					location.reload();
+					//location.reload();
+					console.log(e);
 				}
         });
     }else{
@@ -95,8 +96,8 @@ function submitCheck(){
 function recordAttendance(check_type){
 	//alert(check_type);
 	$.ajax({
-		//url: configObject.SARRecordAttendance,
-		url: "http://127.0.0.1:99/sar/recordattendance",
+		url: configObject.SARRecordAttendance,
+		//url: "http://127.0.0.1:99/sar/recordattendance",
         type: "POST",
 		data: { ID:$("#ID").val(), check_type:check_type },
 		dataType: "JSON",
@@ -105,10 +106,24 @@ function recordAttendance(check_type){
 			function(rs){
 				//console.log(rs);
 				$("#check").show();
+				$("#uncheck").hide();
+				switch(check_type){
+					case "1":
+						$("#in").show();
+						$("#out").hide();
+						break;
+					case "2":
+						$("#out").show();
+						$("#in").hide();
+						break;
+					default:
+				}
 			},
         error: 
 			function(e){
-				alert("沒點到名")
+				$("#uncheck").show();
+				$("#check").hide();
+				
 				//console.log(e);
 			}
 	});

@@ -175,8 +175,8 @@
 		}
 		
 		//建立檔案 CreateFile(sFileFullPath)
-		public function CreateFile($sFileFullPath){
-			$this->SystemToolsService->CreateFile($sFileFullPath);
+		public function CreateFile($sFileFullPath,$sFileContent, $writeType = "w"){
+			return $this->SystemToolsService->CreateFile($sFileFullPath,$sFileContent,$writeType);
 		}
 		
 		//複製檔案 CopyFile(sOrgFileFullPath, sOutFileFullPath)
@@ -205,10 +205,47 @@
         }
         
         
-		//寫LOG檔 ThreadLog(clsName, funName, sDescribe = "", sEventDescribe = "", iErr = 0) ??放哪???
-		public function ThreadLog($clsName, $funName, $sDescribe = "", $sEventDescribe = "", $iErr = 0){
+		//寫LOG檔 ThreadLog(clsName, funName, sDescribe = "", sEventDescribe = "", iErr = 0) 
+		public function WriteLog($clsName, $funName, $sDescribe = "", $sEventDescribe = "", $iErr = 0){
+			global $callFunction;
+			//$SystemToolsService = $this->SystemToolsService;
+			$callFunction = debug_backtrace();
+			$callFunction = $callFunction[0];
+			
 			$this->SystemToolsService->ThreadLog($clsName, $funName, $sDescribe, $sEventDescribe, $iErr);
+			
+			//畫面操作事件
+			if($sEventDescribe != ""){
+				$this->SetAPPLog($sEventDescribe);
+			}
+
+			//釋放
+			$SystemDBService = null;
+			$SystemToolsService = null;
+			$callFunction = null;
 		}
+
+		//寫入使用者APP Log
+		public function SetAPPLog($sLogMsg, $sLogSource = "操作紀錄", $blCn2 = false, $iLogType = 1, $sPhyAddr = "(NULL)", $blFiahMarket = false){
+			global $SystemToolsService;
+			$SystemToolsService = $this->SystemToolsService;
+			try{
+				if(!empty($_SESSION)){
+					$uuid = $_SESSION["uuid"];
+					$sClerk = $_SESSION["ac"];
+					$cHost = $_SESSION["userName"];
+				}else{
+					$uuid = 0;
+					$sClerk = "system";
+					$cHost = "系統動作";
+				}
+				//寫入
+				$this->SystemDBService->SetAPPLog($uuid, $sClerk, $cHost, $sLogMsg, $blCn2, $sLogSource, $iLogType, $sPhyAddr);
+			}catch(Exception $error){
+				$this->WriteLog("clsTools", "SetAPPLog", $error->getMessage(), "", 1);
+			}
+		}
+
 	#modIO結束
 		
 	#modDataFormate

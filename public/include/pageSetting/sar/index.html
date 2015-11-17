@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>建築物雲端全生命週期履歷平台</title>
+		<title>人員出勤點名</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<!--[if lte IE 8]><script src="../include/strongly/assets/js/ie/html5shiv.js"></script><![endif]-->
@@ -26,13 +26,7 @@
             $(function(){
               getLan();
             });
-			 $(function() {
-				$( "#radio" ).buttonset();
-			});
         </script>
-		
-		<script src="/include/js/page/sar.js"></script>
-
 		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 		<style type="text/css">
 			.css_table {
@@ -46,12 +40,35 @@
 			.css_td {
 				display: table-cell;
 			}
-			
-			.check {
+		</style>
+		
+		<script src="/include/js/page/sar.js"></script>
+		<link href="../include/css/bootstrap.css" rel="stylesheet">
+		<link href="../include/css/bootstrap-switch.css" rel="stylesheet">
+		<script src="../include/js/bootstrap/bootstrap-switch.js"></script>
+		<script>
+			$(function() {
+				$( "#radio" ).buttonset();
+				$("[name='switch']").bootstrapSwitch();
+			});
+		</script>
+		<style>
+			.check, .in{
 				display: none;
-				background-color: Green;
-				color: Red;
+				background-color: #66FF66;
+				color: black;
 			}
+			
+			.uncheck, .out{
+				display: none;
+				background-color: #FF7744;
+				color: black;
+			}
+						
+			.txt{
+				font-size: 20px;
+			}
+			
 		</style>
 	</head>
 	<body class="homepage">
@@ -93,18 +110,18 @@
 											<div class='css_table' align='center' style='margin: 0px auto;'>
 												<div class="css_tr">
 													<div class="css_td 3u 12u(mobile)">
-														<!--<form method="post" onsubmit="return false;">-->
 															<!--<select id="check_type">
 																<option value=1 selected>進場</option>
 																<option value=2 >離場</option>
 															</select>-->
-															<span id="radio">
+															<!--<span id="radio">
 																<input type="radio" id="radio1" name="radio" checked="checked" value="1"><label for="radio1">進場</label>
 																<input type="radio" id="radio2" name="radio" value="2"><label for="radio2">出場</label>
-															</span><!---->
-															<input type="text" placeholder="請輸入身分證號" id="ID" name="ID" size="20" onkeypress="runScript(event)" >　
+															</span>-->
+															<input type="checkbox" name="switch" checked>
+															<input type="hidden" id="switch_type" value="1">
+															<input type="text" placeholder="請輸入身分證號" id="ID" name="ID" size="20" onkeypress="runScript(event)" autocomplete="off">　
 															<input type="button" id="ID_check" value="確認" onclick="submitCheck()">	
-														<!--</form>-->
 													</div>
 												</div>	
 												
@@ -115,7 +132,7 @@
 													<div class="css_td" >
 														<span id="info" style="display: none">
 														<div class="css_tr" >
-															<div class="css_td" >
+															<div class="css_td txt" >
 																姓名：<label id="name"></label>　
 																性別：<label id="sex"></label>　
 																生日：<label id="birthday"></label>　
@@ -124,31 +141,39 @@
 														</span>
 														<span id="worker_info" style="display: none">
 															<div class="css_tr" >
-																<div class="css_td" >
+																<div class="css_td txt" >
 																	工種：<label id="type"></label>
 																</div>
 															</div>
 															<div class="css_tr" >
-																<div class="css_td" >
+																<div class="css_td txt" >
 																	廠商：<label id="supply"></label>
 																</div>
 															</div>
 														</span>
 														<span id="employee_info" style="display: none">
 															<div class="css_tr" >
-																<div class="css_td" >
+																<div class="css_td txt" >
 																	單位：<label id="org"></label>
 																</div>
 															</div>
 															<div class="css_tr" >
-																<div class="css_td" >
+																<div class="css_td txt" >
 																	級職：<label id="position"></label>
 																</div>
 															</div>
 														</span>
 													</div>
 												</div>
-												<div class="css_tr"><span class="check" id="check" >已點名</span></div>
+												<div class="css_tr">
+													<div class="css_td txt">
+														<span class="check" id="check" >已點名</span>
+														<span class="uncheck" id="uncheck" >未點名</span>
+														<span class="in" id="in" style="display: none" >進場</span>
+														<span class="out" id="out" style="display: none" >出場</span>
+														
+													</div>
+												</div>
 											</div>
 											
 											

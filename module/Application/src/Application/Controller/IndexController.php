@@ -19,21 +19,24 @@ class IndexController extends AbstractActionController
     {
 		$VTs = new clsSystem;
 		$VTs->initialization();
-		
-		//-----BI開始-----
-		//$HeadTitle = $this->getServiceLocator()->get('ViewHelperManager')->get('HeadTitle');
-        //$VTs->debug($_SESSION);
-		if(empty($_SESSION)){
-            $pagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\index\\login_page.html";
-            $pageContent = $VTs->GetHtmlContent($pagePath);
-		}else{
-			$pagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\index\\after_login.html";
-			$pageContent = $VTs->GetHtmlContent($pagePath);
-            $pageContent = str_replace("@@userName@@",$_SESSION["userName"],$pageContent);
-			//$pageContent = $VTs->CreateInsertOptionBtn('test','test/tw'). $VTs->CreateModifyOptionBtn(["uid"=>1], 'test/tw', 'inputClass', 'contentClass') . $VTs->CreateDeleteOptionBtn(["uid"=>1], 'test/tw', 'rowID') . $VTs->CreateFinishOptionBtn(["uid"=>1], 'test/tw', 'inputClass', 'contentClass') . $pageContent;
+		try{
+			//-----BI開始-----
+			//$HeadTitle = $this->getServiceLocator()->get('ViewHelperManager')->get('HeadTitle');
+	        //$VTs->debug($_SESSION);
+			if(empty($_SESSION)){
+	            $pagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\index\\login_page.html";
+	            $pageContent = $VTs->GetHtmlContent($pagePath);
+			}else{
+				$pagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\index\\after_login.html";
+				$pageContent = $VTs->GetHtmlContent($pagePath);
+	            $pageContent = str_replace("@@userName@@",$_SESSION["userName"],$pageContent);
+				//$pageContent = $VTs->CreateInsertOptionBtn('test','test/tw'). $VTs->CreateModifyOptionBtn(["uid"=>1], 'test/tw', 'inputClass', 'contentClass') . $VTs->CreateDeleteOptionBtn(["uid"=>1], 'test/tw', 'rowID') . $VTs->CreateFinishOptionBtn(["uid"=>1], 'test/tw', 'inputClass', 'contentClass') . $pageContent;
+			}
+			//----BI結束----
+		}catch(Exception $error){
+			//依據Controller, Action補上對應位置, $error->getMessage()為固定部份
+			$VTs->WriteLog("IndexController", "indexAction", $error->getMessage());
 		}
-		//----BI結束----
-		
 		$VTs = null;
 		$this->viewContnet['pageContent'] = $pageContent;
         return new ViewModel($this->viewContnet);
