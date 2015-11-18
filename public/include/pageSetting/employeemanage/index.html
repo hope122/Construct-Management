@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>新增資料頁面</title>
+		<title>員工管理頁面</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<!--[if lte IE 8]><script src="../include/strongly/assets/js/ie/html5shiv.js"></script><![endif]-->
@@ -28,19 +28,24 @@
             });
         </script>
 		
+		<script src="../include/js/page/employeeManage.js"></script>
 		<style type="text/css">
 			.css_table {
 				display:table; 
 				text-align: center;
+				border-collapse:separate;
+				border-spacing: 5px;
+				width: 100%;
 			}
 			
 			.css_tr {
-				display: table-row
+				display: table-row;
 				
 			}
 			
 			.css_td {
 				display: table-cell;
+				width: 10%;
 			}
 		</style>
 		
@@ -77,10 +82,13 @@
 						<div class="row">
 
 							<!-- Content -->
-								<div id="content" class="6u 12u(mobile)">
+								<div id="content" class="12u">
 
 									<!-- Post -->
 										<article class="box post">
+											<div class="3u">
+												<input type="button" id="insert_data" onclick="edit('insertData')" value="新增">
+											</div>
 											<div class="css_table">
 												<div class="css_tr">
 													<div class="css_td">姓名</div>
@@ -91,6 +99,7 @@
 													<div class="css_td">手機</div>
 													<div class="css_td">電話</div>
 													<div class="css_td">信箱</div>
+													<div class="css_td">編輯</div>
 												</div>
 												@@content@@
 											</div>
