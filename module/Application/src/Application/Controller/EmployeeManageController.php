@@ -76,4 +76,39 @@ class EmployeemanageController extends AbstractActionController
 		$this->viewContnet['pageContent'] = $pageContent;
         return new ViewModel($this->viewContnet);
     }
+	
+	public function editPageAction(){
+		$VTs = new clsSystem;
+		$VTs->initialization();
+		try{
+			//-----BI開始-----
+			if(empty($_SESSION)){
+	            $pagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\index\\login_page.html";
+	            $pageContent = $VTs->GetHtmlContent($pagePath);
+			}else{
+				if(!empty($_POST)){
+					$action = $_POST["action"];
+					//echo $action;
+					switch($action){
+						case "insertData":
+							$pageContent = "Prepare to new data";
+							break;
+						case "updateData":
+							$pageContent = "Prepare to update data";
+							break;
+						default:
+							$pageContent = "There has errors";
+					}
+				}
+				
+			}
+			//----BI結束----
+		}catch(Exception $error){
+			//依據Controller, Action補上對應位置, $error->getMessage()為固定部份
+			$VTs->WriteLog("EmployeemanageController", "editPageAction", $error->getMessage());
+		}
+		$VTs = null;
+		$this->viewContnet['pageContent'] = $pageContent;
+        return new ViewModel($this->viewContnet);
+	}
 }
