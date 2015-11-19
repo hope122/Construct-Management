@@ -173,7 +173,17 @@ class LogbookController extends AbstractActionController
 		//-----BI開始-----  get prjuid 傳入廠商ＩＤ 回傳品項html option內容
         //            $apurl='http://211.21.170.18:99';
         $url=$_GET['url'];
-        $VTs->Page2PDF($url,dirname(__DIR__) . "\\..\\..\\..\\..\\public\\test.pdf");
+
+        if( !is_file(dirname(__DIR__) . "\\..\\..\\..\\..\\public\\logbookpdf.pdf") )
+        {     
+            $VTs->Page2PDF($url,dirname(__DIR__) . "\\..\\..\\..\\..\\public\\logbookpdf.pdf");
+            exit;
+        }
+
+ 
+        header('Content-type: application/pdf');
+        readfile('logbookpdf.pdf');
+        header('Content-Disposition: attachment; filename="logbookpdf.pdf"');
         echo "<script>window.close();</script>";
 
       

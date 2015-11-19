@@ -1,5 +1,6 @@
 // var apurl="http://211.21.170.18:99";
 var apurl="http://127.0.0.1:88";
+var cmurl="http://127.0.0.1:168";
 var originUrl = location.origin+'/';
 var configObject = {
     "LoginUrl": "http://211.21.170.18:99/login",

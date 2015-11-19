@@ -68,28 +68,39 @@ class QCController extends AbstractActionController
 		$VTs->initialization();
       try{
 		//-----BI開始-----  index QC審查首頁
-           $apurl='http://211.21.170.18:99';
-        // $apurl='http://127.0.0.1:88';
+           // $apurl='http://211.21.170.18:99';
+        $apurl='http://127.0.0.1:88';
+        //取得html
         $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\qc\\photolist.html";
-//        $trpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\styles\\qc\\tr.html";
+        $trpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\qc\\phototr.html";
         $html=$VTs->GetHtmlContent($mpath);
-//        $tr=$VTs->GetHtmlContent($trpath);
- 
-       $arr_list = $VTs->json2data($VTs->UrlDataGet($apurl."/qc/getdbdata?type=qc_checklist"));
-        
-        // print_r($arr_list);
-//        $str='';
-       // foreach($arr_list as $data) {
-            
-       //      if(!empty($data->imgid)){
-       //          $arr=array("qcid"=>$data->imgid);
-       //          print_r($arr);
-       //          $imginfo = $VTs->json2data($VTs->UrlDataPost($apurl."/pageaction/getqcimglist",$arr));
-       //          print_r($imginfo);
-       //      }
+        $trhtml=$VTs->GetHtmlContent($trpath);
+        //取得qc列表
+        $arr_list = $VTs->json2data($VTs->UrlDataGet($apurl."/qc/getdbdata?type=qc_checklist"));
+        //解析列表
+        $htmlstr="";
+        foreach($arr_list as $data) {
+            // echo($data->imgid);
+            //判斷有imgid(照片id)才顯示  
+            if(!empty($data->imgid)){
+                $trs=$trhtml;
+                $arrin = array(
+                "qcid" => $data->uid,
+            );
+                // print_r($arrin);
+                $imginfo = $VTs->json2data($VTs->UrlDataPost("http://211.21.170.18:99/pageaction/getqcimglist",$arrin));
+                $trs=str_replace('@@d64@@',$imginfo->imgs->img0,$trs);
+                $info = $VTs->json2data($VTs->UrlDataGet($apurl."/material/getdbdata?type=el_petition&uid=".$data->dataid));
+                $trs=str_replace('@@materialname@@',$info[0]->ma_name,$trs);
+                $trs=str_replace('@@count@@',$info[0]->count,$trs);
+                $trs=str_replace('@@place@@',$info[0]->place,$trs);
+                $htmlstr.=$trs;
+            }
    
-       // }
-       // $html=str_replace('@@tr@@',$str,$html);
+       }
+       $title = $VTs->json2data($VTs->UrlDataGet($apurl."/qc/getdbdata?type=title"));
+       $html=str_replace('@@title@@',$title[0]->name,$html);
+       $html=str_replace('@@tr@@',$htmlstr,$html);
         
 
                 $pageContent=$html;
