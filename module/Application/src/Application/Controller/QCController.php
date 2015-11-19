@@ -79,16 +79,16 @@ class QCController extends AbstractActionController
         
         // print_r($arr_list);
 //        $str='';
-       foreach($arr_list as $data) {
+       // foreach($arr_list as $data) {
             
-            if(!empty($data->imgid)){
-                $arr=array("qcid"=>$data->imgid);
-                print_r($arr);
-                $imginfo = $VTs->json2data($VTs->UrlDataPost($apurl."/pageaction/getqcimglist",$arr));
-                print_r($imginfo);
-            }
+       //      if(!empty($data->imgid)){
+       //          $arr=array("qcid"=>$data->imgid);
+       //          print_r($arr);
+       //          $imginfo = $VTs->json2data($VTs->UrlDataPost($apurl."/pageaction/getqcimglist",$arr));
+       //          print_r($imginfo);
+       //      }
    
-       }
+       // }
        // $html=str_replace('@@tr@@',$str,$html);
         
 
