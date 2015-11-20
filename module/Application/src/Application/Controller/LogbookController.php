@@ -108,9 +108,7 @@ class LogbookController extends AbstractActionController
         }
         $html=str_replace("@@tr3@@",$strhtml,$html);
         //印出頁面
-//        $arr_data = $VTs->json2data($VTs->UrlDataGet($apurl."/qc/getdbdata"));
-        
-//        print_r($arr_data);
+
         $str='';
             $html=str_replace('@@tr@@',$str,$html);
         
@@ -137,8 +135,8 @@ class LogbookController extends AbstractActionController
 		//-----BI開始-----  get prjuid 傳入廠商ＩＤ 回傳品項html option內容
             $apurl='http://127.0.0.1:88';
         //取得主頁html
-            $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\setcontents.html";
-  $html=$VTs->GetHtmlContent($mpath);
+        $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\setcontents.html";
+        $html=$VTs->GetHtmlContent($mpath);
       
         //取得天氣列表
         $arr_weather= $VTs->json2data($VTs->UrlDataGet($apurl."/logbook/getdbdata?type=weather"));
@@ -199,33 +197,28 @@ class LogbookController extends AbstractActionController
         $VTs->DBClose();
         //釋放
 		$VTs = null;
-//		$this->viewContnet['pageContent'] = $pageContent;
-//        return new ViewModel($this->viewContnet);
     }
     public function saveAction()
     {
         //session_start();
 		$VTs = new clsSystem;
 		$VTs->initialization();
-		
+        try{
 		//-----BI開始-----  get prjuid 傳入廠商ＩＤ 回傳品項html option內容
                     $apurl='http://211.21.170.18:99';
 //        $apurl='http://127.0.0.1:88';
         $data=$_POST;
         $re=$VTs->UrlDataPost($apurl."/logbook/dbmodify",$_POST);
         print_r($re);
-
-      
-        
-            //印出html
-//            $pageContent=$html;
         //-----BI結束-----
+        }catch(Exception $error){
+            //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
+            $VTs->WriteLog("IndexController", "indexAction", $error->getMessage());
+        }
          //關閉資料庫連線
         $VTs->DBClose();
         //釋放
 		$VTs = null;
-//		$this->viewContnet['pageContent'] = $pageContent;
-//        return new ViewModel($this->viewContnet);
     }
 
 }
