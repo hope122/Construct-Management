@@ -268,6 +268,17 @@
 		public function Json2Data($JsonData){
 			return $this->SystemToolsService->Json2Data($JsonData);
 		}
+		//資料內容取代
+		public function ContentReplace($processData,$replaceContent){
+			$processContent = $this->SystemToolsService->ContentReplace($processData,$replaceContent);
+			if(!$processContent){
+				$callFunction = debug_backtrace();
+				$callFunction = $callFunction[0];
+				$this->WriteLog($callFunction["class"], $callFunction["function"], "內容取代錯誤\n");
+			}else{
+				return $processContent;
+			}
+		}
 	#modDataFormate結束
 		
 	#DataInformationSecurity
