@@ -14,7 +14,7 @@ use Zend\View\Model\ViewModel;
 use System_APService\clsSystem;
 
 class EmployeemanageController extends AbstractActionController
-{	
+{
 	public function indexAction()
     {
 		$VTs = new clsSystem;
@@ -32,7 +32,7 @@ class EmployeemanageController extends AbstractActionController
 				$html = $VTs->GetHtmlContent($indexPage);
 				$html = str_replace("@@userName@@",$_SESSION["userName"],$html);
 				
-				$arr = $VTs->json2data($VTs->UrlDataGet($apurl."/employeemanage/getdata?type=dataList"));
+				$arr = $VTs->json2data($VTs->UrlDataGet($apurl."/employeemanage/getdata"));
 				//$VTs->debug($arr);
 				
 				$listPage = "";
@@ -87,32 +87,15 @@ class EmployeemanageController extends AbstractActionController
 				if(!empty($_POST)){
 					$action = $_POST["action"];
 					//echo $action;
-					
-					$newPagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\employeemanage\\newPage.html";
-					$newPage = $VTs->GetHtmlContent($newPagePath);
-						
-					$basicInfoPagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\employeemanage\\basicInfo.html";
-					$basicInfoPage = $VTs->GetHtmlContent($basicInfoPagePath);
-					
-					$addressPagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\employeemanage\\address.html";
-					$addressPage = $VTs->GetHtmlContent($addressPagePath);
-					
-					$communicationPagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\employeemanage\\communication.html";
-					$communicationPage = $VTs->GetHtmlContent($communicationPagePath);
-						
-					$newPage = str_replace("@@userName@@",$_SESSION["userName"],$newPage);
-					$newPage = str_replace("@@basic_info@@",$basicInfoPage,$newPage);
-					$newPage = str_replace("@@address@@",$addressPage,$newPage);
-					$newPage = str_replace("@@communication@@",$communicationPage,$newPage);
-					
 					switch($action){
 						case "insertData":
-							//basic info change
+							$newPagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\employeemanage\\newPage.html";
+							$newPage = $VTs->GetHtmlContent($newPagePath);
+							$newPage = str_replace("@@userName@@",$_SESSION["userName"],$newPage);
+							
 							$newPage = str_replace("@@name@@","",$newPage);
 							$newPage = str_replace("@@sid@@","",$newPage);
 							$newPage = str_replace("@@birthday@@","",$newPage);
-							
-							//address change
 							$newPage = str_replace("@@zip@@","",$newPage);
 							$newPage = str_replace("@@city@@","",$newPage);
 							$newPage = str_replace("@@area@@","",$newPage);
@@ -120,16 +103,6 @@ class EmployeemanageController extends AbstractActionController
 							$newPage = str_replace("@@verge@@","",$newPage);
 							$newPage = str_replace("@@road@@","",$newPage);
 							$newPage = str_replace("@@addr@@","",$newPage);
-							
-							//communication change
-							$newPage = str_replace("@@belong@@","",$newPage);
-							
-							//get relation list
-							
-							$newPage = str_replace("@@relation@@","",$newPage);
-							
-							$newPage = str_replace("@@tel_o@@","",$newPage);
-							$newPage = str_replace("@@tel_ext@@","",$newPage);
 							$newPage = str_replace("@@mobile@@","",$newPage);
 							$newPage = str_replace("@@tel_h@@","",$newPage);
 							$newPage = str_replace("@@email@@","",$newPage);
@@ -143,13 +116,15 @@ class EmployeemanageController extends AbstractActionController
 							
 							//$apurl = "http://211.21.170.18:99";
 							$apurl = "http://127.0.0.1:99";
-							$arr = $VTs->json2data($VTs->UrlDataGet($apurl."/employeemanage/getdata?type=updateData&uid=".$uid.""));
+							$arr = $VTs->json2data($VTs->UrlDataGet($apurl."/employeemanage/getdata?uid=".$uid.""));
 							if( $arr->status ){
+								$editPagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\employeemanage\\newPage.html";
+								$editPage = $VTs->GetHtmlContent($editPagePath);
+								$editPage = str_replace("@@userName@@",$_SESSION["userName"],$editPage);
 								
 								$editPage = str_replace("@@name@@", $arr->dataList[0]->name, $editPage);
 								$editPage = str_replace("@@sid@@", $arr->dataList[0]->sid, $editPage);
 								$editPage = str_replace("@@birthday@@", $arr->dataList[0]->birthday, $editPage);
-								
 								$editPage = str_replace("@@zip@@", $arr->dataList[0]->zip, $editPage);
 								$editPage = str_replace("@@city@@", $arr->dataList[0]->city, $editPage);
 								$editPage = str_replace("@@area@@", $arr->dataList[0]->area, $editPage);
@@ -157,16 +132,14 @@ class EmployeemanageController extends AbstractActionController
 								$editPage = str_replace("@@verge@@", $arr->dataList[0]->verge, $editPage);
 								$editPage = str_replace("@@road@@", $arr->dataList[0]->road, $editPage);
 								$editPage = str_replace("@@addr@@", $arr->dataList[0]->addr, $editPage);
-								
 								$editPage = str_replace("@@mobile@@", $arr->dataList[0]->mobile, $editPage);
 								$editPage = str_replace("@@tel_h@@", $arr->dataList[0]->tel_h, $editPage);
 								$editPage = str_replace("@@email@@", $arr->dataList[0]->email, $editPage);
 								$editPage = str_replace("@@action@@",$action,$editPage);
 								
 								$pageContent = $editPage;
-								$pageContent = "123";
 							}else{
-								$pageContent = $arr->msg;
+								$pageContent = "Error.";
 							}
 							
 							
@@ -187,5 +160,3 @@ class EmployeemanageController extends AbstractActionController
         return new ViewModel($this->viewContnet);
 	}
 }
-
-
