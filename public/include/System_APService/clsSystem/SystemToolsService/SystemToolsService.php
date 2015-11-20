@@ -285,6 +285,18 @@
 		public function Json2Data($JsonData){
 			return json_decode($JsonData);
 		}
+
+		//資料內容取代
+		public function ContentReplace($processData,$replaceContent){
+			if(is_array($processData)){
+				foreach ($processData as $key => $content) {
+					$replaceContent = str_replace("@@".$key."@@", $content, $replaceContent);
+				}
+				return $replaceContent;
+			}else{
+				return false;
+			}
+		}
 	#modDataFormate結束
 		
 	#DataInformationSecurity

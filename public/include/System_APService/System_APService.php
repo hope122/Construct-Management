@@ -118,6 +118,9 @@
 				$execut = $this->SystemDBService->ExecuteNonQuery($sSqlText);
 				if(!$execut){
 					print_r('Error SQL: '.$sSqlText);
+					$callFunction = debug_backtrace();
+					$callFunction = $callFunction[0];
+					$this->WriteLog($callFunction["class"], $callFunction["function"], "SQL執行錯誤:".$sSqlText);
 				}
 			}
 			return $execut;
@@ -267,6 +270,17 @@
 		//json轉換成資料轉(decode)
 		public function Json2Data($JsonData){
 			return $this->SystemToolsService->Json2Data($JsonData);
+		}
+		//資料內容取代
+		public function ContentReplace($processData,$replaceContent){
+			$processContent = $this->SystemToolsService->ContentReplace($processData,$replaceContent);
+			if(!$processContent){
+				$callFunction = debug_backtrace();
+				$callFunction = $callFunction[0];
+				$this->WriteLog($callFunction["class"], $callFunction["function"], "內容取代錯誤\n");
+			}else{
+				return $processContent;
+			}
 		}
 	#modDataFormate結束
 		
