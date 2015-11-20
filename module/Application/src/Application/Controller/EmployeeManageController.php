@@ -85,67 +85,99 @@ class EmployeemanageController extends AbstractActionController
 	            $pageContent = $VTs->GetHtmlContent($pagePath);
 			}else{
 				if(!empty($_POST)){
+					$editPagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\employeemanage\\newPage.html";
+					$editPage = $VTs->GetHtmlContent($editPagePath);
+					
+					$basicInfoPagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\employeemanage\\basicInfo.html";
+					$basicInfoPage = $VTs->GetHtmlContent($basicInfoPagePath);
+					
+					$addressPagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\employeemanage\\address.html";
+					$addressPage = $VTs->GetHtmlContent($addressPagePath);
+					
+					$communicationPagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\employeemanage\\communication.html";
+					$communicationPage = $VTs->GetHtmlContent($communicationPagePath);
+					
+					$dataArr = ["userName"=>$_SESSION["userName"], "basicInfo"=>$basicInfoPage,
+								"address"=>$addressPage, "communication"=>$communicationPage];
+					$editPage = $VTs->ContentReplace($dataArr,$editPage);					
+							
+					//$apurl = "http://211.21.170.18:99";
+					$apurl = "http://127.0.0.1:99";
 					$action = $_POST["action"];
 					//echo $action;
 					switch($action){
 						case "insertData":
-							$newPagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\employeemanage\\newPage.html";
-							$newPage = $VTs->GetHtmlContent($newPagePath);
-							$newPage = str_replace("@@userName@@",$_SESSION["userName"],$newPage);
+							$optionData = $VTs->json2data($VTs->UrlDAtaGet($apurl."/employeemanage/getdata?type=relationOption"));
+							//$VTs->debug($option);
+							$selectElement = "<select><option value='0'>-請選擇-</option>";
+							foreach($optionData->dataList as $data){
+								$optionElement = "<option value='".$data->uid."'>".$data->relation."</option>";
+								$selectElement .= $optionElement;
+							}
+							$selectElement .= "</select>";
 							
-							$newPage = str_replace("@@name@@","",$newPage);
-							$newPage = str_replace("@@sid@@","",$newPage);
-							$newPage = str_replace("@@birthday@@","",$newPage);
-							$newPage = str_replace("@@zip@@","",$newPage);
-							$newPage = str_replace("@@city@@","",$newPage);
-							$newPage = str_replace("@@area@@","",$newPage);
-							$newPage = str_replace("@@vil@@","",$newPage);
-							$newPage = str_replace("@@verge@@","",$newPage);
-							$newPage = str_replace("@@road@@","",$newPage);
-							$newPage = str_replace("@@addr@@","",$newPage);
-							$newPage = str_replace("@@mobile@@","",$newPage);
-							$newPage = str_replace("@@tel_h@@","",$newPage);
-							$newPage = str_replace("@@email@@","",$newPage);
-							$newPage = str_replace("@@action@@",$action,$newPage);
-							
-							$pageContent = $newPage;
+							$dataArr = ["name"=>"", "sid"=>"", "birthday"=>"", "zip"=>"", "city"=>"", "area"=>"",
+										"vil"=>"", "verge"=>"", "road"=>"", "addr"=>"", "belong"=>"",
+										"relation"=>$selectElement, "relation1"=>"", "mobile"=>"", "tel_h"=>"",
+										"tel_o"=>"", "tel_ext"=>"", "email"=>"", "action"=>$action];
+							$editPage = $VTs->ContentReplace($dataArr,$editPage);
+
+							$pageContent = $editPage;
 							break;
 						case "updateData":
 							$uid = $_POST["uid"];
 							//echo "uid: ".$uid;
 							
-							//$apurl = "http://211.21.170.18:99";
-							$apurl = "http://127.0.0.1:99";
 							$arr = $VTs->json2data($VTs->UrlDataGet($apurl."/employeemanage/getdata?uid=".$uid.""));
 							if( $arr->status ){
-								$editPagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\employeemanage\\newPage.html";
-								$editPage = $VTs->GetHtmlContent($editPagePath);
-								$editPage = str_replace("@@userName@@",$_SESSION["userName"],$editPage);
+								//$VTs->debug($arr);
+								$optionData = $VTs->json2data($VTs->UrlDAtaGet($apurl."/employeemanage/getdata?type=relationOption"));
+								$selectElement = "<select><option value='0'>-請選擇-</option>";
+								foreach($optionData->dataList as $data){
+									if( $arr->dataList[0]->relation == $data->relation ){
+										$optionElement = "<option value='".$data->uid."' selected>".$data->relation."</option>";
+									}else{
+										$optionElement = "<option value='".$data->uid."'>".$data->relation."</option>";
+									}
+									
+									$selectElement .= $optionElement;
+								}
+								$selectElement .= "</select>";
 								
-								$editPage = str_replace("@@name@@", $arr->dataList[0]->name, $editPage);
-								$editPage = str_replace("@@sid@@", $arr->dataList[0]->sid, $editPage);
-								$editPage = str_replace("@@birthday@@", $arr->dataList[0]->birthday, $editPage);
-								$editPage = str_replace("@@zip@@", $arr->dataList[0]->zip, $editPage);
-								$editPage = str_replace("@@city@@", $arr->dataList[0]->city, $editPage);
-								$editPage = str_replace("@@area@@", $arr->dataList[0]->area, $editPage);
-								$editPage = str_replace("@@vil@@", $arr->dataList[0]->vil, $editPage);
-								$editPage = str_replace("@@verge@@", $arr->dataList[0]->verge, $editPage);
-								$editPage = str_replace("@@road@@", $arr->dataList[0]->road, $editPage);
-								$editPage = str_replace("@@addr@@", $arr->dataList[0]->addr, $editPage);
-								$editPage = str_replace("@@mobile@@", $arr->dataList[0]->mobile, $editPage);
-								$editPage = str_replace("@@tel_h@@", $arr->dataList[0]->tel_h, $editPage);
-								$editPage = str_replace("@@email@@", $arr->dataList[0]->email, $editPage);
-								$editPage = str_replace("@@action@@",$action,$editPage);
+								$basicDataArr = ["name"=>$arr->dataList[0]->name,
+												 "sid"=>$arr->dataList[0]->sid,
+												 "birthday"=>$arr->dataList[0]->birthday];
+								$editPage = $VTs->ContentReplace($basicDataArr,$editPage);
+								
+								$addressDataArr = ["zip"=>$arr->dataList[0]->zip, 
+												   "city"=>$arr->dataList[0]->city,
+												   "area"=>$arr->dataList[0]->area,
+												   "vil"=>$arr->dataList[0]->vil, 
+												   "verge"=>$arr->dataList[0]->verge, 
+												   "road"=>$arr->dataList[0]->road, 
+											       "addr"=>$arr->dataList[0]->addr];
+								$editPage = $VTs->ContentReplace($addressDataArr,$editPage);
+								
+								$communicatonDataArr = ["belong"=>$arr->dataList[0]->belong,
+														"relation"=>$selectElement,
+														"relation1"=>$arr->dataList[0]->relation1, 
+														"mobile"=>$arr->dataList[0]->mobile, 
+														"tel_h"=>$arr->dataList[0]->tel_h,
+														"tel_o"=>$arr->dataList[0]->tel_o, 
+														"tel_ext"=>$arr->dataList[0]->tel_ext,
+														"email"=>$arr->dataList[0]->email, "action"=>$action];
+								$editPage = $VTs->ContentReplace($communicatonDataArr,$editPage);
+
 								
 								$pageContent = $editPage;
 							}else{
-								$pageContent = "Error.";
+								$pageContent = "Query has error!";
 							}
 							
 							
 							break;
 						default:
-							$pageContent = "There has errors";
+							$pageContent = "EditPage action has error!";
 					}
 				}
 				
@@ -159,4 +191,5 @@ class EmployeemanageController extends AbstractActionController
 		$this->viewContnet['pageContent'] = $pageContent;
         return new ViewModel($this->viewContnet);
 	}
+	
 }

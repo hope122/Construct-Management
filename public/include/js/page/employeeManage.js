@@ -1,3 +1,9 @@
+$(function(){
+	$("#birthday").datepicker({
+		dateFormat: 'yy/mm/dd'
+	});
+});
+
 var myRedirect = function(redirectUrl, arg, value, uid) {
 	var form;
 	if(uid != ""){
