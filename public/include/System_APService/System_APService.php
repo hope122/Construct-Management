@@ -118,6 +118,9 @@
 				$execut = $this->SystemDBService->ExecuteNonQuery($sSqlText);
 				if(!$execut){
 					print_r('Error SQL: '.$sSqlText);
+					$callFunction = debug_backtrace();
+					$callFunction = $callFunction[0];
+					$this->WriteLog($callFunction["class"], $callFunction["function"], "SQL執行錯誤:".$sSqlText);
 				}
 			}
 			return $execut;
