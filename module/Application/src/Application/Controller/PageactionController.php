@@ -21,7 +21,7 @@ class PageactionController extends AbstractActionController
 		$this->viewContnet['pageContent'] = 'Please Select Your Action and Try Again!';
         return new ViewModel($this->viewContnet);
     }
-	//取得選單
+	//取得樣式選單
 	public function menuprocessAction()
     {
 		$VTs = new clsSystem;
@@ -35,17 +35,30 @@ class PageactionController extends AbstractActionController
 				//取得Classroom系統權限
 	            
 				$data = $_POST["menu"];
-				//取得選單
-				$cpPath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\styles\\menu\\creatParents.html";
-				$cPath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\styles\\menu\\content.html";
-				$oPath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\styles\\menu\\otherContent.html";
-	            
+				//set Options
+				if(!empty($_POST["optionData"])){
+					$forOptionsData = true;
+				}else{
+					$forOptionsData = false;
+				}
+				if(!$forOptionsData){
+					//取得選單
+					$cpPath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\styles\\menu\\creatParents.html";
+					$cPath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\styles\\menu\\content.html";
+					$oPath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\styles\\menu\\otherContent.html";
+	            }else{
+					//取得選單
+					$cpPath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\styles\\setMenuOption\\creatParents.html";
+					$cPath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\styles\\setMenuOption\\content.html";
+					$oPath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\styles\\setMenuOption\\otherContent.html";
+
+	            }
 				$creatParentStyle = $VTs->GetHtmlContent($cpPath);
 				$contentStyle = $VTs->GetHtmlContent($cPath);
 				$otherContentStyle = $VTs->GetHtmlContent($oPath);
 	            
 				//$action["menu"] = $data;
-				$action["menu"] = $this->CreatMenuContent($data, $creatParentStyle, $contentStyle, $otherContentStyle);
+				$action["menu"] = $this->CreatMenuContent($VTs,$data, $creatParentStyle, $contentStyle, $otherContentStyle);
 	            //$action["menu"] = $_POST;
 				$action["status"] = true;
 			}else{
@@ -115,7 +128,7 @@ class PageactionController extends AbstractActionController
     }
 	
 	//產生選單
-	private function CreatMenuContent($MenuData, $creatParentStyle, $contentStyle, $otherContentStyle){
+	private function CreatMenuContent($VTs, $MenuData, $creatParentStyle, $contentStyle, $otherContentStyle){
 		try{
 			$tmpMenuStr = '';
 			$tmpMenuArr = array();
@@ -130,11 +143,11 @@ class PageactionController extends AbstractActionController
 				//這代表還有第二層
 				if(!empty($tmpMenuArr[$content["uid"]])){
 					$tmpStyle = $creatParentStyle;
-					$otherMenuContent = $this->CreatOtherMenuContent($content["uid"], $tmpMenuArr, $creatParentStyle, $otherContentStyle);
-					$tmpMenuStr .= $this->replaceMenuOptiuonChar($tmpStyle, $content, $otherMenuContent);
+					$otherMenuContent = $this->CreatOtherMenuContent($VTs, $content["uid"], $tmpMenuArr, $creatParentStyle, $otherContentStyle);
+					$tmpMenuStr .= $this->replaceMenuOptiuonChar($VTs, $tmpStyle, $content, $otherMenuContent);
 				}else{
 					$tmpStyle = $contentStyle;
-					$tmpMenuStr .= $this->replaceMenuOptiuonChar($tmpStyle, $content);
+					$tmpMenuStr .= $this->replaceMenuOptiuonChar($VTs, $tmpStyle, $content);
 				}
 				
 			}
@@ -147,7 +160,7 @@ class PageactionController extends AbstractActionController
 	}
 	
 	//產生其他子層的選單選單
-	private function CreatOtherMenuContent($otherLayerDataIndex, $totalMenuData, $creatParentStyle, $otherContentStyle){
+	private function CreatOtherMenuContent($VTs, $otherLayerDataIndex, $totalMenuData, $creatParentStyle, $otherContentStyle){
 		try{
 			$tmpMenuStr = '';
 			foreach($totalMenuData[$otherLayerDataIndex] as $content){
@@ -156,11 +169,11 @@ class PageactionController extends AbstractActionController
 				if(!empty($totalMenuData[$content["uid"]])){
 					$tmpStyle = $creatParentStyle;
 					//重複建好
-					$otherMenuContent = $this->CreatOtherMenuContent($content["uid"], $totalMenuData, $creatParentStyle, $otherContentStyle);
-					$tmpMenuStr .= $this->replaceMenuOptiuonChar($tmpStyle, $content, $otherMenuContent);
+					$otherMenuContent = $this->CreatOtherMenuContent($VTs, $content["uid"], $totalMenuData, $creatParentStyle, $otherContentStyle);
+					$tmpMenuStr .= $this->replaceMenuOptiuonChar($VTs, $tmpStyle, $content, $otherMenuContent);
 				}else{
 					$tmpStyle = $otherContentStyle;
-					$tmpMenuStr .= $this->replaceMenuOptiuonChar($tmpStyle, $content);
+					$tmpMenuStr .= $this->replaceMenuOptiuonChar($VTs, $tmpStyle, $content);
 				}
 				
 			}
@@ -172,27 +185,24 @@ class PageactionController extends AbstractActionController
 		}
 	}
 	//取代選單的字
-	private function replaceMenuOptiuonChar($tmpStyle, $content, $otherMenuContent=''){
+	private function replaceMenuOptiuonChar($VTs, $tmpStyle, $content, $otherMenuContent=''){
 		try{
-			$tmpStyle = str_replace("@@nid@@",$content["nid"],$tmpStyle);
-			$tmpStyle = str_replace("@@href@@",$content["href"],$tmpStyle);
+			$processData = [
+				"nid"=>$content["nid"],
+				"href"=>$content["href"]
+			];
 			
-			if($content["click_action"] != ''){
-				$tmpStyle = str_replace("@@onclick@@",'onclick = "'.$content["click_action"].'"',$tmpStyle);
-			}else{
-				$tmpStyle = str_replace("@@onclick@@",'',$tmpStyle);
-			}
+			$click_action = ($content["click_action"] != '')?$content["click_action"]:'';
+			$processData["onclick"] = $click_action;
 			
 			if($otherMenuContent){
-				$tmpStyle = str_replace("@@sonContent@@",$otherMenuContent,$tmpStyle);
+				$processData["sonContent"] = $otherMenuContent;
 			}
 			
-			if($content["class_style"]){
-				$tmpStyle = str_replace("@@class@@",$content["class_style"],$tmpStyle);
-			}else{
-				$tmpStyle = str_replace("@@class@@","",$tmpStyle);
-			}
-			
+			$class_style = ($content["class_style"])?$content["class_style"]:'';
+			$processData["class"] = $class_style;
+
+			$tmpStyle = $VTs->ContentReplace($processData,$tmpStyle);
 			return $tmpStyle;
 		}catch(Exception $error){
 			//依據Controller, Action補上對應位置, $error->getMessage()為固定部份
