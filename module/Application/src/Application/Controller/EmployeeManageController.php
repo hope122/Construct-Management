@@ -50,7 +50,7 @@ class EmployeemanageController extends AbstractActionController
 						$tr = str_replace("@@sex@@", $data->sex, $tr);
 						$tr = str_replace("@@birthday@@", $data->birthday, $tr);
 						
-						//地址：郵遞區號/縣市/鄉鎮區市/村里/鄰/路/巷弄號
+						// 地址：郵遞區號/縣市/鄉鎮區市/村里/鄰/路/巷弄號
 						// $address = $data->zip . $data->city . $data->area . $data->vil . $data->verge . $data->road . $data->addr;
 						// $tr = str_replace("@@address@@", $address, $tr);
 							
@@ -90,12 +90,23 @@ class EmployeemanageController extends AbstractActionController
 	            $pageContent = $VTs->GetHtmlContent($pagePath);
 			}else{
 				if(!empty($_POST)){
-					
+					// $apurl = "http://211.21.170.18:99";
+					$apurl = "http://127.0.0.1:99";
+					$action = $_POST["action"];
+					// echo $action;
 					
 					$editPagePath = $pathString . "\\employeemanage\\newPage.html";
 					$editPage = $VTs->GetHtmlContent($editPagePath);
 					
-					$basicInfoPagePath = $pathString . "\\employeemanage\\basicInfo.html";
+					switch($action){
+						case "insertData":
+							$basicInfoPagePath = $pathString . "\\employeemanage\\basicInfo.html";
+							break;
+						case "updateData":
+							$basicInfoPagePath = $pathString . "\\employeemanage\\basicInfo_edit.html";
+							break;
+						default:
+					}
 					$basicInfoPage = $VTs->GetHtmlContent($basicInfoPagePath);
 					
 					$addressPagePath = $pathString . "\\employeemanage\\address.html";
@@ -109,15 +120,12 @@ class EmployeemanageController extends AbstractActionController
 								"address"=>$addressPage,
 								"communication"=>$communicationPage];
 					$editPage = $VTs->ContentReplace($dataArr,$editPage);					
-							
-					$apurl = "http://211.21.170.18:99";
-					// $apurl = "http://127.0.0.1:99";
-					$action = $_POST["action"];
-					//echo $action;
+
+					
 					switch($action){
 						case "insertData":
 							$optionData = $VTs->json2data($VTs->UrlDAtaGet($apurl."/employeemanage/getdata?type=relationOption"));
-							//$VTs->debug($option);
+							// $VTs->debug($option);
 							$selectElement = "<select id='relation'><option value='0'>-請選擇-</option>";
 							if(!empty($optionData)){
 								foreach($optionData->dataList as $data){
@@ -125,7 +133,7 @@ class EmployeemanageController extends AbstractActionController
 									$selectElement .= $optionElement;
 								}
 							}else{
-								//echo "AP Action getdata has problem.";
+								// echo "AP Action getdata has problem.";
 							}
 							$selectElement .= "</select>";
 							
@@ -165,11 +173,11 @@ class EmployeemanageController extends AbstractActionController
 							break;
 						case "updateData":
 							$uid = $_POST["uid"];
-							//echo "uid: ".$uid;
+							// echo "uid: ".$uid;
 							
 							$arr = $VTs->json2data($VTs->UrlDataGet($apurl."/employeemanage/getdata?uid=".$uid.""));
 							if( $arr->status ){
-								//$VTs->debug($arr);
+								// $VTs->debug($arr);
 								$optionData = $VTs->json2data($VTs->UrlDAtaGet($apurl."/employeemanage/getdata?type=relationOption"));
 								$selectElement = "<select id='relation'><option value='0'>-請選擇-</option>";
 								foreach($optionData->dataList as $data){
@@ -186,6 +194,7 @@ class EmployeemanageController extends AbstractActionController
 								//basicInfo
 								$basicDataArr = ["name"=>$arr->dataList[0]->name,
 												 "sid"=>$arr->dataList[0]->sid,
+												 "sex"=>$arr->dataList[0]->sex,
 												 "birthday"=>$arr->dataList[0]->birthday];
 								$editPage = $VTs->ContentReplace($basicDataArr,$editPage);
 								
