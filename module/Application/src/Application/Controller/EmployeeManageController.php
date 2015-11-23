@@ -42,17 +42,20 @@ class EmployeemanageController extends AbstractActionController
 						$listPage = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\employeemanage\\list.html";
 						$tr = $VTs->GetHtmlContent($listPage);
 						$tr = str_replace("@@name@@", $data->name, $tr);
-						$tr = str_replace("@@ID@@", $data->sid, $tr);
+						
+						$ID = str_replace(substr($data->sid,3, 4), "****", $data->sid);
+						$tr = str_replace("@@ID@@", $ID , $tr);
+						
 						$tr = str_replace("@@sex@@", $data->sex, $tr);
 						$tr = str_replace("@@birthday@@", $data->birthday, $tr);
 						
 						//地址：郵遞區號/縣市/鄉鎮區市/村里/鄰/路/巷弄號
-						$address = $data->zip . $data->city . $data->area . $data->vil . $data->verge . $data->road . $data->addr;
-						$tr = str_replace("@@address@@", $address, $tr);
+						// $address = $data->zip . $data->city . $data->area . $data->vil . $data->verge . $data->road . $data->addr;
+						// $tr = str_replace("@@address@@", $address, $tr);
 							
 						$tr = str_replace("@@mobile@@", $data->mobile, $tr);
-						$tr = str_replace("@@telphone@@", $data->tel_h, $tr);
-						$tr = str_replace("@@email@@", $data->email, $tr);
+						// $tr = str_replace("@@telphone@@", $data->tel_h, $tr);
+						// $tr = str_replace("@@email@@", $data->email, $tr);
 						
 						$tr = str_replace("@@uid@@", $data->uid, $tr);
 						
@@ -85,6 +88,8 @@ class EmployeemanageController extends AbstractActionController
 	            $pageContent = $VTs->GetHtmlContent($pagePath);
 			}else{
 				if(!empty($_POST)){
+					
+					
 					$editPagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\employeemanage\\newPage.html";
 					$editPage = $VTs->GetHtmlContent($editPagePath);
 					
@@ -97,8 +102,10 @@ class EmployeemanageController extends AbstractActionController
 					$communicationPagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\employeemanage\\communication.html";
 					$communicationPage = $VTs->GetHtmlContent($communicationPagePath);
 					
-					$dataArr = ["userName"=>$_SESSION["userName"], "basicInfo"=>$basicInfoPage,
-								"address"=>$addressPage, "communication"=>$communicationPage];
+					$dataArr = ["userName"=>$_SESSION["userName"],
+								"basicInfo"=>$basicInfoPage,
+								"address"=>$addressPage,
+								"communication"=>$communicationPage];
 					$editPage = $VTs->ContentReplace($dataArr,$editPage);					
 							
 					//$apurl = "http://211.21.170.18:99";
@@ -109,17 +116,47 @@ class EmployeemanageController extends AbstractActionController
 						case "insertData":
 							$optionData = $VTs->json2data($VTs->UrlDAtaGet($apurl."/employeemanage/getdata?type=relationOption"));
 							//$VTs->debug($option);
-							$selectElement = "<select><option value='0'>-請選擇-</option>";
-							foreach($optionData->dataList as $data){
-								$optionElement = "<option value='".$data->uid."'>".$data->relation."</option>";
-								$selectElement .= $optionElement;
+							$selectElement = "<select id='relation'><option value='0'>-請選擇-</option>";
+							if(!empty($optionData)){
+								foreach($optionData->dataList as $data){
+									$optionElement = "<option value='".$data->uid."'>".$data->relation."</option>";
+									$selectElement .= $optionElement;
+								}
+							}else{
+								//echo "AP Action getdata has problem.";
 							}
 							$selectElement .= "</select>";
 							
-							$dataArr = ["name"=>"", "sid"=>"", "birthday"=>"", "zip"=>"", "city"=>"", "area"=>"",
-										"vil"=>"", "verge"=>"", "road"=>"", "addr"=>"", "belong"=>"",
-										"relation"=>$selectElement, "relation1"=>"", "mobile"=>"", "tel_h"=>"",
-										"tel_o"=>"", "tel_ext"=>"", "email"=>"", "action"=>$action];
+							//basicInfo
+							$dataArr = ["name"=>"",
+										"sid"=>"",
+										"birthday"=>""];
+							$editPage = $VTs->ContentReplace($dataArr,$editPage);
+
+							//address
+							$dataArr = ["zip"=>"",
+										"city"=>"",
+										"area"=>"",
+										"vil"=>"",
+										"verge"=>"",
+										"road"=>"",
+										"addr"=>""];
+							$editPage = $VTs->ContentReplace($dataArr,$editPage);
+							
+							//communication
+							$dataArr = ["belong"=>"",
+										"relation"=>$selectElement,
+										"relation1"=>"",
+										"mobile"=>"",
+										"tel_h"=>"",
+										"tel_o"=>"",
+										"tel_ext"=>"",
+										"email"=>""];
+							$editPage = $VTs->ContentReplace($dataArr,$editPage);
+							
+							//function arg
+							$dataArr = ["action"=>$action,
+										"uid"=>"" ];
 							$editPage = $VTs->ContentReplace($dataArr,$editPage);
 
 							$pageContent = $editPage;
@@ -132,7 +169,7 @@ class EmployeemanageController extends AbstractActionController
 							if( $arr->status ){
 								//$VTs->debug($arr);
 								$optionData = $VTs->json2data($VTs->UrlDAtaGet($apurl."/employeemanage/getdata?type=relationOption"));
-								$selectElement = "<select><option value='0'>-請選擇-</option>";
+								$selectElement = "<select id='relation'><option value='0'>-請選擇-</option>";
 								foreach($optionData->dataList as $data){
 									if( $arr->dataList[0]->relation == $data->relation ){
 										$optionElement = "<option value='".$data->uid."' selected>".$data->relation."</option>";
@@ -144,11 +181,13 @@ class EmployeemanageController extends AbstractActionController
 								}
 								$selectElement .= "</select>";
 								
+								//basicInfo
 								$basicDataArr = ["name"=>$arr->dataList[0]->name,
 												 "sid"=>$arr->dataList[0]->sid,
 												 "birthday"=>$arr->dataList[0]->birthday];
 								$editPage = $VTs->ContentReplace($basicDataArr,$editPage);
 								
+								//address
 								$addressDataArr = ["zip"=>$arr->dataList[0]->zip, 
 												   "city"=>$arr->dataList[0]->city,
 												   "area"=>$arr->dataList[0]->area,
@@ -158,6 +197,7 @@ class EmployeemanageController extends AbstractActionController
 											       "addr"=>$arr->dataList[0]->addr];
 								$editPage = $VTs->ContentReplace($addressDataArr,$editPage);
 								
+								//commonication
 								$communicatonDataArr = ["belong"=>$arr->dataList[0]->belong,
 														"relation"=>$selectElement,
 														"relation1"=>$arr->dataList[0]->relation1, 
@@ -165,8 +205,13 @@ class EmployeemanageController extends AbstractActionController
 														"tel_h"=>$arr->dataList[0]->tel_h,
 														"tel_o"=>$arr->dataList[0]->tel_o, 
 														"tel_ext"=>$arr->dataList[0]->tel_ext,
-														"email"=>$arr->dataList[0]->email, "action"=>$action];
+														"email"=>$arr->dataList[0]->email];
 								$editPage = $VTs->ContentReplace($communicatonDataArr,$editPage);
+								
+								//function arg
+								$dataArr = ["action"=>$action,
+											"uid"=>", '".$uid."'"];
+								$editPage = $VTs->ContentReplace($dataArr,$editPage);
 
 								
 								$pageContent = $editPage;
