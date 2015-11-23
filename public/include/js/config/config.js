@@ -23,4 +23,7 @@ var configObject = {
     "logbookModify":apurl+"/logbook/dbmodify",
     "getAcInfo": originUrl+"pageaction/acinfo",
     "socketConn": "http://211.21.170.18:7077",
+	"empGetData": apurl+"/employeemanage/getdata",
+	"empInsertData": apurl+"/employeemanage/insertdata", 
+	"empUpdateData": apurl+"/employeemanage/updatedata",x`
 };

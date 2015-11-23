@@ -16,13 +16,16 @@ function checkSubmit(action,uid){
 	
 	var domainUrl = "http://211.21.170.18";
 	// var domainUrl = "http://127.0.0.1";
+
 	var actionUrl;
 	switch(action){
 		case "insertData":
-			actionUrl = domainUrl + ":99/employeemanage/insertdata";
+			actionUrl = configObject.empInsertData;
+			// actionUrl = "http://211.21.170.18:99/employeemanage/insertdata";
 			break;
 		case "updateData":
-			actionUrl = domainUrl + ":99/employeemanage/updatedata?uid="+uid;
+			actionUrl = configObject.empUpdateData + "?uid=" + uid;
+			// actionUrl = "http://211.21.170.18:99/employeemanage/updatedata?uid="+uid;
 			break;
 	}
 		
