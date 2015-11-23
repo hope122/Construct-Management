@@ -90,8 +90,8 @@ class EmployeemanageController extends AbstractActionController
 	            $pageContent = $VTs->GetHtmlContent($pagePath);
 			}else{
 				if(!empty($_POST)){
-					// $apurl = "http://211.21.170.18:99";
-					$apurl = "http://127.0.0.1:99";
+					$apurl = "http://211.21.170.18:99";
+					//$apurl = "http://127.0.0.1:99";
 					$action = $_POST["action"];
 					// echo $action;
 					
