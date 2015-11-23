@@ -21,14 +21,15 @@ class EmployeemanageController extends AbstractActionController
 		$VTs->initialization();
 		try{
 			//-----BI開始-----
+			$pathString = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting";
 			if(empty($_SESSION)){
-	            $pagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\index\\login_page.html";
+	            $pagePath = $pathString . "\\index\\login_page.html";
 	            $pageContent = $VTs->GetHtmlContent($pagePath);
 			}else{
-				//$apurl = "http://211.21.170.18:99";
-				$apurl = "http://127.0.0.1:99";
+				$apurl = "http://211.21.170.18:99";
+				// $apurl = "http://127.0.0.1:99";
 				
-				$indexPage = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\employeemanage\\index.html";
+				$indexPage = $pathString . "\\employeemanage\\index.html";
 				$html = $VTs->GetHtmlContent($indexPage);
 				$html = str_replace("@@userName@@",$_SESSION["userName"],$html);
 				
@@ -39,7 +40,7 @@ class EmployeemanageController extends AbstractActionController
 				$trs = "";
 				if($arr->status){
 					foreach($arr->dataList as $data){
-						$listPage = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\employeemanage\\list.html";
+						$listPage = $pathString . "\\employeemanage\\list.html";
 						$tr = $VTs->GetHtmlContent($listPage);
 						$tr = str_replace("@@name@@", $data->name, $tr);
 						
@@ -83,23 +84,24 @@ class EmployeemanageController extends AbstractActionController
 		$VTs->initialization();
 		try{
 			//-----BI開始-----
+			$pathString = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting";
 			if(empty($_SESSION)){
-	            $pagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\index\\login_page.html";
+	            $pagePath = $pathString . "\\index\\login_page.html";
 	            $pageContent = $VTs->GetHtmlContent($pagePath);
 			}else{
 				if(!empty($_POST)){
 					
 					
-					$editPagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\employeemanage\\newPage.html";
+					$editPagePath = $pathString . "\\employeemanage\\newPage.html";
 					$editPage = $VTs->GetHtmlContent($editPagePath);
 					
-					$basicInfoPagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\employeemanage\\basicInfo.html";
+					$basicInfoPagePath = $pathString . "\\employeemanage\\basicInfo.html";
 					$basicInfoPage = $VTs->GetHtmlContent($basicInfoPagePath);
 					
-					$addressPagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\employeemanage\\address.html";
+					$addressPagePath = $pathString . "\\employeemanage\\address.html";
 					$addressPage = $VTs->GetHtmlContent($addressPagePath);
 					
-					$communicationPagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\employeemanage\\communication.html";
+					$communicationPagePath = $pathString . "\\employeemanage\\communication.html";
 					$communicationPage = $VTs->GetHtmlContent($communicationPagePath);
 					
 					$dataArr = ["userName"=>$_SESSION["userName"],
@@ -108,8 +110,8 @@ class EmployeemanageController extends AbstractActionController
 								"communication"=>$communicationPage];
 					$editPage = $VTs->ContentReplace($dataArr,$editPage);					
 							
-					//$apurl = "http://211.21.170.18:99";
-					$apurl = "http://127.0.0.1:99";
+					$apurl = "http://211.21.170.18:99";
+					// $apurl = "http://127.0.0.1:99";
 					$action = $_POST["action"];
 					//echo $action;
 					switch($action){

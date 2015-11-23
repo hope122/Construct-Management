@@ -5,20 +5,24 @@ $(function(){
 });
 
 function edit(action, uid){
-	//alert(uid);
-	var directurl = "http://127.0.0.1:200/employeemanage/editpage";
+	// alert(uid);
+	var domainUrl = "http://211.21.170.18";
+	// var domainUrl = "http://127.0.0.1";
+	var directurl = domainUrl + ":200/employeemanage/editpage";
 	myRedirect(directurl, "action", action, uid);
 }
 
 function checkSubmit(action,uid){
 	
+	var domainUrl = "http://211.21.170.18";
+	// var domainUrl = "http://127.0.0.1";
 	var actionUrl;
 	switch(action){
 		case "insertData":
-			actionUrl = "http://127.0.0.1:99/employeemanage/insertdata";
+			actionUrl = domainUrl + ":99/employeemanage/insertdata";
 			break;
 		case "updateData":
-			actionUrl = "http://127.0.0.1:99/employeemanage/updatedata?uid="+uid;
+			actionUrl = domainUrl + ":99/employeemanage/updatedata?uid="+uid;
 			break;
 	}
 		
@@ -53,7 +57,7 @@ function checkSubmit(action,uid){
 			async:false,
 			success: 
 				function(rs){
-					window.location.href = "http://127.0.0.1:200/employeemanage";
+					window.location.href = domainUrl + ":200/employeemanage";
 				},
 			error: 
 				function(e){
