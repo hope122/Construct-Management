@@ -19,26 +19,26 @@ $(function(){
 
 function edit(action, uid){
 	// alert(uid);
-	// var domainUrl = "http://211.21.170.18";
-	var domainUrl = "http://127.0.0.1";
+	var domainUrl = "http://211.21.170.18";
+	// var domainUrl = "http://127.0.0.1";
 	var directurl = domainUrl + ":200/employeemanage/editpage";
 	myRedirect(directurl, "action", action, uid);
 }
 
 function checkSubmit(action,uid){
 	
-	// var domainUrl = "http://211.21.170.18";
-	var domainUrl = "http://127.0.0.1";
+	var domainUrl = "http://211.21.170.18";
+	// var domainUrl = "http://127.0.0.1";
 
 	var actionUrl;
 	switch(action){
 		case "insertData":
-			// actionUrl = configObject.empInsertData;
-			actionUrl = "http://127.0.0.1:99/employeemanage/insertdata";
+			actionUrl = configObject.empInsertData;
+			// actionUrl = "http://127.0.0.1:99/employeemanage/insertdata";
 			break;
 		case "updateData":
-			// actionUrl = configObject.empUpdateData + "?uid=" + uid;
-			actionUrl = "http://127.0.0.1:99/employeemanage/updatedata?uid="+uid;
+			actionUrl = configObject.empUpdateData + "?uid=" + uid;
+			// actionUrl = "http://127.0.0.1:99/employeemanage/updatedata?uid="+uid;
 			break;
 	}
 		
