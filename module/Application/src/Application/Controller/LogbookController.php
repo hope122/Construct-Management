@@ -39,43 +39,48 @@ class LogbookController extends AbstractActionController
             // $html=str_replace("@@no@@",$no[0]->no+1,$html);
             $arrdata["no"]=$no[0]->no+1;
         }
-        //取得天氣列表
-//        $arr_weather= $VTs->json2data($VTs->UrlDataGet($apurl."/logbook/getdbdata?type=weather"));
-//        $whtml='';
-//        foreach($arr_weather as $weather){
-//            $whtml.="<option value=".$weather->uid.">".$weather->name."</option>";
-//        }
-//        $html=str_replace("@@woption@@",$whtml,$html);
+        $html=$VTs->ContentReplace($arrdata,$html);
         //取得資料資訊
         $diary_info= $VTs->json2data($VTs->UrlDataGet($apurl."/logbook/getdbdata?type=diary_info&uid=1"));
-        $arrdata["amweather"]=$diary_info[0]->amweather;
-        $arrdata["pmweather"]=$diary_info[0]->pmweather;
-        $arrdata["week"]=$diary_info[0]->week;
-        $arrdata["indate"]=$diary_info[0]->date;
-        // $html=str_replace("@@amweather@@",$diary_info[0]->amweather,$html);
-        // $html=str_replace("@@pmweather@@",$diary_info[0]->pmweather,$html);
-        // $html=str_replace("@@week@@",$diary_info[0]->week,$html);
-        // $html=str_replace("@@indate@@",$diary_info[0]->date,$html);
-        //取得調表日期
-//        $html=str_replace("@@year@@",date('Y'),$html);
-//        $html=str_replace("@@month@@",date('m'),$html);
-//        $html=str_replace("@@day@@",date('d'),$html);
-//        $weekarray=array("日","一","二","三","四","五","六");
-//        $html=str_replace("@@week@@",$weekarray[date('w')],$html);
+        $arrdata = [
+            "amweather"=>$diary_info[0]->amweather,
+            "pmweather"=>$diary_info[0]->pmweather,
+            "week"=>$diary_info[0]->week,
+            "indate"=>$diary_info[0]->date,
+        ];
+        $html=$VTs->ContentReplace($arrdata,$html);
+        
+        // $arrdata["amweather"]=$diary_info[0]->amweather;
+        // $arrdata["pmweather"]=$diary_info[0]->pmweather;
+        // $arrdata["week"]=$diary_info[0]->week;
+        // $arrdata["indate"]=$diary_info[0]->date;
+
+
         //取得表頭項目
         $head= $VTs->json2data($VTs->UrlDataGet($apurl."/logbook/getdbdata?type=project&uid=1"));
 //        print_r($head);
-        $arrdata["prjname"]=$head[0]->prjname;
-        $arrdata["supplyname"]=$head[0]->supplyname;
-        $arrdata["pday"]=$head[0]->pday;
+        // $arrdata["prjname"]=$head[0]->prjname;
+        // $arrdata["supplyname"]=$head[0]->supplyname;
+        // $arrdata["pday"]=$head[0]->pday;
         $aday=round((strtotime(date("Y-m-d"))-strtotime($head[0]->start))/3600/24);
-        $arrdata["aday"]=$aday;
+        // $arrdata["aday"]=$aday;
         $sday=$head[0]->pday-$aday+$head[0]->cday;
-        $arrdata["sday"]=$sday;
-        $arrdata["cday"]=$head[0]->cday;
-        $arrdata["start"]=$head[0]->start;
-        $arrdata["end"]=$head[0]->end;
+        // $arrdata["sday"]=$sday;
+        // $arrdata["cday"]=$head[0]->cday;
+        // $arrdata["start"]=$head[0]->start;
+        // $arrdata["end"]=$head[0]->end;
 
+        $arrdata = [
+            "prjname"=>$head[0]->prjname,
+            "supplyname"=>$head[0]->supplyname,
+            "pday"=>$head[0]->pday,
+            "aday"=>$aday,
+            "sday"=>$sday,
+            "cday"=>$head[0]->cday,
+            "start"=>$head[0]->start,
+            "end"=>$head[0]->end,
+        ];
+        $html=$VTs->ContentReplace($arrdata,$html);
         // $html=str_replace("@@prjname@@",$head[0]->prjname,$html);
         // $html=str_replace("@@supplyname@@",$head[0]->supplyname,$html);
         // $html=str_replace("@@pday@@",$head[0]->pday,$html);
@@ -97,7 +102,7 @@ class LogbookController extends AbstractActionController
         $trhtml=$VTs->GetHtmlContent($trpath);
         $arr_materiel= $VTs->json2data($VTs->UrlDataGet($apurl."/logbook/getdbdata?type=materielcount"));
 //        print_r($arr_materiel);
-        $strhtml='';
+        $strhtml2='';
         if(!$arr_materiel==null ){
             foreach($arr_materiel as $materiel){
                 $tr=$trhtml;
@@ -106,34 +111,38 @@ class LogbookController extends AbstractActionController
                 $tr=str_replace("@@pcount@@",$materiel->pcount,$tr);
                 $tr=str_replace("@@incount@@",$materiel->incount,$tr);
                 $tr=str_replace("@@count@@",$materiel->count,$tr);
-                $strhtml.=$tr;
+                $strhtml2.=$tr;
             }
         }
-        $arrdata["tr2"]=$strhtml;
+        $arrdata["tr2"]=$strhtml2;
         // $html=str_replace("@@tr2@@",$strhtml,$html);
         //取得人員機具管理
         $trpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\tr3.html";
         $trhtml=$VTs->GetHtmlContent($trpath);
         $arr_workcount= $VTs->json2data($VTs->UrlDataGet($apurl."/logbook/getdbdata?type=workcount"));
 //        print_r($arr_workcount);
-        $strhtml='';
+        $strhtml3='';
         if(!$arr_workcount==null ){
             foreach($arr_workcount as $workcount){
                 $tr=$trhtml;
                 $tr=str_replace("@@name@@",$workcount->name,$tr);
                 $tr=str_replace("@@count@@",$workcount->count,$tr);
-                $strhtml.=$tr;
+                $strhtml3.=$tr;
             }
         }
-        $arrdata["tr3"]=$strhtml;
+        $arrdata["tr3"]=$strhtml3;
         // $html=str_replace("@@tr3@@",$strhtml,$html);
         //印出頁面
 
         $str='';
         $arrdata["tr"]=$str;
         // $html=str_replace('@@tr@@',$str,$html);
-        
-
+        $arrdata = [
+            "tr"=>$tr1,
+            "tr1"=>$str,
+            "tr2"=>$strhtml2,
+            "tr3"=>$strhtml3,
+        ];
         $pageContent=$VTs->ContentReplace($arrdata,$html);
         //-----BI結束-----
         }catch(Exception $error){
@@ -192,21 +201,32 @@ class LogbookController extends AbstractActionController
 		//-----BI開始-----  get prjuid 傳入廠商ＩＤ 回傳品項html option內容
         //            $apurl='http://211.21.170.18:99';
         $url=$_GET['url'];
-        echo dirname(__DIR__) . "\\..\\..\\..\\..\\public\\logbookpdf.pdf";
-        echo file_exists(dirname(__DIR__) . "\\..\\..\\..\\..\\public\\logbookpdf.pdf") ;
-    
-        if( file_exists(dirname(__DIR__) . "\\..\\..\\..\\..\\public\\logbookpdf.pdf"))
-        {     
-            echo "yes";
-        }else{
-            echo "no";
+
+        $filePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public";
+        if( !file_exists($filePath) ){ 
+            //echo "no";
+             $filePath = str_replace("\\", "/", $filePath);
+            if( file_exists($filePath)){
+                echo 'yes';
+            }else{
+                echo "no file";
+            }
+        }  
+        $filePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\logbookpdf.pdf";
+        if( !file_exists($filePath) ){ 
+            //echo "no";
+             $filePath = str_replace("\\", "/", $filePath);
+            if( file_exists($filePath)){
+                echo 'yes';
+            }else{
+                echo "no file";
+            }
         }
-        exit;
- 
-        header('Content-type: application/pdf');
-        readfile('logbookpdf.pdf');
-        header('Content-Disposition: attachment; filename="logbookpdf.pdf"');
-        echo "<script>window.close();</script>";
+        
+        // header('Content-type: application/pdf');
+        // readfile('logbookpdf.pdf');
+        // header('Content-Disposition: attachment; filename="logbookpdf.pdf"');
+        // echo "<script>window.close();</script>";
 
       
         
