@@ -162,6 +162,20 @@ return array(
 					),
 				),
 			),
+			'employeemanage' => array(
+				'type'    => 'segment',
+				'options' => array(
+					'route'    => '/employeemanage[/:action]',
+					'constraints' => array(
+						'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+						'id'     => '[0-9]+',
+					),
+					'defaults' => array(
+						'controller' => 'Application\Controller\employeemanage',
+						'action'     => 'index',
+					),
+				),
+			),
         ),
     ),
     'service_manager' => array(
@@ -183,6 +197,7 @@ return array(
             'Application\Controller\QC' => 'Application\Controller\QCController',
             'Application\Controller\SAR' => 'Application\Controller\SARController',
             'Application\Controller\Logbook' => 'Application\Controller\LogbookController',
+            'Application\Controller\EmployeeManage' => 'Application\Controller\EmployeeManageController'
         ),
     ),
     'view_manager' => array(

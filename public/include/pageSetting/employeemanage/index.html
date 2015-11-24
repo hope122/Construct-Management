@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>建築物雲端全生命週期履歷平台</title>
+		<title>員工管理頁面</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<!--[if lte IE 8]><script src="../include/strongly/assets/js/ie/html5shiv.js"></script><![endif]-->
@@ -10,7 +10,7 @@
 		<!--[if lte IE 8]><link rel="stylesheet" href="../include/strongly/assets/css/ie8.css" /><![endif]-->
 		<!-- Scripts -->
 		<script src="../include/strongly/assets/js/jquery.min.js"></script>
-        <script src="../include/js/jquery-ui.min.js"></script>
+        <script src="../include/js/jquery/jquery-ui.min.js"></script>
 		<script src="../include/strongly/assets/js/jquery.dropotron.min.js"></script>
 		<script src="../include/strongly/assets/js/skel.min.js"></script>
 		<script src="../include/strongly/assets/js/skel-viewport.min.js"></script>
@@ -28,38 +28,27 @@
             });
         </script>
 		
+		<script src="../include/js/page/employeeManage.js"></script>
 		<style type="text/css">
 			.css_table {
-				/*display:table;*/
+				display:table; 
+				text-align: center;
+				border-collapse:separate;
+				border-spacing: 5px;
+				width: 100%;
 			}
 			
 			.css_tr {
 				display: table-row;
+				
 			}
 			
 			.css_td {
 				display: table-cell;
+				width: 10%;
 			}
 		</style>
 		
-		 <script src="../include/js/jquery/jquery-1.11.3.min.js"></script>
-		<script src="https://www.google.com/jsapi"></script>
-		<script src="../include/js/chart/chart.js"></script>
-		<script>
-			$(function(){
-				var options = {
-				  url: "http://127.0.0.1:99/sar/report",
-				  urlMethod: "GET",
-				  sendData: {},
-				  drawItemID: 'SARChart',
-				  unitTitle:"人次",
-				  bottomTitle:"工種",
-				  drawType:"ColumnChart" //drawType 可使用 ColumnChart、LineChart 兩種
-				};
-				createChart(options);
-			});
-		</script>
-	
 	</head>
 	<body class="homepage">
 		<div id="page-wrapper">
@@ -93,25 +82,28 @@
 						<div class="row">
 
 							<!-- Content -->
-								<div id="content" class="12u 12u(mobile)">
+								<div id="content" class="12u">
 
 									<!-- Post -->
-										<!--<article class="box post">
-											<div class='css_table' align='center' style='margin: 0px auto;'>
-												<div class="css_tr">
-													<div class="css_td">工種</div>
-													<div class="css_td">人數</div>
-													<div class="css_td">廠商</div>
-												</div>
-												@@data_list@@
-											</div>
-										</article>-->
-										
 										<article class="box post">
-											<div class='css_table' align='center' style='margin: 0px auto;'>
-												<div>今日出工人數</div>
-												<div id="SARChart"></div>
+											<div class="3u">
+												<input type="button" id="insert_data" onclick="edit('insertData','')" value="新增">
 											</div>
+											<div class="css_table">
+												<div class="css_tr">
+													<div class="css_td">姓名</div>
+													<div class="css_td">身分證</div>
+													<div class="css_td">性別</div>
+													<div class="css_td">生日</div>
+													<!--<div class="css_td">地址</div>-->
+													<div class="css_td">手機</div>
+													<!--<div class="css_td">電話</div>
+													<div class="css_td">信箱</div>-->
+													<div class="css_td">編輯</div>
+												</div>
+												@@content@@
+											</div>
+											
 										</article>
 
 								</div>
