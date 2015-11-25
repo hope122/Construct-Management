@@ -18,7 +18,6 @@ class QCController extends AbstractActionController
 	//不執行任何動作
 	public function indexAction()
     {
-		 //session_start();
 		$VTs = new clsSystem;
 		$VTs->initialization();
         try{
@@ -61,38 +60,76 @@ class QCController extends AbstractActionController
 		$this->viewContnet['pageContent'] = $pageContent;
         return new ViewModel($this->viewContnet);
     }
-	public function photolistAction()
+
+
+    //qc 照片列表主頁
+    public function photolistAction()
     {
-		 //session_start();
+        $VTs = new clsSystem;
+        $VTs->initialization();
+      try{
+        //-----BI開始-----  
+        //取得html
+        $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\qc\\photolist.html";
+        $html=$VTs->GetHtmlContent($mpath);
+        $pageContent=$html;
+        //-----BI結束-----
+        }catch(Exception $error){
+            //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
+            $VTs->WriteLog("IndexController", "indexAction", $error->getMessage());
+        }
+         //關閉資料庫連線
+        $VTs->DBClose();
+        //釋放
+        $VTs = null;
+        $this->viewContnet['pageContent'] = $pageContent;
+        return new ViewModel($this->viewContnet);
+    }
+
+    //qc照片列表取得內容
+	   public function getphotolisthtmlAction()
+    {
 		$VTs = new clsSystem;
 		$VTs->initialization();
       try{
 		//-----BI開始-----  index QC審查首頁
-           $apurl='http://211.21.170.18:99';
-        // $apurl='http://127.0.0.1:88';
-        $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\qc\\photolist.html";
-//        $trpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\styles\\qc\\tr.html";
-        $html=$VTs->GetHtmlContent($mpath);
-//        $tr=$VTs->GetHtmlContent($trpath);
- 
-       $arr_list = $VTs->json2data($VTs->UrlDataGet($apurl."/qc/getdbdata?type=qc_checklist"));
-        
-        // print_r($arr_list);
-//        $str='';
-       foreach($arr_list as $data) {
-            
-            if(!empty($data->imgid)){
-                $arr=array("qcid"=>$data->imgid);
-                print_r($arr);
-                $imginfo = $VTs->json2data($VTs->UrlDataPost($apurl."/pageaction/getqcimglist",$arr));
-                print_r($imginfo);
+        //取得html
+        // $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\qc\\photolist.html";
+        $trpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\qc\\phototr.html";
+        // $html=$VTs->GetHtmlContent($mpath);
+        $trhtml=$VTs->GetHtmlContent($trpath);
+        //取得qc列表
+        $data = $_POST["data"];
+        $arr_list=$data["checklist"];
+        $apurl=$_POST["apurl"];
+        //解析列表
+        $htmlstr="";
+        $i=0;
+        foreach($arr_list as $list) {
+             echo $i++;
+            //判斷有imgid(照片id)才顯示  
+                  print_r($list['imgid']);
+            if(!empty($list['imgid'])){
+                $trs=$trhtml;
+                $arrin = array(
+                "qcid" => $list['uid'],
+            );
+
+                $imginfo = $VTs->json2data($VTs->UrlDataPost("http://211.21.170.18:99/pageaction/getqcimglist",$arrin));
+                if($imginfo->status){
+
+                     $trs=str_replace('@@d64@@',$imginfo->imgs->img0,$trs);
+                    $info = $VTs->json2data($VTs->UrlDataGet($apurl."/material/getdbdata?type=el_petition&uid=".$list['dataid']));
+                    $trs=str_replace('@@materialname@@',$info[0]->ma_name,$trs);
+                    $trs=str_replace('@@count@@',$info[0]->count,$trs);
+                    $trs=str_replace('@@place@@',$info[0]->place,$trs);
+                    $htmlstr.=$trs;
+                }
             }
    
        }
-       // $html=str_replace('@@tr@@',$str,$html);
-        
 
-                $pageContent=$html;
+      $pageContent=$htmlstr;
         //-----BI結束-----
         }catch(Exception $error){
             //依據Controller, Action補上對應位置, $error->getMessage()為固定部份

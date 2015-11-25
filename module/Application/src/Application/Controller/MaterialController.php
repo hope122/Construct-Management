@@ -46,8 +46,8 @@ class MaterialController extends AbstractActionController
                         }
                     $html=str_replace('@@opt_supply@@',$str,$html);
                 }
-        
-        
+                $html=str_replace('@@userName@@',$_SESSION["userName"],$html);
+            
         
                 $pageContent=$html;
         //-----BI結束-----
