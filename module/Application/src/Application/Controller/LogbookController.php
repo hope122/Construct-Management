@@ -94,7 +94,7 @@ class LogbookController extends AbstractActionController
         
         //接資料
         $data= $_POST["data"];
-        
+
         //取得html內容
         $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\html.html";
         $html=$VTs->GetHtmlContent($mpath);
@@ -133,7 +133,25 @@ class LogbookController extends AbstractActionController
         // （暫無資料
         $tr1="<tr><td COLSPAN=2 ></td><td></td><td></td><td></td><td></td><td COLSPAN=2></td> </tr>";
         $arrdata["tr1"]=$tr1;
-    
+        $trpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\tr1.html";
+        $trhtml=$VTs->GetHtmlContent($trpath);
+        $areaitem=$data["areaitem"];
+
+        $strhtml1='';
+        if(!empty($areaitem) ){
+            foreach($areaitem as $area){
+                $tr=$trhtml;
+                $tr=str_replace("@@name@@",$area["AREA"].$area["type_d"],$tr);
+                $tr=str_replace("@@unit@@",$area["p_type"],$tr);
+                $tr=str_replace("@@pcount@@",'',$tr);
+                $tr=str_replace("@@fcount@@",$area["qty"],$tr);
+                $tr=str_replace("@@gcount@@",'',$tr);
+                $strhtml1.=$tr;
+            }     
+//   
+        }
+        // echo $strhtml2;
+        $arrdata["tr1"]=$strhtml1;
         //-----------------------------------------------------------------------------------------------
        
         //取得材料管理
@@ -174,19 +192,7 @@ class LogbookController extends AbstractActionController
         }
         $arrdata["tr3"]=$strhtml3;
         $html=$VTs->ContentReplace($arrdata,$html);
-//         // $html=str_replace("@@tr3@@",$strhtml,$html);
-//         //印出頁面
 
-//         $str='';
-//         $arrdata["tr"]=$str;
-//         // $html=str_replace('@@tr@@',$str,$html);
-//         $arrdata = [
-//             "tr"=>$tr1,
-//             "tr1"=>$str,
-//             "tr2"=>$strhtml2,
-//             "tr3"=>$strhtml3,
-//         ];
-      
         
             //印出html
             $pageContent=$html;

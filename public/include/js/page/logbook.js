@@ -1,7 +1,7 @@
 $(function() {  
   //取資料
   $.get(configObject.logbookGetData+"?type=logbook", function( data ) {
-      console.log(data);
+      // console.log(data);
       
       //丟資料toCM回傳html內容
       $.ajax({
