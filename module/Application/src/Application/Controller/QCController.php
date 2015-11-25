@@ -18,7 +18,6 @@ class QCController extends AbstractActionController
 	//不執行任何動作
 	public function indexAction()
     {
-		 //session_start();
 		$VTs = new clsSystem;
 		$VTs->initialization();
         try{
@@ -61,49 +60,76 @@ class QCController extends AbstractActionController
 		$this->viewContnet['pageContent'] = $pageContent;
         return new ViewModel($this->viewContnet);
     }
-	public function photolistAction()
+
+
+    //qc 照片列表主頁
+    public function photolistAction()
     {
-		 //session_start();
+        $VTs = new clsSystem;
+        $VTs->initialization();
+      try{
+        //-----BI開始-----  
+        //取得html
+        $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\qc\\photolist.html";
+        $html=$VTs->GetHtmlContent($mpath);
+        $pageContent=$html;
+        //-----BI結束-----
+        }catch(Exception $error){
+            //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
+            $VTs->WriteLog("IndexController", "indexAction", $error->getMessage());
+        }
+         //關閉資料庫連線
+        $VTs->DBClose();
+        //釋放
+        $VTs = null;
+        $this->viewContnet['pageContent'] = $pageContent;
+        return new ViewModel($this->viewContnet);
+    }
+
+    //qc照片列表取得內容
+	   public function getphotolisthtmlAction()
+    {
 		$VTs = new clsSystem;
 		$VTs->initialization();
       try{
 		//-----BI開始-----  index QC審查首頁
-           // $apurl='http://211.21.170.18:99';
-        $apurl='http://127.0.0.1:88';
         //取得html
-        $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\qc\\photolist.html";
+        // $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\qc\\photolist.html";
         $trpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\qc\\phototr.html";
-        $html=$VTs->GetHtmlContent($mpath);
+        // $html=$VTs->GetHtmlContent($mpath);
         $trhtml=$VTs->GetHtmlContent($trpath);
         //取得qc列表
-        $arr_list = $VTs->json2data($VTs->UrlDataGet($apurl."/qc/getdbdata?type=qc_checklist"));
+        $data = $_POST["data"];
+        $arr_list=$data["checklist"];
+        $apurl=$_POST["apurl"];
         //解析列表
         $htmlstr="";
-        foreach($arr_list as $data) {
-            // echo($data->imgid);
+        $i=0;
+        foreach($arr_list as $list) {
+             echo $i++;
             //判斷有imgid(照片id)才顯示  
-            if(!empty($data->imgid)){
+                  print_r($list['imgid']);
+            if(!empty($list['imgid'])){
                 $trs=$trhtml;
                 $arrin = array(
-                "qcid" => $data->uid,
+                "qcid" => $list['uid'],
             );
-                // print_r($arrin);
+
                 $imginfo = $VTs->json2data($VTs->UrlDataPost("http://211.21.170.18:99/pageaction/getqcimglist",$arrin));
-                $trs=str_replace('@@d64@@',$imginfo->imgs->img0,$trs);
-                $info = $VTs->json2data($VTs->UrlDataGet($apurl."/material/getdbdata?type=el_petition&uid=".$data->dataid));
-                $trs=str_replace('@@materialname@@',$info[0]->ma_name,$trs);
-                $trs=str_replace('@@count@@',$info[0]->count,$trs);
-                $trs=str_replace('@@place@@',$info[0]->place,$trs);
-                $htmlstr.=$trs;
+                if($imginfo->status){
+
+                     $trs=str_replace('@@d64@@',$imginfo->imgs->img0,$trs);
+                    $info = $VTs->json2data($VTs->UrlDataGet($apurl."/material/getdbdata?type=el_petition&uid=".$list['dataid']));
+                    $trs=str_replace('@@materialname@@',$info[0]->ma_name,$trs);
+                    $trs=str_replace('@@count@@',$info[0]->count,$trs);
+                    $trs=str_replace('@@place@@',$info[0]->place,$trs);
+                    $htmlstr.=$trs;
+                }
             }
    
        }
-       $title = $VTs->json2data($VTs->UrlDataGet($apurl."/qc/getdbdata?type=title"));
-       $html=str_replace('@@title@@',$title[0]->name,$html);
-       $html=str_replace('@@tr@@',$htmlstr,$html);
-        
 
-                $pageContent=$html;
+      $pageContent=$htmlstr;
         //-----BI結束-----
         }catch(Exception $error){
             //依據Controller, Action補上對應位置, $error->getMessage()為固定部份

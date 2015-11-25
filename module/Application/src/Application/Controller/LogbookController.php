@@ -213,29 +213,32 @@ class LogbookController extends AbstractActionController
 		//-----BI開始-----  get prjuid 傳入廠商ＩＤ 回傳品項html option內容
         //            $apurl='http://211.21.170.18:99';
         $url=$_GET['url'];
-
-        $filePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public";
-        if( !file_exists($filePath) ){ 
-            //echo "no";
-             $filePath = str_replace("\\", "/", $filePath);
-            if( file_exists($filePath)){
-                echo 'yes';
-            }else{
-                echo "no file";
+        $filename=$_GET['name'].".pdf";
+        // $url="http://127.0.0.1:168/logbook";
+        // $filename="pdftest.pdf";    
+        $dirPath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\file_pdf\\";
+        if( !is_dir($dirPath) ){ 
+             $dirPath = str_replace("\\", "/", $dirPath);
+            if( !is_dir($dirPath)){
+                $VTs->CreateDirectory($dirPath);
             }
         }  
-        $filePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\logbookpdf.pdf";
-        if( !file_exists($filePath) ){ 
-            //echo "no";
-             $filePath = str_replace("\\", "/", $filePath);
-            if( file_exists($filePath)){
-                echo 'yes';
-            }else{
-                echo "no file";
+
+        $filePath = $dirPath.$filename;
+        if(!is_file($filePath) ){ 
+            $filePath = str_replace("\\", "/", $filePath);
+            if(!is_file($filePath)){
+                $VTs->Page2PDF($url,$filePath);
             }
         }
-      
-        
+        if(isset($filePath))
+        {
+            // $_GET['file'] 即為傳入要下載檔名的引數
+            header("Content-type:application");
+            header("Content-Length: " .(string)(filesize($filePath)));
+            header("Content-Disposition: attachment; filename=".$filename);
+            readfile($filePath);
+        }
             //印出html
 //            $pageContent=$html;
         //-----BI結束-----

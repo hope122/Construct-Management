@@ -1,39 +1,39 @@
 
-// $(function(){
-// $.get(configObject.QCGetData+"?type=qc_checklist",function(result){
-// 	json=JSON.parse(result);
-// 	for (var key in json) {
-// 	    if (!(json[key].imgid===null)) {
-// 	    	// console.log(configObject.MaterialGetData+"?type=el_petition&"+json[key].dataid);
-// 	    	str=getdata(json[key].dataid);
-// 	    	console.log(str);
-// 	    	data64=getdata64(json[key].uid);
-// 			$("#photolist").append("<tr><td><img width='500px'  src='"+data64+"'/></td><td>"+str+"</td></tr ><br>");
-// 	    };
-// 	}
-
-//  });
-
-// });
-// function getdata(dataid){
-// 	var str;
-// 	$.get(configObject.MaterialGetData+"?type=el_petition&uid="+dataid,function(re){
-// 		data=JSON.parse(re);
-// 		str="材料名稱："+$(data)[0].ma_name;
-// 		str+="<br>數量："+$(data)[0].count;
-// 		str+="<br>放置地點："+$(data)[0].place;
-// 		console.log(str);
-// 		return str;
-// 	});
-// }
-// function getdata64(uid){
-// 	$.post("http://211.21.170.18:99/pageaction/getqcimglist",{qcid:uid},function(imgresult){
-// 		img=JSON.parse(imgresult);
-// 		d64=$(img)[0].imgs.img0;
-// 		return d64;
-// 	});
-	
-// }
+$(function() {  
+  $.get(configObject.QCGetData+"?type=title", function( data ) {
+      data=JSON.parse(data);
+      // console.log(data['name']);
+      $('#title').html(data['name']);
+  });
+  $.get(configObject.QCGetData+"?type=qc_checklist", function( data ) {
+      console.log(apurl);
+      
+      // 丟資料toCM回傳html內容
+      $.ajax({
+        url: "/qc/getphotolisthtml",
+       type: "POST",
+       data: {data:JSON.parse(data),apurl:apurl},
+       async:false,
+       success: function(rs){
+        console.log(rs);
+        $("#photolist").append(rs);
+//                    alert('新增成功！');
+//                      location.reload();
+       },
+       error: function(e){
+       console.log(e);
+            alert('儲存失敗！');
+       }
+    });
+  });
+});  
 function print(){
-    $("#pr").printArea();
+    $("#div_print").printArea();
+}
+function save(){
+    var Today=new Date();
+　  tdate=Today.getFullYear().toString() + (Today.getMonth()+1)+ Today.getDate().toString() ;
+    window.open('/logbook/savepdffile?url='+location.host+'/qc/photolist&name=photolist'+tdate);
+    // window.close();
+    // console.log('/logbook/savepdffile?url='+location.host+'/logbook');
 }

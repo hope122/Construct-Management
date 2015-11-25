@@ -23,11 +23,11 @@
     <input align="center" onclick="print();" type="button" value="列印">
     <input align="center" onclick="save();" type="button" value="存檔">
 </div>
-<div id='pr' align='center' style='margin: 0px auto;'>
+<div id='div_print' align='center' style='margin: 0px auto;'>
     <table width='90%' > 
       <tr  align='center'>
         <td >
-          <span style="font-size:x-large;"><b>@@title@@</b></span>
+          <b><span id='title' style="font-size:x-large;"></span></b>
         </td>
       </tr>
       <tr  align='center'>
@@ -45,9 +45,7 @@
       </tr>
     </table>
    <table id='photolist' width='90%' style="border:5px #cccccc solid ;" rules="all" cellpadding='5'>
-
-
-      @@tr@@
+    
     <table>
 
  
