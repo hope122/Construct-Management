@@ -20,17 +20,23 @@
 		}
 		
 		//讀取INI檔資料 GetINIInfo(strIniFile, sSection, sKeyName, sDefaultValue = "") As String
-		public function GetINIInfo($strIniFile,$sSection,$sKeyName,$sDefaultValue = "",$originDataArray = false){
+		public function GetINIInfo($strIniFile,$sSection,$sKeyName,$sDefaultValue = "",$originDataArray = false,$process_sections = false){
             if(!file_exists($strIniFile)){
                 $strIniFile = str_replace("\\","/",$strIniFile);
             }
 			if($originDataArray){
-				return parse_ini_file($strIniFile);
+				if(!$process_sections){
+					return parse_ini_file($strIniFile);
+				}else{
+					return parse_ini_file($strIniFile,true);
+				}
 			}else{
 				$iniContent = parse_ini_file($strIniFile,true);
-				foreach($iniContent[$sSection] as $i => $content){
-					if($i == $sKeyName){
-						return ($content)?$content:$sDefaultValue;
+				if(!empty($iniContent[$sSection])){
+					foreach($iniContent[$sSection] as $i => $content){
+						if($i == $sKeyName){
+							return ($content)?$content:$sDefaultValue;
+						}
 					}
 				}
 			}
