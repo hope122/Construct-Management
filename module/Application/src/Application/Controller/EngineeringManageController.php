@@ -26,26 +26,28 @@ class EngineeringmanageController extends AbstractActionController
 	            $pagePath = $pathString . "\\index\\login_page.html";
 	            $pageContent = $VTs->GetHtmlContent($pagePath);
 			}else{
-				$pagePath = $pathString . "\\index\\after_login.html";
-				$pageContent = $VTs->GetHtmlContent($pagePath);
-				//一個索引與內容等同一個 >> str_replace("@@userName@@",$_SESSION["userName"],$pageContent);
+				$indexPath = $pathString . "\\engineeringManage\\index.html";
+				$index = $VTs->GetHtmlContent($indexPath);
+				//登入者
 				$dataArr = ["userName"=>$_SESSION["userName"]];
-				//內容取代
-				$pageContent = $VTs->ContentReplace($dataArr,$pageContent);				
-				$pageContent = "";
+				$index = $VTs->ContentReplace($dataArr,$index);
 				
-				//test start-------------------------
-						//取得目前最後編碼
-						$strSQL = "SELECT code FROM ".$_POST["table"]." ORDER BY code DESC LIMIT 1";
-						$data = $VTs->QueryData($strSQL);
-						
-						//將編碼+1	#編碼規則: AA 兩碼
-						// $lastCode = chr(ord(substr($data[0]["code"],1,1))+1);
-						// $code = substr($data[0]["code"],0,1).$lastCode;
-						
-						$code = codeAddOne($data[0]["code"], "two");
-						echo $code;
-				//test End---------------------------
+				//畫面
+				$editorPath = $pathString . "\\engineeringManage\\editor.html";
+				$editor = $VTs->GetHtmlContent($editorPath);
+				
+				$dataArr = ["edit_area"=>$editor];
+				$index = $VTs->ContentReplace($dataArr,$index);
+				
+				$pageContent = $index;
+				
+				// $strSQL = "SELECT * FROM el_type_unit";
+	// $data = $VTs->QueryData($strSQL);
+	// if(empty($data)){
+		// $data = null;
+	// }
+	// $VTs->debug($data);
+	// $pageContent = "";
 			}
 			//----BI結束----
 		}catch(Exception $error){
@@ -56,28 +58,4 @@ class EngineeringmanageController extends AbstractActionController
 		$this->viewContnet['pageContent'] = $pageContent;
         return new ViewModel($this->viewContnet);
     }
-}
-
-function codeAddOne($OriCode, $digits)
-{
-	$code = "";
-	
-	switch($digits){
-		case "one":
-			$code = chr(ord($data[0]["code"])+1);
-			break;
-		case "two":
-			$lastCode = chr(ord(substr($OriCode,1,1))+1);
-			$code = substr($OriCode,0,1).$lastCode;
-			break;
-		case "four":
-		
-			break;
-		case "six":
-		
-			break;
-		default:
-	}
-	
-	return $code;
 }
