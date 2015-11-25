@@ -11,6 +11,7 @@ $(function() {
        async:false,
        success: function(rs){
         console.log(rs);
+        $("#div_print").append(rs);
 //                    alert('新增成功！');
 //                      location.reload();
        },

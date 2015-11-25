@@ -114,8 +114,9 @@ class LogbookController extends AbstractActionController
         $head=$data["project"];
         $aday=round((strtotime(date("Y-m-d"))-strtotime($head["start"]))/3600/24);
         $sday=$head["pday"]-$aday+$head["cday"];
+
         $arrdata = [
-            "prjname"=>$head["amweather"],
+            "prjname"=>$head["prjname"],
             "supplyname"=>$head["supplyname"],
             "pday"=>$head["pday"],
             "aday"=>$aday,
@@ -125,8 +126,7 @@ class LogbookController extends AbstractActionController
             "end"=>$head["end"],
         ];
         $html=$VTs->ContentReplace($arrdata,$html);
-        print_r($data);
-        exit;
+
 
         //-----------------------------------------------------------------------------------------------
         //取得施工進度
@@ -140,52 +140,56 @@ class LogbookController extends AbstractActionController
         $trpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\tr2.html";
         $trhtml=$VTs->GetHtmlContent($trpath);
         $materielcount=$data["materielcount"];
+
         $strhtml2='';
         if(!empty($materielcount) ){
-            foreach($arr_materiel as $materiel){
+            foreach($materielcount as $materiel){
                 $tr=$trhtml;
-                $tr=str_replace("@@name@@",$materielcount["name"],$tr);
-                $tr=str_replace("@@unit@@",$materiel->unit,$tr);
-                $tr=str_replace("@@pcount@@",$materiel->pcount,$tr);
-                $tr=str_replace("@@incount@@",$materiel->incount,$tr);
-                $tr=str_replace("@@count@@",$materiel->count,$tr);
+                $tr=str_replace("@@name@@",$materiel["name"],$tr);
+                $tr=str_replace("@@unit@@",$materiel["unit"],$tr);
+                $tr=str_replace("@@pcount@@",$materiel["pcount"],$tr);
+                $tr=str_replace("@@incount@@",$materiel["incount"],$tr);
+                $tr=str_replace("@@count@@",$materiel["count"],$tr);
                 $strhtml2.=$tr;
-            }     $arr_materiel= $VTs->json2data($VTs->UrlDataGet($apurl."/logbook/getdbdata?type=materielcount"));
+            }     
 //   
         }
+        // echo $strhtml2;
         $arrdata["tr2"]=$strhtml2;
-        // $html=str_replace("@@tr2@@",$strhtml,$html);
+
+
         //取得人員機具管理
         $trpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\tr3.html";
         $trhtml=$VTs->GetHtmlContent($trpath);
-        $arr_workcount= $VTs->json2data($VTs->UrlDataGet($apurl."/logbook/getdbdata?type=workcount"));
+        $arr_workcount= $data["workcount"];
 //        print_r($arr_workcount);
         $strhtml3='';
         if(!$arr_workcount==null ){
             foreach($arr_workcount as $workcount){
                 $tr=$trhtml;
-                $tr=str_replace("@@name@@",$workcount->name,$tr);
-                $tr=str_replace("@@count@@",$workcount->count,$tr);
+                $tr=str_replace("@@name@@",$workcount["name"],$tr);
+                $tr=str_replace("@@count@@",$workcount["count"],$tr);
                 $strhtml3.=$tr;
             }
         }
         $arrdata["tr3"]=$strhtml3;
-        // $html=str_replace("@@tr3@@",$strhtml,$html);
-        //印出頁面
+        $html=$VTs->ContentReplace($arrdata,$html);
+//         // $html=str_replace("@@tr3@@",$strhtml,$html);
+//         //印出頁面
 
-        $str='';
-        $arrdata["tr"]=$str;
-        // $html=str_replace('@@tr@@',$str,$html);
-        $arrdata = [
-            "tr"=>$tr1,
-            "tr1"=>$str,
-            "tr2"=>$strhtml2,
-            "tr3"=>$strhtml3,
-        ];
+//         $str='';
+//         $arrdata["tr"]=$str;
+//         // $html=str_replace('@@tr@@',$str,$html);
+//         $arrdata = [
+//             "tr"=>$tr1,
+//             "tr1"=>$str,
+//             "tr2"=>$strhtml2,
+//             "tr3"=>$strhtml3,
+//         ];
       
         
             //印出html
-//            $pageContent=$html;
+            $pageContent=$html;
         //-----BI結束-----
         }catch(Exception $error){
             //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
@@ -195,6 +199,8 @@ class LogbookController extends AbstractActionController
         $VTs->DBClose();
         //釋放
         $VTs = null;
+        $this->viewContnet['pageContent'] = $pageContent;
+        return new ViewModel($this->viewContnet);
     }
 
     //儲存pdf
@@ -228,12 +234,6 @@ class LogbookController extends AbstractActionController
                 echo "no file";
             }
         }
-        
-        // header('Content-type: application/pdf');
-        // readfile('logbookpdf.pdf');
-        // header('Content-Disposition: attachment; filename="logbookpdf.pdf"');
-        // echo "<script>window.close();</script>";
-
       
         
             //印出html
