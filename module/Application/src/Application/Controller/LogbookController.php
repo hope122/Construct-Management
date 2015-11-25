@@ -22,97 +22,136 @@ class LogbookController extends AbstractActionController
 		$VTs = new clsSystem;
 		$VTs->initialization();
         try{
-		//-----BI開始-----  index logbook施工日誌首頁
-        
-        //設定apurl
-        $apurl='http://211.21.170.18:99';
-//      $apurl='http://127.0.0.1:88';
+
+        //-----BI開始-----  index logbook施工日誌首頁
+
         //取得主頁html
         $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\index.html";
         $html=$VTs->GetHtmlContent($mpath);
-        //取得編號
-        $no= $VTs->json2data($VTs->UrlDataGet($apurl."/logbook/getdbdata?type=getno"));
-        if($no == null){
-            // $html=str_replace("@@no@@",1,$html);
-            $arrdata["no"]=1;
-        }else{
-            // $html=str_replace("@@no@@",$no[0]->no+1,$html);
-            $arrdata["no"]=$no[0]->no+1;
+        $pageContent=$html;
+
+        //-----BI結束-----
+
+        }catch(Exception $error){
+            //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
+            $VTs->WriteLog("IndexController", "indexAction", $error->getMessage());
         }
-        $html=$VTs->ContentReplace($arrdata,$html);
-        //取得資料資訊
-        $diary_info= $VTs->json2data($VTs->UrlDataGet($apurl."/logbook/getdbdata?type=diary_info&uid=1"));
+         //關閉資料庫連線
+        $VTs->DBClose();
+        //釋放
+		$VTs = null;
+		$this->viewContnet['pageContent'] = $pageContent;
+        return new ViewModel($this->viewContnet);
+    }
+
+  //   //設定選項
+  //      public function setcontentsAction()
+  //   {
+  //       //session_start();
+		// $VTs = new clsSystem;
+		// $VTs->initialization();
+  //       try{
+		// //-----BI開始-----  get prjuid 傳入廠商ＩＤ 回傳品項html option內容
+  //       $apurl='http://127.0.0.1:88';
+  //       //取得主頁html
+  //       $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\setcontents.html";
+  //       $html=$VTs->GetHtmlContent($mpath);
+      
+  //       //取得天氣列表
+  //       $arr_weather= $VTs->json2data($VTs->UrlDataGet($apurl."/logbook/getdbdata?type=weather"));
+  //       $whtml='';
+  //       foreach($arr_weather as $weather){
+  //           $whtml.="<option value=".$weather->uid.">".$weather->name."</option>";
+  //       }
+  //       $html=str_replace("@@woption@@",$whtml,$html);
+        
+        
+  //           //印出html
+  //           $pageContent=$html;
+  //       //-----BI結束-----
+  //       }catch(Exception $error){
+  //           //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
+  //           $VTs->WriteLog("IndexController", "indexAction", $error->getMessage());
+  //       }
+  //        //關閉資料庫連線  //       $VTs->DBClose();
+  //       //釋放
+		// $VTs = 
+
+    // null;
+		// $this->viewContnet['pageContent'] = $pageContent;
+  //       return new ViewModel($this->viewContnet);
+  //   }
+    
+
+    //施工日誌 第一項施工進度 tr1
+    public function gethtmlAction()
+    {
+        //session_start();
+        $VTs = new clsSystem;
+        $VTs->initialization();
+        try{
+        //-----BI開始----- 
+        
+        //接資料
+        $data= $_POST["data"];
+        
+        //取得html內容
+        $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\html.html";
+        $html=$VTs->GetHtmlContent($mpath);
+
+        //取得基本資訊
+        $diary_info=$data["diary_info"];
         $arrdata = [
-            "amweather"=>$diary_info[0]->amweather,
-            "pmweather"=>$diary_info[0]->pmweather,
-            "week"=>$diary_info[0]->week,
-            "indate"=>$diary_info[0]->date,
+            "no"=>$data["no"],
+            "amweather"=>$diary_info["amweather"],
+            "pmweather"=>$diary_info["pmweather"],
+            "week"=>$diary_info["week"],
+            "indate"=>$diary_info["date"],
         ];
         $html=$VTs->ContentReplace($arrdata,$html);
-        
-        // $arrdata["amweather"]=$diary_info[0]->amweather;
-        // $arrdata["pmweather"]=$diary_info[0]->pmweather;
-        // $arrdata["week"]=$diary_info[0]->week;
-        // $arrdata["indate"]=$diary_info[0]->date;
-
 
         //取得表頭項目
-        $head= $VTs->json2data($VTs->UrlDataGet($apurl."/logbook/getdbdata?type=project&uid=1"));
-//        print_r($head);
-        // $arrdata["prjname"]=$head[0]->prjname;
-        // $arrdata["supplyname"]=$head[0]->supplyname;
-        // $arrdata["pday"]=$head[0]->pday;
-        $aday=round((strtotime(date("Y-m-d"))-strtotime($head[0]->start))/3600/24);
-        // $arrdata["aday"]=$aday;
-        $sday=$head[0]->pday-$aday+$head[0]->cday;
-        // $arrdata["sday"]=$sday;
-        // $arrdata["cday"]=$head[0]->cday;
-        // $arrdata["start"]=$head[0]->start;
-        // $arrdata["end"]=$head[0]->end;
-
+        $head=$data["project"];
+        $aday=round((strtotime(date("Y-m-d"))-strtotime($head["start"]))/3600/24);
+        $sday=$head["pday"]-$aday+$head["cday"];
         $arrdata = [
-            "prjname"=>$head[0]->prjname,
-            "supplyname"=>$head[0]->supplyname,
-            "pday"=>$head[0]->pday,
+            "prjname"=>$head["amweather"],
+            "supplyname"=>$head["supplyname"],
+            "pday"=>$head["pday"],
             "aday"=>$aday,
             "sday"=>$sday,
-            "cday"=>$head[0]->cday,
-            "start"=>$head[0]->start,
-            "end"=>$head[0]->end,
+            "cday"=>$head["cday"],
+            "start"=>$head["start"],
+            "end"=>$head["end"],
         ];
         $html=$VTs->ContentReplace($arrdata,$html);
-        // $html=str_replace("@@prjname@@",$head[0]->prjname,$html);
-        // $html=str_replace("@@supplyname@@",$head[0]->supplyname,$html);
-        // $html=str_replace("@@pday@@",$head[0]->pday,$html);
-        // $aday=round((strtotime(date("Y-m-d"))-strtotime($head[0]->start))/3600/24);
-        // $html=str_replace("@@aday@@",$aday,$html);
-        // $sday=$head[0]->pday-$aday+$head[0]->cday;
-        // $html=str_replace("@@sday@@",$sday,$html);
-        // $html=str_replace("@@cday@@",$head[0]->cday,$html);
-        // $html=str_replace("@@start@@",$head[0]->start,$html);
-        // $html=str_replace("@@end@@",$head[0]->end,$html);
+        print_r($data);
+        exit;
+
+        //-----------------------------------------------------------------------------------------------
         //取得施工進度
         // （暫無資料
-
         $tr1="<tr><td COLSPAN=2 ></td><td></td><td></td><td></td><td></td><td COLSPAN=2></td> </tr>";
         $arrdata["tr1"]=$tr1;
-        // $html=str_replace("@@tr1@@",$tr1,$html);
+    
+        //-----------------------------------------------------------------------------------------------
+       
         //取得材料管理
         $trpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\tr2.html";
         $trhtml=$VTs->GetHtmlContent($trpath);
-        $arr_materiel= $VTs->json2data($VTs->UrlDataGet($apurl."/logbook/getdbdata?type=materielcount"));
-//        print_r($arr_materiel);
+        $materielcount=$data["materielcount"];
         $strhtml2='';
-        if(!$arr_materiel==null ){
+        if(!empty($materielcount) ){
             foreach($arr_materiel as $materiel){
                 $tr=$trhtml;
-                $tr=str_replace("@@name@@",$materiel->name,$tr);
+                $tr=str_replace("@@name@@",$materielcount["name"],$tr);
                 $tr=str_replace("@@unit@@",$materiel->unit,$tr);
                 $tr=str_replace("@@pcount@@",$materiel->pcount,$tr);
                 $tr=str_replace("@@incount@@",$materiel->incount,$tr);
                 $tr=str_replace("@@count@@",$materiel->count,$tr);
                 $strhtml2.=$tr;
-            }
+            }     $arr_materiel= $VTs->json2data($VTs->UrlDataGet($apurl."/logbook/getdbdata?type=materielcount"));
+//   
         }
         $arrdata["tr2"]=$strhtml2;
         // $html=str_replace("@@tr2@@",$strhtml,$html);
@@ -143,42 +182,10 @@ class LogbookController extends AbstractActionController
             "tr2"=>$strhtml2,
             "tr3"=>$strhtml3,
         ];
-        $pageContent=$VTs->ContentReplace($arrdata,$html);
-        //-----BI結束-----
-        }catch(Exception $error){
-            //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
-            $VTs->WriteLog("IndexController", "indexAction", $error->getMessage());
-        }
-         //關閉資料庫連線
-        $VTs->DBClose();
-        //釋放
-		$VTs = null;
-		$this->viewContnet['pageContent'] = $pageContent;
-        return new ViewModel($this->viewContnet);
-    }
-       public function setcontentsAction()
-    {
-        //session_start();
-		$VTs = new clsSystem;
-		$VTs->initialization();
-        try{
-		//-----BI開始-----  get prjuid 傳入廠商ＩＤ 回傳品項html option內容
-            $apurl='http://127.0.0.1:88';
-        //取得主頁html
-        $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\setcontents.html";
-        $html=$VTs->GetHtmlContent($mpath);
       
-        //取得天氣列表
-        $arr_weather= $VTs->json2data($VTs->UrlDataGet($apurl."/logbook/getdbdata?type=weather"));
-        $whtml='';
-        foreach($arr_weather as $weather){
-            $whtml.="<option value=".$weather->uid.">".$weather->name."</option>";
-        }
-        $html=str_replace("@@woption@@",$whtml,$html);
-        
         
             //印出html
-            $pageContent=$html;
+//            $pageContent=$html;
         //-----BI結束-----
         }catch(Exception $error){
             //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
@@ -187,11 +194,10 @@ class LogbookController extends AbstractActionController
          //關閉資料庫連線
         $VTs->DBClose();
         //釋放
-		$VTs = null;
-		$this->viewContnet['pageContent'] = $pageContent;
-        return new ViewModel($this->viewContnet);
+        $VTs = null;
     }
-    
+
+    //儲存pdf
     public function savepdffileAction()
     {
         //session_start();
