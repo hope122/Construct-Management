@@ -40,6 +40,8 @@
 		public $iniSet;
 		//使用者資訊
 		public $userInfo;
+		//log file setting
+		public $logFileSetting;
 		
 		//供呼叫程式初始化設定
 		public function initialization($DBSection = ''){
@@ -79,6 +81,14 @@
 			$iniSet["DBSet"]["sPassWord"] = $sPassWord;
 			$iniSet["DBSet"]["sDatabase"] = $sDatabase;
 			
+			//載入LOG設定檔
+			$strIniFile = __DIR__ . '\\..\\setlog.ini';
+            if(!file_exists($strIniFile)){
+                $strIniFile = __DIR__ . '/../setlog.ini';
+            }
+            $sSection = "log";
+			$this->logFileSetting = $VTs->GetINIInfo($strIniFile,$sSection,'write','');
+
 			//存到變數，以重複利用
 			$this->SystemToolsService = $VTs;
 			//釋放
@@ -92,9 +102,6 @@
 			$this->SystemDBService = $VTc;
 			//釋放
 			$VTs = null;
-			
-			//建立框架設定
-			$this->SystemFrameService = new clsFrame;
 		}
 		
 	#這裡是SystemDBService
@@ -116,11 +123,14 @@
 			$execut = false;
 			if( !empty($sSqlText) ){
 				$execut = $this->SystemDBService->ExecuteNonQuery($sSqlText);
+				$callFunction = debug_backtrace();
+				$callFunction = $callFunction[0];
 				if(!$execut){
 					print_r('Error SQL: '.$sSqlText);
-					$callFunction = debug_backtrace();
-					$callFunction = $callFunction[0];
-					$this->WriteLog($callFunction["class"], $callFunction["function"], "SQL執行錯誤:".$sSqlText);
+					$this->WriteLog($callFunction["class"], $callFunction["function"], "SQL Error:".$sSqlText);
+				}
+				if($this->logFileSetting){
+					$this->WriteLog($callFunction["class"], $callFunction["function"], "SQL:".$sSqlText);
 				}
 			}
 			return $execut;
@@ -130,6 +140,11 @@
 		public function QueryData($sSqlText){
 			if( !empty($sSqlText) ){
 				$data = $this->SystemDBService->QueryData($sSqlText);
+				if($this->logFileSetting){
+					$callFunction = debug_backtrace();
+					$callFunction = $callFunction[0];
+					$this->WriteLog($callFunction["class"], $callFunction["function"], "SQL:".$sSqlText."\nData:".$this->Data2Json($data));
+				}
 			}
 			return $data;	
 		}
@@ -163,8 +178,8 @@
 		}
 		
 		//讀取INI檔資料 GetINIInfo(strIniFile, sSection, sKeyName, sDefaultValue = "") As String
-		public function GetINIInfo($strIniFile,$sSection,$sKeyName,$sDefaultValue = "",$originDataArray = false){
-			return $this->SystemToolsService->GetINIInfo($strIniFile,$sSection,$sKeyName,$sDefaultValue,$originDataArray);
+		public function GetINIInfo($strIniFile,$sSection,$sKeyName,$sDefaultValue = "",$originDataArray = false, $process_sections = false){
+			return $this->SystemToolsService->GetINIInfo($strIniFile,$sSection,$sKeyName,$sDefaultValue,$originDataArray,$process_sections);
 		}
 		
 		//使用cmd執行指令
