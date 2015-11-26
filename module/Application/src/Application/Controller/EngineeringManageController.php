@@ -36,26 +36,47 @@ class EngineeringmanageController extends AbstractActionController
 				$editorPath = $pathString . "\\engineeringManage\\editor.html";
 				$editor = $VTs->GetHtmlContent($editorPath);
 				
-				$dataArr = ["edit_area"=>$editor];
-				$index = $VTs->ContentReplace($dataArr,$index);
+				// $dataArr = ["edit_area"=>$editor];
+				// $index = $VTs->ContentReplace($dataArr,$index);
 				
 				$pageContent = $index;
-				
-				// $strSQL = "SELECT * FROM el_type_unit";
-	// $data = $VTs->QueryData($strSQL);
-	// if(empty($data)){
-		// $data = null;
-	// }
-	// $VTs->debug($data);
-	// $pageContent = "";
 			}
 			//----BI結束----
 		}catch(Exception $error){
 			//依據Controller, Action補上對應位置, $error->getMessage()為固定部份
-			$VTs->WriteLog("IndexController", "indexAction", $error->getMessage());
+			$VTs->WriteLog("EngineeringmanageController", "indexAction", $error->getMessage());
 		}
 		$VTs = null;
 		$this->viewContnet['pageContent'] = $pageContent;
         return new ViewModel($this->viewContnet);
     }
+	
+	public function editAction(){
+		$VTs = new clsSystem;
+		$VTs->initialization();
+		try{
+			//-----BI開始-----
+			$pathString = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting";
+			if(empty($_SESSION)){
+	            $pagePath = $pathString . "\\index\\login_page.html";
+	            $pageContent = $VTs->GetHtmlContent($pagePath);
+			}else{
+				$editPath = $pathString . "\\engineeringManage\\editor.html";
+				$edit = $VTs->GetHtmlContent($editPath);
+				
+				//登入者
+				$dataArr = ["userName"=>$_SESSION["userName"]];
+				$edit = $VTs->ContentReplace($dataArr,$edit);
+				
+				$pageContent = $edit;
+			}
+			//----BI結束----
+		}catch(Exception $error){
+			//依據Controller, Action補上對應位置, $error->getMessage()為固定部份
+			$VTs->WriteLog("EngineeringmanageController", "indexAction", $error->getMessage());
+		}
+		$VTs = null;
+		$this->viewContnet['pageContent'] = $pageContent;
+        return new ViewModel($this->viewContnet);
+	}
 }

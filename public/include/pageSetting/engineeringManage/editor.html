@@ -1,26 +1,125 @@
-<div>
-<div>
-	新增 <span id="level" name="level" style="color: red"></span> 子項目
-	<input type="hidden" id="code" name="code" value="">
-</div>
-<div>
-	<label>工程名稱：<input type="text" id="eng_name" name="eng_name" placeholder="請輸入工程名稱" value=""></label>
-	<label>工程代號：<input type="text" id="eng_scode" name="eng_scode" placeholder="請輸入工程代號" value=""></label>
-	<div id="" name="" style="display: none">
-		<div>
-			<input type="text" id="isok" name="isok" placeholder="審查點" value="">
-			<input type="text" id="rate_p" name="rate_p" placeholder="功率" value="">
-		</div>
-	</div>
-	<div id="unit" style="display: none">
-		<label>單位</label>
-	</div>
-	
-</div>
-</div>
-<!-- <input type="hidden" id="eng_type_a" name="eng_type_a" value="">
-<input type="hidden" id="eng_type_b" name="eng_type_b" value="">
-<input type="hidden" id="eng_type_c" name="eng_type_c" value=""> -->
-<input type="hidden" id="table" name="table" value="">
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>新增工程資料</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!--[if lte IE 8]><script src="../include/strongly/assets/js/ie/html5shiv.js"></script><![endif]-->
+		<link rel="stylesheet" href="../include/strongly/assets/css/main.css" />
+        <link rel="stylesheet" href="../include/css/jquery-ui.min.css" />
+		<!--[if lte IE 8]><link rel="stylesheet" href="../include/strongly/assets/css/ie8.css" /><![endif]-->
+		<!-- Scripts -->
+		<script src="../include/strongly/assets/js/jquery.min.js"></script>
+        <script src="../include/js/jquery/jquery-ui.min.js"></script>
+		<script src="../include/strongly/assets/js/jquery.dropotron.min.js"></script>
+		<script src="../include/strongly/assets/js/skel.min.js"></script>
+		<script src="../include/strongly/assets/js/skel-viewport.min.js"></script>
+		<script src="../include/strongly/assets/js/util.js"></script>
+		<!--[if lte IE 8]><script src="../include/strongly/assets/js/ie/respond.min.js"></script><![endif]-->
+		<script src="../include/js/config/config.js"></script>
+		<script src="../include/js/lang/langSet.js"></script>
+        <script src="../include/js/page/ctrl.js"></script>
+        <script src="../include/js/page/check_login.js"></script>
+        <script src="../include/js/page/topMenu.js"></script>
+		<script src="../include/strongly/assets/js/main.js"></script>
+        <script>
+            $(function(){
+				getLan();
+			  
+				$.ajax({
+					url: "http://127.0.0.1:99/engineeringmanage/getdata",
+					type: "POST",
+					data: { type: "selectOption" },
+					dataType: "JSON",
+					async: false,
+					success:
+						function(rs){
+							//console.log(rs.eng_type_a);
+							setSelection(rs);
+						},
+					error:
+						function(e){
+							console.log(e);
+						}
+				});
+            });
+        </script>
+		
+		<script src="../include/js/page/engineeringManage.js"></script>
+	</head>
+	<body class="homepage">
+		<div id="page-wrapper">
 
-<input type="button" id="submit" name="submit" value="送出" onclick="">
+			<!-- Header -->
+				<div id="header-wrapper">
+					<div id="header" class="container">
+
+						<!-- Logo -->
+							<h1 id="logo"><a href="./">建築物雲端全生命週期履歷平台</a></h1>
+                            <p>施工階段模組</p>
+
+						<!-- Nav -->
+							<nav id="nav">
+								<div style="float:right;">
+									<span>Hi, @@userName@@ 歡迎回來</span>
+								</div>
+								<!--選單-->
+								<ul id="menus">
+									<li><a class="icon fa-home" href="./"><span>首頁</span></a></li>
+									<li><a class="icon fa-retweet" href="#" onclick="logoutEven();"><span>Logout</span></a></li>
+								</ul>
+							</nav>
+
+					</div>
+				</div>
+
+			<!-- Main -->
+				<div id="main-wrapper">
+					<div id="main" class="container">
+						<div class="row">
+
+							<!-- Content -->
+								<div id="content" class="12u 12u(mobile)">
+
+									<!-- Post -->
+										<article class="box post">
+											<div>									
+												<div>
+													
+													<label>工程名稱：<input type="text" id="eng_name" name="eng_name" placeholder="請輸入工程名稱" value=""></label>
+													<label>工程代號：<input type="text" id="eng_scode" name="eng_scode" placeholder="請輸入工程代號" value=""></label>
+													<div id="unit" style="display: none">
+														<label>單位</label>
+													</div>
+													
+												</div>
+											</div>
+											<div>
+												<input type="hidden" id="table" name="table" value="">
+												<input type="button" id="submit" name="submit" value="送出" onclick="">
+											</div>
+										</article>
+
+								</div>
+
+						</div>
+					</div>
+				</div>
+
+			<!-- Footer -->
+				<div id="footer-wrapper">
+					<div id="footer" class="container">
+					</div>
+					<div id="copyright" class="container">
+						<ul class="links">
+							<li>&copy; Untitled. All rights reserved.</li><li>Design: HTML5 UP  </li>
+						</ul>
+					</div>
+				</div>
+
+		</div>
+
+		
+
+	</body>
+</html>
