@@ -1,14 +1,7 @@
-$(function(){
-	$("#ID").focus();
-})
-
 function submitCheck(){
-	//console.log("send ID: "+$("#ID").val());
-	//console.log($("#switch_type").val());
 	if($("#ID").val()!=""){		
 		$.ajax({
 			url: configObject.SARGetworkerdata,
-			//url: "http://127.0.0.1:99/sar/getworkerdata",
             type: "POST",
 			data: "ID="+$("#ID").val(),
 			dataType: "JSON",
@@ -18,9 +11,7 @@ function submitCheck(){
 					//console.log(rs);
 					if(rs.status){
 						
-						//顯示人員資料
-						//console.log(rs.info_type);
-						
+						//顯示人員資料						
 						switch(rs.info_type){
 							case "worker":
 								//塞入資料
@@ -55,12 +46,6 @@ function submitCheck(){
 						}
 
 						//紀錄出勤時間
-						//console.log($("#check_type").val())
-						//recordAttendance($("#check_type").val());
-						
-						//console.log($("input[name=radio]:checked").val());
-						//recordAttendance($("input[name=radio]:checked").val());
-						
 						//console.log($("#switch_type").val());
 						recordAttendance($("#switch_type").val());
 						
@@ -93,13 +78,11 @@ function submitCheck(){
 	}
 }
 
-function recordAttendance(check_type){
-	//alert(check_type);
+function recordAttendance($check_type){
 	$.ajax({
 		url: configObject.SARRecordAttendance,
-		//url: "http://127.0.0.1:99/sar/recordattendance",
         type: "POST",
-		data: { ID:$("#ID").val(), check_type:check_type },
+		data: { ID:$("#ID").val(), check_type:$check_type },
 		dataType: "JSON",
 		async:false,
         success: 
@@ -107,7 +90,7 @@ function recordAttendance(check_type){
 				//console.log(rs);
 				$("#check").show();
 				$("#uncheck").hide();
-				switch(check_type){
+				switch($check_type){
 					case "1":
 						$("#in").show();
 						$("#out").hide();
@@ -123,8 +106,7 @@ function recordAttendance(check_type){
 			function(e){
 				$("#uncheck").show();
 				$("#check").hide();
-				
-				//console.log(e);
+				console.log(e);
 			}
 	});
 }
@@ -133,4 +115,26 @@ function runScript(e){
     if (e.keyCode == 13) {
        $("#ID_check").click();
     }
+}
+
+function setTotalPeople(){
+	$.ajax({
+		url: configObject.SARReport,
+		type: "POST",
+		data: {},
+		dataType: "JSON",
+		asyns: false,
+		success:
+			function(rs){
+				var $totalPeople = 0;
+				for(var index in rs){
+					$totalPeople += parseInt(rs[index].w_count);
+				}
+				$("#totalPeople").html($totalPeople);
+			},
+		error:
+			function(e){
+				
+			}
+	});
 }

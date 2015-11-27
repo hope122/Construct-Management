@@ -1,5 +1,6 @@
 var apurl="http://211.21.170.18:99";
 // var apurl="http://127.0.0.1:88";
+// var apurl="http://127.0.0.1:99";
 var originUrl = location.origin+'/';
 var configObject = {
     "LoginUrl": "http://211.21.170.18:99/login",
@@ -18,6 +19,7 @@ var configObject = {
     "QCDelete":apurl+"/qc/dbdelete",
 	"SARGetworkerdata": apurl+"/sar/getworkerdata",
 	"SARRecordAttendance": apurl+"/sar/recordattendance",
+	"SARReport": apurl+"/sar/report",
     "logbookGetData":apurl+"/logbook/getdbdata",
     "getAcInfo": originUrl+"pageaction/acinfo",
     "socketConn": "http://211.21.170.18:7077",

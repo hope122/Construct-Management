@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>建築物雲端全生命週期履歷平台</title>
+		<title>人員出勤報表</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<!--[if lte IE 8]><script src="../include/strongly/assets/js/ie/html5shiv.js"></script><![endif]-->
@@ -10,7 +10,7 @@
 		<!--[if lte IE 8]><link rel="stylesheet" href="../include/strongly/assets/css/ie8.css" /><![endif]-->
 		<!-- Scripts -->
 		<script src="../include/strongly/assets/js/jquery.min.js"></script>
-        <script src="../include/js/jquery-ui.min.js"></script>
+        <script src="../include/js/jquery/jquery-ui.min.js"></script>
 		<script src="../include/strongly/assets/js/jquery.dropotron.min.js"></script>
 		<script src="../include/strongly/assets/js/skel.min.js"></script>
 		<script src="../include/strongly/assets/js/skel-viewport.min.js"></script>
@@ -45,11 +45,12 @@
 		 <script src="../include/js/jquery/jquery-1.11.3.min.js"></script>
 		<script src="https://www.google.com/jsapi"></script>
 		<script src="../include/js/chart/chart.js"></script>
+		<script src="../include/js/page/SAR.js"></script>
+		
 		<script>
 			$(function(){
 				var options = {
-				  //url: "http://127.0.0.1:99/sar/report",
-				  url: "http://211.21.170.18:99/sar/report",
+				  url: configObject.SARReport,
 				  urlMethod: "GET",
 				  sendData: {},
 				  drawItemID: 'SARChart',
@@ -58,9 +59,10 @@
 				  drawType:"ColumnChart" //drawType 可使用 ColumnChart、LineChart 兩種
 				};
 				createChart(options);
+				setTotalPeople();
 			});
 		</script>
-	
+		
 	</head>
 	<body class="homepage">
 		<div id="page-wrapper">
@@ -97,20 +99,9 @@
 								<div id="content" class="12u 12u(mobile)">
 
 									<!-- Post -->
-										<!--<article class="box post">
-											<div class='css_table' align='center' style='margin: 0px auto;'>
-												<div class="css_tr">
-													<div class="css_td">工種</div>
-													<div class="css_td">人數</div>
-													<div class="css_td">廠商</div>
-												</div>
-												@@data_list@@
-											</div>
-										</article>-->
-										
 										<article class="box post">
 											<div class='css_table' align='center' style='margin: 0px auto;'>
-												<div>今日出工人數</div>
+												<div><label>今日出工總人數：<span id="totalPeople" name="totalPeople"></span>人</label></div>
 												<div id="SARChart"></div>
 											</div>
 										</article>
