@@ -1,0 +1,52 @@
+<head>
+<title>QC入料查驗</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+ <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="/include/js/jquery/jquery-1.11.3.min.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="/include/js/config/config.js"></script>
+    <script src="/include/js/jquery/jquery.PrintArea.js"></script>
+    <script src="/include/js/page/qc/photolist.js"></script>
+    <style type="text/css">
+        .css_table {
+      display:table;
+          }
+        .css_tr {
+              display: table-row;
+          }
+        .css_td {
+              display: table-cell;
+          }
+            </style>
+</head>
+<div >
+    <input align="center" onclick="print();" type="button" value="列印">
+    <input align="center" onclick="save();" type="button" value="存檔">
+</div>
+<div id='div_print' align='center' style='margin: 0px auto;'>
+    <table width='90%' > 
+      <tr  align='center'>
+        <td >
+          <b><span id='title' style="font-size:x-large;"></span></b>
+        </td>
+      </tr>
+      <tr  align='center'>
+        <td >
+          <span><u>材料進場查驗照片<u/></span>
+        </td>
+      </tr>
+      <tr >
+        <td align='left'>
+          <span>主辦機關：</span><br>
+          <span>專案管理單位：</span><br>
+          <span>監造廠商：</span><br>
+          <span>承包廠商：</span>
+         </td>
+      </tr>
+    </table>
+   <table id='photolist' width='90%' style="border:5px #cccccc solid ;" rules="all" cellpadding='5'>
+    
+    <table>
+
+ 
+</div>
