@@ -28,6 +28,8 @@ class LogbookController extends AbstractActionController
         //取得主頁html
         $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\index.html";
         $html=$VTs->GetHtmlContent($mpath);
+        $arrdata["userName"]=$_SESSION['userName'];
+        $html=$VTs->ContentReplace($arrdata,$html);
         $pageContent=$html;
 
         //-----BI結束-----
@@ -99,7 +101,7 @@ class LogbookController extends AbstractActionController
         $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\html.html";
         $html=$VTs->GetHtmlContent($mpath);
 
-        //取得基本資訊
+         //取得基本資訊
         $diary_info=$data["diary_info"];
         $arrdata = [
             "no"=>$data["no"],

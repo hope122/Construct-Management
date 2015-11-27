@@ -73,7 +73,7 @@ class MaterialController extends AbstractActionController
                 $apurl='http://211.21.170.18:99';
 //            $apurl='http://127.0.0.1:88';
             //    $apurl='http://211.21.170.18:99';
-            $apurl='http://127.0.0.1:88';
+            // $apurl='http://127.0.0.1:88';
                 //取得廠商ID
             $suid=$_GET['suid'];
             //廠商id傳入ap 取得品項陣列
