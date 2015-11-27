@@ -31,6 +31,7 @@
 				getLan();
 				$("#radio").buttonset();
 				$("[name='switch']").bootstrapSwitch();
+				$("#ID").focus();
             });
         </script>
 		<style type="text/css">
@@ -102,14 +103,6 @@
 											<div class='css_table' align='center' style='margin: 0px auto;'>
 												<div class="css_tr">
 													<div class="css_td 3u 12u(mobile)">
-															<!--<select id="check_type">
-																<option value=1 selected>進場</option>
-																<option value=2 >離場</option>
-															</select>-->
-															<!--<span id="radio">
-																<input type="radio" id="radio1" name="radio" checked="checked" value="1"><label for="radio1">進場</label>
-																<input type="radio" id="radio2" name="radio" value="2"><label for="radio2">出場</label>
-															</span>-->
 															<input type="checkbox" name="switch" checked>
 															<input type="hidden" id="switch_type" value="1">
 															<input type="text" placeholder="請輸入身分證號" id="ID" name="ID" size="20" onkeypress="runScript(event)" autocomplete="off">　
@@ -120,7 +113,6 @@
 												<hr>
 												
 												<div class="css_tr" >
-													<!--<div class="css_td" >@@Identity@@</div>-->
 													<div class="css_td" >
 														<span id="info" style="display: none">
 														<div class="css_tr" >
