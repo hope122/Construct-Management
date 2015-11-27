@@ -72,6 +72,8 @@ class QCController extends AbstractActionController
         //取得html
         $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\qc\\photolist.html";
         $html=$VTs->GetHtmlContent($mpath);
+        $arrdata["userName"]=$_SESSION['userName'];
+        $html=$VTs->ContentReplace($arrdata,$html);
         $pageContent=$html;
         //-----BI結束-----
         }catch(Exception $error){
