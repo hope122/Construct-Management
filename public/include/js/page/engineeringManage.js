@@ -30,6 +30,7 @@ $(function(){
 		$("#table_for_getTypeId").val(getTable($code,1));
 		
 		$("#cancel_chosen").show();		
+		$("#delete_chosen").show();		
 		
 		//樹狀結構開合
 		showOrHide($(this).siblings("ul"));
@@ -68,12 +69,37 @@ function showOrHide(node){
 	}
 }
 
-function cancel_chosen(){
+function cancelChosen(){
 	$("#chosen").html("");
 	$("#target").html("");
 	$("#table_for_insert").val("eng_type_a");
 	$("#table_for_getTypeId").val("");
 	$("#cancel_chosen").hide();
+	$("#delete_chosen").hide();
+}
+
+function deleteChosen(){
+	$.ajax({
+		url: "http://127.0.0.1:99/engineeringmanage/deletedata", 
+		type: "POST",
+		data: { table: $("#table_for_getTypeId").val(), code: $("#chosen_code").val() },
+		dataType: "JSON",
+		async: false,
+		success:
+			function(rs){
+				if(rs.status){
+					alert(rs.msg);
+					location.reload();
+				}else{
+					//console.log(rs);
+					alert(rs.msg);
+				}
+			},
+		error:
+			function(e){
+				console.log(e);
+			}
+	});
 }
 
 function newData(){
@@ -120,6 +146,13 @@ function getTable($code,$type){
 				$table = "eng_type_c";
 			}
 			break;
+		case 6:
+			if($type==0){
+				$table = "";
+			}else if($type==1){
+				$table = "eng_type_d";
+			}
+			break;
 		default:
 	}
 
@@ -139,7 +172,7 @@ function sendData(){
 			async: false,
 			success:
 				function(rs){
-					console.log(rs);
+					//console.log(rs);
 					$typeId = rs.dataArray["uid"];
 					$fCode = rs.dataArray["code"];
 				},
@@ -159,14 +192,18 @@ function sendData(){
 				//scode: $("#eng_scode").val(),
 				typeid: $typeId,
 				fCode: $fCode, 
-				//typeid_u:
+				typeid_u: $("#unit1").val()
 		},
 		dataType: "JSON",
 		async: false,
 		success:
 			function(rs){
-				console.log(rs.msg);
-				//location.reload();
+				if(rs.status){
+					location.reload();
+				}else{
+					// console.log(rs.msg);
+					alert(rs.msg);
+				}
 			},
 		error:
 			function(e){
@@ -182,7 +219,8 @@ function creatUnitSelect(currentNode, dataArray){
 				.attr("id","unit1")
 				.appendTo(currentNode);
 	var unit2 = $("<select/>")
-				.attr("id","unit1")
+				.attr("id","unit2")
+				.css("display","none")
 				.appendTo(currentNode);
 	
 	for(var i=0; i<dataArray.length; i++){
@@ -197,45 +235,3 @@ function creatUnitSelect(currentNode, dataArray){
 	}
 }
 
-
-
-/* function changeSetting($code){
-	switch($code.length){
-		case 1:
-			$("#table").val("eng_type_a");	
-			$("#unit").hide();
-			break;
-		case 2:
-			$("#table").val("eng_type_b");
-			$("#unit").hide();
-			break;
-		case 4:
-			$("#table").val("eng_type_c");
-			$("#unit").hide();
-			break;
-		case 6:
-			$("#table").val("eng_type_d");
-			$("#unit").show();
-			break;
-		default:
-	}
-	$("#code").val($code);
-} */
-
-/* function setSelection($dataArray){
-	setOption($dataArray.eng_type_a, $("#eng_type_a"));
-	setOption($dataArray.eng_type_b, $("#eng_type_b"));
-	setOption($dataArray.eng_type_c, $("#eng_type_c"));
-	setOption($dataArray.eng_type_d, $("#eng_type_d"));
-}
-
-function setOption($dataArray, $selector){
-	var selectElement = $selector;
-	$("<option/>").attr("value", 0).text("-請選擇-").appendTo(selectElement);
-	for(var i=0; i< $dataArray.length; i++){
-		$("<option/>").attr("value", i+1)
-					  .attr("data-code", $dataArray[i]["code"])
-					  .text($dataArray[i]["name"])
-					  .appendTo(selectElement);
-	}
-} */
