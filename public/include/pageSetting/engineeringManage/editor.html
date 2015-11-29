@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>人員出勤報表</title>
+		<title>新增工程資料</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<!--[if lte IE 8]><script src="../include/strongly/assets/js/ie/html5shiv.js"></script><![endif]-->
@@ -24,45 +24,28 @@
 		<script src="../include/strongly/assets/js/main.js"></script>
         <script>
             $(function(){
-              getLan();
+				getLan();
+			  
+				$.ajax({
+					url: "http://127.0.0.1:99/engineeringmanage/getdata",
+					type: "POST",
+					data: { type: "selectOption" },
+					dataType: "JSON",
+					async: false,
+					success:
+						function(rs){
+							//console.log(rs.eng_type_a);
+							setSelection(rs);
+						},
+					error:
+						function(e){
+							console.log(e);
+						}
+				});
             });
         </script>
 		
-		<style type="text/css">
-			.css_table {
-				/*display:table;*/
-			}
-			
-			.css_tr {
-				display: table-row;
-			}
-			
-			.css_td {
-				display: table-cell;
-			}
-		</style>
-		
-		 <script src="../include/js/jquery/jquery-1.11.3.min.js"></script>
-		<script src="https://www.google.com/jsapi"></script>
-		<script src="../include/js/chart/chart.js"></script>
-		<script src="../include/js/page/SAR.js"></script>
-		
-		<script>
-			$(function(){
-				var options = {
-				  url: configObject.SARReport,
-				  urlMethod: "GET",
-				  sendData: {},
-				  drawItemID: 'SARChart',
-				  unitTitle:"人次",
-				  bottomTitle:"工種",
-				  drawType:"ColumnChart" //drawType 可使用 ColumnChart、LineChart 兩種
-				};
-				createChart(options);
-				setTotalPeople();
-			});
-		</script>
-		
+		<script src="../include/js/page/engineeringManage.js"></script>
 	</head>
 	<body class="homepage">
 		<div id="page-wrapper">
@@ -100,9 +83,20 @@
 
 									<!-- Post -->
 										<article class="box post">
-											<div class='css_table' align='center' style='margin: 0px auto;'>
-												<div><label>今日出工總人數：<span id="totalPeople" name="totalPeople"></span>人</label></div>
-												<div id="SARChart"></div>
+											<div>									
+												<div>
+													
+													<label>工程名稱：<input type="text" id="eng_name" name="eng_name" placeholder="請輸入工程名稱" value=""></label>
+													<label>工程代號：<input type="text" id="eng_scode" name="eng_scode" placeholder="請輸入工程代號" value=""></label>
+													<div id="unit" style="display: none">
+														<label>單位</label>
+													</div>
+													
+												</div>
+											</div>
+											<div>
+												<input type="hidden" id="table" name="table" value="">
+												<input type="button" id="submit" name="submit" value="送出" onclick="">
 											</div>
 										</article>
 
