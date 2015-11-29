@@ -31,9 +31,14 @@ class MaterialController extends AbstractActionController
 		$VTs->initialization();
         try{
 		//-----BI開始-----  Application材料申請頁面
-        
+            $html='';
+            if(empty($_SESSION)){
+                $pagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\index\\login_page.html";
+                $pageContent = $VTs->GetHtmlContent($pagePath);
+            }else{
+                $html=str_replace('@@userName@@',$_SESSION["userName"],$html);
                 $apurl='http://211.21.170.18:99';
-//                $apurl='http://127.0.0.1:88';
+    //                $apurl='http://127.0.0.1:88';
                 $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\material\\application.html";
                 $html=$VTs->GetHtmlContent($mpath);
                 $d_type_a = $VTs->json2data($VTs->UrlDataGet($apurl."/material/getdbdata?type=su_supply"));
@@ -45,11 +50,11 @@ class MaterialController extends AbstractActionController
                         $str.='<option value='.$opData->uid.'>'.$opData->name.'</option>';
                         }
                     $html=str_replace('@@opt_supply@@',$str,$html);
+                    $pageContent=$html;
                 }
-                $html=str_replace('@@userName@@',$_SESSION["userName"],$html);
-            
-        
-                $pageContent=$html;
+            }
+                
+                
         //-----BI結束-----
         }catch(Exception $error){
             //依據Controller, Action補上對應位置, $error->getMessage()為固定部份

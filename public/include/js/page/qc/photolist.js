@@ -30,6 +30,7 @@ $(function() {
 function print(){
     $("#div_print").printArea();
 }
+
 function save(){
     var Today=new Date();
 　  tdate=Today.getFullYear().toString() + (Today.getMonth()+1)+ Today.getDate().toString() ;
