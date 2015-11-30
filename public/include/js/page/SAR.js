@@ -8,13 +8,15 @@ function submitCheck(){
 			async:false,
             success: 
 				function(rs){
-					//console.log(rs);
+					// console.log(rs);
 					if(rs.status){
 						
 						//顯示人員資料
-						$("#personal_img").attr("src","../include/workersAlbum/worker2.jpg");
-						// var $img = rs.img;
-						// $("#personal_img").attr("src","../include/workersAlbum/" + $img);
+						//$("#personal_img").attr("src","../include/workersAlbum/1234567890/worker2.jpg");
+						var $img = rs.sar.taxid + "/" + rs.sar.sid + ".jpg";
+						$("#personal_img").attr("src","../include/workersAlbum/" + $img)
+										  .attr("width", "180px")
+										  .attr("height", "180px");
 						
 						switch(rs.info_type){
 							case "worker":
