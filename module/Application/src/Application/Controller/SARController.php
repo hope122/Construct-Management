@@ -67,35 +67,12 @@ class SARController extends AbstractActionController
 				if(empty($_SESSION)){
 					$pagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\index\\login_page.html";
 					$pageContent = $VTs->GetHtmlContent($pagePath);
-				}else{
-					$apurl='http://211.21.170.18:99';
-					//$apurl='http://127.0.0.1:99';
-					
+				}else{	
 					$mpath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\sar\\report.html";
 					$html = $VTs->GetHtmlContent($mpath);
 					$dataArr = ["userName"=>$_SESSION["userName"]];
 					$html = $VTs->ContentReplace($dataArr,$html);
-					//$html = str_replace("@@userName@@",$_SESSION["userName"],$html);
-					$listpath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\sar\\reportList.html";
-					$tr = $VTs->GetHtmlContent($listpath);
-					
-					//$dataList= $VTs->json2data($VTs->UrlDataGet($apurl."/sar/report"));
-					//$VTs->debug($dataList);
-					
-					$trs = "";
-					if(!empty($dataList)){
-						foreach($dataList as $data) {
-							$trs.=$tr;
-							$dataArr = ["supply_name"=>$data->supply_name,
-										"work_type"=>$data->work_type,
-										"count"=>$data->w_count];
-							$trs = $VTs->ContentReplace($dataArr,$trs);
-						}
-					}else{
-						$trs = "無資料";
-					}
-					
-					$html = str_replace('@@data_list@@',$trs,$html);
+
 					$pageContent = $html;
 				}
 			//-----BI結束-----

@@ -88,7 +88,9 @@ function recordAttendance($check_type){
 	$.ajax({
 		url: configObject.SARRecordAttendance,
         type: "POST",
-		data: { ID:$("#ID").val(), check_type:$check_type },
+		data: { ID: $("#ID").val(),
+				check_type: $check_type 
+				},
 		dataType: "JSON",
 		async:false,
         success: 
