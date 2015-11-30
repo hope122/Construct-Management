@@ -11,13 +11,17 @@ function submitCheck(){
 					//console.log(rs);
 					if(rs.status){
 						
-						//顯示人員資料						
+						//顯示人員資料
+						$("#personal_img").attr("src","../include/workersAlbum/worker2.jpg");
+						// var $img = rs.img;
+						// $("#personal_img").attr("src","../include/workersAlbum/" + $img);
+						
 						switch(rs.info_type){
 							case "worker":
 								//塞入資料
 								$("#name").text(rs.sar.name);
 								$("#sex").text(rs.sar.sex);
-								$("#birthday").text(rs.sar.birthday);
+								$("#birthday").text(rs.sar.birthday.substring(0,4));
 								$("#type").text(rs.sar.work_name);
 								$("#supply").text(rs.sar.su_name);
 								
@@ -130,7 +134,15 @@ function setTotalPeople(){
 				for(var index in rs){
 					$totalPeople += parseInt(rs[index].w_count);
 				}
-				$("#totalPeople").html($totalPeople);
+				if($totalPeople!=0){
+					$("#totalPeople").html($totalPeople);
+					$("#has_people").show();
+					$("#no_people").hide();
+				}else{
+					$("#has_people").hide();
+					$("#no_people").show();
+				}
+				
 			},
 		error:
 			function(e){
