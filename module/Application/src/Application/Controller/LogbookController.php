@@ -14,84 +14,9 @@ use Zend\View\Model\ViewModel;
 use System_APService\clsSystem;
 
 class LogbookController extends AbstractActionController
-{   
-    //施工日誌列表
-    public function indexAction()
-    {
-         //session_start();
-        $VTs = new clsSystem;
-        $VTs->initialization();
-        try{
-
-        //-----BI開始-----  index logbook施工日誌首頁
-
-        //判斷頁面type
-        if(!$_GET['type']){
-            $type=$_GET['type'];
-        }else{
-            $type=0;
-        }
-
-        $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\index.html";
-        $html=$VTs->GetHtmlContent($mpath);
-        switch($type){
-            case 0:  //工作日誌列表主頁
-                $arrdata["title"]="工作日誌列表"
-                
-            break;
-        }  
-        $arrdata["pageType"]=$type;
-        $arrdata["userName"]=$_SESSION['userName'];
-        $html=$VTs->ContentReplace($arrdata,$html);
-        $pageContent=$html;
-
-        //-----BI結束-----
-
-        }catch(Exception $error){
-            //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
-            $VTs->WriteLog("IndexController", "indexAction", $error->getMessage());
-        }
-         //關閉資料庫連線
-        $VTs->DBClose();
-        //釋放
-        $VTs = null;
-        $this->viewContnet['pageContent'] = $pageContent;
-        return new ViewModel($this->viewContnet);
-    }
-
-   public function listAction()
-    {
-         //session_start();
-        $VTs = new clsSystem;
-        $VTs->initialization();
-        try{
-
-        //-----BI開始-----  index logbook施工日誌首頁
-
-        //取得主頁html
-        $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\list.html";
-        $html=$VTs->GetHtmlContent($mpath);
-        $arrdata["userName"]=$_SESSION['userName'];
-        $html=$VTs->ContentReplace($arrdata,$html);
-        $pageContent=$html;
-
-        //-----BI結束-----
-
-        }catch(Exception $error){
-            //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
-            $VTs->WriteLog("IndexController", "indexAction", $error->getMessage());
-        }
-         //關閉資料庫連線
-        $VTs->DBClose();
-        //釋放
-        $VTs = null;
-        $this->viewContnet['pageContent'] = $pageContent;
-        return new ViewModel($this->viewContnet);
-    }
-
-
-	//施工日誌內頁-主頁
-	public function pageAction()
+{
+	//不執行任何動作
+	public function indexAction()
     {
 		 //session_start();
 		$VTs = new clsSystem;
@@ -101,7 +26,7 @@ class LogbookController extends AbstractActionController
         //-----BI開始-----  index logbook施工日誌首頁
 
         //取得主頁html
-        $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\page.html";
+        $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\index.html";
         $html=$VTs->GetHtmlContent($mpath);
         $arrdata["userName"]=$_SESSION['userName'];
         $html=$VTs->ContentReplace($arrdata,$html);
@@ -160,8 +85,8 @@ class LogbookController extends AbstractActionController
   //   }
     
 
-    //施工日誌內頁-hrml
-    public function getpagehtmlAction()
+    //施工日誌 第一項施工進度 tr1
+    public function gethtmlAction()
     {
         //session_start();
         $VTs = new clsSystem;
@@ -173,7 +98,7 @@ class LogbookController extends AbstractActionController
         $data= $_POST["data"];
 
         //取得html內容
-        $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\html_page.html";
+        $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\html.html";
         $html=$VTs->GetHtmlContent($mpath);
 
          //取得基本資訊

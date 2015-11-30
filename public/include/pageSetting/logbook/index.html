@@ -22,12 +22,20 @@
         <script src="../include/js/page/check_login.js"></script>
         <script src="../include/js/page/topMenu.js"></script>
 		<script src="../include/strongly/assets/js/main.js"></script>
-		<script src="../include/js/page/logbook/index.js"></script>
+	    <script src="/include/js/jquery/jquery.PrintArea.js"></script>
+	    <script src="/include/js/page/logbook.js"></script>
         <script>
             $(function(){
               getLan();
             });
         </script>
+		<style type="text/css">
+			  th, td{
+				border:1px #cccccc solid ;
+				vertical-align:middle;
+			},
+		
+		</style>
 	</head>
 	<body class="homepage">
 		<div id="page-wrapper">
@@ -65,15 +73,12 @@
 
 									<!-- Post -->
 										<article class="box post">
-											<div align='center'>
-												<input id='pageType' type='hidden' value='@@pageType@@'>
-
-												<b><sapn>@@title@@</span></b>
+										    <div align='left'>
+											    <input align='center' onclick='print();' type='button' value='列印'>
+											    <input align='center' onclick='save();' type='button' value='存檔'>
 											</div>
-											<div id='body'>
+											<div id='div_print'>
 											</div>
-
-
 										</article>
 
 								</div>

@@ -5,7 +5,7 @@ $(function() {
       
       //丟資料toCM回傳html內容
       $.ajax({
-       url: "/logbook/getpagehtml",
+       url: "/logbook/gethtml",
        type: "POST",
        data: {data:JSON.parse(data)},
        async:false,
