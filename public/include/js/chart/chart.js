@@ -80,7 +80,6 @@ function resetData(chartData,options){
         }
         relData[relData.length] = tmpContentArr[worksid];
     }
-    console.log(relData);
     return relData;
 }
 
@@ -119,10 +118,10 @@ function drawChart(options,dataArr) {
         pointSize: 7,
         pointsVisible: true,
         hAxis: {
-          //title: options.bottomTitle
+          title: options.bottomTitle,
         },
         vAxis: {
-          //title: options.unitTitle
+          title: options.unitTitle
         },
         annotations:{
            // startup: true,
