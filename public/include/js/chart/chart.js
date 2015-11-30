@@ -26,6 +26,10 @@ function resetData(chartData,options){
     var titleArr = [];
     //底部項目名稱
     titleArr[0] = options.bottomTitle;
+    //options.annotation於圖表中顯示各方數字，預設是false
+    if(typeof options.annotation == "undefined"){
+        options.annotation = false;
+    }
     
     var contentArr = [];
     //對應的ＩＮＤＥＸ暫存陣列
@@ -50,17 +54,30 @@ function resetData(chartData,options){
     var relData = [], totalItem = 0;
     relData[0] = titleArr;
     totalItem = titleArr.length;
+    //圖片上顯示的數字，是true才補
+    if(options.annotation){
+        titleArr[titleArr.length] = { role: 'annotation' };
+    }
     for(var worksid in tmpContentArr){
-        if(tmpContentArr[worksid].length != totalItem){
-            //將不對稱的部份補上0
-            for(i=1;i <= totalItem-1;i++){
-                if(typeof tmpContentArr[worksid][i] == "undefined"){
-                    tmpContentArr[worksid][i] = 0;
-                }
+        /*if(tmpContentArr[worksid].length != totalItem){
+            
+        }*/
+        //將不對稱的部份補上0
+        //加總內容
+        var tmpCount = 0;
+        for(i=1;i <= totalItem-1;i++){
+            if(typeof tmpContentArr[worksid][i] == "undefined"){
+                tmpContentArr[worksid][i] = 0;
             }
+            tmpCount += tmpContentArr[worksid][i];
+        }
+        //圖片上顯示的數字，是true才顯示，永遠放在最後一個
+        if(options.annotation){
+            tmpContentArr[worksid][tmpContentArr[worksid].length] = tmpCount;
         }
         relData[relData.length] = tmpContentArr[worksid];
     }
+    console.log(relData);
     return relData;
 }
 
