@@ -8,16 +8,22 @@ function submitCheck(){
 			async:false,
             success: 
 				function(rs){
-					//console.log(rs);
+					// console.log(rs);
 					if(rs.status){
 						
-						//顯示人員資料						
+						//顯示人員資料
+						//$("#personal_img").attr("src","../include/workersAlbum/1234567890/worker2.jpg");
+						var $img = rs.sar.taxid + "/" + rs.sar.sid + ".jpg";
+						$("#personal_img").attr("src","../include/workersAlbum/" + $img)
+										  .attr("width", "180px")
+										  .attr("height", "180px");
+						
 						switch(rs.info_type){
 							case "worker":
 								//塞入資料
 								$("#name").text(rs.sar.name);
 								$("#sex").text(rs.sar.sex);
-								$("#birthday").text(rs.sar.birthday);
+								$("#birthday").text(rs.sar.birthday.substring(0,4));
 								$("#type").text(rs.sar.work_name);
 								$("#supply").text(rs.sar.su_name);
 								
@@ -82,7 +88,9 @@ function recordAttendance($check_type){
 	$.ajax({
 		url: configObject.SARRecordAttendance,
         type: "POST",
-		data: { ID:$("#ID").val(), check_type:$check_type },
+		data: { ID: $("#ID").val(),
+				check_type: $check_type 
+				},
 		dataType: "JSON",
 		async:false,
         success: 
@@ -130,7 +138,15 @@ function setTotalPeople(){
 				for(var index in rs){
 					$totalPeople += parseInt(rs[index].w_count);
 				}
-				$("#totalPeople").html($totalPeople);
+				if($totalPeople!=0){
+					$("#totalPeople").html($totalPeople);
+					$("#has_people").show();
+					$("#no_people").hide();
+				}else{
+					$("#has_people").hide();
+					$("#no_people").show();
+				}
+				
 			},
 		error:
 			function(e){

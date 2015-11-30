@@ -32,7 +32,13 @@ class SARController extends AbstractActionController
 			//-----BI開始-----  
 				$mpath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\sar\\index.html";
 				$html = $VTs->GetHtmlContent($mpath);
-				$html = str_replace("@@userName@@",$_SESSION["userName"],$html);
+				$infoPath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\sar\\info.html";
+				$info = $VTs->GetHtmlContent($infoPath);
+				
+				$dataArr = ["userName"=>$_SESSION["userName"],
+							"info"=>$info];
+				$html = $VTs->ContentReplace($dataArr,$html);
+				
 				$pageContent = $html;
 			//-----BI結束-----
         }catch(Exception $error){
@@ -61,32 +67,12 @@ class SARController extends AbstractActionController
 				if(empty($_SESSION)){
 					$pagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\index\\login_page.html";
 					$pageContent = $VTs->GetHtmlContent($pagePath);
-				}else{
-					$apurl='http://211.21.170.18:99';
-					//$apurl='http://127.0.0.1:99';
-					
+				}else{	
 					$mpath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\sar\\report.html";
 					$html = $VTs->GetHtmlContent($mpath);
-					$html = str_replace("@@userName@@",$_SESSION["userName"],$html);
-					$listpath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\sar\\reportList.html";
-					$tr = $VTs->GetHtmlContent($listpath);
-					
-					//$dataList= $VTs->json2data($VTs->UrlDataGet($apurl."/sar/report"));
-					//$VTs->debug($dataList);
-					
-					$trs = "";
-					if(!empty($dataList)){
-						foreach($dataList as $data) {
-							$trs.=$tr;
-							$trs=str_replace('@@supply_name@@',$data->supply_name,$trs);
-							$trs=str_replace('@@work_type@@',$data->work_type,$trs);
-							$trs=str_replace('@@count@@',$data->w_count,$trs);
-						}
-					}else{
-						$trs = "無資料";
-					}
-					
-					$html = str_replace('@@data_list@@',$trs,$html);
+					$dataArr = ["userName"=>$_SESSION["userName"]];
+					$html = $VTs->ContentReplace($dataArr,$html);
+
 					$pageContent = $html;
 				}
 			//-----BI結束-----

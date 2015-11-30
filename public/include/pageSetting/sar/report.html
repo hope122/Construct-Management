@@ -49,6 +49,8 @@
 		
 		<script>
 			$(function(){
+				$("#has_people").hide();
+				$("#no_people").show();
 				var options = {
 				  url: configObject.SARReport,
 				  urlMethod: "GET",
@@ -56,7 +58,8 @@
 				  drawItemID: 'SARChart',
 				  unitTitle:"人次",
 				  bottomTitle:"工種",
-				  drawType:"ColumnChart" //drawType 可使用 ColumnChart、LineChart 兩種
+				  drawType:"ColumnChart", //drawType 可使用 ColumnChart、LineChart 兩種
+				  annotation: true
 				};
 				createChart(options);
 				setTotalPeople();
@@ -101,8 +104,11 @@
 									<!-- Post -->
 										<article class="box post">
 											<div class='css_table' align='center' style='margin: 0px auto;'>
-												<div><label>今日出工總人數：<span id="totalPeople" name="totalPeople"></span>人</label></div>
+												<div><label  id="has_people">今日出工總人數：<span id="totalPeople" name="totalPeople"></span>人</label></div>
 												<div id="SARChart"></div>
+											</div>
+											<div class='css_table' align='center' style='margin: 0px auto;'>
+												<div><label  id="no_people" style="display: none">今日無人出工</label></div>
 											</div>
 										</article>
 
