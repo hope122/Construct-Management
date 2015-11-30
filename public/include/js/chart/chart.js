@@ -73,11 +73,13 @@ function resetData(chartData,options){
         }
         //圖片上顯示的數字，是true才顯示，永遠放在最後一個
         if(options.annotation){
+            if(tmpContentArr[worksid][tmpContentArr[worksid].length-1] == 0){
+                tmpContentArr[worksid][tmpContentArr[worksid].length-1] = 0.0001;
+            }
             tmpContentArr[worksid][tmpContentArr[worksid].length] = tmpCount;
         }
         relData[relData.length] = tmpContentArr[worksid];
     }
-    console.log(relData);
     return relData;
 }
 
@@ -116,11 +118,15 @@ function drawChart(options,dataArr) {
         pointSize: 7,
         pointsVisible: true,
         hAxis: {
-          title: options.bottomTitle
+          title: options.bottomTitle,
         },
         vAxis: {
           title: options.unitTitle
         },
+        annotations:{
+           // startup: true,
+            alwaysOutside: true
+        }
     },
     drawItemID = document.getElementById(options.drawItemID);
 
