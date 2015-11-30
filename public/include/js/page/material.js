@@ -1,6 +1,30 @@
 $(function(){
-  
-    $("#inp_prjuid").change(function() {
+
+  ptype=$('#inp_ptype').val();
+  getContent(ptype);
+    // getlist();
+});
+function getContent(ptype){
+ 
+    $.get(configObject.MaterialGetData+"?type="+ptype, function( data ) {
+ 
+
+      //丟資料toCM回傳html內容
+      $.ajax({
+       url: "/material/"+ptype,
+       type: "POST",
+       data: {data:JSON.parse(data)},
+       async:false,
+       success: function(rs){
+        $("#div_content").empty();
+        $("#div_content").append(rs);
+        setBtn();
+       }
+    });
+  });
+}
+function setBtn(){
+  $("#inp_prjuid").change(function() {
         var uid=$(this).val();
 
         if(uid!=0){
@@ -18,7 +42,9 @@ $(function(){
     });
   
     $("#inp_supply").change(function() {
+
         var suid=$(this).val();
+              console.log(suid);
         $.get('/material/getprjuid',{ suid: suid},function(data){
                 $("#inp_prjuid").empty();
                 $("#inp_prjuid").append(data);
@@ -27,9 +53,7 @@ $(function(){
     $("#inp_date").datepicker({
         dateFormat: 'yy-mm-dd'
     });
-    getlist();
-});
-
+}
 function chkinp(){
     var chk=true;
     var d='';

@@ -19,53 +19,11 @@ class MaterialController extends AbstractActionController
 	//不執行任何動作
 	public function indexAction()
     {
-         //session_start();
-        $VTs = new clsSystem;
-        $VTs->initialization();
-        try{
-
-        //-----BI開始-----  材料類別頁面分流
-        if(!empty($_GET['ptype'])){
-            $ptype=$_GET['ptype'];
-        }else{
-            $ptype='list';
-        }
-        switch($ptype){
-            case 'application':
-                $title='進料申請單';
-                break;
-            default:
-                $title='材料進貨清單';
-                break;
-        } 
-
-        //取得主頁html
-        $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\material\\index.html";
-        $html=$VTs->GetHtmlContent($mpath);
-
-
-
-        $arrdata["title"]=$title;
-        $arrdata["ptype"]=$ptype;
-        $arrdata["userName"]=$_SESSION['userName'];
-        $html=$VTs->ContentReplace($arrdata,$html);
-        $pageContent=$html;
-
-        //-----BI結束-----
-
-        }catch(Exception $error){
-            //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
-            $VTs->WriteLog("IndexController", "indexAction", $error->getMessage());
-        }
-         //關閉資料庫連線
-        $VTs->DBClose();
-        //釋放
-        $VTs = null;
-        $this->viewContnet['pageContent'] = $pageContent;
+		$this->viewContnet['pageContent'] = 'Please Select Your Action and Try Again!';
         return new ViewModel($this->viewContnet);
     }
 	//取得選單
-    public function applicationAction()
+    public function ApplicationAction()
     {
         
         //session_start();
@@ -73,22 +31,30 @@ class MaterialController extends AbstractActionController
 		$VTs->initialization();
         try{
 		//-----BI開始-----  Application材料申請頁面
+            $html='';
+            if(empty($_SESSION)){
+                $pagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\index\\login_page.html";
+                $pageContent = $VTs->GetHtmlContent($pagePath);
+            }else{
+                $html=str_replace('@@userName@@',$_SESSION["userName"],$html);
+                $apurl='http://211.21.170.18:99';
+    //                $apurl='http://127.0.0.1:88';
                 $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\material\\application.html";
                 $html=$VTs->GetHtmlContent($mpath);
-                $d_type_a = $_POST['data'];
+                $d_type_a = $VTs->json2data($VTs->UrlDataGet($apurl."/material/getdbdata?type=su_supply"));
                 $str='';
                 if($d_type_a==null){
                      $html=str_replace('@@opt_supply@@','',$html);
                 }else{
                     foreach($d_type_a as $opData) {
-                        $str.='<option value='.$opData['uid'].'>'.$opData['name'].'</option>';
+                        $str.='<option value='.$opData->uid.'>'.$opData->name.'</option>';
                         }
                     $html=str_replace('@@opt_supply@@',$str,$html);
+                    $pageContent=$html;
                 }
-                $html=str_replace('@@userName@@',$_SESSION["userName"],$html);
-            
-        
-                $pageContent=$html;
+            }
+                
+                
         //-----BI結束-----
         }catch(Exception $error){
             //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
@@ -140,7 +106,7 @@ class MaterialController extends AbstractActionController
 		$this->viewContnet['pageContent'] = $pageContent;
         return new ViewModel($this->viewContnet);
     }
-   public function listAction()
+   public function getlistAction()
     {
         //session_start();
 		$VTs = new clsSystem;
@@ -148,10 +114,10 @@ class MaterialController extends AbstractActionController
 		
 		//-----BI開始-----  get prjuid 傳入廠商ＩＤ 回傳品項html option內容
         try{
-//                         $apurl='http://211.21.170.18:99';
-// //                $apurl='http://127.0.0.1:88';
+                        $apurl='http://211.21.170.18:99';
+//                $apurl='http://127.0.0.1:88';
 
-            $ls_petition=$_POST['data'];
+            $ls_petition= $VTs->json2data($VTs->UrlDataGet($apurl."/material/getdbdata?type=el_petition"));
                 if($ls_petition==null){
                     $ls='無資料';
                 }else{
@@ -164,18 +130,18 @@ class MaterialController extends AbstractActionController
                     foreach($ls_petition as  $id => $lsData) {
                         $trs=$tr;
                         $trs=str_replace('@@id@@',$id+1,$trs);
-                        $trs=str_replace('@@supply@@',$lsData['su_name'],$trs);
-                        $trs=str_replace('@@name@@',$lsData['ma_name'],$trs);
-                        $trs=str_replace('@@intime@@',$lsData['date'],$trs);
-                        $trs=str_replace('@@place@@',$lsData['place'],$trs);
-                        $trs=str_replace('@@count@@',$lsData['count'],$trs);
-                        if($lsData['check']==1){
+                        $trs=str_replace('@@supply@@',$lsData->su_name,$trs);
+                        $trs=str_replace('@@name@@',$lsData->ma_name,$trs);
+                        $trs=str_replace('@@intime@@',$lsData->date,$trs);
+                        $trs=str_replace('@@place@@',$lsData->place,$trs);
+                        $trs=str_replace('@@count@@',$lsData->count,$trs);
+                        if($lsData->check==1){
                             $str_order='已確認';
                         }else{
-                            $str_order="<input type='checkbox' class='cls_order' value=".$lsData['uid'].">";
+                            $str_order="<input type='checkbox' class='cls_order' value=".$lsData->uid.">";
                         }
                         $trs=str_replace('@@order@@',$str_order,$trs);
-                        $trs=str_replace('@@uid@@',$lsData['uid'],$trs);
+                        $trs=str_replace('@@uid@@',$lsData->uid,$trs);
                         $trstr.=$trs;
                     }
                     $ls=str_replace('@@tr@@',$trstr,$ls);
