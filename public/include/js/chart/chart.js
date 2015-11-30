@@ -3,25 +3,31 @@ var chartData = null;
 //載入折線圖,長條圖
 google.load('visualization', '1.1', {packages: ['corechart','bar']});
 
-function createChart(options){
-    $.ajax({
-        url: options.url,
-        type: options.urlMethod,
-        data: options.sendData,
-        dataType: "JSON",
-        async: false,
-        success: function(rs){
-            if(rs.length > 0){
-                chartData = resetData(rs,options);
-                setDraw(options,chartData);
-            }else{
-                $("#"+options.drawItemID).html("Chart Data is Empty!");
-            }
-        }
-    });
-    //return chartData;
-}
 
+function createChart(options,processArray){
+    if(typeof processArray == 'undefined' && typeof options.url != 'undefined'){
+        $.ajax({
+            url: options.url,
+            type: options.urlMethod,
+            data: options.sendData,
+            dataType: "JSON",
+            async: false,
+            success: function(rs){
+                if(rs.length > 0){
+                    //chartData = resetData(rs,options);
+                    setDraw(options,rs);
+                }else{
+                    $("#"+options.drawItemID).html("Chart Data is Empty!");
+                }
+            }
+        });
+    }else{
+        //console.log(processArray);
+        setDraw(options,processArray);
+    }
+    
+}
+//*****這裡是處理ＢＡＲ的部分
 function resetData(chartData,options){
     var titleArr = [];
     //底部項目名稱
@@ -92,12 +98,6 @@ function checkInArray(data,Arr){
     return false;
 }
 
-function setDraw(options,dataArr){
-    google.setOnLoadCallback(function(){
-        drawChart(options,dataArr);
-    });
-}
-
 function putData(worksidIndexArr,suid){
     for(var key in worksidIndexArr){
         if(key == parseInt(suid)){
@@ -105,6 +105,20 @@ function putData(worksidIndexArr,suid){
         }
     }
     return false;
+}
+
+//＊＊＊＊＊bar的部分結束
+
+function setDraw(options,dataArr){
+    var resetDataArr;
+    google.setOnLoadCallback(function(){
+        if(options.drawType == "ColumnChart"){
+            resetDataArr = resetData(dataArr,options);
+        }else{
+            resetDataArr = dataArr;
+        }
+        drawChart(options,resetDataArr);
+    });
 }
 
 function drawChart(options,dataArr) {
@@ -115,20 +129,28 @@ function drawChart(options,dataArr) {
         legend: { position: 'bottom' },
         width: "100%",
         height: 300,
-        pointSize: 7,
-        pointsVisible: true,
-        hAxis: {
-          title: options.bottomTitle,
-        },
+        pointSize: 4,
+        //pointsVisible: true,
+        hAxis:{},
         vAxis: {
           title: options.unitTitle
         },
         annotations:{
            // startup: true,
             alwaysOutside: true
-        }
+        },
+       // curveType: 'function',
+        legend: { position: 'bottom' }
     },
     drawItemID = document.getElementById(options.drawItemID);
+
+    if(typeof options.bottomTitle != 'undefined'){
+       chartOptions.hAxis.title = options.bottomTitle;
+    }
+
+    if(typeof options.chartsHelp != 'undefined'){
+       chartOptions.legend.position = options.chartsHelp;
+    }
 
     switch(options.drawType){
         case "LineChart":
