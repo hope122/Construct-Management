@@ -120,7 +120,6 @@ function setDraw(options,dataArr){
 }
 
 function drawChart(options,dataArr) {
-    console.log(dataArr);
     var chart, 
     data = google.visualization.arrayToDataTable(dataArr),
     chartOptions = {
@@ -165,11 +164,9 @@ function drawChart(options,dataArr) {
     }
     chart.draw(data, chartOptions);
     pageChartObject[options.drawItemID] = chart;
-    console.log(pageChartObject);
 }
 
 function resetChart(itemID){
     pageChartObject[itemID].clearChart();
     delete pageChartObject[itemID];
-    console.log(pageChartObject);
 }
