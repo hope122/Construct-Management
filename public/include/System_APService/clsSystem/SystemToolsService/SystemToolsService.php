@@ -361,5 +361,21 @@
 			return $result;
 		}
 	#modCurl結束
+	#modMail
+		public function Tomail($sender,$recipient,$mailTitle,$msg){
+			if($sender){
+				$sender = "From: ".$sender;
+			}else{
+				$sender = "From: System";
+			}
+			if($recipient and $mailTitle and $msg and $sender){
+				if(mail($recipient, $mailTitle, $msg, $sender)){
+					return true;
+				}else{
+					return false;
+				}
+			}
+		}
+	#modMail結束	
 	}
 ?>
