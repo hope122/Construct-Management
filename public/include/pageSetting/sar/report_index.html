@@ -48,12 +48,11 @@
 		
 		<script>
 			$(function(){
-				var dateString = $("#report_date").val().replace(/\//g,"-");
 				//產生圖表
 				var options = {
 				  url: configObject.SARReport,
 				  urlMethod: "POST",
-				  sendData: { date: dateString },
+				  sendData: { date: $("#report_date").val().replace(/\//g,"-") },
 				  drawItemID: 'SARChart',
 				  unitTitle:"人次",
 				  bottomTitle:"工種",

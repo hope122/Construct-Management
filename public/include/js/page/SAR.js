@@ -12,20 +12,19 @@ $(function(){
 	
 	$("#report_date").change(function(){
 		setTotalPeople();
-		var dateString = $("#report_date").val().replace(/\//g,"-");
-		//alert(dateString);
-		var options = {
+		/* var options = {
 		  url: configObject.SARReport,
 		  urlMethod: "POST",
-		  sendData: { date: dateString },
+		  sendData: { date: $("#report_date").val().replace(/\//g,"-") },
 		  drawItemID: 'SARChart',
 		  unitTitle:"人次",
 		  bottomTitle:"工種",
 		  drawType:"ColumnChart", //drawType 可使用 ColumnChart、LineChart 兩種
 		  annotation: true
 		};
-		createChart(options);
-		
+		createChart(options); */
+		$("#SARChart").html("");
+		resetChart("SARChart");
 	});
 });
 
@@ -43,7 +42,6 @@ function submitCheck(){
 					if(rs.status){
 						
 						//顯示人員資料
-						//$("#personal_img").attr("src","../include/workersAlbum/1234567890/worker2.jpg");
 						var $img = rs.sar.taxid + "/" + rs.sar.sid + ".jpg";
 						$("#personal_img").attr("src","../include/workersAlbum/" + $img)
 										  .attr("width", "180px")
