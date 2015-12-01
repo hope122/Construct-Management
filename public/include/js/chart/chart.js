@@ -13,7 +13,6 @@ function createChart(options,processArray){
             dataType: "JSON",
             async: false,
             success: function(rs){
-                console.log(rs);
                 if(typeof options.resultIndex != 'undefined' && options.resultIndex){
                     if(typeof rs[options.resultIndex] != 'undefined'){
                         rs = rs[options.resultIndex];
