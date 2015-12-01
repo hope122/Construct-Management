@@ -2,7 +2,7 @@
 var chartData = null;
 //載入折線圖,長條圖
 google.load('visualization', '1.1', {packages: ['corechart','bar']});
-
+var pageChartObject={};
 
 function createChart(options,processArray){
     if(typeof processArray == 'undefined' && typeof options.url != 'undefined'){
@@ -165,4 +165,12 @@ function drawChart(options,dataArr) {
         break;
     }
     chart.draw(data, chartOptions);
+    pageChartObject[options.drawItemID] = chart;
+    //console.log(pageChartObject);
+}
+
+function resetChart(itemID){
+    pageChartObject[itemID].clearChart();
+    delete pageChartObject[itemID];
+    console.log(pageChartObject);
 }
