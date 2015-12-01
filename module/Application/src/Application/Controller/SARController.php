@@ -68,9 +68,13 @@ class SARController extends AbstractActionController
 					$pagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\index\\login_page.html";
 					$pageContent = $VTs->GetHtmlContent($pagePath);
 				}else{	
-					$mpath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\sar\\report.html";
+					$mpath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\sar\\report_index.html";
 					$html = $VTs->GetHtmlContent($mpath);
-					$dataArr = ["userName"=>$_SESSION["userName"]];
+					$reportPath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\sar\\report.html";
+					$report = $VTs->GetHtmlContent($reportPath);
+					
+					$dataArr = ["userName"=>$_SESSION["userName"],
+								"report"=>$report];
 					$html = $VTs->ContentReplace($dataArr,$html);
 
 					$pageContent = $html;

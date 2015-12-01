@@ -1,9 +1,26 @@
+$(function(){
+	$("#report_date").datepicker({
+		dateFormat: 'yy/mm/dd'
+	});
+	var dateObj = new Date();
+	var $year = dateObj.getFullYear();
+	var $month = (dateObj.getMonth()+1 < 10)?"0"+dateObj.getMonth()+1:dateObj.getMonth()+1;
+	var $date = (dateObj.getDate() < 10)? "0"+dateObj.getDate():dateObj.getDate();
+	$("#report_date").val($year+"/"+$month+"/"+$date);
+				
+	setTotalPeople();
+	
+	$("#report_date").change(function(){
+		reloadChart();
+	});
+});
+
 function submitCheck(){
 	if($("#ID").val()!=""){		
 		$.ajax({
 			url: configObject.SARGetworkerdata,
             type: "POST",
-			data: "ID="+$("#ID").val(),
+			data: { ID: $("#ID").val() },
 			dataType: "JSON",
 			async:false,
             success: 
@@ -12,7 +29,6 @@ function submitCheck(){
 					if(rs.status){
 						
 						//顯示人員資料
-						//$("#personal_img").attr("src","../include/workersAlbum/1234567890/worker2.jpg");
 						var $img = rs.sar.taxid + "/" + rs.sar.sid + ".jpg";
 						$("#personal_img").attr("src","../include/workersAlbum/" + $img)
 										  .attr("width", "180px")
@@ -129,28 +145,53 @@ function setTotalPeople(){
 	$.ajax({
 		url: configObject.SARReport,
 		type: "POST",
-		data: {},
+		data: { date: $("#report_date").val().replace(/\//g,"-") },
 		dataType: "JSON",
 		asyns: false,
 		success:
 			function(rs){
-				var $totalPeople = 0;
-				for(var index in rs){
-					$totalPeople += parseInt(rs[index].w_count);
-				}
-				if($totalPeople!=0){
-					$("#totalPeople").html($totalPeople);
-					$("#has_people").show();
-					$("#no_people").hide();
+				if(rs.status){
+					var $totalPeople = 0;
+					for(var index in rs.data){
+						$totalPeople += parseInt(rs.data[index].w_count);
+					}
+					if($totalPeople!=0){
+						$("#totalPeople").html($totalPeople);
+						$("#has_people").show();
+						$("#SARChart").show();
+						$("#no_people").hide();
+					}else{
+						$("#totalPeople").html("");
+						$("#has_people").hide();
+						$("#SARChart").hide();
+						$("#no_people").show();
+					}
 				}else{
 					$("#has_people").hide();
+					$("#SARChart").hide();
 					$("#no_people").show();
 				}
-				
 			},
 		error:
 			function(e){
 				
 			}
 	});
+}
+
+function reloadChart(){
+	setTotalPeople();
+		
+	resetChart("SARChart");	
+	var options = {
+		url: configObject.SARReport,
+		urlMethod: "POST",
+		sendData: { date: $("#report_date").val().replace(/\//g,"-") },
+		drawItemID: 'SARChart',
+		unitTitle:"人次",
+		bottomTitle:"工種",
+		drawType:"ColumnChart", //drawType 可使用 ColumnChart、LineChart 兩種
+		annotation: true
+	};
+	createChart(options);
 }
