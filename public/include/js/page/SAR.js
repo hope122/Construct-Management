@@ -1,3 +1,34 @@
+$(function(){
+	$("#report_date").datepicker({
+		dateFormat: 'yy/mm/dd'
+	});
+	var dateObj = new Date();
+	var $year = dateObj.getFullYear();
+	var $month = (dateObj.getMonth()+1 < 10)?"0"+dateObj.getMonth()+1:dateObj.getMonth()+1;
+	var $date = (dateObj.getDate() < 10)? "0"+dateObj.getDate():dateObj.getDate();
+	$("#report_date").val($year+"/"+$month+"/"+$date);
+				
+	setTotalPeople();
+	
+	$("#report_date").change(function(){
+		setTotalPeople();
+		var dateString = $("#report_date").val().replace(/\//g,"-");
+		//alert(dateString);
+		var options = {
+		  url: configObject.SARReport,
+		  urlMethod: "POST",
+		  sendData: { date: dateString },
+		  drawItemID: 'SARChart',
+		  unitTitle:"人次",
+		  bottomTitle:"工種",
+		  drawType:"ColumnChart", //drawType 可使用 ColumnChart、LineChart 兩種
+		  annotation: true
+		};
+		createChart(options);
+		
+	});
+});
+
 function submitCheck(){
 	if($("#ID").val()!=""){		
 		$.ajax({
@@ -129,7 +160,7 @@ function setTotalPeople(){
 	$.ajax({
 		url: configObject.SARReport,
 		type: "POST",
-		data: {},
+		data: { date: $("#report_date").val().replace(/\//g,"-") },
 		dataType: "JSON",
 		asyns: false,
 		success:
