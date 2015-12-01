@@ -16,6 +16,7 @@
           bottomTitle:"工種",
           chartsHelp: "bottom", //top,left,right,bottom; 預設為bottom
           drawType:"ColumnChart", //drawType 可使用 ColumnChart、LineChart 兩種
+          resultIndex: "data",//資料回傳的參數索引值
           annotation: true //default是false
         };
         createChart(options);
@@ -62,7 +63,7 @@
         });
         return reData;
       }
-      //清除圖片請使用resetChart(itemID)
+      //清除圖片請使用 resetChart(itemID)
     </script>
   </head>
   <body>

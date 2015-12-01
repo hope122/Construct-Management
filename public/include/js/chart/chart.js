@@ -13,16 +13,25 @@ function createChart(options,processArray){
             dataType: "JSON",
             async: false,
             success: function(rs){
-                if(rs.status){
-                    //chartData = resetData(rs.data,options);
-                    setDraw(options,rs.data);
+                if(typeof options.resultIndex != 'undefined' && options.resultIndex){
+                    if(typeof rs[options.resultIndex] != 'undefined'){
+                        rs = rs[options.resultIndex];
+                        if(rs.length > 0){
+                            setDraw(options,rs);
+                        }else{
+                            $("#"+options.drawItemID).html("Chart Data is Empty!");
+                        }
+                    }else{
+                        resetChart(options.drawItemID);
+                        $("#"+options.drawItemID).html("Chart Data is Empty!");
+                    }
                 }else{
+                    resetChart(options.drawItemID);
                     $("#"+options.drawItemID).html("Chart Data is Empty!");
                 }
             }
         });
     }else{
-        //console.log(processArray);
         setDraw(options,processArray);
     }
     
@@ -167,6 +176,8 @@ function drawChart(options,dataArr) {
 }
 
 function resetChart(itemID){
-    pageChartObject[itemID].clearChart();
-    delete pageChartObject[itemID];
+    if(typeof pageChartObject[itemID] != 'undefined'){
+        pageChartObject[itemID].clearChart();
+        delete pageChartObject[itemID];
+    }
 }
