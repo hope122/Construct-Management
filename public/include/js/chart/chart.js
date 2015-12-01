@@ -111,17 +111,16 @@ function putData(worksidIndexArr,suid){
 
 function setDraw(options,dataArr){
     var resetDataArr;
-    google.setOnLoadCallback(function(){
-        if(options.drawType == "ColumnChart"){
-            resetDataArr = resetData(dataArr,options);
-        }else{
-            resetDataArr = dataArr;
-        }
-        drawChart(options,resetDataArr);
-    });
+    if(options.drawType == "ColumnChart"){
+        resetDataArr = resetData(dataArr,options);
+    }else{
+        resetDataArr = dataArr;
+    }
+    drawChart(options,resetDataArr);
 }
 
 function drawChart(options,dataArr) {
+    console.log(dataArr);
     var chart, 
     data = google.visualization.arrayToDataTable(dataArr),
     chartOptions = {
@@ -166,7 +165,7 @@ function drawChart(options,dataArr) {
     }
     chart.draw(data, chartOptions);
     pageChartObject[options.drawItemID] = chart;
-    //console.log(pageChartObject);
+    console.log(pageChartObject);
 }
 
 function resetChart(itemID){
