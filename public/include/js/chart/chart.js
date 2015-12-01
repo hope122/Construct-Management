@@ -13,9 +13,9 @@ function createChart(options,processArray){
             dataType: "JSON",
             async: false,
             success: function(rs){
-                if(rs.length > 0){
-                    //chartData = resetData(rs,options);
-                    setDraw(options,rs);
+                if(rs.status){
+                    //chartData = resetData(rs.data,options);
+                    setDraw(options,rs.data);
                 }else{
                     $("#"+options.drawItemID).html("Chart Data is Empty!");
                 }

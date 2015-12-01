@@ -11,20 +11,7 @@ $(function(){
 	setTotalPeople();
 	
 	$("#report_date").change(function(){
-		setTotalPeople();
-		/* var options = {
-		  url: configObject.SARReport,
-		  urlMethod: "POST",
-		  sendData: { date: $("#report_date").val().replace(/\//g,"-") },
-		  drawItemID: 'SARChart',
-		  unitTitle:"人次",
-		  bottomTitle:"工種",
-		  drawType:"ColumnChart", //drawType 可使用 ColumnChart、LineChart 兩種
-		  annotation: true
-		};
-		createChart(options); */
-		$("#SARChart").html("");
-		resetChart("SARChart");
+		reloadChart();
 	});
 });
 
@@ -33,7 +20,7 @@ function submitCheck(){
 		$.ajax({
 			url: configObject.SARGetworkerdata,
             type: "POST",
-			data: "ID="+$("#ID").val(),
+			data: { ID: $("#ID").val() },
 			dataType: "JSON",
 			async:false,
             success: 
@@ -163,23 +150,48 @@ function setTotalPeople(){
 		asyns: false,
 		success:
 			function(rs){
-				var $totalPeople = 0;
-				for(var index in rs){
-					$totalPeople += parseInt(rs[index].w_count);
-				}
-				if($totalPeople!=0){
-					$("#totalPeople").html($totalPeople);
-					$("#has_people").show();
-					$("#no_people").hide();
+				if(rs.status){
+					var $totalPeople = 0;
+					for(var index in rs.data){
+						$totalPeople += parseInt(rs.data[index].w_count);
+					}
+					if($totalPeople!=0){
+						$("#totalPeople").html($totalPeople);
+						$("#has_people").show();
+						$("#SARChart").show();
+						$("#no_people").hide();
+					}else{
+						$("#totalPeople").html("");
+						$("#has_people").hide();
+						$("#SARChart").hide();
+						$("#no_people").show();
+					}
 				}else{
 					$("#has_people").hide();
+					$("#SARChart").hide();
 					$("#no_people").show();
 				}
-				
 			},
 		error:
 			function(e){
 				
 			}
 	});
+}
+
+function reloadChart(){
+	setTotalPeople();
+		
+	resetChart("SARChart");	
+	var options = {
+		url: configObject.SARReport,
+		urlMethod: "POST",
+		sendData: { date: $("#report_date").val().replace(/\//g,"-") },
+		drawItemID: 'SARChart',
+		unitTitle:"人次",
+		bottomTitle:"工種",
+		drawType:"ColumnChart", //drawType 可使用 ColumnChart、LineChart 兩種
+		annotation: true
+	};
+	createChart(options);
 }
