@@ -158,23 +158,23 @@ function setTotalPeople(){
 					if($totalPeople!=0){
 						$("#totalPeople").html($totalPeople);
 						$("#has_people").show();
-						$("#SARChart").show();
+						$("#SARChart").css("visibility", "visible");
 						$("#no_people").hide();
 					}else{
 						$("#totalPeople").html("");
 						$("#has_people").hide();
-						$("#SARChart").hide();
+						$("#SARChart").css("visibility", "hidden");
 						$("#no_people").show();
 					}
 				}else{
 					$("#has_people").hide();
-					$("#SARChart").hide();
+					$("#SARChart").css("visibility", "hidden");
 					$("#no_people").show();
 				}
 			},
 		error:
 			function(e){
-				
+				console.log(e);
 			}
 	});
 }
@@ -188,9 +188,10 @@ function reloadChart(){
 		urlMethod: "POST",
 		sendData: { date: $("#report_date").val().replace(/\//g,"-") },
 		drawItemID: 'SARChart',
-		unitTitle:"人次",
-		bottomTitle:"工種",
-		drawType:"ColumnChart", //drawType 可使用 ColumnChart、LineChart 兩種
+		unitTitle: "人次",
+		bottomTitle: "工種",
+		drawType: "ColumnChart", //drawType 可使用 ColumnChart、LineChart 兩種
+		resultIndex: "data",
 		annotation: true
 	};
 	createChart(options);
