@@ -1,58 +1,68 @@
 $(function(){
 
+  //取得頁面類別
   ptype=$('#inp_ptype').val();
-  getContent(ptype);
-    // getlist();
-});
-function getContent(ptype){
- 
-    $.get(configObject.MaterialGetData+"?type="+ptype, function( data ) {
- 
 
+  //取得頁面內容
+  getContent(ptype,ptype,'div_content','');
+});
+
+//取得頁面內容
+//傳入值 String ptype 取得資料的名稱
+//      String purl 處理的controller
+//      String divid 取回html後要塞入的div
+//      String parameter get參數若無輸入'',若有第一位加& 
+function getContent(ptype,purl,divid,parameter){
+    
+    $.get(configObject.MaterialGetData+"?type="+ptype+parameter, function( data ) {
+      // console.log(data);
       //丟資料toCM回傳html內容
       $.ajax({
-       url: "/material/"+ptype,
+       url: "/material/"+purl,
        type: "POST",
        data: {data:JSON.parse(data)},
        async:false,
        success: function(rs){
-        $("#div_content").empty();
-        $("#div_content").append(rs);
+        $("#"+divid).empty();
+        $("#"+divid).append(rs);
         setBtn();
        }
     });
   });
 }
+//----------------------application-------h
 function setBtn(){
-  $("#inp_prjuid").change(function() {
-        var uid=$(this).val();
 
-        if(uid!=0){
-            $.get(configObject.MaterialGetData,{ type: "qu_materiel",uid:uid},function(data){
-                var o=jQuery.parseJSON(data);
-                $('#inp_total').val((o[0].count==null)?0:o[0].count);
-                $('#inp_finished').val((o[0].count_in==null)?0:o[0].count_in);
-                $('#inp_prjuid').val((o[0]. uid==null)?0:o[0].uid);
-            });
+  $("#inp_prjuid").change(function() {
+
+        var suid=$("#inp_supply").val();
+        var muid=$(this).val();
+        if (suid==0){
+          getContent('getsupply','getselect','inp_supply','&muid='+muid);
         }else{
-             $('#inp_total').val(0);
-             $('#inp_finished').val(0);
-             $('#inp_prjuid').val(0);
+
         }
     });
   
     $("#inp_supply").change(function() {
 
         var suid=$(this).val();
-              console.log(suid);
-        $.get('/material/getprjuid',{ suid: suid},function(data){
-                $("#inp_prjuid").empty();
-                $("#inp_prjuid").append(data);
-            });
-        });
+        var muid=$("#inp_prjuid").val();
+        if (muid==0){
+          getContent('getmaterial','getselect','inp_prjuid','&suid='+suid);
+          $.get(configObject.MaterialGetData+"?type="+ptype+parameter, function( data ) {
+          });
+        }else{
+
+        }
+
+    });
     $("#inp_date").datepicker({
         dateFormat: 'yy-mm-dd'
     });
+}
+function clear(){
+  getContent('application','application','div_content','');
 }
 function chkinp(){
     var chk=true;
@@ -94,6 +104,7 @@ function chkinp(){
    
 }
 
+//=============================application=====e
 function chk_order(){
     var d='';
     var str='';
@@ -151,11 +162,4 @@ function send_qclist(arr){
        }
     });
 
-}
-
-function getlist(){
-    $("#list").empty();
-    $.get("/material/getlist", function(result){
-        $("#list").append(result);
-    });
 }

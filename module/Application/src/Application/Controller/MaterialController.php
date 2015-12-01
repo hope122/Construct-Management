@@ -16,7 +16,7 @@ use System_APService\clsSystem;
 class MaterialController extends AbstractActionController
 {
 
-	//不執行任何動作
+	//主頁分流
 	public function indexAction()
     {
          //session_start();
@@ -64,7 +64,7 @@ class MaterialController extends AbstractActionController
         $this->viewContnet['pageContent'] = $pageContent;
         return new ViewModel($this->viewContnet);
     }
-	//取得選單
+	//申請頁內容
     public function applicationAction()
     {
         
@@ -73,17 +73,31 @@ class MaterialController extends AbstractActionController
 		$VTs->initialization();
         try{
 		//-----BI開始-----  Application材料申請頁面
+                //取得html
                 $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\material\\application.html";
                 $html=$VTs->GetHtmlContent($mpath);
-                $d_type_a = $_POST['data'];
+
+                //接資料
+                $data = $_POST['data'];
                 $str='';
-                if($d_type_a==null){
+                
+                //產生select
+                if($data['su_supply']==null){
                      $html=str_replace('@@opt_supply@@','',$html);
                 }else{
-                    foreach($d_type_a as $opData) {
+                    foreach($data['su_supply'] as $opData) {
                         $str.='<option value='.$opData['uid'].'>'.$opData['name'].'</option>';
                         }
                     $html=str_replace('@@opt_supply@@',$str,$html);
+                }
+                $str='';
+                if($data['el_materiel']==null){
+                     $html=str_replace('@@opt_supply@@','',$html);
+                }else{
+                    foreach($data['el_materiel'] as $opData) {
+                        $str.='<option value='.$opData['uid'].'>'.$opData['name'].'</option>';
+                        }
+                    $html=str_replace('@@opt_prjuid@@',$str,$html);
                 }
                 $html=str_replace('@@userName@@',$_SESSION["userName"],$html);
             
@@ -101,29 +115,21 @@ class MaterialController extends AbstractActionController
 		$this->viewContnet['pageContent'] = $pageContent;
         return new ViewModel($this->viewContnet);
     }
-   public function getprjuidAction()
+
+   public function getselectAction()
     {
         //session_start();
 		$VTs = new clsSystem;
 		$VTs->initialization();
 		
-		//-----BI開始-----  get prjuid 傳入廠商ＩＤ 回傳品項html option內容
-        try{
-                $apurl='http://211.21.170.18:99';
-//            $apurl='http://127.0.0.1:88';
-            //    $apurl='http://211.21.170.18:99';
-            // $apurl='http://127.0.0.1:88';
+		//-----BI開始-----  
+        try{           
                 //取得廠商ID
-            $suid=$_GET['suid'];
-            //廠商id傳入ap 取得品項陣列
-            $arr_prj_material = $VTs->json2data($VTs->UrlDataGet($apurl."/material/getdbdata?type=prj_materiel&suid=".$suid));
-//            print_r($arr_prj_material);
-      
-            //陣列組成html
+            $arr_data=$_POST['data'];
             $html="<option value=0>請選擇</option>";
-            if(!$arr_prj_material==null){
-                foreach($arr_prj_material as $prj){
-                    $html.="<option value=".$prj->uid.">".$prj->name."</option>";
+            if(!$arr_data==null){
+                foreach($arr_data as $data){
+                    $html.="<option value=".$data['uid'].">".$data['name']."</option>";
                 }
             }
             //印出html

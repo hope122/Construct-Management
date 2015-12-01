@@ -1,24 +1,26 @@
 <div class='css_table' align='center' style='margin: 0px auto;'>
 <input type='hidden' class='cls_inp' id='identity' value='3'>
+<div id='div_info'>
+</div>
 <div class="css_tr">
-     <div class="css_td">廠商</div>
       <div class="css_td">品項</div>
+     <div class="css_td">廠商</div>
+
       <div class="css_td">數量</div>
-      <div class="css_td">已進場累計數量</div>
-      <div class="css_td">合約總數量</div>
+      <div class="css_td">剩餘數量</div>
       <div class="css_td">日期</div>
       <div class="css_td">放置地點</div>
       
   </div>
  <div class="css_tr">
-      <div class="css_td" > <select id='inp_supply' class='cls_inp'><option value=0>請選擇</option>@@opt_supply@@</select></div>
       <div class="css_td" > <select id='inp_prjuid' class='cls_inp'><option value=0>請選擇</option>@@opt_prjuid@@</select></div>
+      <div class="css_td" > <select id='inp_supply' class='cls_inp'><option value=0>請選擇</option>@@opt_supply@@</select></div>
       <div class="css_td" ><input id='inp_quantity' class='cls_inp'></div>
-      <div class="css_td" ><input id='inp_finished'  readonly value=0></div>
-      <div class="css_td" ><input id='inp_total'  readonly value=0></div>
+      <div class="css_td" ><input id='inp_amount'  readonly value=0></div>
       <div class="css_td" ><input id='inp_date' class='cls_inp'></div>
       <div class="css_td" ><input id='inp_place' class='cls_inp'></div>
   </div>
+  <a  href="javascript:clear()">清除搜尋</a>
 </div>
 <br>
 <div align='center'>
