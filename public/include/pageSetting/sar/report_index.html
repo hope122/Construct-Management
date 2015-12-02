@@ -22,9 +22,45 @@
         <script src="../include/js/page/check_login.js"></script>
         <script src="../include/js/page/topMenu.js"></script>
 		<script src="../include/strongly/assets/js/main.js"></script>
+
+		<script src="https://www.google.com/jsapi"></script>
+		<script src="../include/js/chart/chart.js"></script>
+		<script src="../include/js/page/sar.js"></script>
+
         <script>
             $(function(){
-              getLan();
+              	getLan();
+
+              	//設定今天日期
+				$("#report_date").datepicker({
+					dateFormat: 'yy/mm/dd'
+				});
+				var dateObj = new Date();
+				var $year = dateObj.getFullYear();
+				var $month = (dateObj.getMonth()+1 < 10)?"0"+dateObj.getMonth()+1 : dateObj.getMonth()+1;
+				var $date = (dateObj.getDate() < 10)? "0"+dateObj.getDate() : dateObj.getDate();
+				$("#report_date").val($year+"/"+$month+"/"+$date);
+
+				//產生圖表
+				var options = {
+				  url: configObject.SARReport,
+				  urlMethod: "POST",
+				  sendData: { date: $("#report_date").val().replace(/\//g,"-") },
+				  drawItemID: 'SARChart',
+				  unitTitle:"人次",
+				  bottomTitle:"工種",
+				  drawType:"ColumnChart", //drawType 可使用 ColumnChart、LineChart 兩種
+				  resultIndex: "data",
+				  annotation: true
+				};
+				createChart(options);
+					
+				//顯示今日出工總人數		
+				setTotalPeople();
+				
+				$("#report_date").change(function(){
+					reloadChart();
+				});
             });
         </script>
 		
@@ -41,93 +77,59 @@
 				display: table-cell;
 			}
 		</style>
-		
-		<script src="https://www.google.com/jsapi"></script>
-		<script src="../include/js/chart/chart.js"></script>
-		<script src="../include/js/page/SAR.js"></script>
-		
-		<script>
-			$(function(){
-				//產生圖表
-				var options = {
-				  url: configObject.SARReport,
-				  urlMethod: "POST",
-				  sendData: { date: $("#report_date").val().replace(/\//g,"-") },
-				  drawItemID: 'SARChart',
-				  unitTitle:"人次",
-				  bottomTitle:"工種",
-				  drawType:"ColumnChart", //drawType 可使用 ColumnChart、LineChart 兩種
-				  resultIndex: "data",
-				  annotation: true
-				};
-				createChart(options);
-			});
-		</script>
-		
 	</head>
 	<body class="homepage">
 		<div id="page-wrapper">
 
 			<!-- Header -->
-				<div id="header-wrapper">
-					<div id="header" class="container">
+			<div id="header-wrapper">
+				<div id="header" class="container">
+					<!-- Logo -->
+					<h1 id="logo"><a href="./">建築物雲端全生命週期履歷平台</a></h1>
+                    <p>施工階段模組</p>
 
-						<!-- Logo -->
-							<h1 id="logo"><a href="./">建築物雲端全生命週期履歷平台</a></h1>
-                            <p>施工階段模組</p>
-
-						<!-- Nav -->
-							<nav id="nav">
-								<div style="float:right;">
-									<span>Hi, @@userName@@ 歡迎回來</span>
-								</div>
-								<!--選單-->
-								<ul id="menus">
-									<li><a class="icon fa-home" href="./"><span>首頁</span></a></li>
-									<li><a class="icon fa-retweet" href="#" onclick="logoutEven();"><span>Logout</span></a></li>
-								</ul>
-							</nav>
-
-					</div>
+					<!-- Nav -->
+					<nav id="nav">
+						<div style="float:right;">
+							<span>Hi, @@userName@@ 歡迎回來</span>
+						</div>
+						<!--選單-->
+						<ul id="menus">
+							<li><a class="icon fa-home" href="./"><span>首頁</span></a></li>
+							<li><a class="icon fa-retweet" href="#" onclick="logoutEven();"><span>Logout</span></a></li>
+						</ul>
+					</nav>
 				</div>
+			</div>
 
 			<!-- Main -->
-				<div id="main-wrapper">
-					<div id="main" class="container">
-						<div class="row">
-
-							<!-- Content -->
-								<div id="content" class="12u 12u(mobile)">
-
-									<!-- Post -->
-										<article class="box post">
-												
-											<div  class='css_table' align='center' style='margin: 0px auto;'>
-												<label>查詢日期：<input type="text" id="report_date" name="report_date" value=""></label>
-												<span>@@report@@</span>
-											</div>
-										</article>
-
+			<div id="main-wrapper">
+				<div id="main" class="container">
+					<div class="row">
+						<!-- Content -->
+						<div id="content" class="12u 12u(mobile)">
+							<!-- Post -->
+							<article class="box post">
+								<div  class='css_table' align='center' style='margin: 0px auto;'>
+									<label>查詢日期：<input type="text" id="report_date" name="report_date" value=""></label>
+									<span>@@report@@</span>
 								</div>
-
+							</article>
 						</div>
 					</div>
 				</div>
+			</div>
 
 			<!-- Footer -->
-				<div id="footer-wrapper">
-					<div id="footer" class="container">
-					</div>
-					<div id="copyright" class="container">
-						<ul class="links">
-							<li>&copy; Untitled. All rights reserved.</li><li>Design: HTML5 UP  </li>
-						</ul>
-					</div>
+			<div id="footer-wrapper">
+				<div id="footer" class="container">
 				</div>
-
+				<div id="copyright" class="container">
+					<ul class="links">
+						<li>&copy; Untitled. All rights reserved.</li><li>Design: HTML5 UP  </li>
+					</ul>
+				</div>
+			</div>
 		</div>
-
-		
-
 	</body>
 </html>
