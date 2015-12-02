@@ -23,36 +23,40 @@ class MaterialController extends AbstractActionController
         $VTs = new clsSystem;
         $VTs->initialization();
         try{
-
-        //-----BI開始-----  材料類別頁面分流
-        if(!empty($_GET['ptype'])){
-            $ptype=$_GET['ptype'];
-        }else{
-            $ptype='list';
+        if(empty($_SESSION)){
+            $pagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\index\\login_page.html";
+            $pageContent = $VTs->GetHtmlContent($pagePath);
+        }else{  
+            //-----BI開始-----  材料類別頁面分流
+            if(!empty($_GET['ptype'])){
+                $ptype=$_GET['ptype'];
+            }else{
+                $ptype='list';
+            }
+            switch($ptype){
+                case 'application':
+                    $title='進料申請單';
+                    break;
+                case 'chkinfo':
+                    $title='材料申請單明細';
+                    break;
+                default:
+                    $title='材料進貨清單';
+                    break;
+            } 
         }
-        switch($ptype){
-            case 'application':
-                $title='進料申請單';
-                break;
-            case 'chkinfo':
-                $title='材料申請單明細';
-                break;
-            default:
-                $title='材料進貨清單';
-                break;
-        } 
 
-        //取得主頁html
-        $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\material\\index.html";
-        $html=$VTs->GetHtmlContent($mpath);
+            //取得主頁html
+            $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\material\\index.html";
+            $html=$VTs->GetHtmlContent($mpath);
 
 
 
-        $arrdata["title"]=$title;
-        $arrdata["ptype"]=$ptype;
-        $arrdata["userName"]=$_SESSION['userName'];
-        $html=$VTs->ContentReplace($arrdata,$html);
-        $pageContent=$html;
+            $arrdata["title"]=$title;
+            $arrdata["ptype"]=$ptype;
+            $arrdata["userName"]=$_SESSION['userName'];
+            $html=$VTs->ContentReplace($arrdata,$html);
+            $pageContent=$html;
 
         //-----BI結束-----
 
@@ -170,12 +174,12 @@ class MaterialController extends AbstractActionController
                         }
                         $trs=str_replace('@@status@@',$status,$trs);
                         $trs=str_replace('@@color@@',$color,$trs);
-                        // if($lsData['check']==1){
-                        //     $str_order='已確認';
-                        // }else{
-                        //     $str_order="<input type='checkbox' class='cls_order' value=".$lsData['uid'].">";
-                        // }
-                        // $trs=str_replace('@@order@@',$str_order,$trs);
+                        if($lsData['ck1']==1){
+                            $str_order='已確認';
+                        }else{
+                            $str_order="<input type='checkbox' class='cls_order' value=".$lsData['uid'].">";
+                        }
+                        $trs=str_replace('@@order@@',$str_order,$trs);
                         // $trs=str_replace('@@uid@@',$lsData['uid'],$trs);
                         $trstr.=$trs;
                     }
@@ -235,10 +239,17 @@ class MaterialController extends AbstractActionController
         
         try{
             $path=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\material\\chkinfo.html";
+            $uid=$_GET['uid'];
+            $data = $VTs->json2data($VTs->UrlDataGet("211.21.170.18:99/material/getdbdata?type=chkinfo&uid=".$uid));
             $html=$VTs->GetHtmlContent($path);
-            $data=$_POST['data'];
-            $arrdata['no']='AA0000'.$data['uid'];
-            $arrdata['cpname']=$data['cpname'];
+            $arrdata['no']='AA0000'.$data->uid;
+            $arrdata['cpname']=$data->cpname;
+            $arrdata['keyman']=$data->keyman;
+            $arrdata['phone']=$data->mobile;
+             $arrdata['mname']=$data->mname;
+             $arrdata['count']=$data->count;
+             $arrdata['date']=$data->date;
+             $arrdata['aname']=$data->aname;
             $pageContent=$html=$VTs->ContentReplace($arrdata,$html);
         //-----BI結束-----
         }catch(Exception $error){
@@ -283,6 +294,31 @@ class MaterialController extends AbstractActionController
                 $info.="</tr>";
             }
             $html=str_replace('@@info@@',$info,$html);
+            //印出html
+            $pageContent=$html;
+        //-----BI結束-----
+        }catch(Exception $error){
+            //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
+            $VTs->WriteLog("IndexController", "indexAction", $error->getMessage());
+        }
+         //關閉資料庫連線
+        $VTs->DBClose();
+        //釋放
+        $VTs = null;
+        $this->viewContnet['pageContent'] = $pageContent;
+        return new ViewModel($this->viewContnet);
+    }
+   public function sendemailAction()
+    {
+        //session_start();
+        $VTs = new clsSystem;
+        $VTs->initialization();
+        
+        try{
+            $data=$_POST['data'];
+            $str="正中建材公司您好,向貴公司訂購訂購水泥50包";
+            $VTs->Tomail("hope080122@gmail.com","hope080122@gmail.com","訂貨",$str);
+            $html='sendEmail';
             //印出html
             $pageContent=$html;
         //-----BI結束-----
