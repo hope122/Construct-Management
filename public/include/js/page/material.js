@@ -96,6 +96,7 @@ function chkinp(){
                //dataType: "JSON",
                success: function(rs){
 //                console.log(rs);
+                  $.post("/material/sendemail", { data: d } );
                     socket.emit('chatMsg', {'msg':'材料申請通知','uid':uuid,'name':userName});
                     alert('新增成功！');
                     clear();
@@ -108,49 +109,50 @@ function chkinp(){
    
 }
 
-// function chk_order(){
-//     var d='';
-//     var str='';
-//     var arr = [];
-//     d += 'type=chkorder&id=';
-//     $( ".cls_order" ).each(function( index ) {
-// //                console.log($(this).val());
-//         if(this.checked){
-//             d += $(this).val()+',';
-// //            console.log($('#tr'+index).find('.name').html()+"  "+$('#tr'+index).find('.time').html()+"");
-//             index++;
-// //            console.log('#tr'+index);
-//             str+=$('#tr'+index).find('.supply').html()+"  "+$('#tr'+index).find('.name').html()+"  "+$('#tr'+index).find('.time').html()+"  "+$('#tr'+index).find('.count').html()+"\n";
-//             arr.push({ type: 1, dataid: $(this).val(),date:$('#tr'+index).find('.time').html() });
+function chk_order(){
+    var d='';
+    var str='';
+    var arr = [];
+    d += 'type=chkorder&id=';
+    $( ".cls_order" ).each(function( index ) {
+//                console.log($(this).val());
+        if(this.checked){
+
+            d += $(this).val()+',';
+//            console.log($('#tr'+index).find('.name').html()+"  "+$('#tr'+index).find('.time').html()+"");
+            index++;
+//            console.log('#tr'+index);
+            str+=$('#tr'+index).find('.no').html()+"  "+$('#tr'+index).find('.ma_name').html()+"  "+$('#tr'+index).find('.count').html()+"  "+$('#tr'+index).find('.adate').html()+"\n";
+            arr.push({ type: 1, dataid: $(this).val(),date:$('#tr'+index).find('.time').html() });
             
-//         }
-//     });
-// //    console.log(arr);
-//     d = d.substring(0,d.length-1);
-//     if(!str==''){
-//         r=confirm('確認資料：\n'+str);
-//         if(r){
-//                $.ajax({
-//                    url: configObject.MaterialModify,
-//                    type: "POST",
-//                    data: d,
-//                    async:false,
-//                    //dataType: "JSON",
-//                    success: function(rs){
-// //                    console.log(rs);
-//                         send_qclist(arr);
-//                         alert('送出訂單！');
-// //                        location.reload();
-//                    },
-//                    error: function(e){
-//                         alert('儲存失敗！');
-//                    }
-//                 });
-//         }else{
-//             location.reload();
-//         }
-//     }
-// }
+        }
+    });
+//    console.log(arr);
+    d = d.substring(0,d.length-1);
+    if(!str==''){
+        r=confirm('確認資料：\n'+str);
+        if(r){
+               $.ajax({
+                   url: configObject.MaterialModify,
+                   type: "POST",
+                   data: d,
+                   async:false,
+                   //dataType: "JSON",
+                   success: function(rs){
+//                    console.log(rs);
+                        send_qclist(arr);
+                        alert('送出訂單！');
+                       location.reload();
+                   },
+                   error: function(e){
+                        alert('儲存失敗！');
+                   }
+                });
+        }else{
+            location.reload();
+        }
+    }
+}
 
 function send_qclist(arr){
     console.log(arr);
