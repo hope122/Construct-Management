@@ -19,11 +19,56 @@ class MaterialController extends AbstractActionController
 	//不執行任何動作
 	public function indexAction()
     {
-		$this->viewContnet['pageContent'] = 'Please Select Your Action and Try Again!';
+         //session_start();
+        $VTs = new clsSystem;
+        $VTs->initialization();
+        try{
+
+        //-----BI開始-----  材料類別頁面分流
+        if(!empty($_GET['ptype'])){
+            $ptype=$_GET['ptype'];
+        }else{
+            $ptype='list';
+        }
+        switch($ptype){
+            case 'application':
+                $title='進料申請單';
+                break;
+            case 'chkinfo':
+                $title='材料申請單明細';
+                break;
+            default:
+                $title='材料進貨清單';
+                break;
+        } 
+
+        //取得主頁html
+        $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\material\\index.html";
+        $html=$VTs->GetHtmlContent($mpath);
+
+
+
+        $arrdata["title"]=$title;
+        $arrdata["ptype"]=$ptype;
+        $arrdata["userName"]=$_SESSION['userName'];
+        $html=$VTs->ContentReplace($arrdata,$html);
+        $pageContent=$html;
+
+        //-----BI結束-----
+
+        }catch(Exception $error){
+            //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
+            $VTs->WriteLog("IndexController", "indexAction", $error->getMessage());
+        }
+         //關閉資料庫連線
+        $VTs->DBClose();
+        //釋放
+        $VTs = null;
+        $this->viewContnet['pageContent'] = $pageContent;
         return new ViewModel($this->viewContnet);
     }
 	//取得選單
-    public function ApplicationAction()
+    public function applicationAction()
     {
         
         //session_start();
@@ -31,23 +76,30 @@ class MaterialController extends AbstractActionController
 		$VTs->initialization();
         try{
 		//-----BI開始-----  Application材料申請頁面
-        
-                $apurl='http://211.21.170.18:99';
-//                $apurl='http://127.0.0.1:88';
                 $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\material\\application.html";
                 $html=$VTs->GetHtmlContent($mpath);
-                $d_type_a = $VTs->json2data($VTs->UrlDataGet($apurl."/material/getdbdata?type=su_supply"));
+
+                $data = $_POST['data'];
+            
                 $str='';
-                if($d_type_a==null){
+                if($data['su_supply']==null){
                      $html=str_replace('@@opt_supply@@','',$html);
                 }else{
-                    foreach($d_type_a as $opData) {
-                        $str.='<option value='.$opData->uid.'>'.$opData->name.'</option>';
+                    foreach($data['su_supply'] as $opData) {
+                        $str.='<option value='.$opData['uid'].'>'.$opData['name'].'</option>';
                         }
                     $html=str_replace('@@opt_supply@@',$str,$html);
                 }
-                $html=str_replace('@@userName@@',$_SESSION["userName"],$html);
-            
+                $str='';
+                if($data['el_materiel']==null){
+                     $html=str_replace('@@opt_supply@@','',$html);
+                }else{
+                    foreach($data['el_materiel'] as $opData) {
+                        $str.='<option value='.$opData['uid'].'>'.$opData['name'].'</option>';
+                        }
+                    $html=str_replace('@@opt_prjuid@@',$str,$html);
+                }
+
         
                 $pageContent=$html;
         //-----BI結束-----
@@ -62,57 +114,18 @@ class MaterialController extends AbstractActionController
 		$this->viewContnet['pageContent'] = $pageContent;
         return new ViewModel($this->viewContnet);
     }
-   public function getprjuidAction()
+ public function listAction()
     {
         //session_start();
-		$VTs = new clsSystem;
-		$VTs->initialization();
-		
-		//-----BI開始-----  get prjuid 傳入廠商ＩＤ 回傳品項html option內容
+        $VTs = new clsSystem;
+        $VTs->initialization();
+        
+        //-----BI開始-----  get prjuid 傳入廠商ＩＤ 回傳品項html option內容
         try{
-                $apurl='http://211.21.170.18:99';
-//            $apurl='http://127.0.0.1:88';
-            //    $apurl='http://211.21.170.18:99';
-            // $apurl='http://127.0.0.1:88';
-                //取得廠商ID
-            $suid=$_GET['suid'];
-            //廠商id傳入ap 取得品項陣列
-            $arr_prj_material = $VTs->json2data($VTs->UrlDataGet($apurl."/material/getdbdata?type=prj_materiel&suid=".$suid));
-//            print_r($arr_prj_material);
-      
-            //陣列組成html
-            $html="<option value=0>請選擇</option>";
-            if(!$arr_prj_material==null){
-                foreach($arr_prj_material as $prj){
-                    $html.="<option value=".$prj->uid.">".$prj->name."</option>";
-                }
-            }
-            //印出html
-            $pageContent=$html;
-        //-----BI結束-----
-        }catch(Exception $error){
-            //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
-            $VTs->WriteLog("IndexController", "indexAction", $error->getMessage());
-        }
-         //關閉資料庫連線
-        $VTs->DBClose();
-        //釋放
-		$VTs = null;
-		$this->viewContnet['pageContent'] = $pageContent;
-        return new ViewModel($this->viewContnet);
-    }
-   public function getlistAction()
-    {
-        //session_start();
-		$VTs = new clsSystem;
-		$VTs->initialization();
-		
-		//-----BI開始-----  get prjuid 傳入廠商ＩＤ 回傳品項html option內容
-        try{
-                        $apurl='http://211.21.170.18:99';
-//                $apurl='http://127.0.0.1:88';
+//                         $apurl='http://211.21.170.18:99';
+// //                $apurl='http://127.0.0.1:88';
 
-            $ls_petition= $VTs->json2data($VTs->UrlDataGet($apurl."/material/getdbdata?type=el_petition"));
+            $ls_petition=$_POST['data'];
                 if($ls_petition==null){
                     $ls='無資料';
                 }else{
@@ -125,18 +138,45 @@ class MaterialController extends AbstractActionController
                     foreach($ls_petition as  $id => $lsData) {
                         $trs=$tr;
                         $trs=str_replace('@@id@@',$id+1,$trs);
-                        $trs=str_replace('@@supply@@',$lsData->su_name,$trs);
-                        $trs=str_replace('@@name@@',$lsData->ma_name,$trs);
-                        $trs=str_replace('@@intime@@',$lsData->date,$trs);
-                        $trs=str_replace('@@place@@',$lsData->place,$trs);
-                        $trs=str_replace('@@count@@',$lsData->count,$trs);
-                        if($lsData->check==1){
-                            $str_order='已確認';
+                        // $trs=str_replace('@@supply@@',$lsData['su_name'],$trs);
+                        // $trs=str_replace('@@no@@',"AA0000".$lsData['uid'],$trs);
+                        $trs=str_replace('@@uid@@',$lsData['uid'],$trs);
+                        $trs=str_replace('@@adate@@',$lsData['datep'],$trs);
+                        $trs=str_replace('@@ma_name@@',$lsData['ma_name'],$trs);
+                        $trs=str_replace('@@count@@',$lsData['count'],$trs);
+                        $status='';
+                        $color='block';
+
+
+                        if ($lsData['ck2']!=-1){
+                           if($lsData['ck2']==1){
+                                $status='已進場';
+                           }else{
+                                $status='QC未通過';
+                                $color='red';
+                           }
                         }else{
-                            $str_order="<input type='checkbox' class='cls_order' value=".$lsData->uid.">";
+                            if($lsData['ck1']!=-1){
+                              if($lsData['ck1']==1){
+                                    $status='待進場';
+                               }else{
+                                    $status='主任未通過';
+                                    $color='red';
+                               }
+                            }else{
+                                $status='待確認';
+                                $color='#8E8E8E';
+                            }
                         }
-                        $trs=str_replace('@@order@@',$str_order,$trs);
-                        $trs=str_replace('@@uid@@',$lsData->uid,$trs);
+                        $trs=str_replace('@@status@@',$status,$trs);
+                        $trs=str_replace('@@color@@',$color,$trs);
+                        // if($lsData['check']==1){
+                        //     $str_order='已確認';
+                        // }else{
+                        //     $str_order="<input type='checkbox' class='cls_order' value=".$lsData['uid'].">";
+                        // }
+                        // $trs=str_replace('@@order@@',$str_order,$trs);
+                        // $trs=str_replace('@@uid@@',$lsData['uid'],$trs);
                         $trstr.=$trs;
                     }
                     $ls=str_replace('@@tr@@',$trstr,$ls);
@@ -153,8 +193,109 @@ class MaterialController extends AbstractActionController
          //關閉資料庫連線
         $VTs->DBClose();
         //釋放
+        $VTs = null;
+        $this->viewContnet['pageContent'] = $pageContent;
+        return new ViewModel($this->viewContnet);
+    }
+   public function getselectAction()
+    {
+        //session_start();
+		$VTs = new clsSystem;
+		$VTs->initialization();
+		
+        try{
+
+            $arr_data = $_POST['data'];
+            $html="<option value=0>請選擇</option>";
+            if(!$arr_data==null){
+                foreach($arr_data as $data){
+                    $html.="<option value=".$data['uid'].">".$data['name']."</option>";
+                }
+            }
+            //印出html
+            $pageContent=$html;
+        //-----BI結束-----
+        }catch(Exception $error){
+            //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
+            $VTs->WriteLog("IndexController", "indexAction", $error->getMessage());
+        }
+         //關閉資料庫連線
+        $VTs->DBClose();
+        //釋放
 		$VTs = null;
 		$this->viewContnet['pageContent'] = $pageContent;
         return new ViewModel($this->viewContnet);
     }
+
+    public function chkinfoAction()
+    {
+        //session_start();
+        $VTs = new clsSystem;
+        $VTs->initialization();
+        
+        try{
+            $path=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\material\\chkinfo.html";
+            $html=$VTs->GetHtmlContent($path);
+            $data=$_POST['data'];
+            $arrdata['no']='AA0000'.$data['uid'];
+            $arrdata['cpname']=$data['cpname'];
+            $pageContent=$html=$VTs->ContentReplace($arrdata,$html);
+        //-----BI結束-----
+        }catch(Exception $error){
+            //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
+            $VTs->WriteLog("IndexController", "indexAction", $error->getMessage());
+        }
+         //關閉資料庫連線
+        $VTs->DBClose();
+        //釋放
+        $VTs = null;
+        $this->viewContnet['pageContent'] = $pageContent;
+        return new ViewModel($this->viewContnet);
+    }
+    public function getsuinfoAction()
+    {
+        //session_start();
+        $VTs = new clsSystem;
+        $VTs->initialization();
+        
+        try{
+            $path=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\material\\info.html";
+            $html=$VTs->GetHtmlContent($path);
+            $arr_data = $_POST['data'];
+         
+            $info='';
+            $i=0;
+            if(!$arr_data==null){
+                foreach($arr_data as $key=>$data){
+                    if(!empty($data)){
+                    $i++;
+                    if(fmod($i,3)==1){
+                        $info.="<tr width='100%'>";
+                    }
+                    $info.="<td width='30%'>".$key."：".$data."</td>";
+                   if(fmod($i,3)==0){
+                        $info.="</tr>";
+                    }
+                    }
+                }
+            }
+            if(fmod($i,3)!=0){
+                $info.="</tr>";
+            }
+            $html=str_replace('@@info@@',$info,$html);
+            //印出html
+            $pageContent=$html;
+        //-----BI結束-----
+        }catch(Exception $error){
+            //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
+            $VTs->WriteLog("IndexController", "indexAction", $error->getMessage());
+        }
+         //關閉資料庫連線
+        $VTs->DBClose();
+        //釋放
+        $VTs = null;
+        $this->viewContnet['pageContent'] = $pageContent;
+        return new ViewModel($this->viewContnet);
+    }
+  
 }
