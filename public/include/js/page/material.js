@@ -1,35 +1,73 @@
 $(function(){
-  
-    $("#inp_prjuid").change(function() {
-        var uid=$(this).val();
 
-        if(uid!=0){
-            $.get(configObject.MaterialGetData,{ type: "qu_materiel",uid:uid},function(data){
-                var o=jQuery.parseJSON(data);
-                $('#inp_total').val((o[0].count==null)?0:o[0].count);
-                $('#inp_finished').val((o[0].count_in==null)?0:o[0].count_in);
-                $('#inp_prjuid').val((o[0]. uid==null)?0:o[0].uid);
-            });
+  ptype=$('#inp_ptype').val();
+  getContent(ptype,ptype,'div_content','');
+    // getlist();
+});
+
+function getContent(ptype,purl,divid,parameter){
+ 
+    $.get(configObject.MaterialGetData+"?type="+ptype+parameter, function( data ) {
+ 
+      console.log(data);
+      //丟資料toCM回傳html內容
+      $.ajax({
+       url: "/material/"+purl,
+       type: "POST",
+       data: {data:JSON.parse(data)},
+       async:false,
+       success: function(rs){
+        $("#"+divid).empty();
+        $("#"+divid).append(rs);
+        setBtn();
+       }
+    });
+  });
+}
+//===============application======s
+function setBtn(){
+  $("#inp_prjuid").change(function() {
+        
+        var muid=$(this).val();
+        var suid=$("#inp_supply").val();
+
+        if(suid==0){
+            getContent('getsupply','getselect','inp_supply','&muid='+muid);
         }else{
-             $('#inp_total').val(0);
-             $('#inp_finished').val(0);
-             $('#inp_prjuid').val(0);
+          $("#inp_supply").prop('disabled', 'disabled');
+         $.get(configObject.MaterialGetData+"?type=lcount&suid="+suid+"&muid="+muid, function( r ) {
+            r=JSON.parse(r);
+            $("#inp_lcount").val(r['lcount']);
+            $("#prj_mid").val(r['uid']);
+          });
         }
     });
   
     $("#inp_supply").change(function() {
+        // $(this).prop('disabled', 'disabled');
+        var muid=$("#inp_prjuid").val();
         var suid=$(this).val();
-        $.get('/material/getprjuid',{ suid: suid},function(data){
-                $("#inp_prjuid").empty();
-                $("#inp_prjuid").append(data);
-            });
+        getContent('getsuinfo','getsuinfo','info','&suid='+suid);
+        if(muid==0){
+            getContent('getmaterial','getselect','inp_prjuid','&suid='+suid);
+
+        }else{
+          $("#inp_prjuid").prop('disabled', 'disabled');
+         $.get(configObject.MaterialGetData+"?type=lcount&suid="+suid+"&muid="+muid, function( r ) {
+            r=JSON.parse(r);
+            $("#inp_lcount").val(r['lcount']);
+            $("#prj_mid").val(r['uid']);
+          });
+        }
         });
     $("#inp_date").datepicker({
         dateFormat: 'yy-mm-dd'
     });
-    getlist();
-});
+}
 
+function clear(){
+  getContent('application','application','div_content','');
+}
 function chkinp(){
     var chk=true;
     var d='';
@@ -58,9 +96,10 @@ function chkinp(){
                //dataType: "JSON",
                success: function(rs){
 //                console.log(rs);
+                  $.post("/material/sendemail", { data: d } );
                     socket.emit('chatMsg', {'msg':'材料申請通知','uid':uuid,'name':userName});
                     alert('新增成功！');
-                    getlist();
+                    clear();
                },
                error: function(e){
                     alert('儲存失敗！');
@@ -78,11 +117,12 @@ function chk_order(){
     $( ".cls_order" ).each(function( index ) {
 //                console.log($(this).val());
         if(this.checked){
+
             d += $(this).val()+',';
 //            console.log($('#tr'+index).find('.name').html()+"  "+$('#tr'+index).find('.time').html()+"");
             index++;
 //            console.log('#tr'+index);
-            str+=$('#tr'+index).find('.supply').html()+"  "+$('#tr'+index).find('.name').html()+"  "+$('#tr'+index).find('.time').html()+"  "+$('#tr'+index).find('.count').html()+"\n";
+            str+=$('#tr'+index).find('.no').html()+"  "+$('#tr'+index).find('.ma_name').html()+"  "+$('#tr'+index).find('.count').html()+"  "+$('#tr'+index).find('.adate').html()+"\n";
             arr.push({ type: 1, dataid: $(this).val(),date:$('#tr'+index).find('.time').html() });
             
         }
@@ -102,7 +142,7 @@ function chk_order(){
 //                    console.log(rs);
                         send_qclist(arr);
                         alert('送出訂單！');
-//                        location.reload();
+                       location.reload();
                    },
                    error: function(e){
                         alert('儲存失敗！');
@@ -128,10 +168,4 @@ function send_qclist(arr){
     });
 
 }
-
-function getlist(){
-    $("#list").empty();
-    $.get("/material/getlist", function(result){
-        $("#list").append(result);
-    });
-}
+//===============application======e

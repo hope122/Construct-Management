@@ -22,8 +22,8 @@ class QCController extends AbstractActionController
 		$VTs->initialization();
         try{
 		//-----BI開始-----  index QC審查首頁
-        //    $apurl='http://211.21.170.18:99';
-        $apurl='http://127.0.0.1:88';
+           $apurl='http://211.21.170.18:99';
+        // $apurl='http://127.0.0.1:88';
         $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\qc\\index.html";
         $trpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\qc\\tr.html";
         $html=$VTs->GetHtmlContent($mpath);
@@ -121,10 +121,12 @@ class QCController extends AbstractActionController
                 if($imginfo->status){
 
                      $trs=str_replace('@@d64@@',$imginfo->imgs->img0,$trs);
-                    $info = $VTs->json2data($VTs->UrlDataGet($apurl."/material/getdbdata?type=el_petition&uid=".$list['dataid']));
-                    $trs=str_replace('@@materialname@@',$info[0]->ma_name,$trs);
-                    $trs=str_replace('@@count@@',$info[0]->count,$trs);
-                    $trs=str_replace('@@place@@',$info[0]->place,$trs);
+                    $info = $VTs->json2data($VTs->UrlDataGet($apurl."/qc/getdbdata?type=photoinfo&uid=".$list['dataid']));
+                    $trs=str_replace('@@remark@@',$list['remark'],$trs);
+                    $trs=str_replace('@@uid@@',$info->uid,$trs);
+                    $trs=str_replace('@@materialname@@',$info->ma_name,$trs);
+                    $trs=str_replace('@@count@@',$info->count,$trs);
+                    $trs=str_replace('@@place@@',$info->place,$trs);
                     $htmlstr.=$trs;
                 }
             }
