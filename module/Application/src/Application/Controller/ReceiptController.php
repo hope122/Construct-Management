@@ -15,7 +15,7 @@ use System_APService\clsSystem;
 
 class ReceiptController extends AbstractActionController
 {
-    public function indexAction()
+	public function indexAction()
     {
 		$VTs = new clsSystem;
 		$VTs->initialization();
@@ -27,8 +27,24 @@ class ReceiptController extends AbstractActionController
 			}else{
 				$pagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\receipt\\index.html";
 				$pageContent = $VTs->GetHtmlContent($pagePath);
+				
+				$companyTitlePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\receipt\\companyTitle.html";
+				$companyTitle = $VTs->GetHtmlContent($companyTitlePath);
+				
+				$supplyInfoPath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\receipt\\supplyInfo.html";
+				$supplyInfo = $VTs->GetHtmlContent($supplyInfoPath);
+				
+				$paymentDetialPath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\receipt\\paymentDetial.html";
+				$paymentDetial = $VTs->GetHtmlContent($paymentDetialPath);
+				
 				//一個索引與內容等同一個 >> str_replace("@@userName@@",$_SESSION["userName"],$pageContent);
-				$dataArr = ["userName"=>$_SESSION["userName"]];
+				$dataArr = [
+					"userName"=>$_SESSION["userName"],
+					"companyTitle"=>$companyTitle,
+					"supplyInfo"=>$supplyInfo,
+					"paymentDetial"=>$paymentDetial
+				];
+
 				//內容取代
 				$pageContent = $VTs->ContentReplace($dataArr,$pageContent);
 	        }
