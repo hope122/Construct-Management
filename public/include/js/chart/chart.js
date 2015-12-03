@@ -135,7 +135,7 @@ function drawChart(options,dataArr) {
         //curveType: 'function',
         legend: { position: 'bottom' },
         //width: "3000",
-        //height: "100%",
+        //height: 300,
         pointSize: 4,
         //pointsVisible: true,
         hAxis:{},
@@ -146,7 +146,7 @@ function drawChart(options,dataArr) {
            // startup: true,
             alwaysOutside: true
         },
-        timeline: { colorByRowLabel: true },
+        //timeline: { showRowLabels: false },
        // curveType: 'function',
         legend: { position: 'bottom' }
     },
@@ -174,6 +174,7 @@ function drawChart(options,dataArr) {
         break;
         case "TimeLine":
             chart = new google.visualization.Timeline(drawItemID);
+            chartOptions.avoidOverlappingGridLines=false;
         break;
         default:
             chart = new google.visualization.ColumnChart(drawItemID);

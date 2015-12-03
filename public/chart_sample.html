@@ -105,7 +105,7 @@
         $.each(data,function(i,v){
           var vObject = v.PlanDates;
           $.each(vObject,function(ai,av){
-            reData[reData.length] = [av.Name,new Date(av.sDate+" 8:00"),new Date(av.sDate+" 17:00")];
+            reData[reData.length] = [av.Name,new Date(av.sDate+" 0:00"),new Date(av.sDate+" 23:59")];
             
             if(typeof colorObject[av.Name] == 'undefined'){
               colorArr[colorArr.length] = (av.ChkType)?"#DA3636":"#2BD834";
@@ -115,7 +115,7 @@
           if(v.RealDates && typeof v.RealDates!='undefined'){
             var vObject = v.RealDates;
             $.each(vObject,function(ai,av){
-              reData[reData.length] = [av.Name,new Date(av.sDate+" 8:00"),new Date(av.sDate+" 17:00")];
+              reData[reData.length] = [av.Name,new Date(av.sDate+" 0:00"),new Date(av.sDate+" 23:59")];
 
               if(typeof colorObject[av.Name] == 'undefined'){
                 colorArr[colorArr.length] = (av.ChkType)?"#DA3636":"#2BD834";
@@ -136,6 +136,6 @@
   <body>
     <div id="testChart"></div>
     <div id="testChart2"></div>
-    <div id="testChart3" style="height: 1000px;"></div>
+    <div id="testChart3" style="height: 300px;"></div>
   </body>
 </html>
