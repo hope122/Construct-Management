@@ -1,7 +1,7 @@
 
 var chartData = null;
 //載入折線圖,長條圖
-google.load('visualization', '1.1', {packages: ['corechart','bar']});
+google.load('visualization', '1.1', {packages: ['corechart','bar','timeline']});
 var pageChartObject={};
 
 function createChart(options,processArray){
@@ -134,8 +134,8 @@ function drawChart(options,dataArr) {
     chartOptions = {
         //curveType: 'function',
         legend: { position: 'bottom' },
-        width: "100%",
-        height: 300,
+        //width: "3000",
+        //height: 300,
         pointSize: 4,
         //pointsVisible: true,
         hAxis:{},
@@ -146,6 +146,7 @@ function drawChart(options,dataArr) {
            // startup: true,
             alwaysOutside: true
         },
+        //timeline: { showRowLabels: false },
        // curveType: 'function',
         legend: { position: 'bottom' }
     },
@@ -159,6 +160,10 @@ function drawChart(options,dataArr) {
        chartOptions.legend.position = options.chartsHelp;
     }
 
+    if(typeof options.ganttColor != 'undefined'){
+       chartOptions.colors = options.ganttColor;
+    }
+
     switch(options.drawType){
         case "LineChart":
             chart = new google.visualization.LineChart(drawItemID);
@@ -166,6 +171,10 @@ function drawChart(options,dataArr) {
         case "ColumnChart":
             chart = new google.visualization.ColumnChart(drawItemID);
             chartOptions.isStacked = true;
+        break;
+        case "TimeLine":
+            chart = new google.visualization.Timeline(drawItemID);
+            chartOptions.avoidOverlappingGridLines=false;
         break;
         default:
             chart = new google.visualization.ColumnChart(drawItemID);
