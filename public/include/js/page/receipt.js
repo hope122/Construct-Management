@@ -57,8 +57,9 @@ $(function(){
           if(rs.status){
             //呈現資料
             setView(rs.data);
+            $("#submit").css("visibility","visible");
           }else{
-            //console.log(rs.msg);
+            console.log(rs.msg);
             clearView();
           }
         },
@@ -86,7 +87,7 @@ function createSelection($dataArr,$id){
 }
 
 function setView($dataArr){
-  // console.log($dataArr[0]);
+   console.log($dataArr[0]);
 
   //廠商資料
   $("#su_name").text($dataArr[0].su_name);
@@ -101,8 +102,10 @@ function setView($dataArr){
   $("#voucher").text($dataArr[0].voucher);
   $("#dates").text($dataArr[0].dates);
   $("#datee").text($dataArr[0].datee);
-  $("#amount").text($dataArr[0].amount);
+  $("#price").text($dataArr[0].price);
   $("#pay_date").text($dataArr[0].pay_date);
+
+  setList($dataArr);
 }
 
 function getAddress($dataArr){
@@ -123,4 +126,10 @@ function clearView(){
   $("#datee").text("");
   $("#amount").text("");
   $("#pay_date").text("");
+}
+
+function setList($dataArr){
+  $.each($dataArr,function(i,v){
+    console.log(i,v);
+  });
 }
