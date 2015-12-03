@@ -190,6 +190,20 @@ return array(
 					),
 				),
 			),
+			'receipt' => array(
+				'type'    => 'segment',
+				'options' => array(
+					'route'    => '/receipt[/:action]',
+					'constraints' => array(
+						'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+						'id'     => '[0-9]+',
+					),
+					'defaults' => array(
+						'controller' => 'Application\Controller\receipt',
+						'action'     => 'index',
+					),
+				),
+			),
         ),
     ),
     'service_manager' => array(
@@ -213,6 +227,7 @@ return array(
             'Application\Controller\Logbook' => 'Application\Controller\LogbookController',
             'Application\Controller\EmployeeManage' => 'Application\Controller\EmployeeManageController',
             'Application\Controller\EngineeringManage' => 'Application\Controller\EngineeringManageController',
+            'Application\Controller\receipt' => 'Application\Controller\receiptController',
         ),
     ),
     'view_manager' => array(
