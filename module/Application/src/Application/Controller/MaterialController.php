@@ -80,6 +80,7 @@ class MaterialController extends AbstractActionController
 		$VTs->initialization();
         try{
 		//-----BI開始-----  Application材料申請頁面
+
                 $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\material\\application.html";
                 $html=$VTs->GetHtmlContent($mpath);
 
@@ -130,6 +131,7 @@ class MaterialController extends AbstractActionController
 // //                $apurl='http://127.0.0.1:88';
 
             $ls_petition=$_POST['data'];
+            
                 if($ls_petition==null){
                     $ls='無資料';
                 }else{
