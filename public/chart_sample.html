@@ -15,7 +15,7 @@
           unitTitle:"人次",
           bottomTitle:"工種",
           chartsHelp: "bottom", //top,left,right,bottom; 預設為bottom
-          drawType:"ColumnChart", //drawType 可使用 ColumnChart、LineChart 兩種
+          drawType:"ColumnChart", //drawType 可使用 ColumnChart、LineChart、TimeLine
           resultIndex: "data",//資料回傳的參數索引值
           annotation: true //default是false
         };
@@ -30,19 +30,53 @@
           unitTitle: dataSample.ChartHead.ChartAxisUnit.AxisY,
           //bottomTitle: dataSample.ChartHead.ChartAxisUnit.AxisX,
           chartsHelp: "right", //top,left,right,bottom; 預設為bottom
-          drawType:"LineChart", //drawType 可使用 ColumnChart、LineChart 兩種
+          drawType:"LineChart", //drawType 可使用 ColumnChart、LineChart、TimeLine
           annotation: true //default是false
         };
         var setTitleArr = ["Data",dataSample.ChartLine.PlanLine,dataSample.ChartLine.RealLine];
         var dataArr = processDataSample(setTitleArr,dataSample.ChartContent);
         createChart(options,dataArr);
         //結束第二種
+
+        //甘特圖
+        var dataSample = getGanttChartsDataSample();
+        //console.log(dataSample);
+        var setTitleArr = ["Name","sDate","eDate"];
+        var dataArr = processGanttDataSample(setTitleArr,dataSample.ChartContent);
+        var options = {
+          drawItemID: 'testChart3',
+          //unitTitle: dataSample.ChartHead.ChartAxisUnit.AxisY,
+          //bottomTitle: dataSample.ChartHead.ChartAxisUnit.AxisX,
+          //chartsHelp: "right", //top,left,right,bottom; 預設為bottom
+          drawType:"TimeLine", //drawType 可使用 ColumnChart、LineChart、TimeLine
+          //annotation: true //default是false
+          ganttColor: dataArr.colors//以陣列方式帶入
+        };
+        console.log(dataArr);
+        createChart(options,dataArr.reData);
+        //結束甘特圖
       });
 
       function getChartsDataSample(){
         var chartsData;
         $.ajax({
             url: location.origin+"/charts.text",
+            type: "GET",
+            dataType: "JSON",
+            async: false,
+            success: function(rs){
+                chartsData = rs;
+                //console.log(rs)
+            }
+        });
+        return chartsData;
+      }
+
+      //甘特圖
+      function getGanttChartsDataSample(){
+        var chartsData;
+        $.ajax({
+            url: location.origin+"/gantt.text",
             type: "GET",
             dataType: "JSON",
             async: false,
@@ -63,11 +97,45 @@
         });
         return reData;
       }
+
+      function processGanttDataSample(titleArray,data){
+        var reData = [];
+        reData[0] = titleArray;
+        var colorObject = {},colorArr = [];
+        $.each(data,function(i,v){
+          var vObject = v.PlanDates;
+          $.each(vObject,function(ai,av){
+            reData[reData.length] = [av.Name,new Date(av.sDate+" 8:00"),new Date(av.sDate+" 17:00")];
+            
+            if(typeof colorObject[av.Name] == 'undefined'){
+              colorArr[colorArr.length] = (av.ChkType)?"#DA3636":"#2BD834";
+            }
+            colorObject[av.Name] = true;
+          });
+          if(v.RealDates && typeof v.RealDates!='undefined'){
+            var vObject = v.RealDates;
+            $.each(vObject,function(ai,av){
+              reData[reData.length] = [av.Name,new Date(av.sDate+" 8:00"),new Date(av.sDate+" 17:00")];
+
+              if(typeof colorObject[av.Name] == 'undefined'){
+                colorArr[colorArr.length] = (av.ChkType)?"#DA3636":"#2BD834";
+              }
+              colorObject[av.Name] = true;
+            });
+          }
+          
+        });
+        var totleObject = {};
+        totleObject.reData = reData;
+        totleObject.colors = colorArr;
+        return totleObject;
+      }
       //清除圖片請使用 resetChart(itemID)
     </script>
   </head>
   <body>
     <div id="testChart"></div>
     <div id="testChart2"></div>
+    <div id="testChart3" style="height: 1000px;"></div>
   </body>
 </html>
