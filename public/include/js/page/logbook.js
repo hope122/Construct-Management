@@ -52,7 +52,33 @@ function savecontent(){
        async:false,
        success: function(rs){
           alert("儲存成功");
-          getContent('list','list','div_content','',true);
+          // getContent('list','list','div_content','',true);
+       }
+    });
+  }else{
+      $.ajax({
+       url: configObject.logbookModify,
+       type: "POST",
+       data: $("#cform").serialize(),
+       async:false,
+       success: function(rs){
+          alert("儲存成功");
+          // getContent('list','list','div_content','',true);
+       }
+    });
+  }
+}
+//===============setcontent=========e
+function savelaborsafety(){
+  isnew=$("#isnew").val();
+  if(isnew==1){
+      $.ajax({
+       url: configObject.logbookInsert,
+       type: "POST",
+       data: $("#cform").serialize(),
+       async:false,
+       success: function(rs){
+          alert("儲存成功");
        }
     });
   }else{
@@ -68,7 +94,6 @@ function savecontent(){
     });
   }
 }
-//===============setcontent=========e
 //存檔
 function save(){
     var Today=new Date();
