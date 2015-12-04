@@ -52,13 +52,23 @@
           //annotation: true //default是false
           ganttColor: dataArr.colors//以陣列方式帶入
         };
-        console.log(dataArr);
         createChart(options,dataArr.reData);
         //結束甘特圖
       });
 
       function getChartsDataSample(){
         var chartsData;
+		
+		 $.ajax({
+            url: 'http://211.21.170.18:8080/Construction/wsConstruction.asmx/GetScheduleChart_JSON',
+            type: "GET",
+            dataType: "xml",
+            async: false,
+            success: function(rs){
+                chartsData = $.parseJSON($(rs).find("string").text());
+            }
+        });
+		/*
         $.ajax({
             url: location.origin+"/charts.text",
             type: "GET",
@@ -68,7 +78,7 @@
                 chartsData = rs;
                 //console.log(rs)
             }
-        });
+        });*/
         return chartsData;
       }
 
@@ -76,7 +86,7 @@
       function getGanttChartsDataSample(){
         var chartsData;
         $.ajax({
-            url: 'http://211.21.170.18:8080/Construction/wsConstruction.asmx/GetScheduleChart_JSON',
+            url: 'http://211.21.170.18:8080/Construction/wsConstruction.asmx/GetGanttChart_JSON',
             type: "GET",
             dataType: "xml",
             async: false,
@@ -84,7 +94,7 @@
                 chartsData = $.parseJSON($(rs).find("string").text());
             }
         });
-        console.log(chartsData);
+        //console.log(chartsData);
         return chartsData;
       }
 
@@ -102,7 +112,6 @@
         var reData = [];
         reData[0] = titleArray;
         var colorObject = {},colorArr = [];
-        console.log(data);
         $.each(data,function(i,v){
           var vObject = v.PlanDates;
           $.each(vObject,function(ai,av){
