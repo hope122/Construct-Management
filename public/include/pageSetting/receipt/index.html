@@ -62,11 +62,21 @@
 						<div id="content" class="12u 12u(mobile)">
 							<!-- Post -->
 							<article class="box post">
-								<div>選擇廠商：<label id="supplySelection"></label></div>
-								<div id="companyTitle">@@companyTitle@@</div>
-								<div id="supplyInfo">@@supplyInfo@@</div>
-								<div id="paymentDetial">@@paymentDetial@@</div>
-								<div><input type="button" id="submit" style="visibility:hidden" value="確認" onclick="checkSubmit();"></div>
+									<div>
+										選擇廠商：<label id="supplySelection"></label>
+										<input type="button" id="submit" style="visibility:hidden" value="確認" onclick="checkSubmit();">
+									</div>
+									<!-- <div id="payment" style="display:none"> -->
+									
+									<div id="receipt" style="display: none">
+
+										<table id="payment">
+											<tr>@@companyTitle@@</tr>
+											<tr>@@supplyInfo@@</tr>
+											<tr>@@paymentDetial@@</tr>
+										</table>
+										
+									</div>
 							</article>
 						</div>
 					</div>
