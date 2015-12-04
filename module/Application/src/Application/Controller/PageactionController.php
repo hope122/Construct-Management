@@ -199,5 +199,32 @@ class PageactionController extends AbstractActionController
 			$VTs->WriteLog("PageactionController", "CreatOtherMenuContent", $error->getMessage());
 		}
 	}
+
+	public function getlogoAction(){
+		$VTs = new clsSystem;
+        $VTs->initialization();
+        try{
+        //-----BI開始-----
+	        $action = array();
+	        $action["status"] = false;
+	        if(!empty($_SESSION["uuid"]) and !empty($_SESSION["userName"])){
+	        	$logoPath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\styles\\logo\\logoContent.html";
+				$logoStyle = $VTs->GetHtmlContent($logoPath);
+				
+	            $action["logoString"] = $logoStyle;
+	            $action["status"] = true;
+	        }else{
+	            $action["msg"] = 'Please Login Again!';
+	        }
+	        $pageContent = $VTs->Data2Json($action);
+        //-----BI結束-----
+	    }catch(Exception $error){
+			//依據Controller, Action補上對應位置, $error->getMessage()為固定部份
+			$VTs->WriteLog("PageactionController", "acinfoAction", $error->getMessage());
+		}
+        $VTs = null;
+        $this->viewContnet['pageContent'] = $pageContent;
+        return new ViewModel($this->viewContnet);
+	}
 	
 }
