@@ -2,6 +2,7 @@ var redirect_url;
 var login_code;
 
 $(function(){
+  setLogoString();
 	//console.log(GetParameters);
 	if(typeof GetParameters["redirect_url"] !== "undefined"){
 		redirect_url = GetParameters["redirect_url"];
@@ -46,14 +47,28 @@ function logoutEven(){
 }
 
 function getPageContents(){
-    $.ajax({
-        url: 'menter/logout',
-        type:"POST",
-        async: false,
-        success: function(rs){
-            location.href = './';
+  $.ajax({
+      url: 'menter/logout',
+      type:"POST",
+      async: false,
+      success: function(rs){
+          location.href = './';
+      }
+  });
+}
+
+function setLogoString(){
+  $.ajax({
+      url: 'pageaction/getlogo',
+      type:"POST",
+      async: true,
+      dataType: "JSON",
+      success: function(rs){
+        if(rs.status){
+          $("#logo").html(rs.logoString);
         }
-    });
+      }
+  });
 }
 
 var GetParameters = function () {

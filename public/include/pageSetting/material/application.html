@@ -1,5 +1,5 @@
-<button onclick="javascript:getContent('list','list','div_content','');">清單列表</button>
-<div id='info'></div>
+<button onclick="javascript:getContent('list','list','div_content','',true);">清單列表</button>
+
 <div class='css_table' align='center' style='margin: 0px auto;'>
 <input type='hidden' class='cls_inp' id='prj_mid'>
 <input type='hidden' class='cls_inp' id='identity' value='3'>
@@ -8,7 +8,7 @@
      <div class="css_td">廠商</div>
       <div class="css_td">數量</div>
       <div class="css_td">剩餘數量</div>
-      <div class="css_td">日期</div>
+      <div class="css_td">進場日期</div>
       <div class="css_td">放置地點</div>
       
   </div>
@@ -16,8 +16,8 @@
       <div class="css_td" > <select id='inp_prjuid' class='cls_inp'><option value=0>請選擇</option>@@opt_prjuid@@</select></div>
       <div class="css_td" > <select id='inp_supply' class='cls_inp'><option value=0>請選擇</option>@@opt_supply@@</select></div>
       <div class="css_td" ><input id='inp_quantity' class='cls_inp'></div>
-      <div class="css_td" ><input id='inp_lcount'  readonly value=0></div>
-      <div class="css_td" ><input id='inp_date' class='cls_inp'></div>
+      <div class="css_td" ><input id='inp_lcount'  readonly value=0><input type='hidden' id='hid_lcount'></div>
+      <div class="css_td" ><input id='inp_date' class='cls_inp qc_date'></div>
       <div class="css_td" ><input id='inp_place' class='cls_inp'></div>
   </div>
   <a href="javascript:clear();">清除搜尋</a>
@@ -27,6 +27,7 @@
 <input type='button' id='send' onclick='chkinp();' value='送出'>
 </div>
 <hr>
+<div id='info'></div>
 <div class='css_bable'  align='center' style='margin: 0px auto;'>
 <div id="list" class="css_tr" >
 </div>

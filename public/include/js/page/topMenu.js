@@ -7,6 +7,7 @@ getMenu.prototype = {
     MenuContent: function () {
         var menuStyle = useGetAjax(configObject.menuProcess,this.menu);
         $("#menus").html(menuStyle.menu);
+        getLan();
         //處理連結問題
         $("a").click(function(){
             var thisHref = $(this).attr("href");

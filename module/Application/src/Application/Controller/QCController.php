@@ -119,7 +119,7 @@ class QCController extends AbstractActionController
 
                 $imginfo = $VTs->json2data($VTs->UrlDataPost("http://211.21.170.18:99/pageaction/getqcimglist",$arrin));
                 if($imginfo->status){
-
+                    $trs=str_replace('@@chkdate@@',$list['datec'],$trs);
                      $trs=str_replace('@@d64@@',$imginfo->imgs->img0,$trs);
                     $info = $VTs->json2data($VTs->UrlDataGet($apurl."/qc/getdbdata?type=photoinfo&uid=".$list['dataid']));
                     $trs=str_replace('@@remark@@',$list['remark'],$trs);
