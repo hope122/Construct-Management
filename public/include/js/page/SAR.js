@@ -22,7 +22,13 @@ function submitCheck(){
 								//塞入資料
 								$("#name").text(rs.sar.name);
 								$("#sex").text(rs.sar.sex);
-								$("#birthday").text(rs.sar.birthday.substring(0,4));
+								// $("#birthday").text(rs.sar.birthday.substring(0,4));
+								
+								//計算年齡
+								var dateObj = new Date();
+								var $age = dateObj.getFullYear() - parseInt(rs.sar.birthday.substring(0,4));
+								$("#age").text($age);
+								
 								$("#type").text(rs.sar.work_name);
 								$("#supply").text(rs.sar.su_name);
 								
