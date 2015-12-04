@@ -1,15 +1,15 @@
 $(function(){
 
   ptype=$('#inp_ptype').val();
-  getContent(ptype,ptype,'div_content','');
+  getContent(ptype,ptype,'div_content','',true);
     // getlist();
 });
 
-function getContent(ptype,purl,divid,parameter){
- 
+function getContent(ptype,purl,divid,parameter,reset){
+  console.log(configObject.MaterialGetData+"?type="+ptype+parameter);
     $.get(configObject.MaterialGetData+"?type="+ptype+parameter, function( data ) {
  
-      console.log(data);
+      
       //丟資料toCM回傳html內容
       $.ajax({
        url: "/material/"+purl,
@@ -19,20 +19,23 @@ function getContent(ptype,purl,divid,parameter){
        success: function(rs){
         $("#"+divid).empty();
         $("#"+divid).append(rs);
-        setBtn();
+        if(reset){
+          setBtn();
+        }
        }
     });
   });
 }
-//===============application======s
+
 function setBtn(){
+  //===============application======s
   $("#inp_prjuid").change(function() {
         
         var muid=$(this).val();
         var suid=$("#inp_supply").val();
 
         if(suid==0){
-            getContent('getsupply','getselect','inp_supply','&muid='+muid);
+            getContent('getsupply','getselect','inp_supply','&muid='+muid,false);
         }else{
           $("#inp_supply").prop('disabled', 'disabled');
          $.get(configObject.MaterialGetData+"?type=lcount&suid="+suid+"&muid="+muid, function( r ) {
@@ -42,20 +45,26 @@ function setBtn(){
           });
         }
     });
-  
+    $("#inp_quantity").change(function(){
+        var  sum;
+        sum=$("#hid_lcount").val()-$(this).val();
+        $("#inp_lcount").val(sum);
+
+    });
     $("#inp_supply").change(function() {
         // $(this).prop('disabled', 'disabled');
         var muid=$("#inp_prjuid").val();
         var suid=$(this).val();
-        getContent('getsuinfo','getsuinfo','info','&suid='+suid);
+        getContent('getsuinfo','getsuinfo','info','&suid='+suid,false);
         if(muid==0){
-            getContent('getmaterial','getselect','inp_prjuid','&suid='+suid);
+            getContent('getmaterial','getselect','inp_prjuid','&suid='+suid,false);
 
         }else{
           $("#inp_prjuid").prop('disabled', 'disabled');
          $.get(configObject.MaterialGetData+"?type=lcount&suid="+suid+"&muid="+muid, function( r ) {
             r=JSON.parse(r);
             $("#inp_lcount").val(r['lcount']);
+            $("#hid_lcount").val(r['lcount']);
             $("#prj_mid").val(r['uid']);
           });
         }
@@ -63,10 +72,42 @@ function setBtn(){
     $("#inp_date").datepicker({
         dateFormat: 'yy-mm-dd'
     });
+    //===============application======e
+
+ 
+    //===============list======s
+   $(".jq_date").datepicker({
+        dateFormat: 'yy-mm-dd'
+    });
+   getContent('malist','getselect','inp_mname','',false);
+    // $("#btn_findlist").click(function(){
+
+    //     maname=$("#inp_mname").val();
+    //     sdate=$("#inp_stime").val();
+    //     edate= $("#inp_etime").val();
+    //     if(Date.parse(sdate)>Date.parse(edate)){
+    //       alert('起始時間不得大於結束時間');
+    //     }
+    //     if(sdate!='' && edate!='' || maname!=0 ){
+    //       getContent('list','list','div_content',"&sdate='"+sdate+"'&edate='"+edate+"'&maname="+maname,'false');
+    //     }else{
+    //       alert("請輸入搜尋條件");
+    //     }
+    // });
+    $("#inp_mname").change(function(){
+      muid=$(this).val();
+      if(!muid==0){
+        getContent('list','list','div_content',"&maname="+muid,'true');
+      }
+    });
+    //===============list======e
+
 }
 
+
+  //===============application======s
 function clear(){
-  getContent('application','application','div_content','');
+  getContent('application','application','div_content','',true);
 }
 function chkinp(){
     var chk=true;
@@ -169,3 +210,6 @@ function send_qclist(arr){
 
 }
 //===============application======e
+
+//===============list======s
+//===============list======e

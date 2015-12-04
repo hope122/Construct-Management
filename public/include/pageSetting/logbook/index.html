@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="../include/css/jquery-ui.min.css" />
 		<!--[if lte IE 8]><link rel="stylesheet" href="../include/strongly/assets/css/ie8.css" /><![endif]-->
 		<!-- Scripts -->
-		<script src="../include/strongly/assets/js/jquery.min.js"></script>
+		<script src="../include/js/jquery/jquery.min.js"></script>
         <script src="../include/js/jquery/jquery-ui.min.js"></script>
 		<script src="../include/strongly/assets/js/jquery.dropotron.min.js"></script>
 		<script src="../include/strongly/assets/js/skel.min.js"></script>
@@ -22,20 +22,46 @@
         <script src="../include/js/page/check_login.js"></script>
         <script src="../include/js/page/topMenu.js"></script>
 		<script src="../include/strongly/assets/js/main.js"></script>
-	    <script src="/include/js/jquery/jquery.PrintArea.js"></script>
-	    <script src="/include/js/page/logbook.js"></script>
+	    <script src="../include/js/page/logbook.js"></script>
+	    <script src="../include/js/config/config.js"></script>
+	    <script src="../include/js/socket/socket.io.js"></script>
+	    <script src="../include/js/socket/conn.js"></script>
+	    <script src="../include/js/toastmessage/jquery.toastmessage.js"></script>
+	    <script src="../include/js/notice/notice.js"></script>
+	    <link rel="stylesheet" href="../include/css/jquery.toastmessage.css">
+	    <link rel="stylesheet" href="../include/css/jquery-ui.min.css">
         <script>
             $(function(){
               getLan();
             });
         </script>
-		<style type="text/css">
+
+	    <style type="text/css">
+	    fieldset {
+	padding:10px;
+	margin:10px;
+
+	border:#06c dashed 1px;
+} 
+
+	        .css_table {
+	      		display:table;
+	        }
+	        .css_tr {
+	            display: table-row;
+	        }
+	        .css_td {
+	            display: table-cell;
+	            margin:auto 5px auto 5px;
+	        }
+
 			  th, td{
 				border:1px #cccccc solid ;
 				vertical-align:middle;
-			},
+			}
 		
-		</style>
+		
+	    </style>
 	</head>
 	<body class="homepage">
 		<div id="page-wrapper">
@@ -45,9 +71,7 @@
 					<div id="header" class="container">
 
 						<!-- Logo -->
-							<h1 id="logo"><a href="./">建築物雲端全生命週期履歷平台</a></h1>
-                            <p>施工階段模組</p>
-
+							<h1 id="logo"><a href="./">建築物施工管理雲端系統</a></h1>
 						<!-- Nav -->
 							<nav id="nav">
 								<div style="float:right;">
@@ -73,14 +97,12 @@
 
 									<!-- Post -->
 										<article class="box post">
-										    <div align='left'>
-											    <input align='center' onclick='print();' type='button' value='列印'>
-											    <input align='center' onclick='save();' type='button' value='存檔'>
-											</div>
-											<div id='div_print'>
+											<div align='center'><b><span>@@title@@</span></b></div><br>
+											<input id='inp_ptype' type='hidden' value='@@ptype@@'>
+											<input id='inp_purl' type='hidden' value='@@ptype@@'>
+											<div id='div_content'>
 											</div>
 										</article>
-
 								</div>
 
 						</div>
