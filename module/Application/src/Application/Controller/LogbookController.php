@@ -40,6 +40,10 @@ class LogbookController extends AbstractActionController
                     break;
                 case 'setcontents':
                     $title='內容設定';
+                    break;
+                case 'laborsafety':
+                    $title="勞安設定";
+                    break;
                 default:
                     $title='日誌清單';
                     break;
@@ -151,13 +155,32 @@ class LogbookController extends AbstractActionController
                 "end"=>$project["end"],
             ];
             $html=$VTs->ContentReplace($arrdata,$html);
-
+            //進度
+            $project=$data["schedule"];
+            if(!empty($project['price_tbp'])){
+                $arrdata['tbp']=$project['price_tbp']."%";
+            }else{
+                $arrdata['tbp']='';
+            }
+            if(!empty($project['price_twp'])){
+                $arrdata['twp']=$project['price_twp']."%";
+            }else{
+                $arrdata['twp']='';
+            }
             //進度管理tr1
             $trpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\tr1.html";
             $trhtml=$VTs->GetHtmlContent($trpath);
-            // $materielcount=$data["materielcount"];
+            $arr_construction=$data["construction"];
             $strhtml1='';
-            if(!empty($materielcount) ){
+            if(!empty($arr_construction) ){
+                foreach($arr_construction as $construction){
+                    $tr=$trhtml;
+                    $tr=str_replace("@@name@@",$construction["n1"],$tr);
+                    $tr=str_replace("@@unit@@",$construction["unit1"],$tr);
+                    $tr=str_replace("@@pcount@@",$construction["qty_work"],$tr);
+                    $tr=str_replace("@@fcount@@",$construction["qty_budget"],$tr);
+                    $strhtml1.=$tr;
+                }     
             }
             $arrdata["tr1"]=$strhtml1;
             $html=$VTs->ContentReplace($arrdata,$html);
@@ -200,12 +223,12 @@ class LogbookController extends AbstractActionController
             $html=$VTs->ContentReplace($arrdata,$html);
 
              //日誌內容content
-             $content= $data["content"];
+             $content= $data["fifth"];
             $arrdata = [
-                "fourth"=>$content["fifth"],
-                "fifth"=>$content["sixth"],
-                "sixth"=>$content["seventh"],
-                "seventh"=>$content["eighth"],
+                "fifth"=>'',
+                "seventh"=>'',
+                "fourth"=>$data["fifth"],
+                "sixth"=>$data["seventh"],
             ];
             $html=$VTs->ContentReplace($arrdata,$html);
         $pageContent=$html;
@@ -238,12 +261,6 @@ class LogbookController extends AbstractActionController
             $weekarray=array("日","一","二","三","四","五","六");
             $arrdata = [
                 "no"=>'',
-                "four_y"=>'',
-                "four_n"=>'',
-                "fifth"=>'',
-                "sixth"=>'',
-                "seventh"=>'',
-                "eighth"=>'',
                 "today"=>date("Y")."-".date("m")."-".date("d"),
                 "isnew"=>1,
                 "week"=>$weekarray[date("w")],
@@ -263,21 +280,11 @@ class LogbookController extends AbstractActionController
             $weekarray=array("日","一","二","三","四","五","六");
             $arrdata = [
                 "no"=>'',
-                "fifth"=>$content['fifth'],
-                "sixth"=>$content['sixth'],
-                "seventh"=>$content['seventh'],
-                "eighth"=>$content['eighth'],
                 "today"=>$content['date'],
                 "isnew"=>0,
                 "week"=>$content['week'],
             ];
-            if($content['fourth']==1){
-                $arrdata['fourth_y']='checked';
-                $arrdata['fourth_n']='';
-            }else{
-                $arrdata['fourth_y']='';
-                $arrdata['fourth_n']='checked';
-            }
+
         //取得天氣列表
             $arr_weather=$data['weather'];
                         
@@ -319,27 +326,61 @@ class LogbookController extends AbstractActionController
 		$this->viewContnet['pageContent'] = $pageContent;
         return new ViewModel($this->viewContnet);
     }
-    public function savecontentAction()
+    public function laborsafetyAction()
     {
         //session_start();
         $VTs = new clsSystem;
         $VTs->initialization();
+        
+        //-----BI開始-----  
         try{
-        //-----BI開始-----  get prjuid 傳入廠商ＩＤ 回傳品項html option內容
-        //取得主頁html
-        print_r($_POST);
-        exit;
 
-        
-        
-            //印出html
-            $pageContent='';
+
+            $html_path=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\laborsafety.html";
+            $html=$VTs->GetHtmlContent($html_path);
+            $laborsafety=$_POST['data'];
+            if(empty($laborsafety)){
+                $arrdata = [
+                    "isnew"=>1,
+                    "fifth"=>'',
+                    "seventh"=>'',
+ 
+                ];
+            }else{
+                $arrdata['isnew']=0;
+                if(!empty($laborsafety['fifth'])){
+                    $arrdata['fifth']=$laborsafety['fifth']['contents'];
+                }else{
+                    $arrdata['fifth']='';
+                }
+                if(!empty($laborsafety['seventh'])){
+                    $arrdata['seventh']=$laborsafety['seventh']['contents'];
+                }else{
+                    $arrdata['seventh']='';
+                }
+
+            }
+
+            $html=$VTs->ContentReplace($arrdata,$html);
+            // foreach($arr_data as  $data) {
+            //      $trs=$tr;
+            //     $trs=str_replace('@@no@@',$data['no'],$trs);
+            //     $trs=str_replace('@@date@@',$data['date'],$trs);
+            //     $trs=str_replace('@@uid@@',$data['uid'],$trs);
+            //     $trstr.=$trs;
+
+            // }
+            // $html=str_replace('@@tr@@',$trstr,$html);
+            
+                
+            $pageContent=$html;
         //-----BI結束-----
         }catch(Exception $error){
             //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
             $VTs->WriteLog("IndexController", "indexAction", $error->getMessage());
         }
-         //關閉資料庫連線  //       $VTs->DBClose();
+         //關閉資料庫連線
+        $VTs->DBClose();
         //釋放
         $VTs = null;
         $this->viewContnet['pageContent'] = $pageContent;
