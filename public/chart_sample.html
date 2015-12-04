@@ -76,15 +76,15 @@
       function getGanttChartsDataSample(){
         var chartsData;
         $.ajax({
-            url: location.origin+"/gantt.text",
+            url: 'http://211.21.170.18:8080/Construction/wsConstruction.asmx/GetScheduleChart_JSON',
             type: "GET",
-            dataType: "JSON",
+            dataType: "xml",
             async: false,
             success: function(rs){
-                chartsData = rs;
-                //console.log(rs)
+                chartsData = $.parseJSON($(rs).find("string").text());
             }
         });
+        console.log(chartsData);
         return chartsData;
       }
 
@@ -102,6 +102,7 @@
         var reData = [];
         reData[0] = titleArray;
         var colorObject = {},colorArr = [];
+        console.log(data);
         $.each(data,function(i,v){
           var vObject = v.PlanDates;
           $.each(vObject,function(ai,av){
