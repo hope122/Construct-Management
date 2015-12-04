@@ -61,7 +61,7 @@ function setLogoString(){
   $.ajax({
       url: 'pageaction/getlogo',
       type:"POST",
-      async: false,
+      async: true,
       dataType: "JSON",
       success: function(rs){
         if(rs.status){
