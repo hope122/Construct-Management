@@ -30,6 +30,31 @@
             	getLan();
             });
         </script>
+        <style>
+        	fieldset {
+				padding:10px;
+				margin:10px;
+
+				border:#06c dashed 1px;
+			} 
+
+	        .css_table {
+	      		display:table;
+	        }
+	        .css_tr {
+	            display: table-row;
+	        }
+	        .css_td {
+	            display: table-cell;
+	            margin:auto 5px auto 5px;
+	        }
+
+			  th, td{
+				border:1px #cccccc solid ;
+				vertical-align:middle;
+			}
+		
+        </style>
 	</head>
 	<body class="homepage">
 		<div id="page-wrapper">
@@ -70,7 +95,7 @@
 									
 									<div id="receipt" style="display: none">
 
-										<table id="payment">
+										<table id="payment" class='border' align='center'  rules="all" cellpadding='10'>
 											<tr>@@companyTitle@@</tr>
 											<tr>@@supplyInfo@@</tr>
 											<tr>@@paymentDetial@@</tr>
