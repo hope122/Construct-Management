@@ -87,6 +87,7 @@ class MaterialController extends AbstractActionController
                 $data = $_POST['data'];
             
                 $str='';
+                 $html=str_replace('@@uuid@@',$_SESSION['uuid'],$html);
                 if($data['su_supply']==null){
                      $html=str_replace('@@opt_supply@@','',$html);
                 }else{
@@ -131,7 +132,15 @@ class MaterialController extends AbstractActionController
 // //                $apurl='http://127.0.0.1:88';
 
             $ls_petition=$_POST['data'];
-            
+            //權限判別
+            $position= $_SESSION['position'];
+
+            $position='2502';
+            if($position=='2502' || $position=='3502'){
+                $div_hid='';
+            }else{
+                $div_hid='none';
+            }
                 if($ls_petition==null){
                     $ls='無資料';
                 }else{
@@ -188,6 +197,7 @@ class MaterialController extends AbstractActionController
                     $ls=str_replace('@@tr@@',$trstr,$ls);
                     
                 }
+                $ls=str_replace('@@ishid@@',$div_hid,$ls);
 //                $html=str_replace('@@list@@',$ls,$html);
             //印出html
             $pageContent=$ls;

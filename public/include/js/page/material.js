@@ -1,12 +1,11 @@
 $(function(){
-
   ptype=$('#inp_ptype').val();
   getContent(ptype,ptype,'div_content','',true);
     // getlist();
 });
 
 function getContent(ptype,purl,divid,parameter,reset){
-  console.log(configObject.MaterialGetData+"?type="+ptype+parameter);
+  // console.log(configObject.MaterialGetData+"?type="+ptype+parameter);
     $.get(configObject.MaterialGetData+"?type="+ptype+parameter, function( data ) {
  
       
@@ -41,6 +40,7 @@ function setBtn(){
          $.get(configObject.MaterialGetData+"?type=lcount&suid="+suid+"&muid="+muid, function( r ) {
             r=JSON.parse(r);
             $("#inp_lcount").val(r['lcount']);
+            $("#hid_lcount").val(r['lcount']);
             $("#prj_mid").val(r['uid']);
           });
         }
