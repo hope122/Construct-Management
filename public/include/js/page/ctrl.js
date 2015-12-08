@@ -28,7 +28,7 @@ function redirectPage(result){
 	if(result.status){
         $.post(configObject.processLoginUrl,result,function(rs){
            //console.log(rs);
-           location.href = "./";
+           location.href = location.origin;
         });
 	}else{
 		alert(result.error);
@@ -37,29 +37,18 @@ function redirectPage(result){
 
 function logoutEven(){
 	$.ajax({
-		url: 'menter/logout',
+		url: configObject.Logout,
 		type:"POST",
 		async: false,
 		success: function(rs){
-			location.href = './';
+			location.href = location.origin;
 		}
 	});
 }
 
-function getPageContents(){
-  $.ajax({
-      url: 'menter/logout',
-      type:"POST",
-      async: false,
-      success: function(rs){
-          location.href = './';
-      }
-  });
-}
-
 function setLogoString(){
   $.ajax({
-      url: 'pageaction/getlogo',
+      url: configObject.GetLogo,
       type:"POST",
       async: true,
       dataType: "JSON",
