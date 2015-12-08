@@ -30,6 +30,32 @@
             	getLan();
             });
         </script>
+        <style>
+        	fieldset {
+				padding:10px;
+				margin:10px;
+
+				border:#06c dashed 1px;
+			} 
+
+	        .css_table {
+	      		display:table;
+	        }
+	        .css_tr {
+	            display: table-row;
+	        }
+	        .css_td {
+	            display: table-cell;
+	            margin:auto 5px auto 5px;
+	        }
+
+			th, td{
+				border:1px #cccccc solid ;
+				vertical-align:middle;
+				text-align: center;
+			}
+		
+        </style>
 	</head>
 	<body class="homepage">
 		<div id="page-wrapper">
@@ -62,21 +88,27 @@
 						<div id="content" class="12u 12u(mobile)">
 							<!-- Post -->
 							<article class="box post">
-									<div>
-										選擇廠商：<label id="supplySelection"></label>
-										<input type="button" id="submit" style="visibility:hidden" value="確認" onclick="checkSubmit();">
-									</div>
-									<!-- <div id="payment" style="display:none"> -->
+								<div>
+									選擇廠商：<label id="supplySelection"></label>
+								</div>
+								<div id="option" style="visibility:hidden" >
+									付款日期：<input type="text" id="date_pay" placeholder="請輸入付款日期" value="">
+									<input type="button" id="detialList" value="項目明細" onclick="showDetial();">
+									<input type="button" id="submit" value="確認" onclick="checkSubmit();">
+									<input type="hidden" id="prjid_su" value="">
+								</div>
 									
-									<div id="receipt" style="display: none">
+								<div id="receipt" style="display: none">
+									<table id="payment" class='border' align='center'  rules="all" cellpadding='10'>
+										<tr>@@companyTitle@@</tr>
+										<tr>@@supplyInfo@@</tr>
+										<tr>@@paymentDetial@@</tr>
+									</table>	
+								</div>
 
-										<table id="payment">
-											<tr>@@companyTitle@@</tr>
-											<tr>@@supplyInfo@@</tr>
-											<tr>@@paymentDetial@@</tr>
-										</table>
-										
-									</div>
+								<div style="display: none;">
+									@@detialList@@
+								</div>
 							</article>
 						</div>
 					</div>
@@ -85,8 +117,7 @@
 
 			<!-- Footer -->
 			<div id="footer-wrapper">
-				<div id="footer" class="container">
-				</div>
+				<div id="footer" class="container"></div>
 				<div id="copyright" class="container">
 					<ul class="links">
 						<li>&copy; Untitled. All rights reserved.</li><li>Design: HTML5 UP  </li>

@@ -29,6 +29,8 @@ var configObject = {
 	"empInsertData": apurl+"/employeemanage/insertdata", 
 	"empUpdateData": apurl+"/employeemanage/updatedata",
     "ReceiptGetData": apurl+"/receipt/getdata",
+    "ReceiptDetialList": originUrl+"receipt/detial",
+    "ReceiptInsertData": apurl+"/receipt/insertdata",
     "GetLogo": originUrl+"pageaction/getlogo",
     "Logout": originUrl+"menter/logout",
 };

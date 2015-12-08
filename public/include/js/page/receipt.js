@@ -45,7 +45,11 @@ $(function(){
 
   //顯示相關資料
   $("#supply").change(function(){
-    //console.log($(this).val());
+    // console.log($(this).val());
+    //清除舊資料
+    clearView();
+
+    //塞入新資料
     if($(this).val()!=0){
       $.ajax({
         url: configObject.ReceiptGetData,
@@ -54,11 +58,10 @@ $(function(){
         dataType: "JSON",
         success:
           function(rs){
-            console.log(rs.data.price[0].price);
+            // console.log(rs.data.price[0].price);
             if(rs.status){
               //呈現資料
-              setView(rs.data);
-              
+              setView(rs.data);    
             }else{
               console.log(rs.msg);
               clearView();
@@ -72,8 +75,20 @@ $(function(){
     }else{
       clearView();
       $("#receipt").hide();
+      $("#option").css("visibility","hidden");
     }
   });
+
+  //設定付款日期
+  $("#date_pay").datepicker({
+    dateFormat: 'yy/mm/dd'
+  });
+  var $date = new Date();
+  var dateString = $date.getFullYear() + "/" + 
+                   ($date.getMonth()<10?("0"+($date.getMonth()+1)):($date.getMonth()+1)) + "/" + 
+                   ($date.getDate()<10?("0"+($date.getDate()+1)):($date.getDate()+1));
+  $("#date_pay").val(dateString);
+
 });
 
 function createSelection($dataArr,$id){
@@ -93,24 +108,23 @@ function createSelection($dataArr,$id){
 
 function setView($dataArr){
   //console.log($dataArr);
-  if(!$.isEmptyObject($dataArr.supplyInfo) && !$.isEmptyObject($dataArr.dateRange) && !$.isEmptyObject($dataArr.price) && !$.isEmptyObject($dataArr.detial)){
+  if(!$.isEmptyObject($dataArr.supplyInfo) && !$.isEmptyObject($dataArr.dateRange[0]) && !$.isEmptyObject($dataArr.price[0])){
     //廠商資料  
     setSupplyInfo($dataArr.supplyInfo);
 
     //付款資料
     setPaymentData($dataArr.dateRange[0], $dataArr.price[0]);
 
-    //明細資料
-    setList($dataArr.detial);
-
+    //顯示資訊
     $("#receipt").show();
-    $("#submit").css("visibility","visible");
+    $("#option").css("visibility","visible");
   }else{
     //清除資料
     clearView();
-    $("#receipt").hide();
-    $("#submit").css("visibility","hidden");
 
+    //隱藏表格
+    $("#receipt").hide();
+    $("#option").css("visibility","hidden");
     alert("無資料");
   }
 }
@@ -140,33 +154,12 @@ function clearView(){
   $("#addr").text("");
   $("#tel_o").text("");
   $("#mobile").text("");
+  $("#prjid_su").text("");
 
   //付款資料
   $("#dates").text("");
   $("#datee").text("");
-  $("#price").text("");
-
-  //明細
-  $("tr[name='newTr']").remove();
-}
-
-function setList($dataArr){
-  //console.log($dataArr);
-  if(!$.isEmptyObject($dataArr)){
-    $.each($dataArr,function(i,v){
-      //console.log(i,v);
-      var $tr = $("<tr/>").attr("name","newTr");
-      $("<td/>").attr("width","16%").text(v.n1).appendTo($tr);
-      $("<td/>").attr("width","16%").text(v.n2).appendTo($tr);
-      $("<td/>").attr("width","16%").text(v.n3).appendTo($tr);
-      $("<td/>").attr("width","16%").text(v.n4).appendTo($tr);
-      $("<td/>").attr("width","16%").text(v.qty).appendTo($tr);
-      $("<td/>").attr("width","16%").text(v.unit1).appendTo($tr);
-      $tr.appendTo($("#payment"));
-    });
-  }else{
-    $("tr[name='newTr']").remove();
-  }
+  $("#price").text(""); 
 }
 
 function setSupplyInfo($dataArr){
@@ -177,6 +170,7 @@ function setSupplyInfo($dataArr){
       }
     });
   }
+  $("#prjid_su").val($dataArr[0].prjid_su);
 }
 
 function setPaymentData($dateRange, $price){
@@ -206,4 +200,93 @@ function parsePrice($price){
   }
 
   return str;
+}
+
+function showDetial(){
+  //取消點擊
+  $("#detialList").attr('disabled','disabled');
+
+  $.ajax({
+      url: configObject.ReceiptGetData,
+      type: "POST",
+      data: { type: "detialList", suid: $("#supply").val() },
+      dataType: "JSON",
+      async: false,
+      success:
+        function(rs){
+          if(rs.status){
+            // console.log(rs.data);
+            if(!$.isEmptyObject(rs.data)){
+                $.each(rs.data,function(i,v){
+                  //console.log(i,v);
+                  var $tr = $("<tr/>").attr("name","newTr");
+                  $("<td/>").text(v.n1).appendTo($tr);
+                  $("<td/>").text(v.n2).appendTo($tr);
+                  $("<td/>").text(v.n3).appendTo($tr);
+                  $("<td/>").text(v.n4).appendTo($tr);
+                  $("<td/>").text(v.qty).appendTo($tr);
+                  $("<td/>").text(v.unit1).appendTo($tr);
+                  $tr.appendTo($("#detial_list"));
+                });
+              }
+          }else{
+            var $tr = $("<tr/>").attr("name","newTr").appendTo("#detial_list");
+            $("<td/>").attr("colspan","6")
+                  .css("text-align","center")
+                  .text("無資料")
+                  .appendTo($tr);
+            console.log("msg",rs.msg);
+          }
+        },
+      error:
+        function(e){
+          console.log(e);
+        }
+    });
+  $("#detial_list").dialog({
+    height: '100%',
+    width: '450',
+    position: { my: "center", at: "center", of: window },
+    beforeClose: function(e,ui){
+        //移除資料
+        $("tr[name=newTr]").remove();
+        //恢復點擊
+        $("#detialList").removeAttr('disabled');
+      }
+  });
+}
+
+function checkSubmit(){
+  var $dates, $datee, $amount, $prjid_su, $suid;
+  $dates = $("#dates").text();
+  $datee = $("#datee").text();
+  $amount = $("#price").text();
+  $amount = $amount.replace(",","");
+  $prjid_su = $("#prjid_su").val();
+  $suid = $("#supply").val();
+  $date_pay = $("#date_pay").val();
+  // console.log("dates:",$dates,"datee:",$datee,"amount:",$amount,"prjid_su:",$prjid_su,"suid:",$suid,"date_pay:",$date_pay);
+
+  $.ajax({
+    url: configObject.ReceiptInsertData,
+    type: "POST",
+    data: { 
+            dates: $dates, 
+            datee: $datee,
+            amount: $amount,
+            prjid_su: $prjid_su,
+            suid: $suid,
+            date_pay: $date_pay
+          },
+    dataType: "JSON",
+    async: false,
+    success:
+      function(rs){
+        // console.log(rs);
+     },
+    error:
+      function(e){
+        console.log(e);
+      }
+  });
 }

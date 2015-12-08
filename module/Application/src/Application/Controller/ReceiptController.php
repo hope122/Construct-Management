@@ -36,13 +36,17 @@ class ReceiptController extends AbstractActionController
 				
 				$paymentDetialPath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\receipt\\paymentDetial.html";
 				$paymentDetial = $VTs->GetHtmlContent($paymentDetialPath);
+
+				$detialListPath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\receipt\\detialList.html";
+				$detialList = $VTs->GetHtmlContent($detialListPath);
 				
 				//一個索引與內容等同一個 >> str_replace("@@userName@@",$_SESSION["userName"],$pageContent);
 				$dataArr = [
 					"userName"=>$_SESSION["userName"],
 					"companyTitle"=>$companyTitle,
 					"supplyInfo"=>$supplyInfo,
-					"paymentDetial"=>$paymentDetial
+					"paymentDetial"=>$paymentDetial,
+					"detialList"=>$detialList
 				];
 
 				//內容取代
