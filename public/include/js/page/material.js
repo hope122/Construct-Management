@@ -212,4 +212,23 @@ function send_qclist(arr){
 //===============application======e
 
 //===============list======s
+function showinfo(){
+    var data='<b>你好</b><br>測試';
+   $('#dialog').html("<iframe width='100%' height='100%' frameborder='0' scrolling='no' src='/material/chkinfo?uid=1'></iframe>" );
+
+
+    $('#dialog').css({display:'inline'});
+
+    $("#dialog").dialog({
+        title: '資料',
+        bgiframe: true,
+        width: '50%',
+        height: '50%',
+        modal: true,
+        draggable: true,
+        resizable: false,
+        overlay:{opacity: 0.7, background: "#FF8899" },
+
+    });
+}
 //===============list======e

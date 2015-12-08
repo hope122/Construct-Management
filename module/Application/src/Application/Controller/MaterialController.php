@@ -134,7 +134,7 @@ class MaterialController extends AbstractActionController
             $ls_petition=$_POST['data'];
             //權限判別
             $position= $_SESSION['position'];
-
+ 
             $position='2502';
             if($position=='2502' || $position=='3502'){
                 $div_hid='';
@@ -252,7 +252,7 @@ class MaterialController extends AbstractActionController
         try{
             $path=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\material\\chkinfo.html";
             $uid=$_GET['uid'];
-            $data = $VTs->json2data($VTs->UrlDataGet("211.21.170.18:99/material/getdbdata?type=chkinfo&uid=".$uid));
+            $data = $VTs->json2data($VTs->UrlDataGet("127.0.0.1:88/material/getdbdata?type=chkinfo&uid=".$uid));
             $html=$VTs->GetHtmlContent($path);
             $arrdata['no']='AA0000'.$data->uid;
             $arrdata['cpname']=$data->cpname;
@@ -327,7 +327,7 @@ class MaterialController extends AbstractActionController
         $VTs->initialization();
         
         try{
-            $data=$_POST['data'];
+            // $data=$_POST['data'];
             $str="正中建材公司您好,向貴公司訂購訂購水泥50包";
             $VTs->Tomail("hope080122@gmail.com","hope080122@gmail.com","訂貨",$str);
             $html='sendEmail';
