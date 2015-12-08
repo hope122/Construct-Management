@@ -3,10 +3,10 @@ var apurl="http://211.21.170.18:99";
 // var apurl="http://127.0.0.1:99";
 var originUrl = location.origin+'/';
 var configObject = {
-    "LoginUrl": "http://211.21.170.18:99/login",
-    "langSet":"http://211.21.170.18:99/lang/page",
+    "LoginUrl": apurl+"/login",
+    "langSet": apurl+"/lang/page",
     "processLoginUrl": originUrl+"menter/setlogin",
-    "getmenu": "http://211.21.170.18:99/pageaction/getmenu",
+    "getmenu": apurl+"/pageaction/getmenu",
     "menuProcess": originUrl+"pageaction/menuprocess",
     "getPosition": originUrl+"pageaction/acposition",
     "MaterialInsert":apurl+"/material/dbinsert",
