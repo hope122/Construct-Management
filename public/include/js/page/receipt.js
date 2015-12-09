@@ -240,7 +240,12 @@ function showDetial(){
                     countTr2.appendTo($("#detial_list"));
                   }
                   var $tr = $("<tr/>").attr("name","newTr");
-                  $("<td/>").text(v.n1+" "+v.n2+" "+v.n3+" "+v.n4).appendTo($tr);
+                  if(rs.typeid == 0){
+                    $("<td/>").text(v.n1+" "+v.n2+" "+v.n3+" "+v.n4).appendTo($tr);
+                  }else if(rs.typeid == 1){
+                    $("<td/>").text(v.name).appendTo($tr);
+                  }
+                  
                   $("<td/>").text(v.unit1).appendTo($tr);
                   $("<td/>").text(v.qty).appendTo($tr);
                   $("<td/>").text(v.sdate).appendTo($tr);                  
