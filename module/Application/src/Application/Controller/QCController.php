@@ -107,6 +107,7 @@ class QCController extends AbstractActionController
         //解析列表
         $htmlstr="";
         $i=0;
+        if(!empty($arr_list)){
         foreach($arr_list as $list) {
              echo $i++;
             //判斷有imgid(照片id)才顯示  
@@ -132,7 +133,7 @@ class QCController extends AbstractActionController
             }
    
        }
-
+   }
       $pageContent=$htmlstr;
         //-----BI結束-----
         }catch(Exception $error){

@@ -1,12 +1,11 @@
 $(function(){
-
   ptype=$('#inp_ptype').val();
   getContent(ptype,ptype,'div_content','',true);
     // getlist();
 });
 
 function getContent(ptype,purl,divid,parameter,reset){
-  console.log(configObject.MaterialGetData+"?type="+ptype+parameter);
+  // console.log(configObject.MaterialGetData+"?type="+ptype+parameter);
     $.get(configObject.MaterialGetData+"?type="+ptype+parameter, function( data ) {
  
       
@@ -41,6 +40,7 @@ function setBtn(){
          $.get(configObject.MaterialGetData+"?type=lcount&suid="+suid+"&muid="+muid, function( r ) {
             r=JSON.parse(r);
             $("#inp_lcount").val(r['lcount']);
+            $("#hid_lcount").val(r['lcount']);
             $("#prj_mid").val(r['uid']);
           });
         }
@@ -137,7 +137,7 @@ function chkinp(){
                //dataType: "JSON",
                success: function(rs){
 //                console.log(rs);
-                  $.post("/material/sendemail", { data: d } );
+
                     socket.emit('chatMsg', {'msg':'材料申請通知','uid':uuid,'name':userName});
                     alert('新增成功！');
                     clear();
@@ -181,7 +181,7 @@ function chk_order(){
                    //dataType: "JSON",
                    success: function(rs){
 //                    console.log(rs);
-                        send_qclist(arr);
+                        // send_qclist(arr);
                         alert('送出訂單！');
                        location.reload();
                    },
@@ -193,6 +193,55 @@ function chk_order(){
             location.reload();
         }
     }
+}
+function infocheck(){
+  d= 'type=chkorder&id=';
+  d+=$("#inp_uid").val();
+  
+  console.log(d);
+  $.ajax({
+                   url: configObject.MaterialModify,
+                   type: "POST",
+                   data: d,
+                   async:false,
+                   //dataType: "JSON",
+                   success: function(rs){
+//                    console.log(rs);
+                        alert('送出訂單！');
+                       // location.reload();
+                      $.post("/material/sendemail", { uid:$("#inp_uid").val() } );
+                       $("#btn_check").hide();
+                       $("#btn_in").show();
+                   },
+                   error: function(e){
+                        alert('儲存失敗！');
+                   }
+                });
+}
+
+function infoin(){
+  d= 'type=chkin&id=';
+  d+=$("#inp_uid").val();
+
+   var arr = [];
+   arr.push({ type: 1, dataid: $("#inp_uid").val(),date:$("#inp_date").val() });
+  console.log(d);
+  $.ajax({
+                   url: configObject.MaterialModify,
+                   type: "POST",
+                   data: d,
+                   async:false,
+                   //dataType: "JSON",
+                   success: function(rs){
+                        send_qclist(arr);
+                        alert('確認進場!');
+                       // location.reload();
+                       $("#btn_in").hide();
+                   },
+                   error: function(e){
+                        alert('儲存失敗！');
+                   }
+                });
 }
 
 function send_qclist(arr){
@@ -212,4 +261,29 @@ function send_qclist(arr){
 //===============application======e
 
 //===============list======s
+function showinfo(uid){
+    var data='<b>你好</b><br>測試';
+   // $('#dialog').html("<iframe width='500px' src='/material/chkinfo?uid=1'></iframe>" );
+       $.ajax({
+                url: '/material/chkinfo?uid='+uid,
+                type:"GET",
+                dataType:'text',
+                success: function(msg){
+                    $('#dialog').html(msg);
+                },
+            });
+    $('#dialog').css({display:'inline'});
+
+    $("#dialog").dialog({
+        title: '資料',
+        bgiframe: true,
+        height: 300,
+        width: '80%',
+        modal: true,
+        draggable: true,
+        resizable: false,
+        overlay:{opacity: 0.7, background: "#FF8899" },
+
+    });
+}
 //===============list======e

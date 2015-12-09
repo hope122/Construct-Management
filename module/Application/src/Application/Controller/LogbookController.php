@@ -257,6 +257,7 @@ class LogbookController extends AbstractActionController
         $html=$VTs->GetHtmlContent($mpath);
         $data=$_POST['data'];
         $content=$data['content'];
+
         if(empty($content)){
             $weekarray=array("日","一","二","三","四","五","六");
             $arrdata = [
@@ -279,7 +280,7 @@ class LogbookController extends AbstractActionController
             // print_r($content);
             $weekarray=array("日","一","二","三","四","五","六");
             $arrdata = [
-                "no"=>'',
+                "no"=>'訂單編號：'.$content['no'],
                 "today"=>$content['date'],
                 "isnew"=>0,
                 "week"=>$content['week'],
@@ -311,7 +312,99 @@ class LogbookController extends AbstractActionController
             $html=$VTs->ContentReplace($arrdata,$html);
         }
 
-        
+
+            //表頭資訊project
+            $project=$data["project"];
+            // print_r($project);
+            $aday=round((strtotime(date('Y-m-d'))-strtotime($project["start"]))/3600/24);
+            $sday=$project["pday"]-$aday+$project["cday"];
+             $arrdata = [
+                "prjname"=>$project["prjname"],
+                "supplyname"=>$project["supplyname"],
+                "pday"=>$project["pday"],
+                "aday"=>$aday,
+                "sday"=>$sday,
+                "cday"=>$project["cday"],
+                "start"=>$project["start"],
+                "end"=>$project["end"],
+            ];
+            $html=$VTs->ContentReplace($arrdata,$html);
+            //進度
+            $project=$data["schedule"];
+            if(!empty($project['price_tbp'])){
+                $arrdata['tbp']=$project['price_tbp']."%";
+            }else{
+                $arrdata['tbp']='';
+            }
+            if(!empty($project['price_twp'])){
+                $arrdata['twp']=$project['price_twp']."%";
+            }else{
+                $arrdata['twp']='';
+            }
+            //進度管理tr1
+            $trpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\tr1.html";
+            $trhtml=$VTs->GetHtmlContent($trpath);
+            $arr_construction=$data["construction"];
+            $strhtml1='';
+            if(!empty($arr_construction) ){
+                foreach($arr_construction as $construction){
+                    $tr=$trhtml;
+                    $tr=str_replace("@@name@@",$construction["n1"],$tr);
+                    $tr=str_replace("@@unit@@",$construction["unit1"],$tr);
+                    $tr=str_replace("@@pcount@@",$construction["qty_work"],$tr);
+                    $tr=str_replace("@@fcount@@",$construction["qty_budget"],$tr);
+                    $strhtml1.=$tr;
+                }     
+            }
+            $arrdata["tr1"]=$strhtml1;
+            $html=$VTs->ContentReplace($arrdata,$html);
+
+            //材料管理tr2
+            $trpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\tr2.html";
+            $trhtml=$VTs->GetHtmlContent($trpath);
+            $materielcount=$data["materielcount"];
+            $strhtml2='';
+            if(!empty($materielcount) ){
+                foreach($materielcount as $materiel){
+                    $tr=$trhtml;
+                    $tr=str_replace("@@name@@",$materiel["name"],$tr);
+                    $tr=str_replace("@@unit@@",$materiel["unit"],$tr);
+                    $tr=str_replace("@@pcount@@",$materiel["pcount"],$tr);
+                    $tr=str_replace("@@incount@@",$materiel["incount"],$tr);
+                    $tr=str_replace("@@count@@",$materiel["count"],$tr);
+                    $strhtml2.=$tr;
+                }     
+    //   
+
+            }
+            $arrdata["tr2"]=$strhtml2;
+            $html=$VTs->ContentReplace($arrdata,$html);
+            //取得人員機具管理tr3
+            $trpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\tr3.html";
+            $trhtml=$VTs->GetHtmlContent($trpath);
+            $arr_workcount= $data["workcount"];
+    //        print_r($arr_workcount);
+            $strhtml3='';
+            if(!$arr_workcount==null ){
+                foreach($arr_workcount as $workcount){
+                    $tr=$trhtml;
+                    $tr=str_replace("@@name@@",$workcount["wtypename"],$tr);
+                    $tr=str_replace("@@count@@",$workcount["count"],$tr);
+                    $strhtml3.=$tr;
+                }
+            }
+            $arrdata["tr3"]=$strhtml3;
+            $html=$VTs->ContentReplace($arrdata,$html);
+
+             //日誌內容content
+             $content= $data["fifth"];
+            $arrdata = [
+                "fifth"=>'',
+                "seventh"=>'',
+                "fourth"=>$data["fifth"],
+                "sixth"=>$data["seventh"],
+            ];
+            $html=$VTs->ContentReplace($arrdata,$html);
         
             //印出html
             $pageContent=$html;
