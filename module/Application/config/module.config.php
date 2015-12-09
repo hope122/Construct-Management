@@ -204,6 +204,16 @@ return array(
 					),
 				),
 			),
+			'constructionschedule'=> array(
+				'type'    => 'segment',
+				'options' => array(
+					'route'    => '/constructionschedule',
+					'defaults' => array(
+						'controller' => 'Application\Controller\constructionschedule',
+						'action'     => 'index',
+					),
+				),
+			),
         ),
     ),
     'service_manager' => array(
@@ -228,6 +238,7 @@ return array(
             'Application\Controller\EmployeeManage' => 'Application\Controller\EmployeeManageController',
             'Application\Controller\EngineeringManage' => 'Application\Controller\EngineeringManageController',
             'Application\Controller\receipt' => 'Application\Controller\receiptController',
+            'Application\Controller\Constructionschedule' => 'Application\Controller\ConstructionscheduleController',
         ),
     ),
     'view_manager' => array(
