@@ -132,6 +132,7 @@ class MaterialController extends AbstractActionController
 // //                $apurl='http://127.0.0.1:88';
 
             $ls_petition=$_POST['data'];
+
             //權限判別
             $position= $_SESSION['position'];
  
@@ -252,9 +253,10 @@ class MaterialController extends AbstractActionController
         try{
             $path=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\material\\chkinfo.html";
             $uid=$_GET['uid'];
-            $data = $VTs->json2data($VTs->UrlDataGet("127.0.0.1:88/material/getdbdata?type=chkinfo&uid=".$uid));
+            $data = $VTs->json2data($VTs->UrlDataGet("http://211.21.170.18:99/material/getdbdata?type=chkinfo&uid=".$uid));
 
             $html=$VTs->GetHtmlContent($path);
+            $arrdata['uid']=$uid;
             $arrdata['no']='AA0000'.$data->uid;
             $arrdata['cpname']=$data->cpname;
             $arrdata['keyman']=$data->keyman;
@@ -267,10 +269,13 @@ class MaterialController extends AbstractActionController
              $arrdata['mplace']=$data->place_work;
              $arrdata['aphone']=$data->amobile;
             if($data->check){
-                if(!empty($data->datain)){
+
+                if(!empty($data->datein)){
+
                     $arrdata['btn_check']='none';
                     $arrdata['btn_in']='none';
                 }else{      
+   
                     $arrdata['btn_check']='none';
                     $arrdata['btn_in']='';
                 }
@@ -343,8 +348,26 @@ class MaterialController extends AbstractActionController
         $VTs->initialization();
         
         try{
+
+            $uid=$_POST['uid'];
+            $data = $VTs->json2data($VTs->UrlDataGet("http://211.21.170.18:99/material/getdbdata?type=chkinfo&uid=".$uid));
             // $data=$_POST['data'];
-            $str="正中建材公司您好,向貴公司訂購訂購水泥50包";
+
+             $str="廠商資訊"."\n";
+             $str="訂單編號:".'AA0000'.$data->uid."\n";
+             $str.="公司名稱:".$data->cpname."\n";
+            $str.="品項:".$data->mname."\n";
+            $str.="數量:".$data->count."\n";
+            $str.="聯絡人:".$data->keyman."\n";
+            $str.="電話:".$data->mobile."\n";
+            $str.="===========================\n";
+            $str.="申請人資訊\n";
+            $str.="申請人:".$data->aname."\n";
+            $str.="電話:".$data->amobile."\n";
+            $str.="放置地點:".$data->place."\n";
+            $str.="施作部位:".$data->place_work."\n";
+            $str.="預計進場時間：".$data->date."\n";
+            // $str="正中建材公司您好,向貴公司訂購訂購水泥50包";
             $VTs->Tomail("hope080122@gmail.com","hope080122@gmail.com","訂貨",$str);
             $html='sendEmail';
             //印出html

@@ -2,7 +2,8 @@
 			<title>進貨申請單</title>
 		<meta charset="utf-8" />
 	</head>
-
+<input type='hidden' id='inp_uid' value='@@uid@@'>
+<input type='hidden' id='inp_date' value='@@date@@'>
 <table style="border:5px #cccccc solid;" rules="all" cellpadding='5';>
 	<tr algin='center'>
 		<th COLSPAN=3>進料申請單</th>
@@ -35,5 +36,5 @@
 		<td COLSPAN=2>預計進場時間：@@date@@</td>
 	</tr>
 </table>
-<button style="display:@@btn_check@@;" onclick='infocheck()'>確認</button>
-<button style="display:@@btn_in@@;" onclick='infoin()'>進場</button>
+<button id='btn_check' style="display:@@btn_check@@;" onclick='infocheck()'>確認</button>
+<button id='btn_in'  style="display:@@btn_in@@;" onclick='infoin()'>進場</button>
