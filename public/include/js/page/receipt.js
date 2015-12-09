@@ -191,6 +191,7 @@ function setPaymentData($dateRange, $price){
 }
 
 function parsePrice($price){
+  $price = String(Math.round($price));
   var str = $price;
   for(var i=1, j=0; i<=Math.floor($price.length/3); i++,j++){
     str = str.substr(0,str.length-3*i-j) + "," + str.substr(str.length-3*i-j, str.length);
@@ -220,12 +221,9 @@ function showDetial(){
                 $.each(rs.data,function(i,v){
                   //console.log(i,v);
                   var $tr = $("<tr/>").attr("name","newTr");
-                  $("<td/>").text(v.n1).appendTo($tr);
-                  $("<td/>").text(v.n2).appendTo($tr);
-                  $("<td/>").text(v.n3).appendTo($tr);
-                  $("<td/>").text(v.n4).appendTo($tr);
-                  $("<td/>").text(v.qty).appendTo($tr);
+                  $("<td/>").text(v.n1+" "+v.n2+" "+v.n3+" "+v.n4).appendTo($tr);
                   $("<td/>").text(v.unit1).appendTo($tr);
+                  $("<td/>").text(v.qty).appendTo($tr);
                   $tr.appendTo($("#detial_list"));
                 });
               }
@@ -245,7 +243,7 @@ function showDetial(){
     });
   $("#detial_list").dialog({
     height: '100%',
-    width: '450',
+    width: '310',
     position: { my: "center", at: "center", of: window },
     beforeClose: function(e,ui){
         //移除資料
@@ -282,6 +280,7 @@ function checkSubmit(){
     async: false,
     success:
       function(rs){
+        location.reload();
         // console.log(rs);
      },
     error:

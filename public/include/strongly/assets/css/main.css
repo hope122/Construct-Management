@@ -2408,7 +2408,8 @@
 			}
 
 				#header h1 {
-					font-size: 2em;
+					font-size: 1em;
+					/*font-size: 110%;*/
 					letter-spacing: 8px;
 					line-height: 1.25em;
 				}
@@ -2489,4 +2490,13 @@
 				padding-top: 2em;
 			}
 
+	}
+
+	/*menu colors*/
+	.menus_top_colors{
+		color: #FF7057 !important;
+	}
+
+	.menus_content_colors{
+		color: #FFBCBC !important;
 	}
