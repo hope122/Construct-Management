@@ -85,8 +85,8 @@ $(function(){
   });
   var $date = new Date();
   var dateString = $date.getFullYear() + "/" + 
-                   ($date.getMonth()<10?("0"+($date.getMonth()+1)):($date.getMonth()+1)) + "/" + 
-                   ($date.getDate()<10?("0"+($date.getDate()+1)):($date.getDate()+1));
+                   ($date.getMonth()<9?("0"+($date.getMonth()+1)):($date.getMonth()+1)) + "/" + 
+                   ($date.getDate()<10?("0"+($date.getDate())):($date.getDate()));
   $("#date_pay").val(dateString);
 
 });
