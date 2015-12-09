@@ -265,6 +265,7 @@ class LogbookController extends AbstractActionController
                 "today"=>date("Y")."-".date("m")."-".date("d"),
                 "isnew"=>1,
                 "week"=>$weekarray[date("w")],
+                "div_inphid"=>'',
             ];
         //取得天氣列表
             $arr_weather=$data['weather'];
@@ -277,7 +278,13 @@ class LogbookController extends AbstractActionController
             $arrdata['pmoption']=$whtml;
             $html=$VTs->ContentReplace($arrdata,$html);
         }else{
-            // print_r($content);
+
+            if(!empty($content['dates'])){
+                $arrdata['div_inphid']='none';
+            }else{
+                $arrdata['div_inphid']='';
+            }
+            $html=$VTs->ContentReplace($arrdata,$html);
             $weekarray=array("日","一","二","三","四","五","六");
             $arrdata = [
                 "no"=>'訂單編號：'.$content['no'],

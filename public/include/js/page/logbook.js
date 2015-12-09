@@ -41,6 +41,39 @@ function toreport(uid){
 function tosetpage(){
   getContent('setcontent','setcontent','div_content','',true);
 }
+function savecontentcheck(){
+  isnew=$("#isnew").val();
+  console.log(isnew);
+  istrue=confirm("確定後資料無法再進行修改");
+  if(istrue){
+    if(isnew==1){
+        $.ajax({
+         url: configObject.logbookInsert,
+         type: "POST",
+         data: $("#cform").serialize(),
+         async:false,
+         success: function(rs){
+          $.post(configObject.logbookModify, { type:'infocheck' } );
+            alert("儲存成功");
+            // getContent('list','list','div_content','',true);
+         }
+      });
+    }else{
+        $.ajax({
+         url: configObject.logbookModify,
+         type: "POST",
+         data: $("#cform").serialize(),
+         async:false,
+         success: function(rs){
+          $.post(configObject.logbookModify, { type:'infocheck' } );
+            alert("儲存成功");
+            // getContent('list','list','div_content','',true);
+         }
+      });
+    }
+    }
+  
+}
 function savecontent(){
   isnew=$("#isnew").val();
   console.log(isnew);
