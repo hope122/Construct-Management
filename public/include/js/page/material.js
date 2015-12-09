@@ -214,16 +214,22 @@ function send_qclist(arr){
 //===============list======s
 function showinfo(){
     var data='<b>你好</b><br>測試';
-   $('#dialog').html("<iframe width='100%' height='100%' frameborder='0' scrolling='no' src='/material/chkinfo?uid=1'></iframe>" );
-
-
+   // $('#dialog').html("<iframe width='500px' src='/material/chkinfo?uid=1'></iframe>" );
+       $.ajax({
+                url: '/material/chkinfo?uid=1',
+                type:"GET",
+                dataType:'text',
+                success: function(msg){
+                    $('#dialog').html(msg);
+                },
+            });
     $('#dialog').css({display:'inline'});
 
     $("#dialog").dialog({
         title: '資料',
         bgiframe: true,
-        width: '50%',
-        height: '50%',
+        height: 300,
+        width: '80%',
         modal: true,
         draggable: true,
         resizable: false,

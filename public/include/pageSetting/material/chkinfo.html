@@ -1,20 +1,39 @@
+<head>
+			<title>進貨申請單</title>
+		<meta charset="utf-8" />
+	</head>
 
-<table>
-	<tr>
-		<td>訂單編號:@@no@@</td>
+<table style="border:5px #cccccc solid;" rules="all" cellpadding='5';>
+	<tr algin='center'>
+		<th COLSPAN=3>進料申請單</th>
 	</tr>
+
 	<tr>
-		<td>公司名稱:@@cpname@@</td>
-		<td>聯絡人:@@keyman@@</td>
-		<td>電話:@@phone@@</td>
+		<th ROWSPAN=3>廠商資訊</th><td>訂單編號:@@no@@</td><td>公司名稱:@@cpname@@</td>
 	</tr>
 	<tr>
 		<td>品項：@@mname@@</td>
 		<td>數量：@@count@@</td>
-		<td>預計進場時間：@@date@@</td>
+
 	</tr>
 	<tr>
-		<td>申請人:@@aname@@</td>
+		<td>聯絡人:@@keyman@@</td>
+		<td>電話:@@phone@@</td>
+		
 	</tr>
-	
+	<tr>
+		<th ROWSPAN=3>申請人資訊</th>
+		<td>申請人:@@aname@@</td>
+		<td >電話:@@aphone@@</td>
+	</tr>
+	<tr>
+		
+		<td>放置地點:@@place@@</td>
+		<td>施作部位:@@mplace@@</td>
+	</tr>
+	<tr>
+		<td COLSPAN=2>預計進場時間：@@date@@</td>
+	</tr>
 </table>
+<button style="display:@@btn_check@@;" onclick='infocheck()'>確認</button>
+<button style="display:@@btn_in@@;" onclick='infoin()'>進場</button>

@@ -253,6 +253,7 @@ class MaterialController extends AbstractActionController
             $path=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\material\\chkinfo.html";
             $uid=$_GET['uid'];
             $data = $VTs->json2data($VTs->UrlDataGet("127.0.0.1:88/material/getdbdata?type=chkinfo&uid=".$uid));
+
             $html=$VTs->GetHtmlContent($path);
             $arrdata['no']='AA0000'.$data->uid;
             $arrdata['cpname']=$data->cpname;
@@ -262,6 +263,21 @@ class MaterialController extends AbstractActionController
              $arrdata['count']=$data->count;
              $arrdata['date']=$data->date;
              $arrdata['aname']=$data->aname;
+             $arrdata['place']=$data->place;
+             $arrdata['mplace']=$data->place_work;
+             $arrdata['aphone']=$data->amobile;
+            if($data->check){
+                if(!empty($data->datain)){
+                    $arrdata['btn_check']='none';
+                    $arrdata['btn_in']='none';
+                }else{      
+                    $arrdata['btn_check']='none';
+                    $arrdata['btn_in']='';
+                }
+            }else{
+                 $arrdata['btn_check']='';
+                 $arrdata['btn_in']='none';
+            }
             $pageContent=$html=$VTs->ContentReplace($arrdata,$html);
         //-----BI結束-----
         }catch(Exception $error){
