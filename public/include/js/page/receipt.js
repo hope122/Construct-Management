@@ -216,7 +216,7 @@ function showDetial(){
       success:
         function(rs){
           if(rs.status){
-            console.log(rs.data);
+            //console.log(rs.data);
             if(!$.isEmptyObject(rs.data)){
                 var nowP_modelid = rs.data[0].p_modelid;
                 var countQty = 0, price = rs.data[0].price;
@@ -227,6 +227,8 @@ function showDetial(){
                   }else{
                     countQty = parseFloat(v.qty);
                   }
+
+                  //總計欄位
                   if( nowP_modelid != v.p_modelid ){
                     var countTr1 = $("<tr/>").attr("name","newTr");
                     var countTr2 = $("<tr/>").attr("name","newTr");
@@ -239,13 +241,13 @@ function showDetial(){
                     countTr1.appendTo($("#detial_list"));
                     countTr2.appendTo($("#detial_list"));
                   }
+                  //基本欄位
                   var $tr = $("<tr/>").attr("name","newTr");
                   if(rs.typeid == 0){
                     $("<td/>").text(v.n1+" "+v.n2+" "+v.n3+" "+v.n4).appendTo($tr);
                   }else if(rs.typeid == 1){
                     $("<td/>").text(v.name).appendTo($tr);
                   }
-                  
                   $("<td/>").text(v.unit1).appendTo($tr);
                   $("<td/>").text(v.qty).appendTo($tr);
                   $("<td/>").text(v.sdate).appendTo($tr);                  
@@ -266,10 +268,10 @@ function showDetial(){
               }
           }else{
             var $tr = $("<tr/>").attr("name","newTr").appendTo("#detial_list");
-            $("<td/>").attr("colspan","6")
-                  .css("text-align","center")
-                  .text("無資料")
-                  .appendTo($tr);
+            $("<td/>").attr("colspan","4")
+                      .css("text-align","center")
+                      .text("無資料")
+                      .appendTo($tr);
             console.log("msg",rs.msg);
           }
         },
