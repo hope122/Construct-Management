@@ -8,7 +8,6 @@ function getContent(ptype,purl,divid,parameter,reset){
   // console.log(configObject.MaterialGetData+"?type="+ptype+parameter);
     $.get(configObject.MaterialGetData+"?type="+ptype+parameter, function( data ) {
  
-      
       //丟資料toCM回傳html內容
       $.ajax({
        url: "/material/"+purl,
@@ -41,7 +40,7 @@ function setBtn(){
             r=JSON.parse(r);
             $("#inp_lcount").val(r['lcount']);
             $("#hid_lcount").val(r['lcount']);
-            $("#prj_mid").val(r['uid']);
+            $("#prj_mid").val(r['prjid']);
           });
         }
     });
@@ -63,9 +62,10 @@ function setBtn(){
           $("#inp_prjuid").prop('disabled', 'disabled');
          $.get(configObject.MaterialGetData+"?type=lcount&suid="+suid+"&muid="+muid, function( r ) {
             r=JSON.parse(r);
+             // console.log(r);
             $("#inp_lcount").val(r['lcount']);
             $("#hid_lcount").val(r['lcount']);
-            $("#prj_mid").val(r['uid']);
+            $("#prj_mid").val(r['prjid']);
           });
         }
         });
@@ -125,7 +125,7 @@ function chkinp(){
        
     });
     d = d.substring(0,d.length-1);
-//    console.log(d);
+
     if(!chk){
         alert('資料不完整！');
     }else{
@@ -136,7 +136,7 @@ function chkinp(){
                async:       false,
                //dataType: "JSON",
                success: function(rs){
-//                console.log(rs);
+
 
                     socket.emit('chatMsg', {'msg':'材料申請通知','uid':uuid,'name':userName});
                     alert('新增成功！');
@@ -198,7 +198,7 @@ function infocheck(){
   d= 'type=chkorder&id=';
   d+=$("#inp_uid").val();
   
-  console.log(d);
+
   $.ajax({
                    url: configObject.MaterialModify,
                    type: "POST",
@@ -209,7 +209,7 @@ function infocheck(){
 //                    console.log(rs);
                         alert('送出訂單！');
                        // location.reload();
-                      $.post("/material/sendemail", { uid:$("#inp_uid").val() } );
+                        sendemail($("#inp_uid").val());
                        $("#btn_check").hide();
                        $("#btn_in").show();
                    },
@@ -218,14 +218,29 @@ function infocheck(){
                    }
                 });
 }
+function sendemail(uid){
+    $.get(configObject.MaterialGetData+"?type=chkinfo&uid="+uid, function( data ) {
+ 
+      //丟資料toCM回傳html內容
+      $.ajax({
+       url: "/material/sendemail",
+       type: "POST",
+       data: {data:JSON.parse(data)},
+       async:false,
+       // success: function(rs){
+       //    console.log(rs);
+        
+       // }
+    });
+  });
 
+}
 function infoin(){
-  d= 'type=chkin&id=';
-  d+=$("#inp_uid").val();
-
+  d= 'type=chkin&id='+$("#inp_uid").val();
+  d+='&count='+$("#inp_count").val();
+  d+='&quid='+$("#inp_quid").val();
    var arr = [];
    arr.push({ type: 1, dataid: $("#inp_uid").val(),date:$("#inp_date").val() });
-  console.log(d);
   $.ajax({
                    url: configObject.MaterialModify,
                    type: "POST",
@@ -245,7 +260,6 @@ function infoin(){
 }
 
 function send_qclist(arr){
-    console.log(arr);
      $.ajax({
        url: configObject.QCInsert,
        type: "POST",
@@ -253,7 +267,6 @@ function send_qclist(arr){
        async:false,
        //dataType: "JSON",
        success: function(rs){
-                console.log(rs);
        }
     });
 
@@ -262,16 +275,15 @@ function send_qclist(arr){
 
 //===============list======s
 function showinfo(uid){
-    var data='<b>你好</b><br>測試';
-   // $('#dialog').html("<iframe width='500px' src='/material/chkinfo?uid=1'></iframe>" );
-       $.ajax({
-                url: '/material/chkinfo?uid='+uid,
-                type:"GET",
-                dataType:'text',
-                success: function(msg){
-                    $('#dialog').html(msg);
-                },
-            });
+  getContent('chkinfo','chkinfo','dialog','&uid='+uid,false);
+   // $.ajax({
+   //          url: '/material/chkinfo?uid='+uid,
+   //          type:"GET",
+   //          dataType:'text',
+   //          success: function(msg){
+   //              $('#dialog').html(msg);
+   //          },
+   //      });
     $('#dialog').css({display:'inline'});
 
     $("#dialog").dialog({

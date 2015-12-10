@@ -69,12 +69,17 @@ class QCController extends AbstractActionController
         $VTs->initialization();
       try{
         //-----BI開始-----  
-        //取得html
-        $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\qc\\photolist.html";
-        $html=$VTs->GetHtmlContent($mpath);
-        $arrdata["userName"]=$_SESSION['userName'];
-        $html=$VTs->ContentReplace($arrdata,$html);
-        $pageContent=$html;
+        if(empty($_SESSION)){
+            $pagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\index\\login_page.html";
+            $pageContent = $VTs->GetHtmlContent($pagePath);
+        }else{  
+            //取得html
+            $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\qc\\photolist.html";
+            $html=$VTs->GetHtmlContent($mpath);
+            $arrdata["userName"]=$_SESSION['userName'];
+            $html=$VTs->ContentReplace($arrdata,$html);
+            $pageContent=$html;
+        }
         //-----BI結束-----
         }catch(Exception $error){
             //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
