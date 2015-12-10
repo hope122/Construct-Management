@@ -38,8 +38,10 @@ function setBtn(){
           $("#inp_supply").prop('disabled', 'disabled');
          $.get(configObject.MaterialGetData+"?type=lcount&suid="+suid+"&muid="+muid, function( r ) {
             r=JSON.parse(r);
-            $("#inp_lcount").val(r['lcount']);
-            $("#hid_lcount").val(r['lcount']);
+            lcount=Math.round(r['lcount']*100);
+            lcount=lcount/100;
+            $("#inp_lcount").val(lcount);
+            $("#hid_lcount").val(lcount);
             $("#prj_mid").val(r['prjid']);
           });
         }
@@ -47,6 +49,8 @@ function setBtn(){
     $("#inp_quantity").change(function(){
         var  sum;
         sum=$("#hid_lcount").val()-$(this).val();
+        sum=math.round(sum*100);
+        sum=sum/100;
         $("#inp_lcount").val(sum);
 
     });
@@ -63,8 +67,10 @@ function setBtn(){
          $.get(configObject.MaterialGetData+"?type=lcount&suid="+suid+"&muid="+muid, function( r ) {
             r=JSON.parse(r);
              // console.log(r);
-            $("#inp_lcount").val(r['lcount']);
-            $("#hid_lcount").val(r['lcount']);
+            lcount=Math.round(r['lcount']*100);
+            lcount=lcount/100;
+            $("#inp_lcount").val(lcount);
+            $("#hid_lcount").val(lcount);
             $("#prj_mid").val(r['prjid']);
           });
         }

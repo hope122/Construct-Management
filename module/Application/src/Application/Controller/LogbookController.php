@@ -178,8 +178,8 @@ class LogbookController extends AbstractActionController
                     $tr=$trhtml;
                     $tr=str_replace("@@name@@",$construction["n1"],$tr);
                     $tr=str_replace("@@unit@@",$construction["unit1"],$tr);
-                    $tr=str_replace("@@pcount@@",$construction["qty_work"],$tr);
-                    $tr=str_replace("@@fcount@@",$construction["qty_budget"],$tr);
+                  $tr=str_replace("@@pcount@@",number_format($construction["qty_work"], 2),$tr);
+                    $tr=str_replace("@@fcount@@",number_format($construction["qty_budget"], 2),$tr);
                     $strhtml1.=$tr;
                 }     
             }
@@ -358,13 +358,14 @@ class LogbookController extends AbstractActionController
             $trhtml=$VTs->GetHtmlContent($trpath);
             $arr_construction=$data["construction"];
             $strhtml1='';
+
             if(!empty($arr_construction) ){
                 foreach($arr_construction as $construction){
                     $tr=$trhtml;
                     $tr=str_replace("@@name@@",$construction["n1"],$tr);
                     $tr=str_replace("@@unit@@",$construction["unit1"],$tr);
-                    $tr=str_replace("@@pcount@@",$construction["qty_work"],$tr);
-                    $tr=str_replace("@@fcount@@",$construction["qty_budget"],$tr);
+                    $tr=str_replace("@@pcount@@",number_format($construction["qty_work"], 2),$tr);
+                    $tr=str_replace("@@fcount@@",number_format($construction["qty_budget"], 2),$tr);
                     $strhtml1.=$tr;
                 }     
             }
