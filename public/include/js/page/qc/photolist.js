@@ -6,7 +6,7 @@ $(function() {
       $('#title').html(data['name']);
   });
   $.get(configObject.QCGetData+"?type=qc_checklist", function( data ) {
-      console.log(apurl);
+      // console.log(apurl);
       
       // 丟資料toCM回傳html內容
       $.ajax({
@@ -15,7 +15,7 @@ $(function() {
        data: {data:JSON.parse(data),apurl:apurl},
        async:false,
        success: function(rs){
-        console.log(rs);
+        // console.log(rs);
         $("#photolist").append(rs);
 //                    alert('新增成功！');
 //                      location.reload();

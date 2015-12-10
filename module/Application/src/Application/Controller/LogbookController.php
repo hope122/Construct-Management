@@ -48,9 +48,7 @@ class LogbookController extends AbstractActionController
                     $title='日誌清單';
                     break;
             } 
-        }
-
-            //取得主頁html
+           //取得主頁html
             $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\index.html";
             $html=$VTs->GetHtmlContent($mpath);
 
@@ -61,6 +59,9 @@ class LogbookController extends AbstractActionController
             $arrdata["userName"]=$_SESSION['userName'];
             $html=$VTs->ContentReplace($arrdata,$html);
             $pageContent=$html;
+        }
+
+ 
         //-----BI結束-----
 
         }catch(Exception $error){
@@ -274,6 +275,7 @@ class LogbookController extends AbstractActionController
             foreach($arr_weather as $weather){
                 $whtml.="<option value=".$weather['uid'].">".$weather['name']."</option>";
             }
+
             $arrdata['amoption']=$whtml;
             $arrdata['pmoption']=$whtml;
             $html=$VTs->ContentReplace($arrdata,$html);
@@ -281,8 +283,10 @@ class LogbookController extends AbstractActionController
 
             if(!empty($content['dates'])){
                 $arrdata['div_inphid']='none';
+                $arrdata['disabled']='disabled';
             }else{
                 $arrdata['div_inphid']='';
+                $arrdata['disabled']='';
             }
             $html=$VTs->ContentReplace($arrdata,$html);
             $weekarray=array("日","一","二","三","四","五","六");
@@ -295,7 +299,7 @@ class LogbookController extends AbstractActionController
 
         //取得天氣列表
             $arr_weather=$data['weather'];
-                        
+            
 
             $amhtml='';
             foreach($arr_weather as $weather){
@@ -316,6 +320,7 @@ class LogbookController extends AbstractActionController
             }
             $arrdata['amoption']=$amhtml;
             $arrdata['pmoption']=$pmhtml;
+  
             $html=$VTs->ContentReplace($arrdata,$html);
         }
 
@@ -439,29 +444,37 @@ class LogbookController extends AbstractActionController
             $html_path=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\laborsafety.html";
             $html=$VTs->GetHtmlContent($html_path);
             $laborsafety=$_POST['data'];
-            if(empty($laborsafety)){
-                $arrdata = [
-                    "isnew"=>1,
-                    "fifth"=>'',
-                    "seventh"=>'',
- 
-                ];
-            }else{
-                $arrdata['isnew']=0;
-                if(!empty($laborsafety['fifth'])){
-                    $arrdata['fifth']=$laborsafety['fifth']['contents'];
-                }else{
-                    $arrdata['fifth']='';
-                }
-                if(!empty($laborsafety['seventh'])){
-                    $arrdata['seventh']=$laborsafety['seventh']['contents'];
-                }else{
-                    $arrdata['seventh']='';
-                }
 
+
+            if(empty($laborsafety['dates'])){
+
+                if(empty($laborsafety['fifth']) && empty($laborsafety['seventh'])){
+                    $arrdata = [
+                        "isnew"=>1,
+                        "fifth"=>'',
+                        "seventh"=>'',
+     
+                    ];
+                }else{
+                    $arrdata['isnew']=0;
+                    if(!empty($laborsafety['fifth'])){
+                        $arrdata['fifth']=$laborsafety['fifth']['contents'];
+                    }else{
+                        $arrdata['fifth']='';
+                    }
+                    if(!empty($laborsafety['seventh'])){
+                        $arrdata['seventh']=$laborsafety['seventh']['contents'];
+                    }else{
+                        $arrdata['seventh']='';
+                    }
+
+                }
+                $html=$VTs->ContentReplace($arrdata,$html);
+            }else{
+                $html="主任已確認,資料無法再進行修改";
             }
 
-            $html=$VTs->ContentReplace($arrdata,$html);
+            
             // foreach($arr_data as  $data) {
             //      $trs=$tr;
             //     $trs=str_replace('@@no@@',$data['no'],$trs);

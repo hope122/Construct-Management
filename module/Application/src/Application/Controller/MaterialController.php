@@ -44,8 +44,6 @@ class MaterialController extends AbstractActionController
                     $title='材料進貨清單';
                     break;
             } 
-        }
-
             //取得主頁html
             $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\material\\index.html";
             $html=$VTs->GetHtmlContent($mpath);
@@ -57,6 +55,9 @@ class MaterialController extends AbstractActionController
             $arrdata["userName"]=$_SESSION['userName'];
             $html=$VTs->ContentReplace($arrdata,$html);
             $pageContent=$html;
+        }
+
+
 
         //-----BI結束-----
 
@@ -252,25 +253,25 @@ class MaterialController extends AbstractActionController
         
         try{
             $path=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\material\\chkinfo.html";
-            $uid=$_GET['uid'];
-            $data = $VTs->json2data($VTs->UrlDataGet("http://211.21.170.18:99/material/getdbdata?type=chkinfo&uid=".$uid));
-
+            $data=$_POST['data'];
+       
             $html=$VTs->GetHtmlContent($path);
-            $arrdata['uid']=$uid;
-            $arrdata['no']='AA0000'.$data->uid;
-            $arrdata['cpname']=$data->cpname;
-            $arrdata['keyman']=$data->keyman;
-            $arrdata['phone']=$data->mobile;
-             $arrdata['mname']=$data->mname;
-             $arrdata['count']=$data->count;
-             $arrdata['date']=$data->date;
-             $arrdata['aname']=$data->aname;
-             $arrdata['place']=$data->place;
-             $arrdata['mplace']=$data->place_work;
-             $arrdata['aphone']=$data->amobile;
-            if($data->check){
+            $arrdata['uid']=$data['uid'];
+            $arrdata['no']='AA0000'.$data['uid'];
+            $arrdata['cpname']=$data['cpname'];
+            $arrdata['keyman']=$data['keyman'];
+            $arrdata['phone']=$data['mobile'];
+             $arrdata['mname']=$data['mname'];
+             $arrdata['count']=$data['count'];
+             $arrdata['date']=$data['date'];
+             $arrdata['aname']=$data['aname'];
+             $arrdata['place']=$data['place'];
+             $arrdata['mplace']=$data['place_work'];
+             $arrdata['aphone']=$data['amobile'];
+             $arrdata['quid']=$data['quid'];
+            if($data['check']){
 
-                if(!empty($data->datein)){
+                if(!empty($data['datein'])){
 
                     $arrdata['btn_check']='none';
                     $arrdata['btn_in']='none';
@@ -349,25 +350,27 @@ class MaterialController extends AbstractActionController
         
         try{
 
-            $uid=$_POST['uid'];
-            $data = $VTs->json2data($VTs->UrlDataGet("http://211.21.170.18:99/material/getdbdata?type=chkinfo&uid=".$uid));
-            // $data=$_POST['data'];
-
+            // $uid=$_POST['uid'];
+            // $data = $VTs->json2data($VTs->UrlDataGet("http://211.21.170.18:99/material/getdbdata?type=chkinfo&uid=".$uid));
+             $data=$_POST['data'];
+             // $data={"quid":"2","check":"1","datein":null,"uid":"13","cpname":"\u53f0\u6ce5(\u6df7\u51dd\u571f)","keyman":"vick","mobile":"0955555555","mname":"280 kgf\/cm2 \u9810\u62cc\u6df7\u51dd\u571f","count":"2","date":"2015-12-30","aname":"\u5f37\u68ee\u5442","place":"1","place_work":"2","amobile":null}
+            
              $str="廠商資訊"."\n";
-             $str="訂單編號:".'AA0000'.$data->uid."\n";
-             $str.="公司名稱:".$data->cpname."\n";
-            $str.="品項:".$data->mname."\n";
-            $str.="數量:".$data->count."\n";
-            $str.="聯絡人:".$data->keyman."\n";
-            $str.="電話:".$data->mobile."\n";
+             $str="訂單編號:".'AA0000'.$data['uid']."\n";
+             $str.="公司名稱:".$data['cpname']."\n";
+            $str.="品項:".$data['mname']."\n";
+            $str.="數量:".$data['count']."\n";
+            $str.="聯絡人:".$data['keyman']."\n";
+            $str.="電話:".$data['mobile']."\n";
             $str.="===========================\n";
             $str.="申請人資訊\n";
-            $str.="申請人:".$data->aname."\n";
-            $str.="電話:".$data->amobile."\n";
-            $str.="放置地點:".$data->place."\n";
-            $str.="施作部位:".$data->place_work."\n";
-            $str.="預計進場時間：".$data->date."\n";
+            $str.="申請人:".$data['aname']."\n";
+            $str.="電話:".$data['amobile']."\n";
+            $str.="放置地點:".$data['place']."\n";
+            $str.="施作部位:".$data['place_work']."\n";
+            $str.="預計進場時間：".$data['date']."\n";
             // $str="正中建材公司您好,向貴公司訂購訂購水泥50包";
+             print_r($str);
             $VTs->Tomail("hope080122@gmail.com","hope080122@gmail.com","訂貨",$str);
             $html='sendEmail';
             //印出html
