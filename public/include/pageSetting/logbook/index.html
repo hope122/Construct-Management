@@ -28,7 +28,6 @@
 	    <script src="../include/js/socket/conn.js"></script>
 	    <script src="../include/js/toastmessage/jquery.toastmessage.js"></script>
 	    <script src="../include/js/notice/notice.js"></script>
-	    <script src="../include/js/page/dailyconstruction.js"></script>
 	    <link rel="stylesheet" href="../include/css/jquery.toastmessage.css">
 	    <link rel="stylesheet" href="../include/css/jquery-ui.min.css">
 	    <style type="text/css">
@@ -54,13 +53,7 @@
 				border:1px #cccccc solid ;
 				vertical-align:middle;
 			}
-			
-			li .checkitem, li .ischeckitem{
-                float: left;
-                margin: 0 15px 0 0;
-                width:50px;
-                height:50px;
-            }
+		
 		
 	    </style>
 	</head>
@@ -102,58 +95,6 @@
 											<input id='inp_ptype' type='hidden' value='@@ptype@@'>
 											<input id='inp_purl' type='hidden' value='@@ptype@@'>
 											<div id='div_content'>
-											</div>
-											
-										</article>
-
-										<!-- Post -->
-										<article class="box post">
-											
-											<div id="dailyconstructionList" align="center" style="margin-top: 30px;">
-												<form id="menuSelect">
-										            <div>
-										                <span>
-										                    樓層:
-										                </span>
-										                <span>
-										                    <select id="floorid" name="floorid" onchange="getDailyList('workitem');" class="4u 12u(mobile)">
-										                        <option value="0">請選擇</option>
-										                    </select>
-										                </span>
-										            </div>
-										            <div>
-										                <span>
-										                    工程項目:
-										                </span>
-										                <span>
-										                    <select id="workitemid" name="workitemid" onchange="getDailyList('pacemodel');" class="4u 12u(mobile)">
-										                        <option value="0">請選擇</option>
-										                    </select>
-										                </span>
-										            </div>
-										            <div>
-										                <span>
-										                    施工項目:
-										                </span>
-										                <span>
-										                    <select id="pacemodelid" name="pacemodelid" onchange="getDailyList('area')" class="4u 12u(mobile)">
-										                        <option value="0">請選擇</option>
-										                    </select>
-										                </span>
-										            </div>
-										            <div>
-										                <span>
-										                    部位項目:
-										                </span>
-										                <span>
-										                    <select id="areaid" name="areaid" onchange="getDailyList('alllist');" class="4u 12u(mobile)">
-										                        <option value="0">請選擇</option>
-										                    </select>
-										                </span>
-										            </div>
-										        </form>
-										       <form id="alllist"></form>
-										       <div><input type="button" class="2u 12u(mobile)" onclick="checkItems();" value="選單確認"></div>
 											</div>
 										</article>
 								</div>

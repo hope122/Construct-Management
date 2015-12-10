@@ -214,6 +214,16 @@ return array(
 					),
 				),
 			),
+			'dailyconstruction'=> array(
+				'type'    => 'segment',
+				'options' => array(
+					'route'    => '/dailyconstruction',
+					'defaults' => array(
+						'controller' => 'Application\Controller\dailyconstruction',
+						'action'     => 'index',
+					),
+				),
+			),
         ),
     ),
     'service_manager' => array(
@@ -239,6 +249,7 @@ return array(
             'Application\Controller\EngineeringManage' => 'Application\Controller\EngineeringManageController',
             'Application\Controller\receipt' => 'Application\Controller\receiptController',
             'Application\Controller\Constructionschedule' => 'Application\Controller\ConstructionscheduleController',
+            'Application\Controller\Dailyconstruction' => 'Application\Controller\DailyconstructionController',
         ),
     ),
     'view_manager' => array(

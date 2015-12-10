@@ -1,11 +1,49 @@
 $(function(){
   //取得列表
-  getDailyList("floor");
+  //getDailyList("floor");
+  getWorkList();
 });
+
+function getWorkList(){
+    var uuid;
+    $.ajax({
+      url: configObject.getAcInfo,
+       type: "POST",
+       dataType: "JSON",
+       async:false,
+       success: function(rs){
+           if(rs.status){
+            uuid = rs.uuid;
+           }else{
+            console.log(rs.msg);
+           }
+       }
+    });
+
+    //取得列表
+    $.ajax({
+       url: configObject.getWorkProject,
+       type: "POST",
+       data: {uuid:uuid},
+       dataType: "JSON",
+       success: function(rs){
+           $("#worklist").empty();
+           if(rs.status){
+               $.each(rs.workList,function(i,v){
+                  $('<option value="'+v.uid+'">'+v.name+'</option>').appendTo("#worklist");
+              });
+               getDailyList("floor");
+           }else{
+               console.log(rs.msg);
+           }
+       }
+    });
+}
 
 function getDailyList(type){
     var formOption = $("#menuSelect").serialize();
-    formOption += "&puid=1&type="+type;
+    var puid = $("#worklist").val();
+    formOption += "&puid="+puid+"&type="+type;
     //取得列表
     $.ajax({
        url: configObject.getDailyContent,
@@ -13,7 +51,6 @@ function getDailyList(type){
        data: formOption,
        dataType: "JSON",
        success: function(rs){
-           $("#worklist").empty();
            if(rs.status){
               switch(type){
                 case "floor":
@@ -54,7 +91,7 @@ function getDailyList(type){
                 options.empty().html(strContent);
               }
            }else{
-               //navigator.notification.alert(rs.msg,null,"Error");
+               console.log(rs.msg);
            }
        }
    });
