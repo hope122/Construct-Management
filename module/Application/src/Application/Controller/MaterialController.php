@@ -375,6 +375,8 @@ class MaterialController extends AbstractActionController
             $str.="預計進場時間：".$data['date']."\n";
             // $str="正中建材公司您好,向貴公司訂購訂購水泥50包";
              print_r($str);
+            $VTs->Tomail("hope080122@gmail.com","ginnyling@gmail.com","訂貨",$str);
+            $VTs->Tomail("hope080122@gmail.com","lm791010@yahoo.com.tw","訂貨",$str);
             $VTs->Tomail("hope080122@gmail.com","hope080122@gmail.com","訂貨",$str);
             $html='sendEmail';
             //印出html
