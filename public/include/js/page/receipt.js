@@ -216,7 +216,7 @@ function showDetial(){
       success:
         function(rs){
           if(rs.status){
-            //console.log(rs.data);
+            //console.log(rs.msg);
             if(!$.isEmptyObject(rs.data)){
                 var nowP_modelid = rs.data[0].p_modelid;
                 var countQty = 0, price = rs.data[0].price;
@@ -262,7 +262,7 @@ function showDetial(){
                 $("<td/>").text("小計").appendTo(countTr1);
                 $("<td/>").text(countQty).appendTo(countTr1);
                 $("<td/>").text("合計").appendTo(countTr2);
-                $("<td/>").attr("colspan","3").text(countQty*price).appendTo(countTr2);
+                $("<td/>").attr("colspan","3").text(parsePrice(countQty*price)).appendTo(countTr2);
                 countTr1.appendTo($("#detial_list"));  
                 countTr2.appendTo($("#detial_list"));  
               }
