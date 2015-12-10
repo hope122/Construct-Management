@@ -30,16 +30,22 @@ class SARController extends AbstractActionController
 		$VTs->initialization();
 		try{
 			//-----BI開始-----  
-				$mpath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\sar\\index.html";
-				$html = $VTs->GetHtmlContent($mpath);
-				$infoPath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\sar\\info.html";
-				$info = $VTs->GetHtmlContent($infoPath);
+				if(empty($_SESSION)){
+					$pagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\index\\login_page.html";
+					$pageContent = $VTs->GetHtmlContent($pagePath);
+				}else{	
+					$mpath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\sar\\index.html";
+					$html = $VTs->GetHtmlContent($mpath);
+					$infoPath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\sar\\info.html";
+					$info = $VTs->GetHtmlContent($infoPath);
+					
+					$dataArr = ["userName"=>$_SESSION["userName"],
+								"info"=>$info];
+					$html = $VTs->ContentReplace($dataArr,$html);
+					
+					$pageContent = $html;
+				}
 				
-				$dataArr = ["userName"=>$_SESSION["userName"],
-							"info"=>$info];
-				$html = $VTs->ContentReplace($dataArr,$html);
-				
-				$pageContent = $html;
 			//-----BI結束-----
         }catch(Exception $error){
 			//依據Controller, Action補上對應位置, $error->getMessage()為固定部份
