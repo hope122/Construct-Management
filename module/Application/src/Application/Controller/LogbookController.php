@@ -84,13 +84,16 @@ class LogbookController extends AbstractActionController
         //-----BI開始-----  
         try{
             $arr_data=$_POST['data'];
-
+                $html_path=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\list.html";
+                $html=$VTs->GetHtmlContent($html_path);
                 if(empty($arr_data)){
-                    $ls='無資料';
+                    
+                    $tr='無資料';
+                    $html=str_replace('@@tr@@',$tr,$html);
                 }else{
-                    $html_path=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\list.html";
+                    
                     $tr_path=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\tr.html";
-                    $html=$VTs->GetHtmlContent($html_path);
+                    
                     $tr=$VTs->GetHtmlContent($tr_path);
                      $trstr='';
                     foreach($arr_data as  $data) {
