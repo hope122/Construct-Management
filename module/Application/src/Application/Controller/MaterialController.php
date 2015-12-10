@@ -143,12 +143,16 @@ class MaterialController extends AbstractActionController
             }else{
                 $div_hid='none';
             }
+                $ls_path=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\material\\list.html";
+                $ls=$VTs->GetHtmlContent($ls_path);
                 if($ls_petition==null){
-                    $ls='無資料';
+                    $tr='<div class="css_tr"><div class="css_td" style="width:15%;">無資料</div></div>';
+                    $ls=str_replace('@@tr@@',$tr,$ls);
+                    
                 }else{
-                    $ls_path=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\material\\list.html";
+                    
                     $tr_path=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\material\\tr.html";
-                    $ls=$VTs->GetHtmlContent($ls_path);
+                    
                     $tr=$VTs->GetHtmlContent($tr_path);
                     $trstr='';
 //                    print_r($ls_petition);
