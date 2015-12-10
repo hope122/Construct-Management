@@ -33,4 +33,6 @@ var configObject = {
     "ReceiptInsertData": apurl+"/receipt/insertdata",
     "GetLogo": originUrl+"pageaction/getlogo",
     "Logout": originUrl+"menter/logout",
+    "getDailyContent": apurl+"/pageaction/getdailycontent",
+    "getWorkProject": apurl+"/pageaction/getworkproject",
 };
