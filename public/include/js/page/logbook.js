@@ -10,7 +10,6 @@ function print(){
 }
 
 function getContent(ptype,purl,divid,parameter,reset){
-  console.log(configObject.logbookGetData+"?type="+ptype+parameter);
     $.get(configObject.logbookGetData+"?type="+ptype+parameter, function( data ) {    
       //丟資料toCM回傳html內容
       $.ajax({
@@ -43,7 +42,7 @@ function tosetpage(){
 }
 function savecontentcheck(){
   isnew=$("#isnew").val();
-  console.log(isnew);
+  // console.log(isnew);
   istrue=confirm("確定後資料無法再進行修改");
   if(istrue){
     if(isnew==1){
@@ -76,7 +75,7 @@ function savecontentcheck(){
 }
 function savecontent(){
   isnew=$("#isnew").val();
-  console.log(isnew);
+  // console.log(isnew);
   if(isnew==1){
       $.ajax({
        url: configObject.logbookInsert,
