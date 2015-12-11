@@ -111,6 +111,7 @@ function checkItems(){
        data: formOption,
        //dataType: "JSON",
        success: function(rs){
+        alert('已送出項目至QC列表中');
         getDailyList('alllist');
       }
   });
