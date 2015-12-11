@@ -235,9 +235,9 @@ function showDetial(){
                     $("<td/>").text("單價").appendTo(countTr1);
                     $("<td/>").text(price).appendTo(countTr1);
                     $("<td/>").text("小計").appendTo(countTr1);
-                    $("<td/>").text(countQty).appendTo(countTr1);
+                    $("<td/>").text(Math.floor(countQty*100)/100).appendTo(countTr1);
                     $("<td/>").text("合計").appendTo(countTr2);
-                    $("<td/>").text(countQty*price).appendTo(countTr2);
+                    $("<td/>").attr("colspan","3").text(parsePrice(countQty*price)).appendTo(countTr2);
                     countTr1.appendTo($("#detial_list"));
                     countTr2.appendTo($("#detial_list"));
                   }
@@ -260,6 +260,7 @@ function showDetial(){
                 $("<td/>").text("單價").appendTo(countTr1);
                 $("<td/>").text(price).appendTo(countTr1);
                 $("<td/>").text("小計").appendTo(countTr1);
+                console.log(countQty,countQty*100,Math.floor(countQty*100),Math.floor(countQty*100)/100);
                 $("<td/>").text(countQty).appendTo(countTr1);
                 $("<td/>").text("合計").appendTo(countTr2);
                 $("<td/>").attr("colspan","3").text(parsePrice(countQty*price)).appendTo(countTr2);
