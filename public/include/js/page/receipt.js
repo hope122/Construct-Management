@@ -58,7 +58,7 @@ $(function(){
         dataType: "JSON",
         success:
           function(rs){
-            // console.log(rs.data.price[0].price);
+            // console.log(rs.data);
             if(rs.status){
               //呈現資料
               setView(rs.data);    
@@ -190,22 +190,11 @@ function setPaymentData($dateRange, $price){
   });
 }
 
-function parsePrice($price){
-  $price = String(Math.round($price));
-  var str = $price;
-  for(var i=1, j=0; i<=Math.floor($price.length/3); i++,j++){
-    str = str.substr(0,str.length-3*i-j) + "," + str.substr(str.length-3*i-j, str.length);
-  }
-  if($price.length%3==0){
-    str = str.substr(1,str.length);
-  }
 
-  return str;
-}
 
 function showDetial(){
   //取消點擊
-  $("#detialList").attr('disabled','disabled');
+  // $("#detialList").attr('disabled','disabled');
 
   $.ajax({
       url: configObject.ReceiptGetData,
@@ -216,56 +205,90 @@ function showDetial(){
       success:
         function(rs){
           if(rs.status){
-            //console.log(rs.msg);
+            // console.log(rs.data);
+            // if(!$.isEmptyObject(rs.data)){
+            //     var nowP_modelid = rs.data[0].p_modelid;
+            //     var countQty = 0, price = rs.data[0].price;
+            //     $.each(rs.data,function(i,v){
+            //       //console.log(i,v);
+            //       if(nowP_modelid = v.p_modelid){
+            //         countQty += parseFloat(v.qty);
+            //       }else{
+            //         countQty = parseFloat(v.qty);
+            //       }
+
+            //       // //總計欄位
+            //       // if( nowP_modelid != v.p_modelid ){
+            //       //   var countTr1 = $("<tr/>").attr("name","newTr");
+            //       //   var countTr2 = $("<tr/>").attr("name","newTr");
+            //       //   $("<td/>").text("單價").appendTo(countTr1);
+            //       //   $("<td/>").text(price).appendTo(countTr1);
+            //       //   $("<td/>").text("小計").appendTo(countTr1);
+            //       //   $("<td/>").text(formatPrice(countQty,2)).appendTo(countTr1);
+            //       //   $("<td/>").text("合計").appendTo(countTr2);
+            //       //   $("<td/>").attr("colspan","3").text(parsePrice(countQty*price)).appendTo(countTr2);
+            //       //   countTr1.appendTo($("#detial_list"));
+            //       //   countTr2.appendTo($("#detial_list"));
+            //       // }
+            //       //基本欄位
+            //       var $tr = $("<tr/>").attr("name","newTr");
+            //       if(rs.typeid == 0){
+            //         $("<td/>").text(v.n1+" "+v.n2+" "+v.n3+" "+v.n4).appendTo($tr);
+            //       }else if(rs.typeid == 1){
+            //         $("<td/>").text(v.name).appendTo($tr);
+            //       }
+            //       $("<td/>").text(v.unit1).appendTo($tr);
+            //       $("<td/>").css("text-align","right").text(v.qty+" ").appendTo($tr);
+            //       $("<td/>").text(v.sdate).appendTo($tr);                  
+            //       $tr.appendTo($("#detial_list"));
+
+            //       // price = v.price;
+            //     });
+            //     var countTr1 = $("<tr/>").attr("name","newTr");
+            //     var countTr2 = $("<tr/>").attr("name","newTr");
+            //     $("<td/>").text("單價: "+price).appendTo(countTr1);
+            //     // $("<td/>").text(price).appendTo(countTr1);
+            //     $("<td/>").text("小計").appendTo(countTr1);
+            //     $("<td/>").text(formatNumber(countQty,2)).appendTo(countTr1);
+            //     $("<td/>").text("合計").appendTo(countTr2);
+            //     $("<td/>").attr("colspan","2").text(parsePrice(countQty*price)).appendTo(countTr2);
+            //     countTr1.appendTo($("#detial_list"));  
+            //     countTr2.appendTo($("#detial_list"));  
+            //   }
             if(!$.isEmptyObject(rs.data)){
-                var nowP_modelid = rs.data[0].p_modelid;
-                var countQty = 0, price = rs.data[0].price;
-                $.each(rs.data,function(i,v){
-                  //console.log(i,v);
-                  if(nowP_modelid = v.p_modelid){
-                    countQty += parseFloat(v.qty);
-                  }else{
-                    countQty = parseFloat(v.qty);
-                  }
+              var $countQty = 0;
+              var $price = parseFloat(rs.data[0].price);
+              var $now_p_modelid = rs.data[0].p_modelid;
+              
+              //各筆資料欄位
+              $.each(rs.data,function(i,v){
+                var $tr = $("<tr/>").attr("name","newTr");
+                if(rs.typeid == 0){
+                  $("<td/>").attr("colspan","2").text(v.n1+" "+v.n2+" "+v.n3+" "+v.n4).appendTo($tr);
+                }else if(rs.typeid == 1){
+                  $("<td/>").attr("colspan","2").text(v.name).appendTo($tr);
+                }
+                $("<td/>").text(v.unit1).appendTo($tr);
+                $("<td/>").css("text-align","right").text(v.qty).appendTo($tr);
+                $("<td/>").text(v.sdate).appendTo($tr);                  
+                $tr.appendTo($("#detial_list"));
 
-                  //總計欄位
-                  if( nowP_modelid != v.p_modelid ){
-                    var countTr1 = $("<tr/>").attr("name","newTr");
-                    var countTr2 = $("<tr/>").attr("name","newTr");
-                    $("<td/>").text("單價").appendTo(countTr1);
-                    $("<td/>").text(price).appendTo(countTr1);
-                    $("<td/>").text("小計").appendTo(countTr1);
-                    $("<td/>").text(countQty).appendTo(countTr1);
-                    $("<td/>").text("合計").appendTo(countTr2);
-                    $("<td/>").text(countQty*price).appendTo(countTr2);
-                    countTr1.appendTo($("#detial_list"));
-                    countTr2.appendTo($("#detial_list"));
-                  }
-                  //基本欄位
-                  var $tr = $("<tr/>").attr("name","newTr");
-                  if(rs.typeid == 0){
-                    $("<td/>").text(v.n1+" "+v.n2+" "+v.n3+" "+v.n4).appendTo($tr);
-                  }else if(rs.typeid == 1){
-                    $("<td/>").text(v.name).appendTo($tr);
-                  }
-                  $("<td/>").text(v.unit1).appendTo($tr);
-                  $("<td/>").text(v.qty).appendTo($tr);
-                  $("<td/>").text(v.sdate).appendTo($tr);                  
-                  $tr.appendTo($("#detial_list"));
+                $countQty += parseFloat(v.qty);
+              });
 
-                  price = v.price;
-                });
-                var countTr1 = $("<tr/>").attr("name","newTr");
-                var countTr2 = $("<tr/>").attr("name","newTr");
-                $("<td/>").text("單價").appendTo(countTr1);
-                $("<td/>").text(price).appendTo(countTr1);
-                $("<td/>").text("小計").appendTo(countTr1);
-                $("<td/>").text(countQty).appendTo(countTr1);
-                $("<td/>").text("合計").appendTo(countTr2);
-                $("<td/>").attr("colspan","3").text(parsePrice(countQty*price)).appendTo(countTr2);
-                countTr1.appendTo($("#detial_list"));  
-                countTr2.appendTo($("#detial_list"));  
-              }
+              //總計欄位
+              var countTr1 = $("<tr/>").attr("name","newTr");
+              var countTr2 = $("<tr/>").attr("name","newTr");
+              $("<td/>").text("單價").appendTo(countTr1);
+              $("<td/>").css("text-align","right").text($price+"元").appendTo(countTr1);
+              $("<td/>").text("小計").appendTo(countTr1);
+              $("<td/>").css("text-align","right").text(formatNumber($countQty,2)).appendTo(countTr1);
+              $("<td/>").attr("colspan","2").text("合計").appendTo(countTr2);
+              $("<td/>").css("text-align","right").attr("colspan","3").text(parsePrice($countQty*$price)+"元").appendTo(countTr2);
+              countTr1.appendTo($("#detial_list"));  
+              countTr2.appendTo($("#detial_list"));  
+
+            }
           }else{
             var $tr = $("<tr/>").attr("name","newTr").appendTo("#detial_list");
             $("<td/>").attr("colspan","4")
@@ -280,9 +303,12 @@ function showDetial(){
           console.log(e);
         }
     });
-  $("#detial_list").dialog({
-    height: '100%',
-    width: '420',
+ 
+    $("#list").dialog({
+    draggable: false,
+    modal: true,
+    width: $(window).width()*0.3,
+    height: $(window).height()*0.4,
     position: { my: "center", at: "center", of: window },
     beforeClose: function(e,ui){
         //移除資料
@@ -327,4 +353,24 @@ function checkSubmit(){
         console.log(e);
       }
   });
+}
+
+function parsePrice($price){
+  $price = String(Math.round($price));
+  var str = $price;
+  for(var i=1, j=0; i<=Math.floor($price.length/3); i++,j++){
+    str = str.substr(0,str.length-3*i-j) + "," + str.substr(str.length-3*i-j, str.length);
+  }
+  if($price.length%3==0){
+    str = str.substr(1,str.length);
+  }
+
+  //str = formatNumber(str,2);
+
+  return str;
+}
+
+function formatNumber($num,$pos){
+  var $size = Math.pow(10, $pos);
+  return Math.round($num * $size) / $size; 
 }
