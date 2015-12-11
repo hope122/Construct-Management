@@ -49,7 +49,7 @@ function setBtn(){
     $("#inp_quantity").change(function(){
         var  sum;
         sum=$("#hid_lcount").val()-$(this).val();
-        sum=math.round(sum*100);
+        sum=Math.round(sum*100);
         sum=sum/100;
         $("#inp_lcount").val(sum);
 

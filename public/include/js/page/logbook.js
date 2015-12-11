@@ -110,6 +110,7 @@ function savelaborsafety(){
        data: $("#cform").serialize(),
        async:false,
        success: function(rs){
+    
           alert("儲存成功");
        }
     });
