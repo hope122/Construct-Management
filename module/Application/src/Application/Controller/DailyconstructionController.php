@@ -32,6 +32,9 @@ class DailyconstructionController extends AbstractActionController
 				$pageContent = $VTs->ContentReplace($dataArr,$pageContent);
 	            //$pageContent = str_replace("@@userName@@",$_SESSION["userName"],$pageContent);
 				//$pageContent = $VTs->CreateInsertOptionBtn('test','test/tw'). $VTs->CreateModifyOptionBtn(["uid"=>1], 'test/tw', 'inputClass', 'contentClass') . $VTs->CreateDeleteOptionBtn(["uid"=>1], 'test/tw', 'rowID') . $VTs->CreateFinishOptionBtn(["uid"=>1], 'test/tw', 'inputClass', 'contentClass') . $pageContent;
+			}else{
+				$pagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\index\\login_page.html";
+	            $pageContent = $VTs->GetHtmlContent($pagePath);
 			}
 			//----BI結束----
 		}catch(Exception $error){
