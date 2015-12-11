@@ -70,6 +70,7 @@ function savecontentcheck(){
          }
       });
     }
+    $("#div_hid").hide();
     }
   
 }
