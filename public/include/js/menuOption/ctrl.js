@@ -35,22 +35,25 @@ function reprocessMenus(menuObject){
       tmpArr[tmpArr.length] = menuObject[i];
     }else{
       var optionStr = '<div class="options">';
+      optionStr += '<form id="setting'+index+'">';
       optionStr += '<ul><li>';
       optionStr += '<span class="'+menuObject[i].nid+'">'+menuObject[i].nid + '</span>';
       optionStr += '<ul class="menusSettionOptions" id="menusSettionOptions'+index+'">';
       
-      optionStr += '<li><span>連結: </span><span><input type="text" name="htrf['+index+'][]" value="'+ menuObject[i].href +'"></span></li>';
-      optionStr += '<li><span>點選動作: </span><span><input type="text" name="click_action['+index+'][]" value="'+ menuObject[i].click_action +'"></span></li>';
-      optionStr += '<li><span>多語系ID設定: </span><span><input type="text" name="nid['+index+'][]" value="'+ menuObject[i].nid +'"></span></li>';
-      
+      optionStr += '<li><span>連結: </span><span><input type="text" name="htrf['+index+']" value="'+ menuObject[i].href +'"></span></li>';
+      optionStr += '<li><span>點選動作: </span><span><input type="text" name="click_action['+index+']" value="'+ menuObject[i].click_action +'"></span></li>';
+      optionStr += '<li><span>多語系ID設定: </span><span><input type="text" name="nid['+index+']" value="'+ menuObject[i].nid +'"></span></li>';
       
       optionStr += '</ul>';
-      optionStr += '</li></ul>';
+      optionStr += '</li>';
+      optionStr += '<li><input type="button" value="設定" onclick="settingBtn(\'setting'+index+'\')"></li>';
+      optionStr += '</ul>';
+      optionStr += '</form>';
       optionStr += '</div>';
       $(optionStr).appendTo("#menusOptions");
     }
   });
-  var selectOption = '<li class="parentOptions">所屬父層：<select id="parentOptions@@uid@@" name="parent_layer[@@uid@@][]">';
+  var selectOption = '<li class="parentOptions">所屬父層：<select id="parentOptions@@uid@@" name="parent_layer[@@uid@@]">';
   selectOption += selectContent;
   selectOption += '</select></li>';
   
@@ -78,17 +81,21 @@ function reprocessMenus(menuObject){
       tmpItems[tmpArr[i].parent_layer] = {};
     }
     var optionStr = '<div class="options">';
+    optionStr += '<form id="setting'+index+'">';
     optionStr += '<ul><li>';
     optionStr += '<span class="'+tmpArr[i].nid+'">'+tmpArr[i].nid + '</span>';
     optionStr += '<ul class="menusSettionOptions" id="menusSettionOptions'+index+'">';
     
-    optionStr += '<li><span>連結: </span><span><input type="text" name="htrf['+index+'][]" value="'+ tmpArr[i].href +'"></span></li>';
-    optionStr += '<li><span>點選動作: </span><span><input type="text" name="click_action['+index+'][]" value="'+ tmpArr[i].click_action +'"></span></li>';
-    optionStr += '<li><span>多語系ID設定: </span><span><input type="text" name="nid['+index+'][]" value="'+ tmpArr[i].nid +'"></span></li>';
+    optionStr += '<li><span>連結: </span><span><input type="text" name="htrf['+index+']" value="'+ tmpArr[i].href +'"></span></li>';
+    optionStr += '<li><span>點選動作: </span><span><input type="text" name="click_action['+index+']" value="'+ tmpArr[i].click_action +'"></span></li>';
+    optionStr += '<li><span>多語系ID設定: </span><span><input type="text" name="nid['+index+']" value="'+ tmpArr[i].nid +'"></span></li>';
     optionStr += tmpSelectOptionStr;
     
     optionStr += '</ul>';
-    tmpSelectOptionStr += '</li></ul>';
+    optionStr += '</li>';
+    optionStr += '<li><input type="button" value="設定" onclick="settingBtn(\'setting'+index+'\')"></li>';
+    optionStr += '</ul>';
+    optionStr += '</form>';
     optionStr += '</div>';
 
     var objects = {};
@@ -132,4 +139,40 @@ function useGetAjax(url, data){
        }
     });
     return result;
+}
+
+//設定
+function settingBtn(formID){
+  var pram = $("#"+formID).serialize();
+  var uuid;
+  $.ajax({
+     url: configObject.getAcInfo,
+     type: "POST",
+     async: false,
+     dataType: "JSON",
+     success: function(rs){
+         if(rs.status){
+             uuid = rs.uuid;
+         }else{
+             console.log(rs.msg);
+         }
+     }
+  });
+
+  $.ajax({
+     url: configObject.getAcInfo,
+     type: "POST",
+     async: false,
+     dataType: "JSON",
+     success: function(rs){
+         if(rs.status){
+             uuid = rs.uuid;
+         }else{
+             console.log(rs.msg);
+         }
+     }
+  });
+  console.log(uuid);
+  
+  console.log(pram);
 }

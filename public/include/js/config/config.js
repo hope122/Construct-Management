@@ -35,4 +35,5 @@ var configObject = {
     "Logout": originUrl+"menter/logout",
     "getDailyContent": apurl+"/pageaction/getdailycontent",
     "getWorkProject": apurl+"/pageaction/getworkproject",
+    "settingMenu": apurl+"/pageaction/settingmenu",
 };
