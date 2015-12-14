@@ -1,6 +1,6 @@
 $(function(){
 	$.ajax({
-		url: "http://127.0.0.1:99/engineeringmanage/getdata",
+		url: configObject.engGetData,
 		type: "POST",
 		data: { type: "index" },
 		dataType: "JSON",
@@ -80,7 +80,7 @@ function cancelChosen(){
 
 function deleteChosen(){
 	$.ajax({
-		url: "http://127.0.0.1:99/engineeringmanage/deletedata", 
+		url: configObject.engDeleteData, 
 		type: "POST",
 		data: { table: $("#table_for_getTypeId").val(), code: $("#chosen_code").val() },
 		dataType: "JSON",
@@ -165,7 +165,7 @@ function sendData(){
 	if($("#table_for_getTypeId").val()!=""){
 		//取得所需typeId
 		$.ajax({
-			url: "http://127.0.0.1:99/engineeringmanage/getdata",
+			url: configObject.engGetData,
 			type: "POST",
 			data: { type: "getTypeId", table: $("#table_for_getTypeId").val(), code: $("#chosen_code").val() },
 			dataType: "JSON",
@@ -185,7 +185,7 @@ function sendData(){
 	
 	//新增資料
 	$.ajax({
-		url: "http://127.0.0.1:99/engineeringmanage/insertdata",
+		url: configObject.engInsertData,
 		type: "POST",
 		data: { table: $("#table_for_insert").val(), 
 				name: $("#eng_name").val(),
