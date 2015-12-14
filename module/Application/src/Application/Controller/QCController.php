@@ -114,16 +114,17 @@ class QCController extends AbstractActionController
         $i=0;
         if(!empty($arr_list)){
         foreach($arr_list as $list) {
-             echo $i++;
+             // echo $i++;
             //判斷有imgid(照片id)才顯示  
-                  print_r($list['imgid']);
             if(!empty($list['imgid'])){
                 $trs=$trhtml;
                 $arrin = array(
                 "qcid" => $list['uid'],
             );
 
-                $imginfo = $VTs->json2data($VTs->UrlDataPost("http://211.21.170.18:99/pageaction/getqcimglist",$arrin));
+                $imginfo = $VTs->json2data($VTs->UrlDataPost($apurl."/pageaction/getqcimglist",$arrin));
+                // print_r($imginfo);
+                // exit;
                 if($imginfo->status){
                     $trs=str_replace('@@chkdate@@',$list['datec'],$trs);
                      $trs=str_replace('@@d64@@',$imginfo->imgs->img0,$trs);
@@ -137,6 +138,9 @@ class QCController extends AbstractActionController
                 }
             }
    
+       }
+       if($htmlstr==''){
+            $htmlstr='無資料';
        }
    }
       $pageContent=$htmlstr;

@@ -166,37 +166,27 @@ class MaterialController extends AbstractActionController
                         $trs=str_replace('@@ma_name@@',$lsData['ma_name'],$trs);
                         $trs=str_replace('@@count@@',$lsData['count'],$trs);
                         $status='';
-                        $color='block';
+                        // $color='block';
 
-
-                        if ($lsData['ck2']!=-1){
-                           if($lsData['ck2']==1){
-                                $status='已進場';
-                           }else{
-                                $status='QC未通過';
-                                $color='red';
-                           }
-                        }else{
-                            if($lsData['ck1']!=-1){
-                              if($lsData['ck1']==1){
-                                    $status='待進場';
-                               }else{
-                                    $status='主任未通過';
-                                    $color='red';
-                               }
-                            }else{
-                                $status='待確認';
-                                $color='#8E8E8E';
-                            }
+                         $status='待確認';
+                        if ($lsData['chksend']!=-1){
+                            $status='待進場';
                         }
+                        if ($lsData['chkin']!=-1){
+                            $status='待審查';
+                        }
+                        if ($lsData['chkqc']!=-1){
+                            $status='已進場';
+                        }
+
                         $trs=str_replace('@@status@@',$status,$trs);
-                        $trs=str_replace('@@color@@',$color,$trs);
-                        if($lsData['ck1']==1){
-                            $str_order='已確認';
-                        }else{
-                            $str_order="<input type='checkbox' class='cls_order' value=".$lsData['uid'].">";
-                        }
-                        $trs=str_replace('@@order@@',$str_order,$trs);
+                        // $trs=str_replace('@@color@@',$color,$trs);
+                        // if($lsData['ck1']==1){
+                        //     $str_order='已確認';
+                        // }else{
+                        //     $str_order="<input type='checkbox' class='cls_order' value=".$lsData['uid'].">";
+                        // }
+                        // $trs=str_replace('@@order@@',$str_order,$trs);
                         // $trs=str_replace('@@uid@@',$lsData['uid'],$trs);
                         $trstr.=$trs;
                     }
