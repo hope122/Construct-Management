@@ -29,8 +29,9 @@ $(function(){
 		$("#table_for_insert").val(getTable($code,0));
 		$("#table_for_getTypeId").val(getTable($code,1));
 		
-		$("#cancel_chosen").show();		
-		$("#delete_chosen").show();		
+		$("#cancel_chosen").show();
+		$("#delete_chosen").show();
+		$("#update_chosen").show();
 		
 		//樹狀結構開合
 		showOrHide($(this).siblings("ul"));
@@ -76,6 +77,7 @@ function cancelChosen(){
 	$("#table_for_getTypeId").val("");
 	$("#cancel_chosen").hide();
 	$("#delete_chosen").hide();
+	$("#update_chosen").hide();
 }
 
 function deleteChosen(){
