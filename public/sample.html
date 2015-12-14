@@ -17,8 +17,17 @@
 	}
   .options{
     border: 1px solid #000;
-    margin: 3px 0 0 0;
+    margin: 3px 0.8em 0 0;
     width: 300px;
+    float: left;
+  }
+  #menusOptions li{
+    width: 100%;
+  }
+  .parent{
+    float: left;
+    width : 100%;
+    margin: 1.5em 0 0 0;
   }
   </style>
   <script>
@@ -36,23 +45,10 @@
   </script>
 </head>
 <body>
-	<ul>
-	  <li id="draggable" class="ui-state-highlight">Drag me down</li>
-	</ul>
   <div id="menusOptions">
   </div>
-<ul id="menus">
-</ul>
-
- 
-<ul id="sortable">
-  <li class="ui-state-default">Item 1</li>
-  <li class="ui-state-default">Item 2</li>
-  <li class="ui-state-default">Item 3</li>
-  <li class="ui-state-default">Item 4</li>
-  <li class="ui-state-default">Item 5</li>
-</ul>
- 
+<ul id="menus" style="display:none;">
+</ul> 
  
 </body>
 </html>

@@ -18,7 +18,7 @@ function loginEven(){
 		type:"POST",
 		async: true,
 		success: function(rs){
-			var result = $.parseJSON(rs);
+      var result = $.parseJSON(rs);
 			redirectPage(result);
 		}
 	});

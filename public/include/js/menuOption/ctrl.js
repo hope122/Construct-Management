@@ -8,7 +8,7 @@ function loadMenuLayer(){
   var menuObject = useGetAjax(configObject.getmenu,positionObject);
   menuObject.optionData = true;
   var menuLayer = useGetAjax(configObject.menuProcess,menuObject);
-  console.log(menuObject);
+  //console.log(menuObject);
   reprocessMenus(menuObject.menu);
   $("#menus").html(menuLayer.menu);
   /*$("#menus .menuOptions").sortable({
@@ -23,10 +23,14 @@ function reprocessMenus(menuObject){
   var tmpArr = [];
   var selectContent = '<option value = "0">頂層選項</option>';
   //先整理父層架構
+  var optionStr = '<div>頂層選項</div><br>';
+  $(optionStr).appendTo("#menusOptions");
+  var tmpParentContent = {};
   $.each(menuObject,function(i,v){
     var index = parseInt(menuObject[i].uid);
     //console.log(index);
     selectContent += '<option value = "'+index+'" class="'+menuObject[i].nid+'"></option>';
+    tmpParentContent[index] = menuObject[i].nid;
     if(parseInt(menuObject[i].parent_layer) != 0){
       tmpArr[tmpArr.length] = menuObject[i];
     }else{
@@ -58,12 +62,21 @@ function reprocessMenus(menuObject){
     $(this).find(".parentOptions").html(tmpSelectOption);
   });
 
- 
+ var tmpParent = {};
+ var tmpItems = {};
   //再解決子層架構
   $.each(tmpArr,function(i,v){
     var index = tmpArr[i].uid;
     var restr = new RegExp("@@uid@@", 'g');
     var tmpSelectOptionStr = selectOption.replace(restr,index);
+    if(typeof tmpParent[tmpArr[i].parent_layer] != 'undefined'){
+      //var optionStr = '<div class="options">';
+    }else{
+      //var optionStr = '<div class="parent'+tmpArr[i].parent_layer+' parent">'+tmpArr[i].parent_layer+'</div><br/>';
+      //optionStr += '<div class="options">';
+      tmpParent[tmpArr[i].parent_layer] = true;
+      tmpItems[tmpArr[i].parent_layer] = {};
+    }
     var optionStr = '<div class="options">';
     optionStr += '<ul><li>';
     optionStr += '<span class="'+tmpArr[i].nid+'">'+tmpArr[i].nid + '</span>';
@@ -75,14 +88,26 @@ function reprocessMenus(menuObject){
     optionStr += tmpSelectOptionStr;
     
     optionStr += '</ul>';
-    optionStr += '</li></ul>';
+    tmpSelectOptionStr += '</li></ul>';
     optionStr += '</div>';
-    $(optionStr).appendTo("#menusOptions").find("#parentOptions"+index).val(tmpArr[i].parent_layer);    
+
+    var objects = {};
+    objects[index] = optionStr;
+    $.extend(tmpItems[tmpArr[i].parent_layer],objects);
+    //$(optionStr).appendTo("#menusOptions").find("#parentOptions"+index).val(tmpArr[i].parent_layer);    
   });
-  
-  
-  
-  console.log(tmpArr);
+  //開始放到頁面上
+  $.each(tmpItems,function(i,v){
+    var optionStr = '<h3 class="'+tmpParentContent[i]+' parent">'+tmpParentContent[i]+'</h3><br/>';
+    $(optionStr).appendTo("#menusOptions");   
+    $.each(tmpItems[i],function(y,yv){
+      var optionStr = yv;
+      $(optionStr).appendTo("#menusOptions").find("#parentOptions"+y).val(i);
+    });
+
+  });
+  //console.log(tmpParentContent);
+  //console.log(tmpItems);
 }
 
 //取得資訊
