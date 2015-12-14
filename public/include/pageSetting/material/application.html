@@ -1,57 +1,36 @@
-<head>
-<title>材料申請1</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <script src="/include/js/jquery/jquery-1.11.3.min.js"></script>
-    <script src="/include/js/jquery/jquery-ui.min.js"></script>
-    <script src="/include/js/page/material.js"></script>
-    <script src="/include/js/config/config.js"></script>
-    <script src="/include/js/socket/socket.io.js"></script>
-    <script src="/include/js/socket/conn.js"></script>
-    <script src="/include/js/toastmessage/jquery.toastmessage.js"></script>
-    <script src="/include/js/notice/notice.js"></script>
-    <link rel="stylesheet" href="/include/css/jquery.toastmessage.css">
-    <link rel="stylesheet" href="/include/css/jquery-ui.min.css">
-    <style type="text/css">
-        .css_table {
-      display:table;
-          }
-        .css_tr {
-              display: table-row;
-          }
-        .css_td {
-              display: table-cell;
-              margin:auto 5px auto 5px;
-          }
-    </style>
-</head>
+<button onclick="javascript:getContent('list','list','div_content','',true);">清單列表</button>
+
 <div class='css_table' align='center' style='margin: 0px auto;'>
-    <input type='hidden' class='cls_inp' id='identity' value='3'>
-    <div class="css_tr">
-         <div class="css_td">廠商</div>
-          <div class="css_td">品項</div>
-          <div class="css_td">數量</div>
-          <div class="css_td">已進場累計數量</div>
-          <div class="css_td">合約總數量</div>
-          <div class="css_td">日期</div>
-          <div class="css_td">放置地點</div>
-          
-      </div>
-     <div class="css_tr">
-          <div class="css_td" > <select id='inp_supply' class='cls_inp'><option value=0>請選擇</option>@@opt_supply@@</select></div>
-          <div class="css_td" > <select id='inp_prjuid' class='cls_inp'><option value=0>請選擇</option>@@opt_prjuid@@</select></div>
-          <div class="css_td" ><input id='inp_quantity' class='cls_inp'></div>
-          <div class="css_td" ><input id='inp_finished'  readonly value=0></div>
-          <div class="css_td" ><input id='inp_total'  readonly value=0></div>
-          <div class="css_td" ><input id='inp_date' class='cls_inp'></div>
-          <div class="css_td" ><input id='inp_place' class='cls_inp'></div>
-      </div>
+<input type='hidden' class='cls_inp' id='prj_mid'>
+<input type='hidden' class='cls_inp' id='identity' value='@@uuid@@'>
+<div class="css_tr">
+      <div class="css_td">品項</div>
+     <div class="css_td">廠商</div>
+      <div class="css_td">數量</div>
+      <div class="css_td">剩餘數量</div>
+      <div class="css_td">進場日期</div>
+      <div class="css_td">放置地點</div>
+      <div class="css_td">施作部位</div>
+      
+  </div>
+ <div class="css_tr">
+      <div class="css_td" > <select id='inp_prjuid' class='cls_inp'><option value=0>請選擇</option>@@opt_prjuid@@</select></div>
+      <div class="css_td" > <select id='inp_supply' class='cls_inp'><option value=0>請選擇</option>@@opt_supply@@</select></div>
+      <div class="css_td" ><input id='inp_quantity' class='cls_inp'></div>
+      <div class="css_td" ><input id='inp_lcount'  readonly value=0><input type='hidden' id='hid_lcount'></div>
+      <div class="css_td" ><input id='inp_date' class='cls_inp qc_date'></div>
+      <div class="css_td" ><input id='inp_place' class='cls_inp'></div>
+      <div class="css_td" ><input id='inp_mplace' class='cls_inp'></div>
+  </div>
+  <a href="javascript:clear();">清除搜尋</a>
 </div>
 <br>
 <div align='center'>
-    <input type='button' id='send' onclick='chkinp();' value='送出'>
+<input type='button' id='send' onclick='chkinp();' value='送出'>
 </div>
 <hr>
+<div id='info'></div>
 <div class='css_bable'  align='center' style='margin: 0px auto;'>
-  <div id="list" class="css_tr" >
-  </div>
+<div id="list" class="css_tr" >
+</div>
 </div>

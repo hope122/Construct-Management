@@ -176,6 +176,54 @@ return array(
 					),
 				),
 			),
+			'engineeringmanage' => array(
+				'type'    => 'segment',
+				'options' => array(
+					'route'    => '/engineeringmanage[/:action]',
+					'constraints' => array(
+						'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+						'id'     => '[0-9]+',
+					),
+					'defaults' => array(
+						'controller' => 'Application\Controller\engineeringmanage',
+						'action'     => 'index',
+					),
+				),
+			),
+			'receipt' => array(
+				'type'    => 'segment',
+				'options' => array(
+					'route'    => '/receipt[/:action]',
+					'constraints' => array(
+						'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+						'id'     => '[0-9]+',
+					),
+					'defaults' => array(
+						'controller' => 'Application\Controller\receipt',
+						'action'     => 'index',
+					),
+				),
+			),
+			'constructionschedule'=> array(
+				'type'    => 'segment',
+				'options' => array(
+					'route'    => '/constructionschedule',
+					'defaults' => array(
+						'controller' => 'Application\Controller\constructionschedule',
+						'action'     => 'index',
+					),
+				),
+			),
+			'dailyconstruction'=> array(
+				'type'    => 'segment',
+				'options' => array(
+					'route'    => '/dailyconstruction',
+					'defaults' => array(
+						'controller' => 'Application\Controller\dailyconstruction',
+						'action'     => 'index',
+					),
+				),
+			),
         ),
     ),
     'service_manager' => array(
@@ -197,7 +245,11 @@ return array(
             'Application\Controller\QC' => 'Application\Controller\QCController',
             'Application\Controller\SAR' => 'Application\Controller\SARController',
             'Application\Controller\Logbook' => 'Application\Controller\LogbookController',
-            'Application\Controller\EmployeeManage' => 'Application\Controller\EmployeeManageController'
+            'Application\Controller\EmployeeManage' => 'Application\Controller\EmployeeManageController',
+            'Application\Controller\EngineeringManage' => 'Application\Controller\EngineeringManageController',
+            'Application\Controller\receipt' => 'Application\Controller\receiptController',
+            'Application\Controller\Constructionschedule' => 'Application\Controller\ConstructionscheduleController',
+            'Application\Controller\Dailyconstruction' => 'Application\Controller\DailyconstructionController',
         ),
     ),
     'view_manager' => array(

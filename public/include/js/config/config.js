@@ -1,11 +1,12 @@
 var apurl="http://211.21.170.18:99";
-//var apurl="http://127.0.0.1:88";
+// var apurl="http://127.0.0.1:88";
+// var apurl="http://127.0.0.1:99";
 var originUrl = location.origin+'/';
 var configObject = {
-    "LoginUrl": "http://211.21.170.18:99/login",
-    "langSet":"http://211.21.170.18:99/lang/page",
+    "LoginUrl": apurl+"/login",
+    "langSet": apurl+"/lang/page",
     "processLoginUrl": originUrl+"menter/setlogin",
-    "getmenu": "http://211.21.170.18:99/pageaction/getmenu",
+    "getmenu": apurl+"/pageaction/getmenu",
     "menuProcess": originUrl+"pageaction/menuprocess",
     "getPosition": originUrl+"pageaction/acposition",
     "MaterialInsert":apurl+"/material/dbinsert",
@@ -18,6 +19,7 @@ var configObject = {
     "QCDelete":apurl+"/qc/dbdelete",
 	"SARGetworkerdata": apurl+"/sar/getworkerdata",
 	"SARRecordAttendance": apurl+"/sar/recordattendance",
+	"SARReport": apurl+"/sar/report",
     "logbookGetData":apurl+"/logbook/getdbdata",
     "logbookInsert":apurl+"/logbook/dbinsert",
     "logbookModify":apurl+"/logbook/dbmodify",
@@ -26,4 +28,11 @@ var configObject = {
 	"empGetData": apurl+"/employeemanage/getdata",
 	"empInsertData": apurl+"/employeemanage/insertdata", 
 	"empUpdateData": apurl+"/employeemanage/updatedata",
+    "ReceiptGetData": apurl+"/receipt/getdata",
+    "ReceiptDetialList": originUrl+"receipt/detial",
+    "ReceiptInsertData": apurl+"/receipt/insertdata",
+    "GetLogo": originUrl+"pageaction/getlogo",
+    "Logout": originUrl+"menter/logout",
+    "getDailyContent": apurl+"/pageaction/getdailycontent",
+    "getWorkProject": apurl+"/pageaction/getworkproject",
 };

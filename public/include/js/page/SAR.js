@@ -1,32 +1,34 @@
-$(function(){
-	$("#ID").focus();
-})
-
 function submitCheck(){
-	//console.log("send ID: "+$("#ID").val());
-	//console.log($("#switch_type").val());
 	if($("#ID").val()!=""){		
 		$.ajax({
 			url: configObject.SARGetworkerdata,
-			//url: "http://127.0.0.1:99/sar/getworkerdata",
             type: "POST",
-			data: "ID="+$("#ID").val(),
+			data: { ID: $("#ID").val() },
 			dataType: "JSON",
 			async:false,
             success: 
 				function(rs){
-					//console.log(rs);
+					// console.log(rs);
 					if(rs.status){
 						
 						//顯示人員資料
-						//console.log(rs.info_type);
+						var $img = rs.sar.taxid + "/" + rs.sar.sid + ".jpg";
+						$("#personal_img").attr("src","../include/workersAlbum/" + $img)
+										  .attr("width", "180px")
+										  .attr("height", "180px");
 						
 						switch(rs.info_type){
 							case "worker":
 								//塞入資料
 								$("#name").text(rs.sar.name);
 								$("#sex").text(rs.sar.sex);
-								$("#birthday").text(rs.sar.birthday);
+								// $("#birthday").text(rs.sar.birthday.substring(0,4));
+								
+								//計算年齡
+								var dateObj = new Date();
+								var $age = dateObj.getFullYear() - parseInt(rs.sar.birthday.substring(0,4));
+								$("#age").text($age);
+								
 								$("#type").text(rs.sar.work_name);
 								$("#supply").text(rs.sar.su_name);
 								
@@ -55,12 +57,6 @@ function submitCheck(){
 						}
 
 						//紀錄出勤時間
-						//console.log($("#check_type").val())
-						//recordAttendance($("#check_type").val());
-						
-						//console.log($("input[name=radio]:checked").val());
-						//recordAttendance($("input[name=radio]:checked").val());
-						
 						//console.log($("#switch_type").val());
 						recordAttendance($("#switch_type").val());
 						
@@ -93,13 +89,13 @@ function submitCheck(){
 	}
 }
 
-function recordAttendance(check_type){
-	//alert(check_type);
+function recordAttendance($check_type){
 	$.ajax({
 		url: configObject.SARRecordAttendance,
-		//url: "http://127.0.0.1:99/sar/recordattendance",
         type: "POST",
-		data: { ID:$("#ID").val(), check_type:check_type },
+		data: { ID: $("#ID").val(),
+				check_type: $check_type 
+				},
 		dataType: "JSON",
 		async:false,
         success: 
@@ -107,7 +103,7 @@ function recordAttendance(check_type){
 				//console.log(rs);
 				$("#check").show();
 				$("#uncheck").hide();
-				switch(check_type){
+				switch($check_type){
 					case "1":
 						$("#in").show();
 						$("#out").hide();
@@ -123,8 +119,7 @@ function recordAttendance(check_type){
 			function(e){
 				$("#uncheck").show();
 				$("#check").hide();
-				
-				//console.log(e);
+				console.log(e);
 			}
 	});
 }
@@ -133,4 +128,60 @@ function runScript(e){
     if (e.keyCode == 13) {
        $("#ID_check").click();
     }
+}
+
+function reloadChart(){
+	setTotalPeople();
+		
+	resetChart("SARChart");	
+	var options = {
+		url: configObject.SARReport,
+		urlMethod: "POST",
+		sendData: { date: $("#report_date").val().replace(/\//g,"-") },
+		drawItemID: 'SARChart',
+		unitTitle: "人次",
+		bottomTitle: "工種",
+		drawType: "ColumnChart", //drawType 可使用 ColumnChart、LineChart 兩種
+		resultIndex: "data",
+		annotation: true
+	};
+	createChart(options);
+}
+
+function setTotalPeople(){
+	$.ajax({
+		url: configObject.SARReport,
+		type: "POST",
+		data: { date: $("#report_date").val().replace(/\//g,"-") },
+		dataType: "JSON",
+		asyns: false,
+		success:
+			function(rs){
+				if(rs.status){
+					var $totalPeople = 0;
+					for(var index in rs.data){
+						$totalPeople += parseInt(rs.data[index].w_count);
+					}
+					if($totalPeople!=0){
+						$("#totalPeople").html($totalPeople);
+						$("#has_people").show();
+						$("#SARChart").css("visibility", "visible");
+						$("#no_people").hide();
+					}else{
+						$("#totalPeople").html("");
+						$("#has_people").hide();
+						$("#SARChart").css("visibility", "hidden");
+						$("#no_people").show();
+					}
+				}else{
+					$("#has_people").hide();
+					$("#SARChart").css("visibility", "hidden");
+					$("#no_people").show();
+				}
+			},
+		error:
+			function(e){
+				console.log(e);
+			}
+	});
 }

@@ -2,6 +2,7 @@ var redirect_url;
 var login_code;
 
 $(function(){
+  setLogoString();
 	//console.log(GetParameters);
 	if(typeof GetParameters["redirect_url"] !== "undefined"){
 		redirect_url = GetParameters["redirect_url"];
@@ -27,7 +28,7 @@ function redirectPage(result){
 	if(result.status){
         $.post(configObject.processLoginUrl,result,function(rs){
            //console.log(rs);
-           location.href = "./";
+           location.href = location.origin;
         });
 	}else{
 		alert(result.error);
@@ -36,24 +37,27 @@ function redirectPage(result){
 
 function logoutEven(){
 	$.ajax({
-		url: 'menter/logout',
+		url: configObject.Logout,
 		type:"POST",
 		async: false,
 		success: function(rs){
-			location.href = './';
+			location.href = location.origin;
 		}
 	});
 }
 
-function getPageContents(){
-    $.ajax({
-        url: 'menter/logout',
-        type:"POST",
-        async: false,
-        success: function(rs){
-            location.href = './';
+function setLogoString(){
+  $.ajax({
+      url: configObject.GetLogo,
+      type:"POST",
+      async: true,
+      dataType: "JSON",
+      success: function(rs){
+        if(rs.status){
+          $("#logo").html(rs.logoString);
         }
-    });
+      }
+  });
 }
 
 var GetParameters = function () {

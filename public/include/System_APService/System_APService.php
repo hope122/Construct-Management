@@ -325,7 +325,12 @@
 			return $this->SystemToolsService->UrlDataGet($url);
 		}
 	#modCurl結束
-	
+	#modMail
+		public function Tomail($sender,$recipient,$mailTitle,$msg){
+			//回傳true/false
+			return $this->SystemToolsService->Tomail($sender,$recipient,$mailTitle,$msg);
+		}
+	#modMail結束	
 	#這裡是	SystemToolsService 結束
 	#開始SystemFrameService
 		
