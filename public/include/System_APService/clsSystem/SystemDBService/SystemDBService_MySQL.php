@@ -8,6 +8,7 @@
 		//資料庫連線
 		public function CreateDBConnection($sServer,$sDatabase,$sUser,$sPassWord){			
 			$this->conn = new \mysqli($sServer, $sUser, $sPassWord,$sDatabase);
+			$this->conn->set_charset("utf8");
 			if ($this->conn->connect_error) {
 				$this->conn = false;
 			}
