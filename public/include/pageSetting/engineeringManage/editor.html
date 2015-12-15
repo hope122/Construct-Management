@@ -26,7 +26,7 @@
             $(function(){
 			  
 				$.ajax({
-					url: "http://127.0.0.1:99/engineeringmanage/getdata",
+					url: configObject.engGetData,
 					type: "POST",
 					data: { type: "selectOption" },
 					dataType: "JSON",

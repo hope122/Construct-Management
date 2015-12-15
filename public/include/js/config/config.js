@@ -35,4 +35,8 @@ var configObject = {
     "Logout": originUrl+"menter/logout",
     "getDailyContent": apurl+"/pageaction/getdailycontent",
     "getWorkProject": apurl+"/pageaction/getworkproject",
+    "engGetData": apurl+"/engineeringmanage/getdata",
+    "engDeleteData": apurl+"/engineeringmanage/deletedata",
+    "engInsertData": apurl+"/engineeringmanage/insertdata",
+    "engUpdateData": apurl+"/engineeringmanage/updatedata",
 };
