@@ -1,4 +1,9 @@
 $(function(){
+
+
+	$("#new_label").hide();
+	$("#edit_label").hide();
+
 	$.ajax({
 		url: configObject.engGetData,
 		type: "POST",
@@ -17,6 +22,9 @@ $(function(){
 				console.log(e);
 			}
 	});
+	$( "#dataTree" ).accordion({
+      collapsible: true
+    });
 		
 	$("#dataTree a").click(function(){
 		//提示使用者目前選
@@ -26,12 +34,11 @@ $(function(){
 		$("#target").text($(this).text());
 		var $code = $(this)[0].getAttribute("data-code");
 		$("#chosen_code").val($code);
+		$("#eng_name").val($(this).text());
 		$("#table_for_insert").val(getTable($code,0));
 		$("#table_for_getTypeId").val(getTable($code,1));
 		
-		$("#cancel_chosen").show();
-		$("#delete_chosen").show();
-		$("#update_chosen").show();
+		$("#chosenElement").show();
 		
 		//樹狀結構開合
 		showOrHide($(this).siblings("ul"));
@@ -75,9 +82,7 @@ function cancelChosen(){
 	$("#target").html("");
 	$("#table_for_insert").val("eng_type_a");
 	$("#table_for_getTypeId").val("");
-	$("#cancel_chosen").hide();
-	$("#delete_chosen").hide();
-	$("#update_chosen").hide();
+	$("#chosenElement").hide();
 }
 
 function deleteChosen(){
@@ -104,7 +109,46 @@ function deleteChosen(){
 	});
 }
 
+function updateChosen(){
+	$("#eng_name").val($("#target").text());
+
+	$("#index_area").hide();
+	$("#edit_area").show();
+
+	$("#new_label").hide();
+	$("#new_submit").hide();
+	$("#edit_label").show();
+	$("#edit_submit").show();
+
+	$code = $("#chosen_code").val();
+	if( $code.length == 6 ){
+		$.ajax({
+			url: configObject.engGetData,
+			type: "POST",
+			data: { type: "getUnitId", code: $code },
+			dataType: "JSON",
+			async: false,
+			success:
+				function(rs){
+					// console.log(rs.data[0].typeid_u);
+					$("#unit1").val(rs.data[0].typeid_u);
+				},
+			error:
+				function(e){
+					console.log(e);
+				}
+		});
+		console.log($("#unit1")[0]);
+		$("#unitSelection").show();
+	}else{
+		$("#unitSelection").hide();
+	}
+			
+}
+
 function newData(){
+	$("#eng_name").val("");
+
 	$chosen = $("#chosen").html();
 	$code = $("#chosen_code").val();
 	if( $code.length == 6 ){
@@ -116,6 +160,11 @@ function newData(){
 		$("#index_area").hide();
 		$("#edit_area").show();
 	}
+	$("#new_label").show();
+	$("#new_submit").show();
+	$("#edit_label").hide();
+	$("#edit_submit").hide();
+	
 }
 
 function cancelNewData(){
@@ -161,57 +210,87 @@ function getTable($code,$type){
 	return $table;
 }
 
-function sendData(){
-	var $typeId;
-	var $fCode;
-	if($("#table_for_getTypeId").val()!=""){
-		//取得所需typeId
-		$.ajax({
-			url: configObject.engGetData,
-			type: "POST",
-			data: { type: "getTypeId", table: $("#table_for_getTypeId").val(), code: $("#chosen_code").val() },
-			dataType: "JSON",
-			async: false,
-			success:
-				function(rs){
-					//console.log(rs);
-					$typeId = rs.dataArray["uid"];
-					$fCode = rs.dataArray["code"];
+function sendData($type){
+	switch($type){
+		case "new":
+			var $typeId;
+			var $fCode;
+			if($("#table_for_getTypeId").val()!=""){
+				//取得所需typeId
+				$.ajax({
+					url: configObject.engGetData,
+					type: "POST",
+					data: { type: "getTypeId", table: $("#table_for_getTypeId").val(), code: $("#chosen_code").val() },
+					dataType: "JSON",
+					async: false,
+					success:
+						function(rs){
+							//console.log(rs);
+							$typeId = rs.dataArray["uid"];
+							$fCode = rs.dataArray["code"];
+						},
+					error:
+						function(e){
+							console.log(e);
+						}
+				});
+			}
+			
+			//新增資料
+			$.ajax({
+				url: configObject.engInsertData,
+				type: "POST",
+				data: { table: $("#table_for_insert").val(), 
+						name: $("#eng_name").val(),
+						//scode: $("#eng_scode").val(),
+						typeid: $typeId,
+						fCode: $fCode, 
+						typeid_u: $("#unit1").val()
 				},
-			error:
-				function(e){
-					console.log(e);
-				}
-		});
+				dataType: "JSON",
+				async: false,
+				success:
+					function(rs){
+						if(rs.status){
+							location.reload();
+						}else{
+							// console.log(rs.msg);
+							alert(rs.msg);
+						}
+					},
+				error:
+					function(e){
+						console.log(e);
+					}
+			});
+			break;
+		case "edit":
+			$.ajax({
+				url: configObject.engUpdateData,
+				type: "POST",
+				data: { 
+					table: $("#table_for_getTypeId").val(),
+					ori_name: $("#target").text(),
+					code: $("#chosen_code").val(),
+					name: $("#eng_name").val(),
+					unit: $("#unit1").val()
+				},
+				dataType: "JSON",
+				async: false,
+				success:
+					function(rs){
+						 console.log(rs);
+						//location.reload();
+					},
+				error:
+					function(e){
+						console.log(e);
+					}
+			});
+			break;
+		default:
 	}
 	
-	//新增資料
-	$.ajax({
-		url: configObject.engInsertData,
-		type: "POST",
-		data: { table: $("#table_for_insert").val(), 
-				name: $("#eng_name").val(),
-				//scode: $("#eng_scode").val(),
-				typeid: $typeId,
-				fCode: $fCode, 
-				typeid_u: $("#unit1").val()
-		},
-		dataType: "JSON",
-		async: false,
-		success:
-			function(rs){
-				if(rs.status){
-					location.reload();
-				}else{
-					// console.log(rs.msg);
-					alert(rs.msg);
-				}
-			},
-		error:
-			function(e){
-				console.log(e);
-			}
-	});
 
 	
 }

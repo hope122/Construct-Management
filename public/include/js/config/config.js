@@ -38,4 +38,5 @@ var configObject = {
     "engGetData": apurl+"/engineeringmanage/getdata",
     "engDeleteData": apurl+"/engineeringmanage/deletedata",
     "engInsertData": apurl+"/engineeringmanage/insertdata",
+    "engUpdateData": apurl+"/engineeringmanage/updatedata",
 };

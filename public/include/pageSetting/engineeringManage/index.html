@@ -57,37 +57,11 @@
 							<!-- Post -->
 							<article class="box post">
 								<div id="index_area">
-									<div>
-										<input type="button" id="new_data" name="new_data" value="新增資料" onclick="newData();">
-									</div>
-									<div>
-										<label>現在選擇:<span id="chosen" name="chosen" style="color: red"></span><label>
-										<input type="button" id="update_chosen" name="update_chosen" value="修改選擇" style="display: none" onclick="updateChosen()">
-										<input type="button" id="delete_chosen" name="delete_chosen" value="刪除選擇" style="display: none" onclick="deleteChosen()">
-										<input type="button" id="cancel_chosen" name="cancel_chosen" value="取消選擇" style="display: none" onclick="cancelChosen()">
-										<input type="hidden" id="chosen_code" name="chosen_code" value="">
-									</div>
-									<div>現有工程項目：</div>
-									<div id="dataTree"></div>
+									@@index_area@@
 								</div>
 									
-								<div id="edit_area" name="edit_area" style="display: none">
-									<div>
-										<label>新增<span id="target" name="target" style="color: red"></span>項目</label>
-									</div>
-									<div>
-										<label>工程名稱：<input type="text" id="eng_name" name="eng_name" placeholder="請輸入工程名稱" value=""></label>
-										<!--<label>工程代號：<input type="text" id="eng_scode" name="eng_scode" placeholder="請輸入工程代號" value=""></label>-->
-										<div id="unitSelection" name="unitSelection" style="display: none">
-											<label>單位</label>
-										</div>	
-									</div>
-									<div>
-										<input type="hidden" id="table_for_insert" name="table_for_insert" value="eng_type_a">
-										<input type="hidden" id="table_for_getTypeId" name="table_for_getTypeId" value="">
-										<input type="button" id="submit" name="submit" value="送出" onclick="sendData();">
-										<input type="button" id="cancel_new_data" name="cancel_new_data" value="取消新增" onclick="cancelNewData();">
-									</div>
+								<div id="edit_area" style="display: none">
+									@@edit_area@@
 								</div>			
 							</article>
 						</div>

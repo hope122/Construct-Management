@@ -33,11 +33,16 @@ class EngineeringmanageController extends AbstractActionController
 				$index = $VTs->ContentReplace($dataArr,$index);
 				
 				//畫面
-				$editorPath = $pathString . "\\engineeringManage\\editor.html";
-				$editor = $VTs->GetHtmlContent($editorPath);
+				$indexAreaPath = $pathString . "\\engineeringManage\\indexArea.html";
+				$indexArea = $VTs->GetHtmlContent($indexAreaPath);
+				$editAreaPath = $pathString . "\\engineeringManage\\editArea.html";
+				$editArea = $VTs->GetHtmlContent($editAreaPath);
 				
-				// $dataArr = ["edit_area"=>$editor];
-				// $index = $VTs->ContentReplace($dataArr,$index);
+				$dataArr = [
+					"index_area"=>$indexArea,
+					"edit_area"=>$editArea
+				];
+				$index = $VTs->ContentReplace($dataArr,$index);
 				
 				$pageContent = $index;
 			}
@@ -73,7 +78,7 @@ class EngineeringmanageController extends AbstractActionController
 			//----BI結束----
 		}catch(Exception $error){
 			//依據Controller, Action補上對應位置, $error->getMessage()為固定部份
-			$VTs->WriteLog("EngineeringmanageController", "indexAction", $error->getMessage());
+			$VTs->WriteLog("EngineeringmanageController", "editAction", $error->getMessage());
 		}
 		$VTs = null;
 		$this->viewContnet['pageContent'] = $pageContent;
