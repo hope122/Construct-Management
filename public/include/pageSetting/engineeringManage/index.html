@@ -28,96 +28,57 @@
 	</head>
 	<body class="homepage">
 		<div id="page-wrapper">
-
 			<!-- Header -->
-				<div id="header-wrapper">
-					<div id="header" class="container">
+			<div id="header-wrapper">
+				<div id="header" class="container">
+					<!-- Logo -->
+					<h1 id="logo"><a href="./">建築物施工管理雲端系統</a></h1>
 
-						<!-- Logo -->
-							<h1 id="logo"><a href="./">建築物雲端全生命週期履歷平台</a></h1>
-                            <p>施工階段模組</p>
-
-						<!-- Nav -->
-							<nav id="nav">
-								<div style="float:right;">
-									<span>Hi, @@userName@@ 歡迎回來</span>
-								</div>
-								<!--選單-->
-								<ul id="menus">
-									<li><a class="icon fa-home" href="./"><span>首頁</span></a></li>
-									<li><a class="icon fa-retweet" href="#" onclick="logoutEven();"><span>Logout</span></a></li>
-								</ul>
-							</nav>
-
-					</div>
+					<!-- Nav -->
+					<nav id="nav">
+						<div style="float:right;">
+							<span>Hi, @@userName@@ 歡迎回來</span>
+						</div>
+						<!--選單-->
+						<ul id="menus">
+							<li><a class="icon fa-home" href="./"><span>首頁</span></a></li>
+							<li><a class="icon fa-retweet" href="#" onclick="logoutEven();"><span>Logout</span></a></li>
+						</ul>
+					</nav>
 				</div>
+			</div>
 
 			<!-- Main -->
-				<div id="main-wrapper">
-					<div id="main" class="container">
-						<div class="row">
-
-							<!-- Content -->
-							<div id="content" class="12u 12u(mobile)">
-								
-								<!-- Post -->
-								<article class="box post">
+			<div id="main-wrapper">
+				<div id="main" class="container">
+					<div class="row">
+						<!-- Content -->
+						<div id="content" class="12u 12u(mobile)">
+							<!-- Post -->
+							<article class="box post">
+								<div id="index_area">
+									@@index_area@@
+								</div>
 									
-									<div id="index_area">
-										<div>
-											<input type="button" id="new_data" name="new_data" value="新增資料" onclick="newData();">
-										</div>
-										<div>
-											<label>現在選擇:<span id="chosen" name="chosen" style="color: red"></span><label>
-											<input type="button" id="delete_chosen" name="delete_chosen" value="刪除選擇" style="display: none" onclick="deleteChosen()">
-											<input type="button" id="cancel_chosen" name="cancel_chosen" value="取消選擇" style="display: none" onclick="cancelChosen()">
-											<input type="hidden" id="chosen_code" name="chosen_code" value="">
-										</div>
-										<div>現有工程項目：</div>
-										<div id="dataTree">
-										</div>
-									</div>
-									
-									<div id="edit_area" name="edit_area" style="display: none">
-										<div>
-											<label>新增<span id="target" name="target" style="color: red"></span>項目</label>
-										</div>
-										<div>
-											<label>工程名稱：<input type="text" id="eng_name" name="eng_name" placeholder="請輸入工程名稱" value=""></label>
-											<!--<label>工程代號：<input type="text" id="eng_scode" name="eng_scode" placeholder="請輸入工程代號" value=""></label>-->
-											<div id="unitSelection" name="unitSelection" style="display: none">
-												<label>單位</label>
-											</div>	
-										</div>
-										<div>
-											<input type="hidden" id="table_for_insert" name="table_for_insert" value="eng_type_a">
-											<input type="hidden" id="table_for_getTypeId" name="table_for_getTypeId" value="">
-											<input type="button" id="submit" name="submit" value="送出" onclick="sendData();">
-											<input type="button" id="cancel_new_data" name="cancel_new_data" value="取消新增" onclick="cancelNewData();">
-										</div>
-									</div>
-									
-								</article>
-								
-							</div>
+								<div id="edit_area" style="display: none">
+									@@edit_area@@
+								</div>			
+							</article>
 						</div>
 					</div>
 				</div>
+			</div>
 
 			<!-- Footer -->
-				<div id="footer-wrapper">
-					<div id="footer" class="container">
-					</div>
-					<div id="copyright" class="container">
-						<ul class="links">
-							<li>&copy; Untitled. All rights reserved.</li><li>Design: HTML5 UP  </li>
-						</ul>
-					</div>
+			<div id="footer-wrapper">
+				<div id="footer" class="container">
 				</div>
-
+				<div id="copyright" class="container">
+					<ul class="links">
+						<li>&copy; Untitled. All rights reserved.</li><li>Design: HTML5 1UP  </li>
+					</ul>
+				</div>
+			</div>
 		</div>
-
-		
-
 	</body>
 </html>
