@@ -21,13 +21,15 @@ $(function(){
 				console.log(e);
 			}
 	});
-	$("div[name='treeData']").accordion({
-		beforeActivate: function( event, ui ) {
-			$(this).attr("height","300px");
-		},
-      	collapsible: true,
-      	heightStyle: "content",
-    });
+	$("div[name='treeData']")
+		.accordion({
+			beforeActivate: function( event, ui ) {
+				$("div[name='treeData']").first().click();
+			},
+	      	collapsible: true,
+	      	heightStyle: "content",
+	      	active: false
+    	});
 		
 	// $("#dataTree a").click(function(){
 	$("div[name='treeData'] h3").click(function(){
