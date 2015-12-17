@@ -1,6 +1,4 @@
 $(function(){
-
-
 	$("#new_label").hide();
 	$("#edit_label").hide();
 
@@ -12,9 +10,10 @@ $(function(){
 		async: false,
 		success:
 			function(rs){
-				//console.log(rs);
-				var ul = $("<ul/>").appendTo($("#dataTree"));
-				createTree(ul, rs["dataTree"]);	
+				// console.log(rs.dataTree);
+				// var ul = $("<ul/>").appendTo($("#dataTree"));
+				// createTree(ul, rs["dataTree"]);	
+				createTree($("#dataTree"), rs["dataTree"]);	
 				creatUnitSelect($("#unitSelection"), rs["unitArr"]);
 			},
 		error:
@@ -22,17 +21,24 @@ $(function(){
 				console.log(e);
 			}
 	});
-	$( "#dataTree" ).accordion({
-      collapsible: true
+	$("div[name='treeData']").accordion({
+		beforeActivate: function( event, ui ) {
+			$(this).attr("height","300px");
+		},
+      	collapsible: true,
+      	heightStyle: "content",
     });
 		
-	$("#dataTree a").click(function(){
+	// $("#dataTree a").click(function(){
+	$("div[name='treeData'] h3").click(function(){
 		//提示使用者目前選
 		$("#chosen").text($(this).text());
 		
 		//設定參數
 		$("#target").text($(this).text());
+		// var $code = $(this)[0].getAttribute("data-code");
 		var $code = $(this)[0].getAttribute("data-code");
+		console.log($code);
 		$("#chosen_code").val($code);
 		$("#eng_name").val($(this).text());
 		$("#table_for_insert").val(getTable($code,0));
@@ -51,18 +57,32 @@ $(function(){
 function createTree(currentNode, dataArray){
 	for(var index in dataArray){
 		//console.log(dataArray[index]);
-		
-		var li = $("<li/>").appendTo(currentNode);
-		var a = $("<a/>")
-				.text(dataArray[index]["name"])
-				.attr("href", "#")
-				.attr("data-code", dataArray[index]["code"])
-				.appendTo(li);
+		// var ul = $("<ul/>").appendTo(currentNode);
+		// var li = $("<li/>").appendTo(ul);
+		// var a = $("<a/>")
+		// 		.text(dataArray[index]["name"])
+		// 		.attr("href", "#")
+		// 		.attr("data-code", dataArray[index]["code"])
+		// 		.appendTo(li);
 		if(dataArray[index]["child"] !== null){
-			var ul = $("<ul/>")
-					.css("display", "none")
-					.appendTo(li)
-			createTree(ul, dataArray[index]["child"]);
+			var title = $("<h3/>")
+						.text(dataArray[index]["name"])
+						.attr("data-code", dataArray[index]["code"])
+						.appendTo(currentNode);
+			var content = $("<div/>").attr("name","treeData").appendTo(currentNode);
+			//var p = $("<p/>").appendTo(content);
+			
+			// var ul = $("<ul/>")
+			// 		.css("display", "none")
+			// 		.appendTo(li)
+			// createTree(li, dataArray[index]["child"]);
+			createTree(content, dataArray[index]["child"]);
+		}else{
+			var title = $("<h3/>")
+						.text(dataArray[index]["name"])
+						.attr("data-code", dataArray[index]["code"])
+						.appendTo(currentNode);
+			var content = $("<div/>").appendTo(currentNode);
 		}
 	}
 }
@@ -279,8 +299,8 @@ function sendData($type){
 				async: false,
 				success:
 					function(rs){
-						 console.log(rs);
-						//location.reload();
+						// console.log(rs);
+						location.reload();
 					},
 				error:
 					function(e){
