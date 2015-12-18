@@ -21,14 +21,25 @@ $(function(){
 				console.log(e);
 			}
 	});
+
 	$("div[name='treeData']")
 		.accordion({
-			beforeActivate: function( event, ui ) {
-				$("div[name='treeData']").first().click();
-			},
 	      	collapsible: true,
 	      	heightStyle: "content",
-	      	active: false
+	      	active: false,
+	      	header: "> div > h3"
+    	})
+    	.sortable({
+    		axis: "y",
+	        handle: "h3",
+	        stop: function( event, ui ) {
+	          // IE doesn't register the blur when sorting
+	          // so trigger focusout handlers to remove .ui-state-focus
+	          ui.item.children( "h3" ).triggerHandler( "focusout" );
+	 
+	          // Refresh accordion to handle new order
+	          $( this ).accordion( "refresh" );
+	      }
     	});
 		
 	// $("#dataTree a").click(function(){
@@ -67,15 +78,17 @@ $(function(){
 function createTree(currentNode, dataArray){
 	for(var index in dataArray){
 		//console.log(dataArray[index]);
+		
 		if(dataArray[index]["child"] !== null){
+			var row = $("<div/>").attr("class","group").appendTo(currentNode);
 			var title = $("<h3/>")
 						.text(dataArray[index]["name"])
 						.attr("data-code", dataArray[index]["code"])
-						.appendTo(currentNode);
+						.appendTo(row);
 			if(dataArray[index]["child"][0]["child"] !== null ){
-				var content = $("<div/>").attr("name","treeData").appendTo(currentNode);
+				var content = $("<div/>").attr("name","treeData").appendTo(row);
 			}else{
-				var content = $("<div/>").attr("name","last").appendTo(currentNode);
+				var content = $("<div/>").attr("name","last").appendTo(row);
 			}
 			createTree(content, dataArray[index]["child"]);
 		}else{
