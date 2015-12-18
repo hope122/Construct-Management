@@ -86,6 +86,7 @@ class LogbookController extends AbstractActionController
             $arr_data=$_POST['data'];
                 $html_path=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\list.html";
                 $html=$VTs->GetHtmlContent($html_path);
+     
                 if(empty($arr_data)){
                     
                     $tr='無資料';
@@ -101,6 +102,13 @@ class LogbookController extends AbstractActionController
                         $trs=str_replace('@@no@@',$data['no'],$trs);
                         $trs=str_replace('@@date@@',$data['date'],$trs);
                         $trs=str_replace('@@uid@@',$data['uid'],$trs);
+                        if(!empty($data['dates'])){
+                            $sat="未確認";
+                            $color="red";
+                        }else{
+                            $sat="已確認";
+                            $color=""; 
+                        }
                         $trstr.=$trs;
 
                     }
