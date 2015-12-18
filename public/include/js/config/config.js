@@ -1,4 +1,4 @@
-var apurl="http://192.168.0.8:99";
+var apurl="http://192.168.0.6:99";
 // var apurl="http://127.0.0.1:88";
 // var apurl="http://127.0.0.1:99";
 var originUrl = location.origin+'/';
