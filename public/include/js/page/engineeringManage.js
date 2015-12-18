@@ -30,6 +30,7 @@ $(function(){
 	      	header: "> div > h3"
     	})
     	.sortable({
+    		connectWith: "div[name=treeData]",
     		axis: "y",
 	        handle: "h3",
 	        stop: function( event, ui ) {
@@ -39,7 +40,7 @@ $(function(){
 	 
 	          // Refresh accordion to handle new order
 	          $( this ).accordion( "refresh" );
-	      }
+	      	}
     	});
 		
 	// $("#dataTree a").click(function(){
