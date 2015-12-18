@@ -176,7 +176,7 @@ class MaterialController extends AbstractActionController
                             $status='待審查';
                         }
                         if ($lsData['chkqc']!=-1){
-                            $status='已進場';
+                            $status='審查完畢';
                         }
 
                         $trs=str_replace('@@status@@',$status,$trs);
@@ -364,7 +364,7 @@ class MaterialController extends AbstractActionController
             $str.="施作部位:".$data['place_work']."\n";
             $str.="預計進場時間：".$data['date']."\n";
             // $str="正中建材公司您好,向貴公司訂購訂購水泥50包";
-             print_r($str);
+            //  print_r($str);
             $VTs->Tomail("veracity.core.gmail.com","ginnyling@gmail.com","訂貨",$str);
             $VTs->Tomail("veracity.core.gmail.com","lm791010@yahoo.com.tw","訂貨",$str);
             $VTs->Tomail("veracity.core.gmail.com","hope080122@gmail.com","訂貨",$str);

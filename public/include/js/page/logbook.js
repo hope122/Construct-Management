@@ -84,6 +84,7 @@ function savecontent(){
        data: $("#cform").serialize(),
        async:false,
        success: function(rs){
+          console.log(rs);
           alert("儲存成功");
           // getContent('list','list','div_content','',true);
        }
