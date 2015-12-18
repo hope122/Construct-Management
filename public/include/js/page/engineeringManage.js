@@ -1,6 +1,4 @@
 $(function(){
-
-
 	$("#new_label").hide();
 	$("#edit_label").hide();
 
@@ -12,9 +10,10 @@ $(function(){
 		async: false,
 		success:
 			function(rs){
-				//console.log(rs);
-				var ul = $("<ul/>").appendTo($("#dataTree"));
-				createTree(ul, rs["dataTree"]);	
+				// console.log(rs.dataTree);
+				// var ul = $("<ul/>").appendTo($("#dataTree"));
+				// createTree(ul, rs["dataTree"]);	
+				createTree($("#dataTree"), rs["dataTree"]);	
 				creatUnitSelect($("#unitSelection"), rs["unitArr"]);
 			},
 		error:
@@ -22,28 +21,45 @@ $(function(){
 				console.log(e);
 			}
 	});
-	$( "#dataTree" ).accordion({
-      collapsible: true
-    });
+	$("div[name='treeData']")
+		.accordion({
+			beforeActivate: function( event, ui ) {
+				$("div[name='treeData']").first().click();
+			},
+	      	collapsible: true,
+	      	heightStyle: "content",
+	      	active: false
+    	});
 		
-	$("#dataTree a").click(function(){
+	// $("#dataTree a").click(function(){
+	$("div[name='treeData'] h3").click(function(){
 		//提示使用者目前選
 		$("#chosen").text($(this).text());
-		
+		$("#eng_name").val($(this).text());
+
 		//設定參數
 		$("#target").text($(this).text());
 		var $code = $(this)[0].getAttribute("data-code");
 		$("#chosen_code").val($code);
-		$("#eng_name").val($(this).text());
 		$("#table_for_insert").val(getTable($code,0));
 		$("#table_for_getTypeId").val(getTable($code,1));
-		
 		$("#chosenElement").show();
 		
-		//樹狀結構開合
-		showOrHide($(this).siblings("ul"));
+		$("div[name='last'] h3").css("background-color","")
+				   				.css("color","");
 		
 		return false;
+	});
+
+	$("div[name='last'] h3").click(function(){
+		//console.log($(this).css("background-color"));
+		if($(this).css("background-color")!=="rgb(0, 127, 255)"){
+			$(this).css("background-color","#007FFF")
+				   .css("color","white	");
+		}else{
+			$(this).css("background-color","")
+				   .css("color","");
+		}
 	});
 	
 });
@@ -51,28 +67,22 @@ $(function(){
 function createTree(currentNode, dataArray){
 	for(var index in dataArray){
 		//console.log(dataArray[index]);
-		
-		var li = $("<li/>").appendTo(currentNode);
-		var a = $("<a/>")
-				.text(dataArray[index]["name"])
-				.attr("href", "#")
-				.attr("data-code", dataArray[index]["code"])
-				.appendTo(li);
 		if(dataArray[index]["child"] !== null){
-			var ul = $("<ul/>")
-					.css("display", "none")
-					.appendTo(li)
-			createTree(ul, dataArray[index]["child"]);
-		}
-	}
-}
-
-function showOrHide(node){
-	for(var i=0; i<node.length; i++){
-		if(node[i].style.display == "none"){
-			node[i].style.display = "block";
+			var title = $("<h3/>")
+						.text(dataArray[index]["name"])
+						.attr("data-code", dataArray[index]["code"])
+						.appendTo(currentNode);
+			if(dataArray[index]["child"][0]["child"] !== null ){
+				var content = $("<div/>").attr("name","treeData").appendTo(currentNode);
+			}else{
+				var content = $("<div/>").attr("name","last").appendTo(currentNode);
+			}
+			createTree(content, dataArray[index]["child"]);
 		}else{
-			node[i].style.display = "none";;
+			var title = $("<h3/>")
+						.text(dataArray[index]["name"])
+						.attr("data-code", dataArray[index]["code"])
+						.appendTo(currentNode);
 		}
 	}
 }
@@ -163,8 +173,7 @@ function newData(){
 	$("#new_label").show();
 	$("#new_submit").show();
 	$("#edit_label").hide();
-	$("#edit_submit").hide();
-	
+	$("#edit_submit").hide();	
 }
 
 function cancelNewData(){
@@ -252,6 +261,7 @@ function sendData($type){
 				success:
 					function(rs){
 						if(rs.status){
+							alert("新增成功");
 							location.reload();
 						}else{
 							// console.log(rs.msg);
@@ -279,8 +289,9 @@ function sendData($type){
 				async: false,
 				success:
 					function(rs){
-						 console.log(rs);
-						//location.reload();
+						// console.log(rs);
+						alert("修改成功");
+						location.reload();
 					},
 				error:
 					function(e){
@@ -290,9 +301,6 @@ function sendData($type){
 			break;
 		default:
 	}
-	
-
-	
 }
 
 function creatUnitSelect(currentNode, dataArray){
