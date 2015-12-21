@@ -106,6 +106,20 @@ return array(
 					),
 				),
 			),
+            'supply' => array(
+				'type'    => 'segment',
+				'options' => array(
+					'route'    => '/supply[/:action]',
+					'constraints' => array(
+						'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+						'id'     => '[0-9]+',
+					),
+					'defaults' => array(
+						'controller' => 'Application\Controller\Supply',
+						'action'     => 'index',
+					),
+				),
+			),
             'logbook' => array(
 				'type'    => 'segment',
 				'options' => array(
@@ -250,6 +264,7 @@ return array(
             'Application\Controller\receipt' => 'Application\Controller\receiptController',
             'Application\Controller\Constructionschedule' => 'Application\Controller\ConstructionscheduleController',
             'Application\Controller\Dailyconstruction' => 'Application\Controller\DailyconstructionController',
+            'Application\Controller\Supply' => 'Application\Controller\SupplyController',
         ),
     ),
     'view_manager' => array(
