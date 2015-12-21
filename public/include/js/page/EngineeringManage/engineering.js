@@ -1,7 +1,4 @@
 $(function(){
-	$("#new_label").hide();
-	$("#edit_label").hide();
-
 	$.ajax({
 		url: configObject.engGetData,
 		type: "POST",
@@ -11,8 +8,6 @@ $(function(){
 		success:
 			function(rs){
 				// console.log(rs.dataTree);
-				// var ul = $("<ul/>").appendTo($("#dataTree"));
-				// createTree(ul, rs["dataTree"]);	
 				createTree($("#dataTree"), rs["dataTree"]);	
 				creatUnitSelect($("#unitSelection"), rs["unitArr"]);
 			},
@@ -42,8 +37,7 @@ $(function(){
 	          $( this ).accordion( "refresh" );
 	      	}
     	});
-		
-	// $("#dataTree a").click(function(){
+
 	$("div[name='treeData'] h3").click(function(){
 		//提示使用者目前選
 		$("#chosen").text($(this).text());
@@ -64,7 +58,6 @@ $(function(){
 	});
 
 	$("div[name='last'] h3").click(function(){
-		//console.log($(this).css("background-color"));
 		if($(this).css("background-color")!=="rgb(0, 127, 255)"){
 			$(this).css("background-color","#007FFF")
 				   .css("color","white	");
@@ -73,13 +66,11 @@ $(function(){
 				   .css("color","");
 		}
 	});
-	
 });
 
 function createTree(currentNode, dataArray){
 	for(var index in dataArray){
 		//console.log(dataArray[index]);
-		
 		if(dataArray[index]["child"] !== null){
 			var row = $("<div/>").attr("class","group").appendTo(currentNode);
 			var title = $("<h3/>")
@@ -101,98 +92,25 @@ function createTree(currentNode, dataArray){
 	}
 }
 
-function cancelChosen(){
-	$("#chosen").html("");
-	$("#target").html("");
-	$("#table_for_insert").val("eng_type_a");
-	$("#table_for_getTypeId").val("");
-	$("#chosenElement").hide();
-}
-
-function deleteChosen(){
-	$.ajax({
-		url: configObject.engDeleteData, 
-		type: "POST",
-		data: { table: $("#table_for_getTypeId").val(), code: $("#chosen_code").val() },
-		dataType: "JSON",
-		async: false,
-		success:
-			function(rs){
-				if(rs.status){
-					alert(rs.msg);
-					location.reload();
-				}else{
-					//console.log(rs);
-					alert(rs.msg);
-				}
-			},
-		error:
-			function(e){
-				console.log(e);
-			}
-	});
-}
-
-function updateChosen(){
-	$("#eng_name").val($("#target").text());
-
-	$("#index_area").hide();
-	$("#edit_area").show();
-
-	$("#new_label").hide();
-	$("#new_submit").hide();
-	$("#edit_label").show();
-	$("#edit_submit").show();
-
-	$code = $("#chosen_code").val();
-	if( $code.length == 6 ){
-		$.ajax({
-			url: configObject.engGetData,
-			type: "POST",
-			data: { type: "getUnitId", code: $code },
-			dataType: "JSON",
-			async: false,
-			success:
-				function(rs){
-					// console.log(rs.data[0].typeid_u);
-					$("#unit1").val(rs.data[0].typeid_u);
-				},
-			error:
-				function(e){
-					console.log(e);
-				}
-		});
-		console.log($("#unit1")[0]);
-		$("#unitSelection").show();
-	}else{
-		$("#unitSelection").hide();
+function creatUnitSelect(currentNode, dataArray){
+	var unit1 = $("<select/>")
+				.attr("id","unit1")
+				.appendTo(currentNode);
+	var unit2 = $("<select/>")
+				.attr("id","unit2")
+				.css("display","none")
+				.appendTo(currentNode);
+	
+	for(var i=0; i<dataArray.length; i++){
+		var option1 = $("<option/>")
+					.attr("value", i+1)
+					.text(dataArray[i]["unit1"])
+					.appendTo(unit1);
+		var option2 = $("<option/>")
+					.attr("value", i+1)
+					.text(dataArray[i]["unit2"])
+					.appendTo(unit2);
 	}
-			
-}
-
-function newData(){
-	$("#eng_name").val("");
-
-	$chosen = $("#chosen").html();
-	$code = $("#chosen_code").val();
-	if( $code.length == 6 ){
-		alert("無法新增 "+$chosen+" 的子項目");
-	}else{
-		if( $code.length == 4 ){
-			$("#unitSelection").show();
-		}
-		$("#index_area").hide();
-		$("#edit_area").show();
-	}
-	$("#new_label").show();
-	$("#new_submit").show();
-	$("#edit_label").hide();
-	$("#edit_submit").hide();	
-}
-
-function cancelNewData(){
-	$("#index_area").show();
-	$("#edit_area").hide();
 }
 
 function getTable($code,$type){
@@ -231,6 +149,100 @@ function getTable($code,$type){
 	}
 
 	return $table;
+}
+
+
+function cancelChosen(){
+	$("#chosen").html("");
+	$("#target").html("");
+	$("#table_for_insert").val("eng_type_a");
+	$("#table_for_getTypeId").val("");
+	$("#chosenElement").hide();
+}
+
+function deleteChosen(){
+	$.ajax({
+		url: configObject.engDeleteData, 
+		type: "POST",
+		data: { table: $("#table_for_getTypeId").val(), code: $("#chosen_code").val() },
+		dataType: "JSON",
+		async: false,
+		success:
+			function(rs){
+				if(rs.status){
+					alert(rs.msg);
+					location.reload();
+				}else{
+					//console.log(rs);
+					alert(rs.msg);
+				}
+			},
+		error:
+			function(e){
+				console.log(e);
+			}
+	});
+}
+
+function updateChosen(){
+	$("#eng_name").val($("#target").text());
+
+	$("#eng_index_area").hide();
+	$("#eng_edit_area").show();
+
+	$("#new_label").hide();
+	$("#new_submit").hide();
+	$("#edit_label").show();
+	$("#edit_submit").show();
+
+	$code = $("#chosen_code").val();
+	if( $code.length == 6 ){
+		$.ajax({
+			url: configObject.engGetData,
+			type: "POST",
+			data: { type: "getUnitId", code: $code },
+			dataType: "JSON",
+			async: false,
+			success:
+				function(rs){
+					// console.log(rs.data[0].typeid_u);
+					$("#unit1").val(rs.data[0].typeid_u);
+				},
+			error:
+				function(e){
+					console.log(e);
+				}
+		});
+		console.log($("#unit1")[0]);
+		$("#unitSelection").show();
+	}else{
+		$("#unitSelection").hide();
+	}		
+}
+
+function newData(){
+	$("#eng_name").val("");
+
+	$chosen = $("#chosen").html();
+	$code = $("#chosen_code").val();
+	if( $code.length == 6 ){
+		alert("無法新增 "+$chosen+" 的子項目");
+	}else{
+		if( $code.length == 4 ){
+			$("#unitSelection").show();
+		}
+		$("#eng_index_area").hide();
+		$("#eng_edit_area").show();
+	}
+	$("#new_label").show();
+	$("#new_submit").show();
+	$("#edit_label").hide();
+	$("#edit_submit").hide();	
+}
+
+function cancelNewData(){
+	$("#eng_index_area").show();
+	$("#eng_edit_area").hide();
 }
 
 function sendData($type){
@@ -316,25 +328,3 @@ function sendData($type){
 		default:
 	}
 }
-
-function creatUnitSelect(currentNode, dataArray){
-	var unit1 = $("<select/>")
-				.attr("id","unit1")
-				.appendTo(currentNode);
-	var unit2 = $("<select/>")
-				.attr("id","unit2")
-				.css("display","none")
-				.appendTo(currentNode);
-	
-	for(var i=0; i<dataArray.length; i++){
-		var option1 = $("<option/>")
-					.attr("value", i+1)
-					.text(dataArray[i]["unit1"])
-					.appendTo(unit1);
-		var option2 = $("<option/>")
-					.attr("value", i+1)
-					.text(dataArray[i]["unit2"])
-					.appendTo(unit2);
-	}
-}
-
