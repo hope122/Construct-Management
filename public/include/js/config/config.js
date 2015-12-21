@@ -37,5 +37,5 @@ var configObject = {
     "engDeleteData": apurl+"/engineeringmanage/deletedata",
     "engInsertData": apurl+"/engineeringmanage/insertdata",
     "engUpdateData": apurl+"/engineeringmanage/updatedata",
-    "chartsWS": originUrl+":8080"
+    "chartsWS": location.origin+":8080"
 };
