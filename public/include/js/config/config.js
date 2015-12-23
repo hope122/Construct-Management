@@ -1,4 +1,5 @@
-var apurl=location.origin+":99";
+//var apurl=location.origin+":99";
+var apurl = location.protocol+"//"+location.hostname+":99";
 var originUrl = location.origin+'/';
 var configObject = {
     "LoginUrl": apurl+"/login",
