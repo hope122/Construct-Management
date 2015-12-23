@@ -87,6 +87,8 @@ function getDailyList(type){
                         strContent += '</label></li>';
                         strContent += '</ul>';
                   });
+                }else{
+                  strContent = '無資料';
                 }
                 options.empty().html(strContent);
               }

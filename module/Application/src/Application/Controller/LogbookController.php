@@ -189,8 +189,9 @@ class LogbookController extends AbstractActionController
                     $tr=$trhtml;
                     $tr=str_replace("@@name@@",$construction["n1"],$tr);
                     $tr=str_replace("@@unit@@",$construction["unit1"],$tr);
-                  $tr=str_replace("@@pcount@@",number_format($construction["qty_work"], 2),$tr);
+                    $tr=str_replace("@@pcount@@",number_format($construction["qty_work"], 2),$tr);
                     $tr=str_replace("@@fcount@@",number_format($construction["qty_budget"], 2),$tr);
+                    $tr=str_replace("@@qty_s@@",number_format($construction["qty_s"], 2),$tr);
                     $strhtml1.=$tr;
                 }     
             }
@@ -225,9 +226,10 @@ class LogbookController extends AbstractActionController
             $strhtml3='';
             if(!$arr_workcount==null ){
                 foreach($arr_workcount as $workcount){
-                    $tr=$trhtml;
+                    $tr=$trhtml; 
                     $tr=str_replace("@@name@@",$workcount["wtypename"],$tr);
                     $tr=str_replace("@@count@@",$workcount["count"],$tr);
+                    $tr=str_replace("@@count_s@@",$workcount["count_s"],$tr);
                     $strhtml3.=$tr;
                 }
             }
@@ -377,6 +379,7 @@ class LogbookController extends AbstractActionController
                     $tr=str_replace("@@unit@@",$construction["unit1"],$tr);
                     $tr=str_replace("@@pcount@@",number_format($construction["qty_work"], 2),$tr);
                     $tr=str_replace("@@fcount@@",number_format($construction["qty_budget"], 2),$tr);
+                    $tr=str_replace("@@qty_s@@",number_format($construction["qty_s"], 2),$tr);
                     $strhtml1.=$tr;
                 }     
             }
@@ -414,6 +417,7 @@ class LogbookController extends AbstractActionController
                     $tr=$trhtml;
                     $tr=str_replace("@@name@@",$workcount["wtypename"],$tr);
                     $tr=str_replace("@@count@@",$workcount["count"],$tr);
+                    $tr=str_replace("@@count_s@@",$workcount["count_s"],$tr);
                     $strhtml3.=$tr;
                 }
             }
