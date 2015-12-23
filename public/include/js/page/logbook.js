@@ -11,6 +11,7 @@ function print(){
 
 function getContent(ptype,purl,divid,parameter,reset){
     $.get(configObject.logbookGetData+"?type="+ptype+parameter, function( data ) {    
+
       //丟資料toCM回傳html內容
       $.ajax({
        url: "/logbook/"+purl,
@@ -18,6 +19,7 @@ function getContent(ptype,purl,divid,parameter,reset){
        data: {data:JSON.parse(data)},
        async:false,
        success: function(rs){
+
         $("#"+divid).empty();
         $("#"+divid).append(rs);
         if(reset){
