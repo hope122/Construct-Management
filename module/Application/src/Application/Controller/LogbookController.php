@@ -304,7 +304,7 @@ class LogbookController extends AbstractActionController
             $html=$VTs->ContentReplace($arrdata,$html);
             $weekarray=array("日","一","二","三","四","五","六");
             $arrdata = [
-                "no"=>'訂單編號：'.$content['no'],
+                "no"=>'表單編號：'.$content['no'],
                 "today"=>$content['date'],
                 "isnew"=>0,
                 "week"=>$content['week'],
