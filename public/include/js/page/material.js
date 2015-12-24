@@ -223,6 +223,7 @@ function infocheck(){
                         alert('儲存失敗！');
                    }
                 });
+    getContent('list','list','div_content','',true);
 }
 function sendemail(uid){
     $.get(configObject.MaterialGetData+"?type=chkinfo&uid="+uid, function( data ) {
@@ -263,6 +264,7 @@ function infoin(){
                         alert('儲存失敗！');
                    }
                 });
+  getContent('list','list','div_content','',true);
 }
 
 function send_qclist(arr){
