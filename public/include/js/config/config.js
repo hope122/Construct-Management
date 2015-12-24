@@ -35,6 +35,7 @@ var configObject = {
     "getDailyContent": apurl+"/pageaction/getdailycontent",
     "getWorkProject": apurl+"/pageaction/getworkproject",
     "engGetData": apurl+"/engineeringmanage/getdata",
+    "engSetView": originUrl+"/engineeringmanage/setview",
     "engDeleteData": apurl+"/engineeringmanage/deletedata",
     "engInsertData": apurl+"/engineeringmanage/insertdata",
     "engUpdateData": apurl+"/engineeringmanage/updatedata",
