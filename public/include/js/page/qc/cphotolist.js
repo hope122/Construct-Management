@@ -10,7 +10,7 @@ $(function() {
       
       // 丟資料toCM回傳html內容
       $.ajax({
-        url: "/qc/getphotolisthtml",
+        url: "/qc/getcphotolisthtml",
        type: "POST",
        data: {data:JSON.parse(data),apurl:apurl},
        async:false,
@@ -33,7 +33,7 @@ function print(){
 function save(){
     var Today=new Date();
 　  tdate=Today.getFullYear().toString() + (Today.getMonth()+1)+ Today.getDate().toString() ;
-    window.open('/logbook/savepdffile?url='+location.host+'/qc/photolist&name=photolist'+tdate);
+    window.open('/logbook/savepdffile?url='+location.host+'/qc/cphotolist&name=photolist'+tdate);
     // window.close();
     // console.log('/logbook/savepdffile?url='+location.host+'/logbook');
 }
