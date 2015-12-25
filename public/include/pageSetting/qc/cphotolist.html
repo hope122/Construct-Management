@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="../include/css/jquery-ui.min.css" />
 		<!--[if lte IE 8]><link rel="stylesheet" href="../include/strongly/assets/css/ie8.css" /><![endif]-->
 		<!-- Scripts -->
-		<script src="../include/js/jquery/jquery.min.js"></script>
+		<script src="../include/strongly/assets/js/jquery.min.js"></script>
         <script src="../include/js/jquery/jquery-ui.min.js"></script>
 		<script src="../include/strongly/assets/js/jquery.dropotron.min.js"></script>
 		<script src="../include/strongly/assets/js/skel.min.js"></script>
@@ -22,38 +22,14 @@
         <script src="../include/js/page/check_login.js"></script>
         <script src="../include/js/page/topMenu.js"></script>
 		<script src="../include/strongly/assets/js/main.js"></script>
-	    <script src="../include/js/page/material.js"></script>
-	    <script src="../include/js/config/config.js"></script>
-	    <script src="../include/js/socket/socket.io.js"></script>
-	    <script src="../include/js/socket/conn.js"></script>
-	    <script src="../include/js/toastmessage/jquery.toastmessage.js"></script>
-	    <script src="../include/js/notice/notice.js"></script>
-	    <link rel="stylesheet" href="../include/css/jquery.toastmessage.css">
-	    <link rel="stylesheet" href="../include/css/jquery-ui.min.css">
-	    <style type="text/css">
-	    fieldset {
-	padding:10px;
-	margin:10px;
-
-	border:#06c dashed 1px;
-} 
-
-	        .css_table {
-	      		display:table;
-	        }
-	        .css_tr {
-	            display: table-row;
-	        }
-	        .css_td {
-	            display: table-cell;
-	            margin:auto 5px auto 5px;
-
-	        }
-	        tr,td,th,table{
+	    <script src="/include/js/jquery/jquery.PrintArea.js"></script>
+	    <script src="/include/js/page/qc/photolist.js"></script>
+		<style type="text/css">
+			.phtr{
 				border:1px #cccccc solid ;
 				vertical-align:middle;
 			}
-	    </style>
+		</style>
 	</head>
 	<body class="homepage">
 		<div id="page-wrapper">
@@ -64,7 +40,6 @@
 
 						<!-- Logo -->
 							<h1 id="logo"><a href="./">建築物施工管理雲端系統</a></h1>
-
 						<!-- Nav -->
 							<nav id="nav">
 								<div style="float:right;">
@@ -90,12 +65,38 @@
 
 									<!-- Post -->
 										<article class="box post">
-											<div align='center'><b><span>@@title@@</span></b></div><br>
-											<input id='inp_ptype' type='hidden' value='@@ptype@@'>
-											<input id='inp_purl' type='hidden' value='@@ptype@@'>
-											<div id='div_content'>
+											<div >
+											    <input align="center" onclick="print();" type="button" value="列印">
+											    <input align="center" onclick="save();" type="button" value="存檔">
 											</div>
+											<div id='div_print' align='center' style='margin: 0px auto;'>
+											    <table width='90%' > 
+											      <tr  align='center'>
+											        <td >
+											          <b><span id='title' style="font-size:x-large;"></span></b>
+											        </td>
+											      </tr>
+											      <tr  align='center'>
+											        <td >
+											          <span><u>材料進場查驗照片<u/></span>
+											        </td>
+											      </tr>
+											      <tr >
+											        <td align='left'>
+											          <span>主辦機關：</span><br>
+											          <span>專案管理單位：</span><br>
+											          <span>監造廠商：</span><br>
+											          <span>承包廠商：</span>
+											         </td>
+											      </tr>
+											    </table>
+											   <table id='photolist' width='90%' class='phtr'  rules="all" cellpadding='5'>
+											    </table>
+
+											 
+											</div>		
 										</article>
+
 								</div>
 
 						</div>
