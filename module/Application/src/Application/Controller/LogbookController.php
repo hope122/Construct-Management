@@ -36,10 +36,10 @@ class LogbookController extends AbstractActionController
             }
             switch($ptype){
                 case 'report':
-                    $title='施工日誌';
+                    $title='建築物施工日誌';
                     break;
                 case 'setcontents':
-                    $title='內容設定';
+                    $title='建築物施工日誌';
                     break;
                 case 'laborsafety':
                     $title="勞安設定";
