@@ -361,11 +361,11 @@ class LogbookController extends AbstractActionController
             }else{
                 $arrdata['tbp']='';
             }
-            if(!empty($project['price_twp'])){
-                $arrdata['twp']=$project['price_twp']."%";
-            }else{
+            // if(!empty($project['price_twp'])){
+            //     $arrdata['twp']=$project['price_twp']."%";
+            // }else{
                 $arrdata['twp']='';
-            }
+            // }
             //進度管理tr1
             $trpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\tr1.html";
             $trhtml=$VTs->GetHtmlContent($trpath);
