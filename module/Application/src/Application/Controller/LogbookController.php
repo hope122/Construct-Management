@@ -36,10 +36,10 @@ class LogbookController extends AbstractActionController
             }
             switch($ptype){
                 case 'report':
-                    $title='施工日誌';
+                    $title='建築物施工日誌';
                     break;
                 case 'setcontents':
-                    $title='內容設定';
+                    $title='建築物施工日誌';
                     break;
                 case 'laborsafety':
                     $title="勞安設定";
@@ -304,7 +304,7 @@ class LogbookController extends AbstractActionController
             $html=$VTs->ContentReplace($arrdata,$html);
             $weekarray=array("日","一","二","三","四","五","六");
             $arrdata = [
-                "no"=>'訂單編號：'.$content['no'],
+                "no"=>'表單編號：'.$content['no'],
                 "today"=>$content['date'],
                 "isnew"=>0,
                 "week"=>$content['week'],
@@ -361,11 +361,11 @@ class LogbookController extends AbstractActionController
             }else{
                 $arrdata['tbp']='';
             }
-            if(!empty($project['price_twp'])){
-                $arrdata['twp']=$project['price_twp']."%";
-            }else{
+            // if(!empty($project['price_twp'])){
+            //     $arrdata['twp']=$project['price_twp']."%";
+            // }else{
                 $arrdata['twp']='';
-            }
+            // }
             //進度管理tr1
             $trpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\tr1.html";
             $trhtml=$VTs->GetHtmlContent($trpath);

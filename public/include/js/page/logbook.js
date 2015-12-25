@@ -11,6 +11,7 @@ function print(){
 
 function getContent(ptype,purl,divid,parameter,reset){
     $.get(configObject.logbookGetData+"?type="+ptype+parameter, function( data ) {    
+
       //丟資料toCM回傳html內容
       $.ajax({
        url: "/logbook/"+purl,
@@ -18,6 +19,7 @@ function getContent(ptype,purl,divid,parameter,reset){
        data: {data:JSON.parse(data)},
        async:false,
        success: function(rs){
+
         $("#"+divid).empty();
         $("#"+divid).append(rs);
         if(reset){
@@ -43,35 +45,40 @@ function tosetpage(){
 function savecontentcheck(){
   isnew=$("#isnew").val();
   // console.log(isnew);
-  istrue=confirm("確定後資料無法再進行修改");
-  if(istrue){
-    if(isnew==1){
-        $.ajax({
-         url: configObject.logbookInsert,
-         type: "POST",
-         data: $("#cform").serialize(),
-         async:false,
-         success: function(rs){
-          $.post(configObject.logbookModify, { type:'infocheck' } );
-            alert("儲存成功");
-            // getContent('list','list','div_content','',true);
-         }
-      });
-    }else{
-        $.ajax({
-         url: configObject.logbookModify,
-         type: "POST",
-         data: $("#cform").serialize(),
-         async:false,
-         success: function(rs){
-          $.post(configObject.logbookModify, { type:'infocheck' } );
-            alert("儲存成功");
-            // getContent('list','list','div_content','',true);
-         }
-      });
+  if($("#amw").val!=0 && $("#pmw").val()!=0)
+  {
+    istrue=confirm("確定後資料無法再進行修改");
+    if(istrue){
+      if(isnew==1){
+          $.ajax({
+           url: configObject.logbookInsert,
+           type: "POST",
+           data: $("#cform").serialize(),
+           async:false,
+           success: function(rs){
+            $.post(configObject.logbookModify, { type:'infocheck' } );
+              alert("儲存成功");
+              // getContent('list','list','div_content','',true);
+           }
+        });
+      }else{
+          $.ajax({
+           url: configObject.logbookModify,
+           type: "POST",
+           data: $("#cform").serialize(),
+           async:false,
+           success: function(rs){
+            $.post(configObject.logbookModify, { type:'infocheck' } );
+              alert("儲存成功");
+              // getContent('list','list','div_content','',true);
+           }
+        });
+      }
+      $("#div_hid").hide();
     }
-    $("#div_hid").hide();
-    }
+  }else{
+    alert("請輸入天氣");
+  }
   
 }
 function savecontent(){

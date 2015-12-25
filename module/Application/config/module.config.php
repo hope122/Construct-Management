@@ -88,7 +88,7 @@ return array(
 					),
 					'defaults' => array(
 						'controller' => 'Application\Controller\material',
-						'action'     => 'index',
+						'action'     => 'list',
 					),
 				),
 			),
