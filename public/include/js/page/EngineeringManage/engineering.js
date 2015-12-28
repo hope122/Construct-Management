@@ -68,6 +68,7 @@ $(function(){
 	});
 });
 
+//產生工程資料樹狀結構
 function createTree(currentNode, dataArray){
 	for(var index in dataArray){
 		//console.log(dataArray[index]);
@@ -92,6 +93,7 @@ function createTree(currentNode, dataArray){
 	}
 }
 
+//產生單位選單
 function creatUnitSelect(currentNode, dataArray){
 	var unit1 = $("<select/>")
 				.attr("id","unit1")
@@ -160,6 +162,7 @@ function cancelChosen(){
 	$("#chosenElement").hide();
 }
 
+//刪除所選資料
 function deleteChosen(){
 	$.ajax({
 		url: configObject.engDeleteData, 
@@ -184,6 +187,7 @@ function deleteChosen(){
 	});
 }
 
+//修改所選資料
 function updateChosen(){
 	$("#eng_name").val($("#target").text());
 
@@ -245,6 +249,7 @@ function cancelNewData(){
 	$("#eng_edit_area").hide();
 }
 
+//送出新增/修改資料
 function sendData($type){
 	switch($type){
 		case "new":

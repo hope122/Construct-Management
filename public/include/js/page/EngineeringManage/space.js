@@ -42,6 +42,7 @@ function createSpaceView($dataArr){
 
 function newSpace($type){
 	$("#spaceContent").hide();
+	$("#space_insert_table").val($type);
 
 	switch($type){
 		case "eng_str_a":
@@ -69,6 +70,25 @@ function spaceCancel(){
 	$("#spaceContent").show();
 }
 
-function spaceSubmit(){
-
+function spaceSubmit(){	
+	$.ajax({
+		url: configObject.engInsertData,
+		type: "POST",
+		data:{
+			table: $("#space_insert_table").val(),
+			code: $("#space_code").val(),
+			name: $("#space_name").val(),
+			ismodel: $("input[name=space_ismodel]:checked").val()	
+		},
+		dataType: "JSON",
+		async: false,
+		success:
+			function(rs){
+				console.log(rs);
+			},
+		error:
+			function(e){
+				console.log(e);
+			}
+	});
 }
