@@ -60,6 +60,8 @@ function newSpace($type){
 	$("#space_insert_table").val($type);
 	$("#space_new").show();
 	$("#space_update").hide();
+	$("#space_submit").show();
+	$("#space_update_submit").hide();
 
 	switch($type){
 		case "eng_str_a":
@@ -86,9 +88,13 @@ function newSpace($type){
 
 function updateSpace($type){
 	$("#spaceContent").hide();
+	
 	$("#space_insert_table").val($type);
+
 	$("#space_new").hide();
 	$("#space_update").show();
+	$("#space_submit").hide();
+	$("#space_update_submit").show();
 
 	switch($type){
 		case "eng_str_a":
@@ -103,6 +109,8 @@ function updateSpace($type){
 			$ismodel = $("#eng_str_b :selected").attr("data-ismodel");
 
 			// console.log($code, $name, $ismodel);
+			$("#space_ori_name").val($name);
+			$("#space_ori_code").val($code);
 
 			$("#space_code").val($code);
 			$("#space_name").val($name);
@@ -120,6 +128,9 @@ function updateSpace($type){
 
 			$code = $("#eng_str_e :selected").attr("data-code");
 			$name = $("#eng_str_e :selected").text();
+
+			$("#space_ori_name").val($name);
+			$("#space_ori_code").val($code);
 
 			$("#space_code").val($code);
 			$("#space_name").val($name);
@@ -154,6 +165,9 @@ function deleteSpace($type){
 		success:
 			function(rs){
 				console.log(rs);
+				if(rs.status){
+					alert(rs.msg);
+				}
 				location.reload();
 			},
 		error:
@@ -168,15 +182,32 @@ function spaceCancel(){
 	$("#spaceContent").show();
 }
 
-function spaceSubmit(){	
+function spaceSubmit($type){
+	//判斷為新增還是修改
+	switch($type){
+		case "new":
+			$url = configObject.engInsertData;
+			$ori_name = "";
+			$ori_code = "";
+			break;
+		case "update":
+			$url = configObject.engUpdateData;
+			$ori_name = $("#space_ori_name").val();
+			$ori_code = $("#space_ori_code").val();
+			break;
+		default:
+	}
+
 	$.ajax({
-		url: configObject.engInsertData,
+		url: $url,
 		type: "POST",
 		data:{
 			table: $("#space_insert_table").val(),
 			code: $("#space_code").val(),
 			name: $("#space_name").val(),
-			ismodel: $("input[name=space_ismodel]:checked").val()	
+			ismodel: $("input[name=space_ismodel]:checked").val(),
+			ori_name: $ori_name,
+			ori_code: $ori_code
 		},
 		dataType: "JSON",
 		async: false,
@@ -187,7 +218,7 @@ function spaceSubmit(){
 					alert(rs.msg);
 					location.reload();
 				}else{
-					console.log(rs.msg);
+					alert(rs.msg);
 				}
 			},
 		error:
