@@ -16,7 +16,7 @@ use System_APService\clsSystem;
 class SupplyController extends AbstractActionController
 {
 	//不執行任何動作
-	public function indexAction()
+	public function editorAction()
     {
         $VTs = new clsSystem;
         $VTs->initialization();
