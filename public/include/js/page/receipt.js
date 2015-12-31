@@ -205,7 +205,7 @@ function showDetial(){
       success:
         function(rs){
           if(rs.status){
-            // console.log(rs.data);
+            // console.log(rs);
             // if(!$.isEmptyObject(rs.data)){
             //     var nowP_modelid = rs.data[0].p_modelid;
             //     var countQty = 0, price = rs.data[0].price;
@@ -257,7 +257,11 @@ function showDetial(){
             //   }
             if(!$.isEmptyObject(rs.data)){
               var $countQty = 0;
-              var $price = parseFloat(rs.data[0].p_price);
+              if(rs.typeid!=0){
+                var $price = parseFloat(rs.data[0].p_price);
+              }else{
+                var $price = parseFloat(rs.data[0].price);
+              }
               var $now_p_modelid = rs.data[0].p_modelid;
               
               //各筆資料欄位
