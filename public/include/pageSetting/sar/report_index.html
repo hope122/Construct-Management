@@ -31,14 +31,15 @@
             $(function(){
 
               	//設定今天日期
-				$("#report_date").datepicker({
-					dateFormat: 'yy/mm/dd'
-				});
-				var dateObj = new Date();
+              	var dateObj = new Date();
 				var $year = dateObj.getFullYear();
 				var $month = (dateObj.getMonth()+1 < 10)?"0"+dateObj.getMonth()+1 : dateObj.getMonth()+1;
 				var $date = (dateObj.getDate() < 10)? "0"+dateObj.getDate() : dateObj.getDate();
-				$("#report_date").val($year+"/"+$month+"/"+$date);
+				$("#report_date")
+					.datepicker({
+						dateFormat: 'yy/mm/dd'
+					})
+					.val($year+"/"+$month+"/"+$date);
 
 				//產生圖表
 				var options = {

@@ -1,5 +1,12 @@
 <div id="space_edit">
-	<label>新增 <span id="space_target" style="color:red"></span></label><br/>
+	<input type="hidden" id="space_insert_table" />
+	<input type="hidden" id="space_ori_name" />
+	<input type="hidden" id="space_ori_code" />
+	<label>
+		<span id="space_new">新增 </span>
+		<span id="space_update">修改 </span>
+		<span id="space_target" style="color:red"></span>
+	</label><br/>
 	代碼：<input type="text" id="space_code" /><br/>
 	名稱：<input type="text" id="space_name" /><br/>
 	<label id="space_ismodel">
@@ -8,6 +15,7 @@
 		<input type="radio" name="space_ismodel" value="0">否
 	</label>
 	<br/>
-	<input type="button" id="space_submit" value="送出" onclick="spaceSubmit();" />
+	<input type="button" id="space_submit" value="送出" onclick="spaceSubmit('new');" />
+	<input type="button" id="space_update_submit" value="修改" onclick="spaceSubmit('update');" />
 	<input type="button" id="space_cancel" value="取消" onclick="spaceCancel();" />
 </div>
