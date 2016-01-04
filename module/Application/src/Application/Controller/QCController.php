@@ -106,10 +106,13 @@ class QCController extends AbstractActionController
             }
    
        }
-       if($htmlstr==''){
+
+ 
+   }
+         if($htmlstr==''){
+
             $htmlstr='無資料';
        }
-   }
       $pageContent=$htmlstr;
         //-----BI結束-----
         }catch(Exception $error){
@@ -218,10 +221,11 @@ class QCController extends AbstractActionController
             }
    
        }
-       if($htmlstr==''){
+       
+   }
+   if($htmlstr==''){
             $htmlstr='無資料';
        }
-   }
       $pageContent=$htmlstr;
         //-----BI結束-----
         }catch(Exception $error){
