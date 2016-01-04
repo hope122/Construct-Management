@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="../include/css/jquery-ui.min.css" />
 		<!--[if lte IE 8]><link rel="stylesheet" href="../include/strongly/assets/css/ie8.css" /><![endif]-->
 		<!-- Scripts -->
-		<script src="../include/strongly/assets/js/jquery.min.js"></script>
+		<script src="../include/js/jquery/jquery.min.js"></script>
         <script src="../include/js/jquery/jquery-ui.min.js"></script>
 		<script src="../include/strongly/assets/js/jquery.dropotron.min.js"></script>
 		<script src="../include/strongly/assets/js/skel.min.js"></script>
@@ -21,14 +21,16 @@
         <script src="../include/js/page/ctrl.js"></script>
         <script src="../include/js/page/check_login.js"></script>
         <script src="../include/js/page/topMenu.js"></script>
+        <script src="../include/js/page/supply.js"></script>
 		<script src="../include/strongly/assets/js/main.js"></script>
-	    <script src="/include/js/jquery/jquery.PrintArea.js"></script>
-	    <script src="/include/js/page/qc/photolist.js"></script>
 		<style type="text/css">
-			.phtr{
+			th, td{
 				border:1px #cccccc solid ;
 				vertical-align:middle;
 			}
+			.no-titlebar .ui-dialog-titlebar {
+    display: none;
+}
 		</style>
 	</head>
 	<body class="homepage">
@@ -40,6 +42,7 @@
 
 						<!-- Logo -->
 							<h1 id="logo"><a href="./">建築物施工管理雲端系統</a></h1>
+
 						<!-- Nav -->
 							<nav id="nav">
 								<div style="float:right;">
@@ -65,42 +68,25 @@
 
 									<!-- Post -->
 										<article class="box post">
-											<div >
-											    <input align="center" onclick="print();" type="button" value="列印">
-											    <input align="center" onclick="save();" type="button" value="存檔">
+											<div align='center'><b><span>廠商列表</span></b></div>
+											<table align='center' id='tb_list'>
+												<tr class='title'>
+													<th>公司名稱</th>
+													<th>公司英文名稱</th>
+													<th>統一編號</th>
+													<th>負責人</th>
+													<th>詳細資料</th>
+												</tr>
+												<tr>
+													<td>公司</td>
+													<td>英文</td>
+													<td>統編</td>
+													<td>負責人</td>
+													<td>詳細</td>
+												</tr>
+											</table>
+											<div id="dialog" title="" style="display:none;">
 											</div>
-											<div id='div_print' align='center' style='margin: 0px auto;'>
-											    <table width='90%' > 
-											      <tr  align='center'>
-											        <td >
-											          <b><span id='title' style="font-size:x-large;"></span></b>
-											        </td>
-											      </tr>
-											      <tr  align='center'>
-											        <td >
-											          <span id="d_title"></span>
-											          <span><u>材料進場查驗照片<u/></span>
-											        </td>
-											      </tr>
-											      <tr align="right">
-											      		<td>
-											      			日期<select id="d_select"></seelct>
-											      		</td>
-											      </tr>
-											      <tr >
-											        <td align='left'>
-											          <span>主辦機關：</span><br>
-											          <span>專案管理單位：</span><br>
-											          <span>監造廠商：</span><br>
-											          <span>承包廠商：</span>
-											         </td>
-											      </tr>
-											    </table>
-											   <table id='photolist' width='90%' class='phtr'  rules="all" cellpadding='5'>
-											    </table>
-
-											 
-											</div>		
 										</article>
 
 								</div>

@@ -15,8 +15,8 @@ use System_APService\clsSystem;
 
 class SupplyController extends AbstractActionController
 {
-	//不執行任何動作
-	public function indexAction()
+    //不執行任何動作
+    public function editorAction()
     {
         $VTs = new clsSystem;
         $VTs->initialization();
@@ -27,7 +27,7 @@ class SupplyController extends AbstractActionController
             $pageContent = $VTs->GetHtmlContent($pagePath);
         }else{  
             //取得html
-            $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\supply\\index.html";
+            $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\supply\\editor.html";
             $html=$VTs->GetHtmlContent($mpath);
             $arrdata["userName"]=$_SESSION['userName'];
             $html=$VTs->ContentReplace($arrdata,$html);
@@ -37,7 +37,7 @@ class SupplyController extends AbstractActionController
         //-----BI結束-----
         }catch(Exception $error){
             //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
-            $VTs->WriteLog("IndexController", "indexAction", $error->getMessage());
+            $VTs->WriteLog("SupplyController", "editorAction", $error->getMessage());
         }
          //關閉資料庫連線
         $VTs->DBClose();
@@ -46,6 +46,30 @@ class SupplyController extends AbstractActionController
         $this->viewContnet['pageContent'] = $pageContent;
         return new ViewModel($this->viewContnet);
     }
+    //不執行任何動作
+    public function getInfoHtmlAction()
+    {
+        $VTs = new clsSystem;
+        $VTs->initialization();
+      try{
+        //-----BI開始-----  
 
+            //取得html
+            $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\supply\\info.html";
+            $html=$VTs->GetHtmlContent($mpath);
+            // $html='';    
+            $pageContent=$html;
+        //-----BI結束-----
+        }catch(Exception $error){
+            //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
+            $VTs->WriteLog("SupplyController", "getinfohtmlAction", $error->getMessage());
+        }
+         //關閉資料庫連線
+        $VTs->DBClose();
+        //釋放
+        $VTs = null;
+        $this->viewContnet['pageContent'] = $pageContent;
+        return new ViewModel($this->viewContnet);
+    }
 
 }
