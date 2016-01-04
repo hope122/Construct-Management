@@ -1,6 +1,5 @@
 $(function(){
   //初始頁面
-  
     setView();
 });
 
@@ -32,7 +31,7 @@ function getContent(apType,cmAction,setDiv){
   $.get(configObject.SupplyGetData+"?type="+apType, function( rs ) {
 
     $.ajax({
-      url: "/material/"+cmAction,
+      url: "/supply/"+cmAction,
       type: "POST",
       data: {data:JSON.parse(rs)},
       async:false,
@@ -45,11 +44,19 @@ function getContent(apType,cmAction,setDiv){
 //查看按鈕
 function showinfo(uid){
   //傳入uid 將html 塞入dialog div內
-  getContent("chkinfo&uid="+uid,"chkinfo","dialog");
+  // getContent("getinfohtml","chkinfo","dialog");
+      $.ajax({
+      url: "/supply/getinfohtml",
+      type: "POST",
+      async:false,
+      success: function(rs){
+        $("#dialog").empty().append(rs);
+      }
+    });
   //顯示dialog
   $('#dialog').css({display:'inline'});
   $("#dialog").dialog({
-      title: '資料',
+     dialogClass: 'no-titlebar',
       bgiframe: true,
       height: 300,
       width: '80%',
@@ -59,4 +66,6 @@ function showinfo(uid){
       overlay:{opacity: 0.7, background: "#FF8899" },
 
   });
+   $( "#tabs" ).tabs();
+
 }

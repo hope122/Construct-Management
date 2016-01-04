@@ -72,26 +72,37 @@ class QCController extends AbstractActionController
         foreach($arr_list as $list) {
              // echo $i++;
             //判斷有imgid(照片id)才顯示  
-            if(!empty($list['imgid'])){
-                $trs=$trhtml;
-                $arrin = array(
-                "qcid" => $list['uid'],
-            );
+            // if(!empty($list['imgid'])){
+            //     $trs=$trhtml;
+            //     $arrin = array(
+            //     "qcid" => $list['uid'],
+            // );
 
-                $imginfo = $VTs->json2data($VTs->UrlDataPost($apurl."/pageaction/getqcimglist",$arrin));
-                // print_r($imginfo);
-                // exit;
-                if($imginfo->status){
-                    $trs=str_replace('@@chkdate@@',$list['datec'],$trs);
-                     $trs=str_replace('@@d64@@',$imginfo->imgs->img0,$trs);
-                    $info = $VTs->json2data($VTs->UrlDataGet($apurl."/qc/getdbdata?type=photoinfo&uid=".$list['dataid']));
-                    $trs=str_replace('@@remark@@',$list['remark'],$trs);
-                    $trs=str_replace('@@uid@@',$info->uid,$trs);
-                    $trs=str_replace('@@materialname@@',$info->ma_name,$trs);
-                    $trs=str_replace('@@count@@',$info->count,$trs);
-                    $trs=str_replace('@@place@@',$info->place,$trs);
-                    $htmlstr.=$trs;
-                }
+            //     $imginfo = $VTs->json2data($VTs->UrlDataPost($apurl."/pageaction/getqcimglist",$arrin));
+            //     // print_r($imginfo);
+            //     // exit;
+            //     if($imginfo->status){
+            //         $trs=str_replace('@@chkdate@@',$list['datec'],$trs);
+            //          $trs=str_replace('@@d64@@',$imginfo->imgs->img0,$trs);
+            //         $info = $VTs->json2data($VTs->UrlDataGet($apurl."/qc/getdbdata?type=photoinfo&uid=".$list['dataid']));
+            //         $trs=str_replace('@@remark@@',$list['remark'],$trs);
+            //         $trs=str_replace('@@uid@@',$info->uid,$trs);
+            //         $trs=str_replace('@@materialname@@',$info->ma_name,$trs);
+            //         $trs=str_replace('@@count@@',$info->count,$trs);
+            //         $trs=str_replace('@@place@@',$info->place,$trs);
+            //         $htmlstr.=$trs;
+            //     }
+            // }
+            if(!empty($list['imgs'])){
+                $trs=$trhtml;
+                $trs=str_replace('@@chkdate@@',$list['datec'],$trs);
+                $trs=str_replace('@@d64@@',$list['imgs']['img0'],$trs);
+                $trs=str_replace('@@remark@@',$list['remark'],$trs);
+                $trs=str_replace('@@uid@@',$list['uid'],$trs);
+                $trs=str_replace('@@materialname@@',$list['ma_name'],$trs);
+                $trs=str_replace('@@count@@',$list['count'],$trs);
+                $trs=str_replace('@@place@@',$list['place'],$trs);
+                $htmlstr.=$trs;
             }
    
        }
@@ -169,28 +180,41 @@ class QCController extends AbstractActionController
         foreach($arr_list as $list) {
              // echo $i++;
             //判斷有imgid(照片id)才顯示  
-            if(!empty($list['imgid'])){
-                $trs=$trhtml;
-                $arrin = array(
-                "qcid" => $list['uid'],
-            );
+            // if(!empty($list['imgid'])){
+            //     $trs=$trhtml;
+            //     $arrin = array(
+            //     "qcid" => $list['uid'],
+            // );
 
-                $imginfo = $VTs->json2data($VTs->UrlDataPost($apurl."/pageaction/getqcimglist",$arrin));
-                // print_r($imginfo);
-                // exit;
-                if($imginfo->status){
-                    $trs=str_replace('@@chkdate@@',$list['datec'],$trs);
-                     $trs=str_replace('@@d64@@',$imginfo->imgs->img0,$trs);
-                    $info = $VTs->json2data($VTs->UrlDataGet($apurl."/qc/getdbdata?type=cphotoinfo&uid=".$list['dataid']));
-                    $trs=str_replace('@@remark@@',$list['remark'],$trs);
-                    $trs=str_replace('@@uid@@',$info->uid,$trs);
-                    $trs=str_replace('@@fl@@',$info->fl,$trs);
-                    $trs=str_replace('@@typec@@',$info->typec,$trs);
-                    $trs=str_replace('@@model@@',$info->model,$trs);
-                    $trs=str_replace('@@area@@',$info->area,$trs);
-                    $trs=str_replace('@@typed@@',$info->typed,$trs);
-                    $htmlstr.=$trs;
-                }
+            //     $imginfo = $VTs->json2data($VTs->UrlDataPost($apurl."/pageaction/getqcimglist",$arrin));
+            //     // print_r($imginfo);
+            //     // exit;
+            //     if($imginfo->status){
+            //         $trs=str_replace('@@chkdate@@',$list['datec'],$trs);
+            //          $trs=str_replace('@@d64@@',$imginfo->imgs->img0,$trs);
+            //         $info = $VTs->json2data($VTs->UrlDataGet($apurl."/qc/getdbdata?type=cphotoinfo&uid=".$list['dataid']));
+            //         $trs=str_replace('@@remark@@',$list['remark'],$trs);
+            //         $trs=str_replace('@@uid@@',$info->uid,$trs);
+            //         $trs=str_replace('@@fl@@',$info->fl,$trs);
+            //         $trs=str_replace('@@typec@@',$info->typec,$trs);
+            //         $trs=str_replace('@@model@@',$info->model,$trs);
+            //         $trs=str_replace('@@area@@',$info->area,$trs);
+            //         $trs=str_replace('@@typed@@',$info->typed,$trs);
+            //         $htmlstr.=$trs;
+            //     }
+            // }
+            if(!empty($list['imgs'])){
+                $trs=$trhtml;
+                $trs=str_replace('@@chkdate@@',$list['datec'],$trs);
+                $trs=str_replace('@@d64@@',$list['imgs']['img0'],$trs);
+                $trs=str_replace('@@remark@@',$list['remark'],$trs);
+                $trs=str_replace('@@uid@@',$list['uid'],$trs);
+                $trs=str_replace('@@fl@@',$list['fl'],$trs);
+                $trs=str_replace('@@typec@@',$list['typec'],$trs);
+                $trs=str_replace('@@model@@',$list['model'],$trs);
+                $trs=str_replace('@@area@@',$list['area'],$trs);
+                $trs=str_replace('@@typed@@',$list['typed'],$trs);
+                $htmlstr.=$trs;
             }
    
        }
