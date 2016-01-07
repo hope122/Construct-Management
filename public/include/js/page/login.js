@@ -4,10 +4,17 @@ function loginEven(){
 		url: configObject.LoginUrl,
 		data: parm,
 		type:"POST",
-		async: true,
+		async: false,
+    beforeSend: function(){
+      showLoading(true);
+    },
 		success: function(rs){
 			var result = $.parseJSON(rs);
-			redirectPage(result);
+      setTimeout(function(){
+        redirectPage(result);
+        showLoading(false);
+      },500);
+
 		}
 	});
 }
