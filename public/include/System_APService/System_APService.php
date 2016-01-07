@@ -46,10 +46,6 @@
 		//供呼叫程式初始化設定
 		public function initialization($DBSection = ''){
 			@session_start();
-			if(empty($_SESSION)){
-				header("Location: ./login.html");
-				exit();
-			}
 			//相關工具設定
 			//基礎的資安防護
 			$VTs = new clsTools;

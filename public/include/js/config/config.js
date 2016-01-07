@@ -35,13 +35,8 @@ var configObject = {
     "getDailyContent": apurl+"/pageaction/getdailycontent",
     "getWorkProject": apurl+"/pageaction/getworkproject",
     "engGetData": apurl+"/engineeringmanage/getdata",
-    "engSetView": originUrl+"engineeringmanage/setview",
     "engDeleteData": apurl+"/engineeringmanage/deletedata",
     "engInsertData": apurl+"/engineeringmanage/insertdata",
     "engUpdateData": apurl+"/engineeringmanage/updatedata",
-    "chartsWS": location.origin+":8080",
-    "SupplyInsert":apurl+"/supply/dbinsert",
-    "SupplyModify":apurl+"/supply/dbmodify",
-    "SupplyDelete":apurl+"/supply/dbdelete",
-    "SupplyGetData":apurl+"/supply/getdbdata",
+    "chartsWS": location.origin+":8080"
 };
