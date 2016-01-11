@@ -5,15 +5,15 @@ function loginEven(){
 		data: parm,
 		type:"POST",
 		async: false,
-    beforeSend: function(){
-      showLoading(true);
-    },
+	    beforeSend: function(){
+	      showLoading(true);
+	    },
 		success: function(rs){
 			var result = $.parseJSON(rs);
-      setTimeout(function(){
-        redirectPage(result);
-        showLoading(false);
-      },500);
+			setTimeout(function(){
+				redirectPage(result);
+				showLoading(false);
+			},500);
 
 		}
 	});

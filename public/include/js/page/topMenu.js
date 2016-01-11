@@ -5,8 +5,8 @@ var getMenu = function (dataObject) {
 getMenu.prototype = {
     menu: '',
     MenuContent: function () {
-        var menuStyle = useGetAjax(configObject.menuProcess,this.menu);
-        $("#menus").html(menuStyle.menu);
+        //var menuStyle = useGetAjax(configObject.menuProcess,this.menu);
+        $("#menus").html(this.menu.menu);
         getLan();
         //處理連結問題
         $("a").click(function(){
@@ -23,6 +23,7 @@ getMenu.prototype = {
 $(function(){
   var positionObject = useGetAjax(configObject.getPosition);
   var menus = new getMenu(positionObject);
+  console.log(menus);
   menus.MenuContent();
 });
 

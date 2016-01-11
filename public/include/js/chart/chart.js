@@ -1,8 +1,9 @@
 
 var chartData = null;
+var pageChartObject={};
 //載入折線圖,長條圖
 google.load('visualization', '1.1', {packages: ['corechart','bar','timeline']});
-var pageChartObject={};
+
 
 function createChart(options,processArray){
     if(typeof processArray == 'undefined' && typeof options.url != 'undefined'){
@@ -129,13 +130,24 @@ function setDraw(options,dataArr){
 }
 
 function drawChart(options,dataArr) {
+    var drawAreaWidth = $("#"+options.drawItemID).width(),
+    drawAreaHeight = $("#"+options.drawItemID).height();
+    
+    if(drawAreaWidth == 0){
+        drawAreaWidth = null;
+    }
+
+    if(drawAreaHeight == 0){
+        drawAreaHeight = null;
+    }
+    //console.log(drawAreaWidth);
     var chart, 
     data = google.visualization.arrayToDataTable(dataArr),
     chartOptions = {
         //curveType: 'function',
         legend: { position: 'bottom' },
-        //width: "3000",
-        //height: 300,
+        width: drawAreaWidth,
+        height: drawAreaHeight,
         pointSize: 4,
         //pointsVisible: true,
         hAxis:{},

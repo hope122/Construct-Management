@@ -6,3 +6,11 @@
   margin-left: -100px;
   margin-top: -100px;
 }
+.content-loading-img{
+	position: absolute;
+	top:50%;
+	left: 50%;
+	width: 40px;
+	margin-left: -20px;
+	margin-top: -40px;
+}
