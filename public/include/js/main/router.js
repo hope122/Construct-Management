@@ -29,10 +29,14 @@ function firstLoadPage(){
 }
 
 function loadPage(page,contentID){
+	if(page == "./"){
+		page = "home";
+	}
 	var pageInfo = {
 		pagetype: page
 	};
 	var params = $.param(pageInfo);
+
 	window.history.pushState(page,null, "content.html?"+params);
 	
 	var loadPage = 'pages/'+page+'.html';

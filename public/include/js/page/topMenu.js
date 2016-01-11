@@ -23,7 +23,6 @@ getMenu.prototype = {
 $(function(){
   var positionObject = useGetAjax(configObject.getPosition);
   var menus = new getMenu(positionObject);
-  console.log(menus);
   menus.MenuContent();
 });
 
