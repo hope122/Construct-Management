@@ -9,9 +9,12 @@ function checkUserLogin(){
 		async: false,
         dataType: "JSON",
 		success: function(rs){
-           if(!rs.status){
-               location.href = location.origin;
-           }
+			if(!rs.status){
+				location.href = location.origin;
+			}else{
+				var menus = new getMenu(rs);
+				menus.MenuContent();
+			}
 		}
 	});
 }

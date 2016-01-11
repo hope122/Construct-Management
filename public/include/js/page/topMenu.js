@@ -20,13 +20,6 @@ getMenu.prototype = {
     }
 };
 
-$(function(){
-  var positionObject = useGetAjax(configObject.getPosition);
-  var menus = new getMenu(positionObject);
-  menus.MenuContent();
-});
-
-
 //取得資訊
 function useGetAjax(url, data){
     var result = '';
