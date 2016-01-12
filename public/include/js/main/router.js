@@ -1,8 +1,10 @@
-
+var isPopstate = false;
 //-----監聽上下頁事件-----
 window.addEventListener('popstate', function(e){
 	if (e.state) {
+		isPopstate = true;
 		firstLoadPage();
+		isPopstate = false;
 	}
 },false);
 
@@ -36,14 +38,15 @@ function loadPage(page,contentID){
 		pagetype: page
 	};
 	var params = $.param(pageInfo);
-
-	window.history.pushState(page,null, "content.html?"+params);
-	
+	if(!isPopstate){
+		window.history.pushState(page,null, "content.html?"+params);
+	}
 	var loadPage = 'pages/'+page+'.html';
 	loader(contentID);
 	$.get(loadPage,{},function(contents){
 		putContent( contentID, getContent(contents) );
 	});
+
 //	$("#"+contentID).load(loadPage);
 }
 
