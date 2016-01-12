@@ -63,7 +63,7 @@ function getContent(rsContent){
 	tmpHead = tmpHead[0];
 	tmpBody = tmpBody[1].split("</body>");
 	tmpBody = tmpBody[0];
-	//$("head :not(.keep)").remove();
+	$("head :not(.keep)").remove();
 	$(tmpHead).appendTo("head");
 	return tmpBody;
 }
@@ -74,12 +74,14 @@ function putContent(contentID,contents){
 	});
 }
 
-function loadJS(jsSrc,dataSrc){
-	var script = $("<script async>");
+function loadJS(jsSrc,jsClass,dataSrc){
+	var script = $("<script>");
 	script.prop("src",jsSrc);
 	if(typeof dataSrc != "undefined"){
 		script.attr("data-source",dataSrc);
-		script.attr("onload","loadGoogleChart()");
+	}
+	if(typeof jsClass != "undefined"){
+		script.addClass(jsClass);
 	}
 	script.appendTo("head");
 }

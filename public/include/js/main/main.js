@@ -49,18 +49,6 @@ function logoutEven(){
 	});
 }
 
-function setHref(){
-  //處理連結問題
-  $("a").click(function(){
-      var thisHref = $(this).attr("href");
-      if(thisHref != "#"){
-        //location.href = location.origin + "/" + $(this).attr("href");
-        loadPage($(this).attr("href"),"pagescontent");
-      }
-      return false;
-  });
-}
-
 //取得資訊
 function porcessData(url, data, async, dataType){
     var result = '';
