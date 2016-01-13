@@ -46,7 +46,6 @@
 		//供呼叫程式初始化設定
 		public function initialization($DBSection = ''){
 			@session_start();
-			
 			//相關工具設定
 			//基礎的資安防護
 			$VTs = new clsTools;
@@ -103,7 +102,15 @@
 			//釋放
 			$VTs = null;
 		}
-		
+	#檢查ＳＥＳＳＩＯＮ
+	public function CheckLogin(){
+		if(empty($_SESSION)){
+			header("Location: ./login.html");
+			exit();
+		}
+		return true;
+	}
+	#結束檢查ＳＥＳＳＩＯＮ
 	#這裡是SystemDBService
 		//資料庫連線
 		public function CreateDBConnection($sServer='', $sDatabase='', $sUser='', $sPassWord=''){

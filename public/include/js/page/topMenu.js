@@ -5,8 +5,8 @@ var getMenu = function (dataObject) {
 getMenu.prototype = {
     menu: '',
     MenuContent: function () {
-        var menuStyle = useGetAjax(configObject.menuProcess,this.menu);
-        $("#menus").html(menuStyle.menu);
+        //var menuStyle = useGetAjax(configObject.menuProcess,this.menu);
+        $("#menus").html(this.menu.menu);
         getLan();
         //處理連結問題
         $("a").click(function(){
@@ -19,13 +19,6 @@ getMenu.prototype = {
         //return this.menu;
     }
 };
-
-$(function(){
-  var positionObject = useGetAjax(configObject.getPosition);
-  var menus = new getMenu(positionObject);
-  menus.MenuContent();
-});
-
 
 //取得資訊
 function useGetAjax(url, data){

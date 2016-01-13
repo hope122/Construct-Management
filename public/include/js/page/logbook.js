@@ -93,6 +93,7 @@ function savecontent(){
        success: function(rs){
           alert("儲存成功");
           // getContent('list','list','div_content','',true);
+          $("#isnew").val(0);
        }
     });
   }else{

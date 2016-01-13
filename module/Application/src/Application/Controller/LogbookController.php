@@ -417,7 +417,8 @@ class LogbookController extends AbstractActionController
                     $tr=$trhtml;
                     $tr=str_replace("@@name@@",$workcount["wtypename"],$tr);
                     $tr=str_replace("@@count@@",$workcount["count"],$tr);
-                    $tr=str_replace("@@count_s@@",$workcount["count_s"],$tr);
+                    // $tr=str_replace("@@count_s@@",$workcount["count_s"],$tr);
+                    $tr=str_replace("@@count_s@@",'',$tr);
                     $strhtml3.=$tr;
                 }
             }
