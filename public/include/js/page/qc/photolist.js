@@ -1,5 +1,6 @@
 
 $(function() {  
+
   $.get(configObject.QCGetData+"?type=title", function( data ) {
       data=JSON.parse(data);
       // console.log(data['name']);
@@ -15,10 +16,30 @@ $(function() {
         $("#d_select").append('<option val='+val['datef']+'>'+val['datef']+'</option>');
     })
   });
+
   $("#d_select").change(function(){
     setView($(this).val());
   });
 });  
+$( document ).ajaxStart(function() {
+  $("#photolist").empty();
+  $("#dialog").dialog({
+              modal: true,
+              height: 150,
+              width: 200,
+              zIndex: 999,
+              resizable: false,
+              title: "Please wait..."
+      });
+});
+$( document ).ajaxStop(function() {
+  setTimeout(function(){$( "#dialog" ).dialog("close");},500);
+  
+});
+
+
+     
+
 function setView(d_list){
    
   $.get(configObject.QCGetData+"?type=qc_checklist&datel="+d_list, function( data ) {
@@ -30,9 +51,12 @@ function setView(d_list){
        data: {data:data,apurl:apurl},
        async:false,
        success: function(rs){
-
-        $("#photolist").empty().append(rs);
-        $("#d_title").empty().append(data['date']);
+        setTimeout(function(){ 
+          $("#photolist").append(rs);
+          $("#d_title").empty().append(data['date']);
+         }, 500);
+        
+        
        },
        error: function(e){
        console.log(e);

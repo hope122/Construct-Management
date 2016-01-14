@@ -1,4 +1,17 @@
+
+$(window).scroll(function() { 
+                
+    if($(document).height() - $(window).height() - $(document).scrollTop() < 10) { 
+        
+        if(!imagesLoading) { 
+            appendToMasonry(); 
+        } 
+        
+    } 
+    
+});
 $(function() {  
+
   $.get(configObject.QCGetData+"?type=title", function( data ) {
       data=JSON.parse(data);
       // console.log(data['name']);
@@ -14,24 +27,47 @@ $(function() {
         $("#d_select").append('<option val='+val['datef']+'>'+val['datef']+'</option>');
     })
   });
+
   $("#d_select").change(function(){
     setView($(this).val());
   });
 });  
+$( document ).ajaxStart(function() {
+  $("#photolist").empty();
+  $("#dialog").dialog({
+              modal: true,
+              height: 150,
+              width: 200,
+              zIndex: 999,
+              resizable: false,
+              title: "Please wait..."
+      });
+});
+$( document ).ajaxStop(function() {
+  setTimeout(function(){$( "#dialog" ).dialog("close");},500);
+  
+});
+
+
+     
+
 function setView(d_list){
    
   $.get(configObject.QCGetData+"?type=qc_checklist_c&datel="+d_list, function( data ) {
       data=JSON.parse(data);
       // 丟資料toCM回傳html內容
       $.ajax({
-        url: "/qc/getphotolisthtml",
+        url: "/qc/getcphotolisthtml",
        type: "POST",
        data: {data:data,apurl:apurl},
        async:false,
        success: function(rs){
- 
-        $("#photolist").empty().append(rs);
-        $("#d_title").empty().append(data['date']);
+        setTimeout(function(){ 
+          $("#photolist").append(rs);
+          $("#d_title").empty().append(data['date']);
+         }, 500);
+        
+        
        },
        error: function(e){
        console.log(e);
@@ -48,7 +84,7 @@ function print(){
 function save(){
     var Today=new Date();
 　  tdate=Today.getFullYear().toString() + (Today.getMonth()+1)+ Today.getDate().toString() ;
-    window.open('/logbook/savepdffile?url='+location.host+'/qc/cphotolist&name=photolist'+tdate);
+    window.open('/logbook/savepdffile?url='+location.host+'/qc/photolist&name=photolist'+tdate);
     // window.close();
     // console.log('/logbook/savepdffile?url='+location.host+'/logbook');
 }
