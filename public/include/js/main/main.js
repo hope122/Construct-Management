@@ -49,6 +49,30 @@ function logoutEven(){
 	});
 }
 
+function setInputNumberOnly(){
+  //只能輸入數字
+  $(".inputNumberOnly").keypress(function(event){
+    return event.charCode >= 48 && event.charCode <= 57;
+  });
+}
+
+function getUsetInput(){
+  var tmpObj = {};
+  $(".userInput").each(function(){
+    var id= $(this).prop("id");
+    tmpObj[id] = $(this).val();
+  });
+  return tmpObj;
+}
+
+function itemFade(item,ctr){
+  if(ctr){
+    $("#"+item).fadeIn(500);
+  }else{
+    $("#"+item).fadeOut(500);
+  }
+}
+
 //取得資訊
 function porcessData(url, data, async, dataType){
     var result = '';
