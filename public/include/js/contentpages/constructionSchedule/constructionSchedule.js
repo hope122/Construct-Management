@@ -3,17 +3,23 @@
 function getChartsData(){
 	var chartsData;
 
-	    $.ajax({
+	$.ajax({
 	    //url: configObject.chartsWS+'/Construction/wsConstruction.asmx/GetScheduleChart_JSON',
 	    url: 'http://211.21.170.17:8080/Construction/wsConstruction.asmx/GetScheduleChart_JSON',
 	    type: "GET",
 	    dataType: "xml",
 	    async: false,
 	    success: function(rs){
-	        chartsData = $.parseJSON($(rs).find("string").text());
+	        chartsData = processJsonInXml(rs);
 	    }
 	});
+	sendRequest("post",'http://211.21.170.17:8080/Construction/wsConstruction.asmx/GetScheduleChart_JSON',{},"","xml","getResponses");
 	return chartsData;
+}
+
+function getResponses(rsXml){
+	var content = processJsonInXml(rsXml);
+	console.log(content);
 }
 
 	//甘特圖
@@ -26,7 +32,7 @@ function getGanttChartsData(){
 	    dataType: "xml",
 	    async: false,
 	    success: function(rs){
-	        chartsData = $.parseJSON($(rs).find("string").text());
+	        chartsData = processJsonInXml(rs);
 	    }
 	});
 	//console.log(chartsData);

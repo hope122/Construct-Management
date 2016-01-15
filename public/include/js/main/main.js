@@ -73,6 +73,34 @@ function itemFade(item,ctr){
   }
 }
 
+function sendRequest(sendType,sendUrl,sendData,dataType,responsesType,responsesFunction){
+  if(sendUrl.length > 0){
+    sendType = sendType.toLowerCase();
+    if(dataType == "json"){
+      sendData = JSON.stringify(sendData);
+    }
+    $.ajax({
+       url: sendUrl,
+       type: sendType,
+       data: sendData,
+       dataType: responsesType,
+       success: function(rs){
+          if(typeof responsesFunction != "undefined"){
+            window[responsesFunction](rs);
+          }
+           //console.log(rs);
+       }
+    });
+  }else{
+    console.log("sendUrl is Null");
+  }
+}
+
+//處理WS回傳JSON塞在的XML內容
+function processJsonInXml(xmlContent){
+  return $.parseJSON($(xmlContent).find("string").text());
+}
+
 //取得資訊
 function porcessData(url, data, async, dataType){
     var result = '';

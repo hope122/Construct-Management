@@ -55,6 +55,12 @@ $.datepicker._generateMonthYearHeader = function(inst, drawMonth, drawYear, minD
 };
 
 function getInput(){
-	var thisObj = getUsetInput();
-	console.log(thisObj);
+	var sendData = getUsetInput();
+	//sendRequest("get",sendUrl,sendData,{},"xml","getResponses");
+	console.log(sendData);
+}
+
+function getResponses(rsXml){
+	var content = processJsonInXml(rsXml);
+	console.log(content);
 }
