@@ -5,7 +5,7 @@ var sLimit = sLimitOrigin;
 var eLimit = eLimitOrigin;
 var dynamicQuantity = 2;
 var isLoadFinisg = false;
-
+var waypoint;
 $(function() {  
   loader("title","content-loading-img-in");
   $.getJSON(configObject.QCGetData+"?type=title", function( data ) {
@@ -40,23 +40,26 @@ $(function() {
     isLoadFinisg = false;
     setView($(this).val(),false);
   });
-  var iScrollPos = 0;
- 
-  $(window).scroll(function () {
+});  
 
-      var iCurScrollPos = $(this).scrollTop();
-      //console.log(iScrollPos);
-      if (iCurScrollPos > iScrollPos && !isLoadFinisg && iScrollPos > 0 && iScrollPos%50 == 0) {
+function loadWaypoints(){
+  if(typeof waypoint == "undefined"){
+    waypoint = new Waypoint({
+      element: document.getElementById('thisBottom'),
+      handler: function(direction) {
+        //console.log('Waypoint triggered in ' + direction + ' direction')
+        if(!isLoadFinisg && direction == "down"){
           sLimit = eLimit;
           eLimit = eLimit + dynamicQuantity;
-          //Scrolling Down
           setView($("#d_select").val());
-      }
-
-      iScrollPos = iCurScrollPos;
-  });
-
-});  
+        }
+      },
+      offset: 'bottom-in-view'
+    });
+  }else{
+    Waypoint.refreshAll();
+  }
+}
 
 function setView(d_list,notEmpty){
 
@@ -96,6 +99,7 @@ function setView(d_list,notEmpty){
           $("#photolist").append(tmpContent);
         });
         itemFade("imgLoader",false);
+        loadWaypoints();
       }else{
         if(!notEmpty){
           $("#photolist").empty().html("無資料");

@@ -13,7 +13,7 @@ function getChartsData(){
 	        chartsData = processJsonInXml(rs);
 	    }
 	});
-	sendRequest("post",'http://211.21.170.17:8080/Construction/wsConstruction.asmx/GetScheduleChart_JSON',{},"","xml","getResponses");
+	//sendRequest("post",'http://211.21.170.17:8080/Construction/wsConstruction.asmx/GetScheduleChart_JSON',{},"","xml","getResponses");
 	return chartsData;
 }
 

@@ -3,6 +3,7 @@
 	<head>
 		
 	    <script src="include/js/jquery/jquery.PrintArea.js"></script>
+	    <script src="include/js/waypoints/jquery.waypoints.min.js"></script>
 		<style type="text/css">
 			.phtr{
 				border:1px #cccccc solid ;
@@ -105,15 +106,16 @@
 					
 					<!------------分隔線---------->
 				  
-		    	<div id="photolist" >
-		    	</div>
-			    <div id="imgLoader" style="display:none;">
-			    	<img class="content-loading-img-in" src="include/images/loader.svg">
-			    </div>
-				 
+			    	<div id="photolist" class="infinite-container">
+			    	</div>
+				    <div id="imgLoader" style="display:none;">
+				    	<img class="content-loading-img-in" src="include/images/loader.svg">
+				    </div>
+				    <div id="thisBottom"></div>
 				</div>		
 			</article>	
 		</div>
+
 		<script src="include/js/contentpages/qc/photolist.js"></script>
 	</body>
 </html>
