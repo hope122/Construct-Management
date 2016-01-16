@@ -101,6 +101,16 @@ function processJsonInXml(xmlContent){
   return $.parseJSON($(xmlContent).find("string").text());
 }
 
+//iframe設定高
+function iframeLoaded(iframeID) {
+    var iFrameID = document.getElementById(iframeID);
+    if(iFrameID) {
+          // here you can make the height, I delete it first, then I make it again
+          iFrameID.height = "";
+          iFrameID.height = iFrameID.contentWindow.document.body.scrollHeight + "px";
+    }   
+}
+
 //取得資訊
 function porcessData(url, data, async, dataType){
     var result = '';

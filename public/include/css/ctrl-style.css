@@ -77,3 +77,11 @@
 .content-padding5{
 	padding: 5px;
 }
+
+.iframe-scroll-hide{
+  overflow:hidden;
+}
+
+a:hover{
+	text-decoration:none;
+}
