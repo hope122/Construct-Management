@@ -55,11 +55,13 @@ $.datepicker._generateMonthYearHeader = function(inst, drawMonth, drawYear, minD
 };
 
 function getInput(){
-	var sendData = {};
-	sendData.sData = getUsetInput();
-	sendData = $.param(sendData);
+	// var sendData = {};
+	// sendData.sData = getUsetInput();
+	// sendData = $.param(sendData);
+	sendData = "sData="+JSON.parse(getUsetInput());
 	var sendUrl = "http://211.21.170.17:8080/wsContract/Main.asmx/SetMain";
-	sendRequest("post",sendUrl,sendData,"json","xml","getResponses");
+	// sendRequest("post",sendUrl,sendData,"json","xml","getResponses");
+	sendRequest("post",sendUrl,sendData,"","xml","getResponses");
 	console.log(sendData);
 }
 
