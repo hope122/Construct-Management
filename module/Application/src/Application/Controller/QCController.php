@@ -127,8 +127,6 @@ class QCController extends AbstractActionController
         return new ViewModel($this->viewContnet);
     }
 
-
-
     //qc 照片列表主頁
     public function cphotolistAction()
     {

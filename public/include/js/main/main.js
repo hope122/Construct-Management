@@ -49,6 +49,68 @@ function logoutEven(){
 	});
 }
 
+function setInputNumberOnly(){
+  //只能輸入數字
+  $(".inputNumberOnly").keypress(function(event){
+    return event.charCode >= 48 && event.charCode <= 57;
+  });
+}
+
+function getUsetInput(){
+  var tmpObj = {};
+  $(".userInput").each(function(){
+    var id= $(this).prop("id");
+    tmpObj[id] = $(this).val();
+  });
+  return tmpObj;
+}
+
+function itemFade(item,ctr){
+  if(ctr){
+    $("#"+item).fadeIn(500);
+  }else{
+    $("#"+item).fadeOut(500);
+  }
+}
+
+function sendRequest(sendType,sendUrl,sendData,dataType,responsesType,responsesFunction){
+  if(sendUrl.length > 0){
+    sendType = sendType.toLowerCase();
+    if(dataType == "json"){
+      sendData = JSON.stringify(sendData);
+    }
+    $.ajax({
+       url: sendUrl,
+       type: sendType,
+       data: sendData,
+       dataType: responsesType,
+       success: function(rs){
+          if(typeof responsesFunction != "undefined"){
+            window[responsesFunction](rs);
+          }
+           //console.log(rs);
+       }
+    });
+  }else{
+    console.log("sendUrl is Null");
+  }
+}
+
+//處理WS回傳JSON塞在的XML內容
+function processJsonInXml(xmlContent){
+  return $.parseJSON($(xmlContent).find("string").text());
+}
+
+//iframe設定高
+function iframeLoaded(iframeID) {
+    var iFrameID = document.getElementById(iframeID);
+    if(iFrameID) {
+          // here you can make the height, I delete it first, then I make it again
+          iFrameID.height = "";
+          iFrameID.height = iFrameID.contentWindow.document.body.scrollHeight + "px";
+    }   
+}
+
 //取得資訊
 function porcessData(url, data, async, dataType){
     var result = '';

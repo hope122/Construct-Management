@@ -50,8 +50,11 @@ function loadPage(page,contentID){
 //	$("#"+contentID).load(loadPage);
 }
 
-function loader(itemObject){
-	var str = '<img class="content-loading-img" src="include/images/loader.svg">'
+function loader(itemObject,itemClass){
+	if(typeof itemClass == "undefined"){
+		itemClass = "content-loading-img";
+	}
+	var str = '<img class="'+itemClass+'" src="include/images/loader.svg">'
 	$("#"+itemObject).empty();
 	$(str).appendTo("#"+itemObject);
 }
