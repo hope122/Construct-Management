@@ -18,11 +18,11 @@
 			<!-- Post -->
 			<article class="box post">
 				<div class="item-center">
-				    <input onclick="print();" type="button" value="列印">
-				    <input onclick="save();" type="button" value="存檔">
+				    <input onclick="viewprint();" type="button" value="預覽列印">
+				    <input onclick="save();" type="button" value="下載PDF">
 				</div>
 				
-				<div id='div_print' align='center' style='margin: 0px auto;'>
+				<div id='photomain' align='center' style='margin: 0px auto;'>
 					<h3 id="title" class="f-lg"></h3>
 					<div>
 						<select id="d_select"></select>
@@ -112,6 +112,10 @@
 				    	<img class="content-loading-img-in" src="include/images/loader.svg">
 				    </div>
 				    <div id="thisBottom"></div>
+				</div>
+				<!--列印-->
+				<div id="printMain">
+					
 				</div>		
 			</article>	
 		</div>

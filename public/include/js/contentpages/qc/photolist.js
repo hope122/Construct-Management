@@ -67,15 +67,18 @@ function setView(d_list,notEmpty){
   if(typeof notEmpty == "undefined"){
     notEmpty = true;
   }
+  var contentStyles;
   //先取得樣式，然後開始塞資料
   $.get("pages/qc/list_content_style.html",function(rs){
+    contentStyles = rs;
+  }).done(function() {
     //取得照片內容
     $.getJSON(configObject.QCGetData,{type:"qc_checklist",sLimit:sLimit,eLimit:eLimit,datel:d_list}, function( data ) {
       //console.log(data);
       //如果狀態是正常的，開始處理資料
       if(data.status){
         //console.log(data);
-        var tmpContentStyle = rs;
+        var tmpContentStyle = contentStyles;
         var tmpObj = data.checklist;
         if(!notEmpty){
           $("#photolist").empty();
@@ -101,15 +104,15 @@ function setView(d_list,notEmpty){
         itemFade("imgLoader",false);
         loadWaypoints();
       }else{
-        if(!notEmpty){
+        if(sLimit == 0){
           $("#photolist").empty().html("無資料");
         }
         isLoadFinisg = true;
         itemFade("imgLoader",false);
       }
     });
-    //console.log(rs);
   });
+  
 
 }
 
@@ -124,6 +127,18 @@ function save(){
     // window.close();
     // console.log('/logbook/savepdffile?url='+location.host+'/logbook');
 }
+
+//預覽列印
+function viewprint(){
+  loadPage("qc/printlist","pagescontent");
+
+}
+
+//預覽列印取消
+function printCancel(){
+  loadPage("qc/photolist","pagescontent");
+}
+
 //設定訂單編號
 function setNumber(no){
   var max = 6;
