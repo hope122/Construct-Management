@@ -38,6 +38,7 @@ var configObject = {
     "engDeleteData": apurl+"/engineeringmanage/deletedata",
     "engInsertData": apurl+"/engineeringmanage/insertdata",
     "engUpdateData": apurl+"/engineeringmanage/updatedata",
+    "photocount": apurl+"/qc/photocount",
     //"chartsWS": location.origin+":8080"
     "chartsWS": "http://211.21.170.17:8080"
 };

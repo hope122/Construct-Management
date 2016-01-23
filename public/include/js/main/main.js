@@ -76,13 +76,17 @@ function itemFade(item,ctr){
 function sendRequest(sendType,sendUrl,sendData,dataType,responsesType,responsesFunction){
   if(sendUrl.length > 0){
     sendType = sendType.toLowerCase();
+    var contentType = null;
     if(dataType == "json"){
-      sendData = JSON.stringify(sendData);
+      //sendData = JSON.stringify(sendData);
+      //contentType = "application/json";
+      var headers = { Accept: 'application/json' };
     }
     $.ajax({
        url: sendUrl,
        type: sendType,
        data: sendData,
+       headers: headers,
        dataType: responsesType,
        success: function(rs){
           if(typeof responsesFunction != "undefined"){

@@ -60,14 +60,24 @@ function loader(itemObject,itemClass){
 }
 
 function getContent(rsContent){
-	var tmpHead = rsContent.split("<head>");
-	tmpHead = tmpHead[1].split("</head>");
-	var tmpBody = tmpHead[1].split("<body>");
-	tmpHead = tmpHead[0];
-	tmpBody = tmpBody[1].split("</body>");
-	tmpBody = tmpBody[0];
+	var tmpBody,tmpHead;
+	if(rsContent.toLowerCase().search("<head>") != -1){
+		tmpHead = rsContent.split("<head>");
+		tmpHead = tmpHead[1].split("</head>");
+		tmpBody = tmpHead[1].split("<body>");
+		tmpHead = tmpHead[0];
+		tmpBody = tmpBody[1].split("</body>");
+		tmpBody = tmpBody[0];
+		$(tmpHead).appendTo("head");
+	}
+
+	if(rsContent.toLowerCase().search("<body>") != -1){
+		tmpBody = rsContent.split("<body>");
+		tmpBody = tmpBody[1].split("</body>");
+		tmpBody = tmpBody[0];
+	}
 	$("head :not(.keep)").remove();
-	$(tmpHead).appendTo("head");
+	
 	return tmpBody;
 }
 

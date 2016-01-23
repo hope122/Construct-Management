@@ -85,3 +85,32 @@
 a:hover{
 	text-decoration:none;
 }
+
+.ui-progressbar {
+	position: relative;
+}
+.progress-label {
+	position: absolute;
+	left: 48%;
+	top: 4px;
+	font-weight: bold;
+	text-shadow: 1px 1px 0 #fff;
+}
+.ui-progressbar-value{
+	margin: 0 !important;
+}
+
+.item-inline{
+	display: inline;
+}
+
+.item-margin-top{
+	margin-top: 20px;
+}
+
+.item-margin-bottom{
+	margin-bottom: 20px;
+}
+.printList{
+	margin-bottom: 35px;
+}
