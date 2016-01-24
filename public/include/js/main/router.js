@@ -99,6 +99,95 @@ function loadJS(jsSrc,jsClass,dataSrc){
 	script.appendTo("head");
 }
 
+//導引精靈模組
+function elfguide(pageObject){
+	// {
+	// 	page:{},
+	// 	itemValue:{},
+	// 	start: int or string,
+	// 	putArea: string,
+	//	startHide: string,
+	//	backAction: function,
+	//	nextBtnAction: {
+	// 		a: function,
+	// 		....
+	// 	},
+	//  preBtnAction:{
+	// 		a: function,
+	// 		....
+	// 	}
+	// }
+	if(typeof pageObject.putArea != "undefined"){
+		var eg_path = "elfguide/";
+		var pageOb = pageObject.page;
+		var result = {};
+		var countPage = 0;
+		$("#"+pageObject.putArea).empty().show();
+		if(typeof pageObject.start == "undefined"){
+			pageObject.start = Object.keys(pageOb)[0];
+		}
+		if(typeof pageObject.startHide != "undefined"){
+			itemFade(pageObject.startHide,false);
+		}
+		$.each(pageOb,function(i,v){
+			var tmpPath = eg_path + v + ".html";
+			var tmpContent;
+			$.get(tmpPath,{},function(pagesContent){
+				tmpContent = $.parseHTML('<div class="elfguide" id="'+i+'">'+pagesContent+'</div>');
+			}).done(function(){
+				var keys = Object.keys( pageOb ),
+	            idIndex = keys.indexOf( i ),
+	            nextIndex = idIndex += 1,
+	            preIndex = idIndex -= 2,
+				nextKey = keys[ nextIndex ],
+				preKey = keys[ preIndex ];
+				//尚未塞值，待會寫
+				if(typeof pageObject.backAction == "function"){
+					$(tmpContent).find(".backBtn").click(function(){
+						itemFade(pageObject.startHide,true);
+						itemFade(pageObject.putArea,false);
+						pageObject.backAction();
+					});
+				}
+				if(typeof pageObject.nextBtnAction[i] == "function"){
+					$(tmpContent).find(".nextBtn").click(function(){
+						var nowItem = $("#"+pageObject.putArea).find("#"+i);
+						var nextItem;
+						if(typeof nextKey != "undefined"){
+							nextItem = $("#"+pageObject.putArea).find("#"+nextKey);
+						}else{
+							nextItem = null;
+						}
+						pageObject.nextBtnAction[i]( nowItem,nextItem );
+					});
+				}
+
+				if(typeof pageObject.preBtnAction[i] == "function"){
+					$(tmpContent).find(".preBtn").click(function(){
+						var nowItem = $("#"+pageObject.putArea).find("#"+i);
+						var preItem;
+						if(typeof preKey != "undefined"){
+							preItem = $("#"+pageObject.putArea).find("#"+preKey);
+						}else{
+							preItem = null;
+						}
+						pageObject.preBtnAction[i]( nowItem, preItem );
+					});
+				}
+
+				$(tmpContent).hide().appendTo("#"+pageObject.putArea);
+				if(pageObject.start == i){
+					$(tmpContent).fadeIn(500);	
+				}
+			});
+		});
+	}else{
+		console.log("pageObject.putArea is not set!");
+	}
+}
+
+
+
 var getUrlParameter = function getUrlParameter(sParam) {
     var sPageURL = decodeURIComponent(window.location.search.substring(1)),
         sURLVariables = sPageURL.split('&'),

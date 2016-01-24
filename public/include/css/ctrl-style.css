@@ -111,6 +111,15 @@ a:hover{
 .item-margin-bottom{
 	margin-bottom: 20px;
 }
+
+.item-margin-left{
+	margin-left: 5px;
+}
+
 .printList{
 	margin-bottom: 35px;
+}
+
+.mouse-pointer{ 
+	cursor: pointer; 
 }
