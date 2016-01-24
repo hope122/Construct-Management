@@ -13,6 +13,14 @@ function addNewContent(){
 	//	nextBtnAction: {
 	// 		a: function,
 	// 		....
+	// 	},
+	//	breadcrumbs:{
+	//		mean:{
+	// 			name1: "mean value",
+	// 			name2: "mean value",
+	//		},
+	// 		cancelClick:"name1,name2, ...", //string
+	// 		select: "name1" //default first object name
 	// 	}
 	// }
 	var pageObject = {
@@ -59,6 +67,14 @@ function addNewContent(){
 					itemFade( preItem ,true);
 				}
 			}
+		},
+		breadcrumbs:{
+			mean:{
+				number: "新增契約編號",
+				dispositif_people: "契約相關人員",
+				units: "相關單位",
+			},
+			cancelClick:"number"
 		}
 	};
 	elfguide(pageObject);

@@ -123,3 +123,7 @@ a:hover{
 .mouse-pointer{ 
 	cursor: pointer; 
 }
+
+.item-noneborder{
+	border: none;
+}
