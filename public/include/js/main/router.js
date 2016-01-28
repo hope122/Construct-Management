@@ -43,8 +43,15 @@ function loadPage(page,contentID){
 	}
 	var loadPage = 'pages/'+page+'.html';
 	loader(contentID);
-	$.get(loadPage,{},function(contents){
-		putContent( contentID, getContent(contents) );
+	$.ajax({
+    	url: loadPage, 
+    	type: "GET",
+    	success: function(contents){
+    		putContent( contentID, getContent(contents) );
+    	},
+    	error: function(xhr, status, msg){
+			putContent( contentID, "此功能暫不開放" );
+    	}
 	});
 
 //	$("#"+contentID).load(loadPage);
@@ -61,6 +68,7 @@ function loader(itemObject,itemClass){
 
 function getContent(rsContent){
 	var tmpBody,tmpHead;
+	$("head :not(.keep)").remove();
 	if(rsContent.toLowerCase().search("<head>") != -1){
 		tmpHead = rsContent.split("<head>");
 		tmpHead = tmpHead[1].split("</head>");
@@ -76,9 +84,11 @@ function getContent(rsContent){
 		tmpBody = tmpBody[1].split("</body>");
 		tmpBody = tmpBody[0];
 	}
-	$("head :not(.keep)").remove();
-	
-	return tmpBody;
+	if(typeof tmpBody != "undefined"){
+		return tmpBody;
+	}else{
+		return;
+	}
 }
 
 function putContent(contentID,contents){

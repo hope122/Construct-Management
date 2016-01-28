@@ -70,11 +70,11 @@ function addNewContent(){
 		},
 		breadcrumbs:{
 			mean:{
-				number: "新增契約編號",
+				numbers: "新增契約編號",
 				dispositif_people: "契約相關人員",
 				units: "相關單位",
 			},
-			cancelClick:"number"
+			//cancelClick:"numbers"
 		}
 	};
 	elfguide(pageObject);

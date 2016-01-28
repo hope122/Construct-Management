@@ -101,7 +101,7 @@ a:hover{
 }
 
 .item-inline{
-	display: inline;
+	display: inline !important;
 }
 
 .item-margin-top{
@@ -127,3 +127,8 @@ a:hover{
 .item-noneborder{
 	border: none;
 }
+
+.item-hide{
+	display: hidden;
+}
+
