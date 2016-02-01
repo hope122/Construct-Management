@@ -16,6 +16,34 @@ setTimeout(function(){
 
 $(".tab-area").hide();
 
+//拍照按鈕
+$("#snap").hide();
+//相機區域
+$("#video").hide();
+//拍照顯示區
+$("#canvas").hide();
+
+//啟動相機
+$("#camera").click(function(){
+	$("#snap").show();
+	$(this).hide();
+	$("#video").show();
+	//拍照顯示區
+	$("#canvas").hide();
+});
+
+//拍照按鈕按下後
+$("#snap").click(function(){
+	$("#canvas").show();
+	$("#camera").show();
+	$(this).hide();
+	$("#video").hide();
+});
+
+$("#menuList").click(function(){
+	
+});
+
 var firstToShow = $("#optionTabs").find(".active").prop("id");
 $("#"+firstToShow+"-area").show();
 

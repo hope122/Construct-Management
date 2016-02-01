@@ -36,7 +36,7 @@
 				<hr id="userInfoLine" class="col-xs-12 col-md-12">	
 				<div id="userInfo" class="media col-xs-12 col-md-12">
 					<div class="col-md-2"></div>
-			    	<div href="#" class="pull-left col-xs-12 col-md-4">
+			    	<div class="pull-left col-xs-12 col-md-4">
 			      		<img id="personal_img" class="media-object" width="100%"></img>
 			    	</div>
 					<div class="media-body col-xs-12 col-md-4">
@@ -84,10 +84,46 @@
 			</div>
 			<!--臨時卡-->
 			<div id="tmpCard-area" class="item-center item-margin-top tab-area">
-				臨時卡
+				
+				<!--拍照用-->
+				<div class="media col-xs-12 col-md-12">
+					<!--設定鈕-->
+					<div class="pull-right">
+						<i id="menuList" class="glyphicon glyphicon-th-list fa-lg"></i>
+					</div>
+					<div class="pull-left col-xs-12 col-md-4">
+						<video id="video" width="300" height="240" autoplay></video>
+						<canvas id="canvas" width="300" height="240"></canvas>
+						<button id="snap" onclick="camera2photo('canvas','video')">Snap Photo</button>
+						<div id="camera">
+							<i class="glyphicon glyphicon-camera fa-2x mouse-pointer" onclick="cameraPlay('video')"></i>
+						</div>
+					</div>
+					<div class="media-body col-xs-12 col-md-7">
+						<div class="input-group col-xs-12 col-md-7">
+					 		<span class="input-group-addon">身分證字號</span>
+					  		<input type="text" class="form-control" placeholder="身分證字號" aria-describedby="basic-addon1" id="tmpCard-userID" name="tmpCard-userID">
+						</div>
+						<div class="input-group col-xs-12 col-md-2">
+							<i class="glyphicon glyphicon-ok fa-2x mouse-pointer"></i>
+						</div>
+					</div>
+					
+				</div>
+				<!--設定選單-->
+				<div class="item-menu">
+					<div class="list-group">
+					  <a href="#" class="list-group-item">b</a>
+					  <a href="#" class="list-group-item">c</a>
+					  <a href="#" class="list-group-item">P</a>
+					  <a href="#" class="list-group-item">V</a>
+					</div>
+				</div>
+				
 			</div>
 
 			<script src="include/js/contentpages/sar/sar.js"></script>
+			<script src="include/js/main/webcamera.js"></script>
 
 		</article>
 	</body>
