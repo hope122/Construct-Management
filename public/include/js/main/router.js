@@ -30,7 +30,7 @@ function firstLoadPage(){
 	}
 }
 
-function loadPage(page,contentID){
+function loadPage(page,contentID,removeHead,popstate){
 	if(page == "./"){
 		page = "home";
 	}
@@ -38,16 +38,22 @@ function loadPage(page,contentID){
 		pagetype: page
 	};
 	var params = $.param(pageInfo);
-	if(!isPopstate){
+	if(typeof popstate == "undefined"){
+		popstate = (isPopstate)?true:false;
+	}
+	if(!popstate){
 		window.history.pushState(page,null, "content.html?"+params);
 	}
 	var loadPage = 'pages/'+page+'.html';
+	if(typeof removeHead == "undefined"){
+		removeHead = true;
+	}
 	loader(contentID);
 	$.ajax({
     	url: loadPage, 
     	type: "GET",
     	success: function(contents){
-    		putContent( contentID, getContent(contents) );
+    		putContent( contentID, getContent(contents), removeHead);
     	},
     	error: function(xhr, status, msg){
 			putContent( contentID, "此功能暫不開放" );
@@ -66,9 +72,11 @@ function loader(itemObject,itemClass){
 	$(str).appendTo("#"+itemObject);
 }
 
-function getContent(rsContent){
+function getContent(rsContent,removeHead){
 	var tmpBody,tmpHead;
-	$("head :not(.keep)").remove();
+	if(removeHead){
+		$("head :not(.keep)").remove();
+	}
 	if(rsContent.toLowerCase().search("<head>") != -1){
 		tmpHead = rsContent.split("<head>");
 		tmpHead = tmpHead[1].split("</head>");

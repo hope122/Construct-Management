@@ -131,8 +131,25 @@ a:hover{
 .item-hide{
 	display: hidden;
 }
+.item-float-l{
+	float: left;
+}
+.item-float-r{
+	float: right;
+}
 
 .item-menu{
-	position: absolute;
-	top: 0px;
+	position: relative;
+	z-index: 100;
+}
+.item-menu-object{
+    position: absolute;
+    z-index: 100;
+    overflow: hidden;
+    left: -80px;
+    top:24px;
+}
+
+.item-display-n{
+	display: none;
 }

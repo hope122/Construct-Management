@@ -32,6 +32,14 @@ $("#camera").click(function(){
 	$("#canvas").hide();
 });
 
+//臨時卡選單
+$("#menuList").click(function(){
+
+	$("#tmpCardMenu").css({
+		width: 105
+	}).toggle();
+});
+
 //拍照按鈕按下後
 $("#snap").click(function(){
 	$("#canvas").show();
@@ -40,9 +48,26 @@ $("#snap").click(function(){
 	$("#video").hide();
 });
 
-$("#menuList").click(function(){
-	
-});
+//卡片管理
+function tmpCardMana(){
+	//loadPage();
+	tmpManaAreaProcess("tmpCardMana");
+}
+
+//資料管理
+function tmpCardDataMana(){
+	tmpManaAreaProcess("tmpCardDataMana");
+}
+
+//資料管理區顯示與隱藏
+function tmpManaAreaProcess(showArea){
+	$("#menuList").click();
+	$(".tmpManaArea,#cameraArea").hide();
+	$("#tmpManaArea").show();
+	itemFade(showArea, true);
+	loader(showArea);
+	loadPage("sar/"+showArea, showArea, false, true);
+}
 
 var firstToShow = $("#optionTabs").find(".active").prop("id");
 $("#"+firstToShow+"-area").show();
