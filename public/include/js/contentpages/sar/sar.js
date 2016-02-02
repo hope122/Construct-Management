@@ -1,3 +1,6 @@
+//製作臨時卡選單
+getTmpCardSelectList();
+
 $("[name='switch']").bootstrapSwitch({
 	onText: "進場",
 	offText: "出場",
@@ -44,6 +47,7 @@ $("#menuList").click(function(){
 	}).toggle();
 });
 
+
 //拍照按鈕按下後
 $("#snap").click(function(){
 	$("#canvas").show();
@@ -54,18 +58,32 @@ $("#snap").click(function(){
 	$("#saveCardInfo").show();
 });
 
+function getTmpCardSelectList(){
+	//製作臨時卡選單
+	$.getJSON(configObject.cardinfo,{},function(data){
+		if(data.status){
+			var rsContent = data.tc_data;
+			$.each(rsContent,function(i,v){
+				var options = '<option value="'+v.uid+'">'+v.number+'</option>';
+				$("#cameraArea").find("#card_id").append(options);
+			});		
+		}
+		console.log(data);
+	});
+}
+
 function toSaveCardInfo(){
 	var userInput = getUserInput("tmpCardForUser");
 	userInput.img_txt = getCameraPhoto("canvas");
 	console.log(userInput);
 	$.post(configObject.tmpCardNewUser, userInput,function(rs){
 		var processStatus = $.parseJSON(rs);
+		console.log(processStatus);
 		if(processStatus.status){
 			$("#tmpCardForUser").find(".userInput").val("");
 			//儲存按鈕
 			$("#saveCardInfo").hide();
 			clearCameraPhoto("canvas");
-			getCameraPhoto("canvas");
 		}
 	});
 }
