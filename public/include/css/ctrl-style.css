@@ -153,3 +153,25 @@ a:hover{
 .item-display-n{
 	display: none;
 }
+
+.item-width-80{
+	width: 80%;
+}
+
+.item-width-20{
+	width: 20%;
+}
+
+.item-width-90{
+	width: 90%;
+}
+
+.item-width-10{
+	width: 10%;
+}
+
+.item-tmpcardmana-absolute{
+    position: absolute;
+    z-index: 100;
+    right: 0px;
+}

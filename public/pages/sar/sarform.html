@@ -93,8 +93,12 @@
 					<!--設定選單-->
 					<div id="tmpCardMenu" class="item-menu-object item-display-n">
 						<div class="list-group">
-						  <a href="#" class="list-group-item" onclick="tmpCardMana(); return false;">卡片管理</a>
-						  <a href="#" class="list-group-item" onclick="tmpCardDataMana(); return false;">資料管理</a>
+						  <a href="#" class="list-group-item" onclick="tmpCardMana(); return false;">
+						  	卡片管理
+						  </a>
+						  <a href="#" class="list-group-item" onclick="tmpCardDataMana(); return false;">
+						  	資料管理
+						  </a>
 						</div>
 					</div>
 				</div>
@@ -103,19 +107,24 @@
 					
 					<div class="pull-left col-xs-12 col-md-4">
 						<video id="video" width="300" height="240" autoplay></video>
-						<canvas id="canvas" width="300" height="240"></canvas>
-						<button id="snap" onclick="camera2photo('canvas','video')">Snap Photo</button>
-						<div id="camera">
-							<i class="glyphicon glyphicon-camera fa-2x mouse-pointer" onclick="cameraPlay('video')"></i>
-						</div>
+						<canvas id="canvas" width="300" height="240"></canvas>						
 					</div>
 					<div class="media-body col-xs-12 col-md-7">
 						<div class="input-group col-xs-12 col-md-7">
 					 		<span class="input-group-addon">身分證字號</span>
 					  		<input type="text" class="form-control" placeholder="身分證字號" aria-describedby="basic-addon1" id="tmpCard-userID" name="tmpCard-userID">
 						</div>
-						<div class="input-group col-xs-12 col-md-2">
-							<i class="glyphicon glyphicon-ok fa-2x mouse-pointer"></i>
+						<!--拍照-->
+						<div id="camera" class="col-xs-12 col-md-2">
+							<i class="glyphicon glyphicon-camera fa-2x mouse-pointer" onclick="cameraPlay('video')"></i>
+						</div>
+						<!--拍照確認-->
+						<div id="snap" class="input-group col-xs-12 col-md-2">
+							<i class="glyphicon glyphicon-ok fa-2x mouse-pointer" onclick="camera2photo('canvas','video')"></i>
+						</div>
+						<!--送出-->
+						<div id="saveCardInfo" class="input-group col-xs-12 col-md-2">
+							<i class="fa fa-floppy-o fa-2x mouse-pointer"></i>
 						</div>
 					</div>
 

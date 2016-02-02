@@ -22,6 +22,8 @@ $("#snap").hide();
 $("#video").hide();
 //拍照顯示區
 $("#canvas").hide();
+//儲存按鈕
+$("#saveCardInfo").hide();
 
 //啟動相機
 $("#camera").click(function(){
@@ -30,6 +32,8 @@ $("#camera").click(function(){
 	$("#video").show();
 	//拍照顯示區
 	$("#canvas").hide();
+	//儲存按鈕
+	$("#saveCardInfo").hide();
 });
 
 //臨時卡選單
@@ -46,6 +50,8 @@ $("#snap").click(function(){
 	$("#camera").show();
 	$(this).hide();
 	$("#video").hide();
+	//儲存按鈕
+	$("#saveCardInfo").show();
 });
 
 //卡片管理
@@ -57,6 +63,12 @@ function tmpCardMana(){
 //資料管理
 function tmpCardDataMana(){
 	tmpManaAreaProcess("tmpCardDataMana");
+}
+
+//回臨時卡登記
+function backTmpCardCheckin(){
+	$("#tmpManaArea").hide();
+	itemFade("cameraArea", true);
 }
 
 //資料管理區顯示與隱藏
