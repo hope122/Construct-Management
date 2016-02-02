@@ -12,10 +12,20 @@ function camera2photo(canvasID, videoID){
 	$("#"+canvasID).show();
 	//拍照
 	context.drawImage(video, 0, 0, 300, 240);
+	cameraStop();
+}
+
+function getCameraPhoto(canvasID){
+	var canvas = document.getElementById(canvasID);
 	//取得照片資料
 	var imgBase64 = canvas.toDataURL();
-	cameraStop();
-	console.log(imgBase64);
+	return imgBase64;
+}
+
+function clearCameraPhoto(canvasID){
+	var canvas = document.getElementById(canvasID),
+		context = canvas.getContext("2d");
+	context.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 function cameraStop(){

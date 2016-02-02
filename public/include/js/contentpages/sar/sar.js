@@ -54,6 +54,22 @@ $("#snap").click(function(){
 	$("#saveCardInfo").show();
 });
 
+function toSaveCardInfo(){
+	var userInput = getUserInput("tmpCardForUser");
+	userInput.img_txt = getCameraPhoto("canvas");
+	console.log(userInput);
+	$.post(configObject.tmpCardNewUser, userInput,function(rs){
+		var processStatus = $.parseJSON(rs);
+		if(processStatus.status){
+			$("#tmpCardForUser").find(".userInput").val("");
+			//儲存按鈕
+			$("#saveCardInfo").hide();
+			clearCameraPhoto("canvas");
+			getCameraPhoto("canvas");
+		}
+	});
+}
+
 //卡片管理
 function tmpCardMana(){
 	//loadPage();

@@ -109,10 +109,18 @@
 						<video id="video" width="300" height="240" autoplay></video>
 						<canvas id="canvas" width="300" height="240"></canvas>						
 					</div>
-					<div class="media-body col-xs-12 col-md-7">
+					<div class="media-body col-xs-12 col-md-7" id="tmpCardForUser">
 						<div class="input-group col-xs-12 col-md-7">
 					 		<span class="input-group-addon">身分證字號</span>
-					  		<input type="text" class="form-control" placeholder="身分證字號" aria-describedby="basic-addon1" id="tmpCard-userID" name="tmpCard-userID">
+					  		<input type="text" class="form-control userInput" placeholder="身分證字號" aria-describedby="basic-addon1" id="user_id" name="user_id">
+						</div>
+						<div class="input-group col-xs-12 col-md-7 item-margin-top">
+					 		<span class="input-group-addon">臨時卡號</span>
+					  		<input type="text" class="form-control userInput" placeholder="臨時卡號" aria-describedby="basic-addon1" id="card_id" name="number">
+						</div>
+						<div class="input-group col-xs-12 col-md-7 item-margin-top">
+					 		<span class="input-group-addon">目的</span>
+					  		<input type="text" class="form-control userInput" placeholder="臨時卡號" aria-describedby="basic-addon1" id="purpose" name="purpose">
 						</div>
 						<!--拍照-->
 						<div id="camera" class="col-xs-12 col-md-2">
@@ -124,7 +132,7 @@
 						</div>
 						<!--送出-->
 						<div id="saveCardInfo" class="input-group col-xs-12 col-md-2">
-							<i class="fa fa-floppy-o fa-2x mouse-pointer"></i>
+							<i class="fa fa-floppy-o fa-2x mouse-pointer" onclick="toSaveCardInfo();"></i>
 						</div>
 					</div>
 

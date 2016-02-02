@@ -56,9 +56,9 @@ function setInputNumberOnly(){
   });
 }
 
-function getUsetInput(){
+function getUserInput(objectID){
   var tmpObj = {};
-  $(".userInput").each(function(){
+  $("#"+objectID).find(".userInput").each(function(){
     var id= $(this).prop("id");
     tmpObj[id] = $(this).val();
   });
@@ -155,4 +155,9 @@ function porcessData(url, data, async, dataType){
        }
     });
     return result;
+}
+
+//關閉dialog
+function closeDialog(itemID){
+  $("#"+itemID).dialog('close').remove();
 }

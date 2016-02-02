@@ -10,7 +10,6 @@ function loadTmpCardContent(){
 		tContentStyle = rs;
 	}).done(function(){
 		$.getJSON(configObject.cardinfo,{},function(data){
-			console.log(data);
 			$("#cardData").html(tmpCardTableContent);
 			if(data.status){
 				var tc_data = data.tc_data;
@@ -31,9 +30,9 @@ function loadTmpCardContent(){
 
 function setMouseEvent(object){
 	$(object).mouseover(function(){
-		$(this).find(".action-btn").find(".toEdit").show();
+		$(this).addClass("item-hover").find(".action-btn").find(".toEdit").show();
 	}).mouseout(function(){
-		$(this).find(".action-btn").find(".toEdit").hide();
+		$(this).removeClass("item-hover").find(".action-btn").find(".toEdit").hide();
 	});
 }
 
@@ -72,11 +71,16 @@ function tmpCardSaveBtn(object){
 	$(thisParent).find(".data-rows-content").html(modifyVal);
 	//修改
 	if(thisID.length > 0){
-		$.post(configObject.cardModify,{uid:thisID},function(rs){
-			console.log(rs);
-		});
+		$.post(configObject.cardModify,{uid:thisID,modifyVal:modifyVal});
 	}else{ //新增
-		console.log("F");
+		$.post(configObject.tmpNewCard,{newVal:modifyVal},function(rs){
+			var rsObject = $.parseJSON(rs);
+			if(rsObject.status){
+				$(thisParent).prop("id",rsObject.newCard.uid);
+			}else{
+				console.log(rsObject.msg);
+			}
+		});
 	}
 
 }
@@ -84,7 +88,10 @@ function tmpCardSaveBtn(object){
 //刪卡號
 function tmpCardDelBtn(object){
 	var thisParent = getTDParents(object);
+	var thisID = $(thisParent).prop("id");
 	$(thisParent).remove();
+
+	$.post(configObject.tmpDelCard,{uid:thisID});
 }
 
 //編輯卡號
@@ -100,11 +107,17 @@ function tmpCardModifyBtn(object){
 //取消
 function tmpCardCancelBtn(object){
 	var thisParent = getTDParents(object);
-	setMouseEvent(thisParent);
-	$(thisParent).find(".toEdit").show();
-	$(thisParent).find(".toSave").hide();
-	$(thisParent).find(".data-rows-content").show();
-	$(thisParent).find(".data-rows-edit-content").hide();
-	var original = $(thisParent).find(".data-rows-content").html();
-	$(thisParent).find(".edit-card").val(original);
+	var thisID = $(thisParent).prop("id");
+	//新增取消
+	if(thisID.length == 0){
+		$(thisParent).remove();
+	}else{
+		setMouseEvent(thisParent);
+		$(thisParent).find(".toEdit").show();
+		$(thisParent).find(".toSave").hide();
+		$(thisParent).find(".data-rows-content").show();
+		$(thisParent).find(".data-rows-edit-content").hide();
+		var original = $(thisParent).find(".data-rows-content").html();
+		$(thisParent).find(".edit-card").val(original);
+	}
 }

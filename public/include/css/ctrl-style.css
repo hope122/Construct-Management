@@ -175,3 +175,11 @@ a:hover{
     z-index: 100;
     right: 0px;
 }
+
+.item-hover{
+	background-color: #E9E9E9;
+}
+
+.item-ischeck{
+	color: #00BB3B;
+}

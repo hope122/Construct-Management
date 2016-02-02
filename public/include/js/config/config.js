@@ -41,6 +41,12 @@ var configObject = {
     "photocount": apurl+"/qc/photocount",
     "cardinfo": apurl+"/tmpcard/cardinfo",
     "cardModify": apurl+"/tmpcard/modify",
+    "tmpNewCard": apurl+"/tmpcard/newcard",
+    "tmpDelCard": apurl+"/tmpcard/delcard",
+    "tmpCardUserInfo": apurl+"/tmpcard/usercardinfo",
+    "tmpCardUserDetail": apurl+"/tmpcard/usercarddetail",
+    "tmpCardModifyUserDetail": apurl+"/tmpcard/modifytmpuserdata",
+    "tmpCardNewUser": apurl+"/tmpcard/newtmpuserdata",
     //"chartsWS": location.origin+":8080"
     "chartsWS": "http://211.21.170.17:8080"
 };
