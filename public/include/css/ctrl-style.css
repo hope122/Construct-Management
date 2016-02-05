@@ -150,6 +150,13 @@ a:hover{
     top:24px;
 }
 
+.item-search .seachIcon{
+	position: absolute;
+	right: 10px;
+	cursor: pointer;
+	margin-top: 1px;
+}
+
 .item-display-n{
 	display: none;
 }
@@ -182,4 +189,17 @@ a:hover{
 
 .item-ischeck{
 	color: #00BB3B;
+}
+
+.item-bg-danger{
+	background-color: #f2dede;
+}
+
+.combobox-btn{
+	height: 32px;
+    margin-bottom: 1px;
+}
+
+.btn-color-bk button{
+	color: #000 !important;
 }

@@ -73,7 +73,7 @@ function showDetail(object){
 
 			$("#tmpCardDataMana_dialog").dialog({
 		      modal: true,
-		      width: "50%"
+		      width: "80%"
 		    });
 		});
 	});

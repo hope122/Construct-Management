@@ -47,6 +47,9 @@ var configObject = {
     "tmpCardUserDetail": apurl+"/tmpcard/usercarddetail",
     "tmpCardModifyUserDetail": apurl+"/tmpcard/modifytmpuserdata",
     "tmpCardNewUser": apurl+"/tmpcard/newtmpuserdata",
+    "getOrderFormItem": apurl+"/materialexit/getorderformitem",
+    "getSelectItem": apurl+"/materialexit/getselectitem",
+
     //"chartsWS": location.origin+":8080"
     "chartsWS": "http://211.21.170.17:8080"
 };
