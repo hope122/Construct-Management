@@ -197,9 +197,36 @@ a:hover{
 
 .combobox-btn{
 	height: 32px;
-    margin-bottom: 1px;
+    margin-bottom: 5px;
 }
 
 .btn-color-bk button{
 	color: #000 !important;
+}
+
+.item-line{
+	height: 1px;
+	border-bottom: 1px solid #E6E6E6;
+	margin-top: 2em;
+	margin-bottom: 2em;
+}
+
+.send-btn:hover{
+	color: #00C75D;
+}
+
+.cancel-btn:hover{
+	color: #F61E1E;
+}
+
+.item-border{
+	border: 1px solid #E6E6E6;
+}
+
+.table-th-center th{
+	text-align: center;
+}
+
+.table-td-center td{
+	text-align: center;
 }

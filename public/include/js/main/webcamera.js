@@ -1,4 +1,4 @@
-var camera,cameraSupport = false;
+var camera = {},cameraSupport = false;
 var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 if(typeof getUserMedia != "undefined"){
 	cameraSupport = true;
@@ -12,7 +12,7 @@ function camera2photo(canvasID, videoID){
 	$("#"+canvasID).show();
 	//拍照
 	context.drawImage(video, 0, 0, 300, 240);
-	cameraStop();
+	cameraStop(videoID);
 }
 
 function getCameraPhoto(canvasID){
@@ -28,9 +28,11 @@ function clearCameraPhoto(canvasID){
 	context.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-function cameraStop(){
-	camera.getTracks()[0].stop();
-	camera = null;
+function cameraStop(videoID){
+	if(typeof camera[videoID] != "undefined"){
+		camera[videoID].getTracks()[0].stop();
+		camera[videoID] = null;
+	}
 }
 
 function cameraPlay(videoID){
@@ -53,7 +55,7 @@ function cameraPlay(videoID){
 		    // video.src = tmpStream;
 		    // video.play();
 		    video.attr("src",tmpStream);
-		    camera = stream;
+		    camera[videoID] = stream;
 			video.get(0).play();
 		}, errBack);
 	}
