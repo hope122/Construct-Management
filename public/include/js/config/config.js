@@ -39,6 +39,20 @@ var configObject = {
     "engInsertData": apurl+"/engineeringmanage/insertdata",
     "engUpdateData": apurl+"/engineeringmanage/updatedata",
     "photocount": apurl+"/qc/photocount",
+    "cardinfo": apurl+"/tmpcard/cardinfo",
+    "cardModify": apurl+"/tmpcard/modify",
+    "tmpNewCard": apurl+"/tmpcard/newcard",
+    "tmpDelCard": apurl+"/tmpcard/delcard",
+    "tmpCardUserInfo": apurl+"/tmpcard/usercardinfo",
+    "tmpCardUserDetail": apurl+"/tmpcard/usercarddetail",
+    "tmpCardModifyUserDetail": apurl+"/tmpcard/modifytmpuserdata",
+    "tmpCardNewUser": apurl+"/tmpcard/newtmpuserdata",
+    "getOrderFormItem": apurl+"/materialexit/getorderformitem",
+    "getSelectItem": apurl+"/materialexit/getselectitem",
+    "getCompanyInfo": apurl+"/material/getcompanyinfo",
+    "makePurchaseImg": apurl+"/material/makepurchaseimg",
+    "getPurchaseImg": apurl+"/material/getpurchaseimg",
+
     //"chartsWS": location.origin+":8080"
     "chartsWS": "http://211.21.170.17:8080"
 };

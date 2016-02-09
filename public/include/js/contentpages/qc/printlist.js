@@ -83,7 +83,7 @@ $(function() {
 
 function progress(nowVal,Total) {
   var percentage = (nowVal/Total)*100;
-  console.log(percentage);
+  //console.log(percentage);
   //var val = progressbar.progressbar( "value" ) || 0;
   var val = percentage;
   progressbar.progressbar( "value", percentage );

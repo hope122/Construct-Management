@@ -101,7 +101,7 @@ a:hover{
 }
 
 .item-inline{
-	display: inline;
+	display: inline !important ;
 }
 
 .item-margin-top{
@@ -111,6 +111,122 @@ a:hover{
 .item-margin-bottom{
 	margin-bottom: 20px;
 }
+
+.item-margin-left{
+	margin-left: 5px;
+}
+
 .printList{
 	margin-bottom: 35px;
+}
+
+.mouse-pointer{ 
+	cursor: pointer; 
+}
+
+.item-noneborder{
+	border: none;
+}
+
+.item-hide{
+	display: hidden;
+}
+.item-float-l{
+	float: left;
+}
+.item-float-r{
+	float: right;
+}
+
+.item-menu{
+	position: relative;
+	z-index: 100;
+}
+.item-menu-object{
+    position: absolute;
+    z-index: 100;
+    overflow: hidden;
+    left: -80px;
+    top:24px;
+}
+
+.item-search .seachIcon{
+	position: absolute;
+	right: 10px;
+	cursor: pointer;
+	margin-top: 1px;
+}
+
+.item-display-n{
+	display: none;
+}
+
+.item-width-80{
+	width: 80%;
+}
+
+.item-width-20{
+	width: 20%;
+}
+
+.item-width-90{
+	width: 90%;
+}
+
+.item-width-10{
+	width: 10%;
+}
+
+.item-tmpcardmana-absolute{
+    position: absolute;
+    z-index: 100;
+    right: 0px;
+}
+
+.item-hover{
+	background-color: #E9E9E9;
+}
+
+.item-ischeck{
+	color: #00BB3B;
+}
+
+.item-bg-danger{
+	background-color: #f2dede;
+}
+
+.combobox-btn{
+	height: 32px;
+    margin-bottom: 5px;
+}
+
+.btn-color-bk button{
+	color: #000 !important;
+}
+
+.item-line{
+	height: 1px;
+	border-bottom: 1px solid #E6E6E6;
+	margin-top: 2em;
+	margin-bottom: 2em;
+}
+
+.send-btn:hover{
+	color: #00C75D;
+}
+
+.cancel-btn:hover{
+	color: #F61E1E;
+}
+
+.item-border{
+	border: 1px solid #E6E6E6;
+}
+
+.table-th-center th{
+	text-align: center;
+}
+
+.table-td-center td{
+	text-align: center;
 }
