@@ -230,3 +230,22 @@ a:hover{
 .table-td-center td{
 	text-align: center;
 }
+
+.ui-datepicker-trigger{
+    border:none;
+    background:none;
+    color:#000 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    text-align: center;
+}
+
+.ui-datepicker-trigger:hover{
+    border:none;
+    background:none;
+    color:#000 !important;
+}
+
+.input-width-85{
+	width: 85% !important;
+}
