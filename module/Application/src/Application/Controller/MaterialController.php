@@ -124,7 +124,7 @@ class MaterialController extends AbstractActionController
                         $status='待審查';
                     }
                     if ($lsData['chkqc']!=-1){
-                        $status='自檢完畢，進貨單未上傳';
+                        $status='自檢完畢';
                     }
 
                     $arrdata=array(

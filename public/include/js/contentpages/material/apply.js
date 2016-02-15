@@ -131,6 +131,11 @@ function setView(){
   //初始日期
   $("#inp_date").datepicker({
       dateFormat: 'yy-mm-dd',
+      showOn: "button", 
+      buttonText: '<i class="fa fa-calendar mouse-pointer"></i>',
+      onSelect: function(){
+        $("#inp_date_show").html($(this).val());
+      }
   });
 
 }
