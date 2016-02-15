@@ -42,21 +42,21 @@ function setView(){
 //傳入： apTpye:getdata內switch的type 若有參數則在apType直接增加 如： page&uid=1
 //      cmAction:處理資料的Action 
 //      setDiv:html回傳後要放入的div
-function getContent(apType,cmAction,setDiv){
-  $.getJSON(configObject.MaterialGetData+"?type="+apType, function( rs ) {
-     console.log(rs);
-    $.ajax({
-      url: "/material/"+cmAction,
-      type: "POST",
-      data: {data:rs},
-      async:false,
-      success: function(rs){
+// function getContent(apType,cmAction,setDiv){
+//   $.getJSON(configObject.MaterialGetData+"?type="+apType, function( rs ) {
+//      console.log(rs);
+//     $.ajax({
+//       url: "/material/"+cmAction,
+//       type: "POST",
+//       data: {data:rs},
+//       async:false,
+//       success: function(rs){
 
-        $("#"+setDiv).empty().append(rs);
-      }
-    });
-  });
-}
+//         $("#"+setDiv).empty().append(rs);
+//       }
+//     });
+//   });
+// }
 
 //確認按鈕
 function infocheck(){
