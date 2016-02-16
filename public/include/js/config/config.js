@@ -52,6 +52,7 @@ var configObject = {
     "exitItemInfo": apurl+"/materialexit/exititeminfo",
     "exitApply": apurl+"/materialexit/exitapply",
     "exitItemList": apurl+"/materialexit/exititemlist",
+    "exitSurplusItemList": apurl+"/materialexit/exitsurplusitemlist",
     "getCompanyInfo": apurl+"/material/getcompanyinfo",
     "makePurchaseImg": apurl+"/material/makepurchaseimg",
     "getPurchaseImg": apurl+"/material/getpurchaseimg",

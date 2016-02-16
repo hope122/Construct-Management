@@ -142,7 +142,7 @@
         <!--選單內容-->
         <div class="col-md-12">
           <!--新增-->
-          <i class="fa fa-plus fa-lg mouse-pointer" onclick="showArea('surplus_apply');"></i>
+          <i class="fa fa-plus fa-lg mouse-pointer" onclick="showArea('surplus_apply','surplusList');"></i>
         </div>
         <!--新增-->
         <div id="surplus_apply" class="item-display-n">
@@ -183,6 +183,7 @@
           </div>
         </div>
         <!--新增結束-->
+        <div id="surplusList">
         <!--剩餘物料申請退場列表-->
           <table id="exitSurplusList" class="table table-hover item-border table-th-center table-td-center"></table>
           <!--剩餘物料申請退場結束-->
@@ -200,10 +201,47 @@
               </div>
             </div>
           </div>
+        </div>
       </div>
       <!--剩餘物料出場結束-->
       <!--其他出場-->
       <div id="other-items-exit_content" class="tab_content item-display-n">
+        <!--選單內容-->
+        <div class="col-md-12">
+          <!--新增-->
+          <i class="fa fa-plus fa-lg mouse-pointer" onclick="showArea('surplus_apply','surplusList');"></i>
+        </div>
+        <!--新增-->
+        <div id="surplus_apply" class="">
+          <div class="col-xs-12 col-md-12">
+            <!--選項-->
+            <div class="form-group">
+              <label class="col-xs-2 col-md-2 control-label f-right">出場項目</label>
+              <div class="col-xs-10 col-md-10">
+                <!--quid-->
+                <select class="form-control surplus_input" id="other-items">
+                  <option value="">出場項目</option>
+                </select>
+              </div>
+            </div>
+            <!--選項結束-->
+            <!--預計出場日期-->
+            <div class="form-group">
+              <label class="col-xs-2 col-md-2 control-label f-right">預計出場日期</label>
+              <div class="col-xs-10 col-md-10">                
+                <input type="text" id="" class="form-control input-width-85 item-inline">
+              </div>
+            </div>
+            <!--預計出場日期結束-->
+            <div class="form-group">
+              <div class="col-xs-12 col-md-12 f-right">
+                <i class="glyphicon glyphicon-ok fa-lg mouse-pointer send-btn" onclick="exitSurplusApply();"></i>
+              </div>
+            </div>
+            <div id="surplus-msg" class="item-bg-danger"></div>
+          </div>
+        </div>
+        <!--新增結束-->
       </div>
       <!--其他出場結束-->
     </article>  
