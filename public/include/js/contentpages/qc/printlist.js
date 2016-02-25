@@ -20,12 +20,12 @@ var progressbar = $( "#progressbar" ),
 progressLabel = $( ".progress-label" );
 $(function() {  
 
-  $.get("pages/qc/printlist_content_title_style.html",function(rs){
+  $.get("pages/style/qc/printlist_content_title_style.html",function(rs){
     printTitleContentStyle = rs;
   }).done();
 
   //先取得樣式，然後開始塞資料
-  $.get("pages/qc/printlist_content_style.html",function(rs){
+  $.get("pages/style/qc/printlist_content_style.html",function(rs){
     contentStyles = rs;
   }).done();
 

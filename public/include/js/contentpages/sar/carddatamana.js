@@ -6,7 +6,7 @@ function loadTmpCardDataContent(){
 	var tmpCardTableContent = $("#cardUserData").html();
 	loader("cardUserData");
 	var tContentStyle;
-	$.get("pages/sar/tmpCardDataMana_content_style.html",function(rs){
+	$.get("pages/style/sar/tmpCardDataMana_content_style.html",function(rs){
 		tContentStyle = rs;
 	}).done(function(){
 		$.getJSON(configObject.tmpCardUserInfo,{},function(data){
@@ -47,7 +47,7 @@ function showDetail(object){
 	var thisID = $(thisParent).prop("id");
 	//tmpCardDataMana_dialog.html
 	var tContentStyle;
-	$.get("pages/sar/tmpCardDataMana_dialog.html",function(rs){
+	$.get("pages/style/sar/tmpCardDataMana_dialog.html",function(rs){
 		tContentStyle = rs;
 	}).done(function(){
 		$.post(configObject.tmpCardUserDetail,{uid:thisID},function(data){

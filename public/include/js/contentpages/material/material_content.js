@@ -12,7 +12,7 @@ function setView(){
   $.getJSON(configObject.MaterialGetData,{type:"list"}, function( rs ) {
     data = rs;
   }).done(function(){
-    $.get("pages/material/list_content.html",function(pages){
+    $.get("pages/style/material/list_content.html",function(pages){
       var title = $.parseHTML(pages);
       title = $(title).find(".list_title");
       $(title).appendTo("#tbList");
@@ -142,7 +142,7 @@ function showinfo(uid){
   $.getJSON(configObject.MaterialGetData,{type:"chkinfo",uid:uid}, function( datas ) {
     data = datas;
   }).done(function(){
-    $.get("pages/material/list_info.html",function(rs){
+    $.get("pages/style/material/list_info.html",function(rs){
       var content = $.parseHTML(rs);
       if(data.check){
         if(data.datein){
@@ -171,7 +171,7 @@ function showinfo(uid){
             $("#makePhoto").show();
             $(this).hide();
             //取得樣式
-            $.get("pages/material/purchase_style.html",function(pages){
+            $.get("pages/style/material/purchase_style.html",function(pages){
               var content = $.parseHTML(pages);
               $(content).prop("id","purchase"+nowPhoto).find(".canvas").prop("id","canvas"+nowPhoto);
               $(content).find("#purchase_count").keyup(function(){
@@ -202,7 +202,7 @@ function showinfo(uid){
           imgData = rs;
         }).done(function(){
           //取得樣式
-            $.get("pages/material/purchase_content_style.html",function(pages){
+            $.get("pages/style/material/purchase_content_style.html",function(pages){
               //放入
               if(imgData.status){
                 $.each(imgData.imgMemo,function(i,v){

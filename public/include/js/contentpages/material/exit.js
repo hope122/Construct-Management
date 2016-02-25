@@ -53,9 +53,16 @@ $(function() {
   			//載入剩餘物料
   			loadExitSurplusList(1);
   			//載入相關選項
-  			creatComboboxContent("surplus-items","surplus-msg");
+  			creatComboboxContent(configObject.MaterialGetData+"?type=application","el_materiel","surplus-items","surplus-msg");
   		}else if(contentID == "other-items-exit"){
   			//載入其他
+  			loadExitOtherList(1);
+  			creatComboboxContent(configObject.exitOtherSelectItem,"list","other-items","other-msg");
+  			$("#other_exit").datepicker({
+		      dateFormat: 'yy-mm-dd',
+		      showOn: "both", 
+		      buttonText: '<i class="fa fa-calendar mouse-pointer"></i>'
+		  	});
   		}
         
         contentID += "_content";
@@ -113,12 +120,12 @@ function getComboboxSelectList(itemID){
 }
 
 //品項
-function creatComboboxContent(itemID,msgAreaID){
+function creatComboboxContent(apiLink,listIndex,itemID,msgAreaID){
 	
-	$.getJSON(configObject.MaterialGetData+"?type=application", function( rs ) {
+	$.getJSON(apiLink, function( rs ) {
 		//console.log(rs.el_materiel);
 		var optionStr = "";
-		$.each(rs.el_materiel, function(i,v){
+		$.each(rs[listIndex], function(i,v){
 			optionStr += '<option value="'+v.uid+'">'+v.name+'</option>';
 		});
 		$(optionStr).appendTo("#"+itemID);
@@ -146,7 +153,7 @@ function gotoPageTab(goPage, btnObject){
 		data = rs.list;
 		// console.log(rs);
 	}).done(function(){
-		$.get("pages/material/exit_add_list_content.html",function(pages){
+		$.get("pages/style/material/exit_add_list_content.html",function(pages){
 			var title = $.parseHTML(pages);
 			title = $(title).find(".list_title");
 			$(title).appendTo("#tbList");
@@ -200,7 +207,7 @@ function showinfo(uid){
 	    	data = datas;
 	 	 }).done(function(){
 	 	 	if(data != null){
-			    $.get("pages/material/exit_add_list_info.html",function(rs){
+			    $.get("pages/style/material/exit_add_list_info.html",function(rs){
 			      var content = $.parseHTML(rs);
 			      $.each(data,function(i,v){
 			        $(content).find("#inp_"+i).val(v);
@@ -218,7 +225,7 @@ function showinfo(uid){
 			        }).done(function(){
 			        	//console.log(imgData);
 			          //取得樣式
-			            $.get("pages/material/exit_add_purchase_content_style.html",function(pages){
+			            $.get("pages/style/material/exit_add_purchase_content_style.html",function(pages){
 			              //放入
 			              if(imgData.status){
 			                $.each(imgData.imgMemo,function(i,v){
@@ -322,7 +329,7 @@ function exitPurchaseApply(petitionlist_id, purchaseID, typeID, exit_date, quid,
 	
 }
 
-//出貨單申請出場
+//剩餘物料申請出場
 function exitSurplusApply(){
 	// console.log(petitionlist_id,purchaseID,typeID);
 	var uuid;
@@ -357,6 +364,41 @@ function exitSurplusApply(){
 	
 }
 
+//其他申請出場
+function exitOtherApply(){
+	// console.log(petitionlist_id,purchaseID,typeID);
+	var uuid;
+	//合約ID，目前暫以1為使用範例
+	var prj_mid = 1;
+	var exit_date = $("#other_exit").val();
+	var option = {};
+	var typeID = $("#other-items").val();
+	var quid = $("#other-items").val();
+	var quantity = $("#other-quantity").val();
+	
+	$.getJSON(configObject.getAcInfo,{},function(acinfo){
+		uuid = acinfo.uuid;
+		option = { 
+			typeID:typeID, 
+			uuid:uuid, 
+			prj_mid:prj_mid, 
+			exit_date:exit_date,
+			quantity: quantity,
+			quid: quid
+		};
+		console.log(option);
+	}).done(function(){
+		$.post(configObject.exitOtherApply, option, function(rs){
+			//console.log(rs);
+			//$("#other-quantity").val("");
+			//$("#other_exit").val("");
+			//loadExitSurplusList(1);
+			//showArea('surplus_apply','surplusList');
+		});
+	});
+	
+}
+
 //顯示區域
 function showArea(areaID, hideID){
 	$("#"+areaID).toggle("blind",{},500);
@@ -380,7 +422,7 @@ function loadExitPetList(goPage, btnObject){
 		totalPage = data.totla;
 		//console.log(data);
 	}).done(function(){
-		$.get("pages/material/exit_list_content.html",function(pages){
+		$.get("pages/style/material/exit_list_content.html",function(pages){
 			var title = $.parseHTML(pages);
 			title = $(title).find(".list_title");
 			$(title).appendTo("#exitPetList");
@@ -454,7 +496,7 @@ function loadExitSurplusList(goPage, btnObject){
 		totalPage = data.totla;
 		console.log(data);
 	}).done(function(){
-		$.get("pages/material/exit_surplus_list_content.html",function(pages){
+		$.get("pages/style/material/exit_surplus_list_content.html",function(pages){
 			var title = $.parseHTML(pages);
 			title = $(title).find(".list_title");
 			$(title).appendTo("#exitSurplusList");
@@ -494,6 +536,79 @@ function loadExitSurplusList(goPage, btnObject){
 					loadExitSurplusList(1);
 				});
 				$("#toExitSurplusEndPage").unbind("click").click(function(){
+					loadExitSurplusList(totalPage);
+				});
+				//設定跳頁結束
+				//放入
+				$("#toExitSurpluspageTab").html(btn);
+			}
+		});
+	});
+
+	if(typeof btnObject != "undefined"){
+		$(btnObject).parent().find("button").removeClass("active");
+		$(btnObject).addClass("active");
+	}
+	
+}
+
+//其他申請入場列表
+function loadExitOtherList(goPage, btnObject){
+
+	var start = (goPage - 1)*exitPetListPageRowShow;	
+	exitPetListNowPage = goPage;
+
+	var prj_mid = 1;
+	var data;
+	var totalPage;
+	$("#exitOtherList").empty();
+
+	$.getJSON(configObject.exitOtherItemList,{prj_mid:prj_mid,start:start,end:exitPetListPageRowShow}, function( info ) {
+		data = info;
+		totalPage = data.totla;
+		//console.log(data);
+	}).done(function(){
+		$.get("pages/style/material/exit_other_list_content.html",function(pages){
+			var title = $.parseHTML(pages);
+			title = $(title).find(".list_title");
+			$(title).appendTo("#exitOtherList");
+			var countNO = 1;
+			if(!$.isEmptyObject(data.list)){
+				$.each(data.list,function(i,v){
+					var content = $.parseHTML(pages);
+					content = $(content).find(".list_content");
+					//console.log(v);
+					//$(content).find(".numbers").html(countNO);
+					var uidNumber = btoa("AA0000"+v.exitID).replace("==","");
+					$(content).find(".uid").html(uidNumber);
+					$(content).find(".typeName").html(v.typeName);
+					$(content).find(".count").html(v.exitCount);
+					$(content).find(".date").html(v.date);
+					$(content).find(".ofstatus").html(v.ofstatus);
+					countNO++;
+					$(content).appendTo("#exitOtherList");
+				});
+				//開始做頁碼
+				$("#toExitOtherpageTab").empty();
+				var btn = '';
+				var totalPage = Math.ceil(data.total / exitPetListPageRowShow);
+				if(data.total >= exitPetListPageRowShow){			
+					for(var i=1; i<=totalPage; i++){
+						if(i == nowPage){
+							btn += '<button type="button" class="btn btn-default active" onclick="loadExitPetList('+i+',$(this))">' + i + '</button>';
+						}else{
+							btn += '<button type="button" class="btn btn-default" onclick="loadExitPetList('+i+',$(this))">' + i + '</button>';
+						}
+					}
+					
+				}else{
+					btn = '<button type="button" class="btn btn-default active" onclick="loadExitPetList(1,$(this))">1</button>';
+				}
+				//設定跳頁
+				$("#toExitOtherFirstPage").unbind("click").click(function(){
+					loadExitSurplusList(1);
+				});
+				$("#toExitOtherEndPage").unbind("click").click(function(){
 					loadExitSurplusList(totalPage);
 				});
 				//設定跳頁結束

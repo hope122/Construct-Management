@@ -161,3 +161,12 @@ function porcessData(url, data, async, dataType){
 function closeDialog(itemID){
   $("#"+itemID).dialog('close').remove();
 }
+
+//取得物件長度
+Object.size = function(obj) {
+    var size = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+};
