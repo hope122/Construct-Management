@@ -61,5 +61,5 @@ var configObject = {
     "getPurchaseImg": apurl+"/material/getpurchaseimg",
 
     //"chartsWS": location.origin+":8080"
-    "chartsWS": "http://211.21.170.17:8080"
+    "WebAPI": "http://211.21.170.18:8080"
 };

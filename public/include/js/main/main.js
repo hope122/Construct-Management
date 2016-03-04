@@ -59,7 +59,12 @@ function setInputNumberOnly(){
 function getUserInput(objectID){
   var tmpObj = {};
   $("#"+objectID).find(".userInput").each(function(){
-    var id= $(this).prop("id");
+    var userInputType = $(this).prop("type");
+    if( userInputType != "radio" ){
+      var id= $(this).prop("id");
+    }else{
+      var id= $(this).prop("name");
+    }
     tmpObj[id] = $(this).val();
   });
   return tmpObj;
