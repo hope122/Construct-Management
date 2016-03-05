@@ -69,39 +69,39 @@
 			 		<table class="table table-bordered">
 			 			<tr>
 				 			<th rowspan="2" class="col-xs-1 col-md-1">聯絡人</th>
-				 			<td rowspan="2" class="col-xs-4 col-md-4"></td>
+				 			<td rowspan="2" class="col-xs-4 col-md-4">@@owner@@</td>
 				 			<th rowspan="2" class="col-xs-1 col-md-1">聯絡電話</th>
 				 			<th class="col-xs-1 col-md-1">市話</th>
-				 			<td></td>
+				 			<td>@@tel@@</td>
 			 			</tr>
 			 			<tr>
 				 			<th>手機</th>
-				 			<td></td>
+				 			<td>@@mobile@@</td>
 			 			</tr>
 			 			<tr>
 				 			<th>房屋地址</th>
-				 			<td colspan="4"></td>
+				 			<td colspan="4">@@addr@@</td>
 			 			</tr>
 					</table>
 					<table class="table table-bordered">
 			 			<tr>
 				 			<th rowspan="3" class="col-xs-1 col-md-1">建物基本資料</th>
 				 			<th class="col-xs-1 col-md-1">建物類別</th>
-				 			<td></td>
+				 			<td>@@strType@@</td>
 				 			<td class="col-xs-1 col-md-1">檢驗日期</td>
-				 			<td></td>
+				 			<td>@@date@@</td>
 			 			</tr>
 			 			<tr>
 				 			<th>建物規模</th>
-				 			<td></td>
+				 			<td>@@scale@@</td>
 				 			<td>檢驗技師</td>
-				 			<td></td>
+				 			<td>@@ename@@</td>
 			 			</tr>
 			 			<tr>
 				 			<th>結構型態</th>
-				 			<td></td>
+				 			<td>@@type@@</td>
 				 			<td>技師證號</td>
-				 			<td></td>
+				 			<td>@@license@@</td>
 			 			</tr>
 					</table>
 					<table class="table table-bordered text-center">
@@ -115,27 +115,9 @@
 				 			<th class="col-xs-3 col-md-3 text-center">危險等級</th>
 			 			</tr>
 			 			<!--量化範圍-->
-			 			<tr>
-			 				<td>1</td>
-			 				<td>梁</td>
-			 				<td>使用不當</td>
-			 				<td>123</td>
-			 				<td>123</td>
-			 				<td>3張</td>
-			 				<td>輕度</td>
-			 			</tr>
+			 			@@quantity@@
 			 			<!--質化範圍-->
-			 			<tr>
-			 				<td rowspan="2">2</td>
-			 				<td>梁</td>
-			 				<td colspan="3">使用不當</td>
-			 				<td>3張</td>
-			 				<td rowspan="2">輕度</td>
-			 			</tr>
-			 			<tr>
-			 				<td>概述</td>
-			 				<td colspan="4">梁很歪</td>
-			 			</tr>
+			 			@@quality@@
 			 			<!--質化範圍結束-->
 					</table>
 			 		
