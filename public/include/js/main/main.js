@@ -59,7 +59,12 @@ function setInputNumberOnly(){
 function getUserInput(objectID){
   var tmpObj = {};
   $("#"+objectID).find(".userInput").each(function(){
-    var id= $(this).prop("id");
+    var userInputType = $(this).prop("type");
+    if( userInputType != "radio" ){
+      var id= $(this).prop("id");
+    }else{
+      var id= $(this).prop("name");
+    }
     tmpObj[id] = $(this).val();
   });
   return tmpObj;
@@ -161,3 +166,12 @@ function porcessData(url, data, async, dataType){
 function closeDialog(itemID){
   $("#"+itemID).dialog('close').remove();
 }
+
+//取得物件長度
+Object.size = function(obj) {
+    var size = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+};

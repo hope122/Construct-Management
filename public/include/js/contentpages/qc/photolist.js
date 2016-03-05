@@ -69,7 +69,7 @@ function setView(d_list,notEmpty){
   }
   var contentStyles;
   //先取得樣式，然後開始塞資料
-  $.get("pages/qc/list_content_style.html",function(rs){
+  $.get("pages/style/qc/list_content_style.html",function(rs){
     contentStyles = rs;
   }).done(function() {
     //取得照片內容

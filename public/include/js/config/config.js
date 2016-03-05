@@ -51,12 +51,15 @@ var configObject = {
     "getSelectItem": apurl+"/materialexit/getselectitem",
     "exitItemInfo": apurl+"/materialexit/exititeminfo",
     "exitApply": apurl+"/materialexit/exitapply",
+    "exitOtherApply": apurl+"/materialexit/exitotherapply",
     "exitItemList": apurl+"/materialexit/exititemlist",
+    "exitOtherItemList": apurl+"/materialexit/exitotheritemlist",
     "exitSurplusItemList": apurl+"/materialexit/exitsurplusitemlist",
+    "exitOtherSelectItem": apurl+"/materialexit/exitotherselectitem",
     "getCompanyInfo": apurl+"/material/getcompanyinfo",
     "makePurchaseImg": apurl+"/material/makepurchaseimg",
     "getPurchaseImg": apurl+"/material/getpurchaseimg",
 
     //"chartsWS": location.origin+":8080"
-    "chartsWS": "http://211.21.170.17:8080"
+    "WebAPI": "http://211.21.170.18:8080"
 };

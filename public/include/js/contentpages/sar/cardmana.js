@@ -6,7 +6,7 @@ function loadTmpCardContent(){
 	var tmpCardTableContent = $("#cardData").html();
 	loader("cardData");
 	var tContentStyle;
-	$.get("pages/sar/tmpCardMana_content_style.html",function(rs){
+	$.get("pages/style/sar/tmpCardMana_content_style.html",function(rs){
 		tContentStyle = rs;
 	}).done(function(){
 		$.getJSON(configObject.cardinfo,{},function(data){
@@ -43,7 +43,7 @@ function removeMouseEven(object){
 
 function addTmpCardContent(){
 	var tContentStyle;
-	$.get("pages/sar/tmpCardMana_content_style.html",function(rs){
+	$.get("pages/style/sar/tmpCardMana_content_style.html",function(rs){
 		tContentStyle = rs;
 	}).done(function(){
 		var tContent = $.parseHTML(tContentStyle);
