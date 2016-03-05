@@ -95,13 +95,19 @@ class PageactionController extends AbstractActionController
         //-----BI開始-----
 	        $action = array();
 	        $action["status"] = false;
+	        $start_time = microtime(true);
 	        if(!empty($_SESSION["uuid"]) and !empty($_SESSION["userName"])){
 	            $action["uuid"] = $_SESSION["uuid"];
 	            $action["userName"] = $_SESSION["userName"];
 	            $action["status"] = true;
+	            
+
+				
 	        }else{
 	            $action["msg"] = 'Please Login Again!';
 	        }
+	       	$end_time = microtime(true);
+	       	$action["times"] = $end_time - $start_time;
 	        $pageContent = $VTs->Data2Json($action);
         //-----BI結束-----
 	    }catch(Exception $error){

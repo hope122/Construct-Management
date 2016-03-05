@@ -23,10 +23,8 @@ class IndexController extends AbstractActionController
 			//-----BI開始-----
 			//$HeadTitle = $this->getServiceLocator()->get('ViewHelperManager')->get('HeadTitle');
 	        //$VTs->debug($_SESSION);
-			if(empty($_SESSION)){
-	            $pagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\index\\login_page.html";
-	            $pageContent = $VTs->GetHtmlContent($pagePath);
-			}else{
+	        $isLogin = $VTs->CheckLogin();
+			if($isLogin){
 				$pagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\index\\after_login.html";
 				$pageContent = $VTs->GetHtmlContent($pagePath);
 				//一個索引與內容等同一個 >> str_replace("@@userName@@",$_SESSION["userName"],$pageContent);

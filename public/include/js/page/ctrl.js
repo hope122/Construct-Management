@@ -41,7 +41,8 @@ function logoutEven(){
 		type:"POST",
 		async: false,
 		success: function(rs){
-			location.href = location.origin;
+			//location.href = location.origin;
+      location.href = "login.html";
 		}
 	});
 }
