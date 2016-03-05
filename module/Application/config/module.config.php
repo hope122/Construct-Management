@@ -218,6 +218,20 @@ return array(
 					),
 				),
 			),
+			'Oldhouse' => array(
+				'type'    => 'segment',
+				'options' => array(
+					'route'    => '/Oldhouse[/:action]',
+					'constraints' => array(
+						'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+						'id'     => '[0-9]+',
+					),
+					'defaults' => array(
+						'controller' => 'Application\Controller\Oldhouse',
+						'action'     => 'index',
+					),
+				),
+			),
 			'constructionschedule'=> array(
 				'type'    => 'segment',
 				'options' => array(
@@ -265,6 +279,8 @@ return array(
             'Application\Controller\Constructionschedule' => 'Application\Controller\ConstructionscheduleController',
             'Application\Controller\Dailyconstruction' => 'Application\Controller\DailyconstructionController',
             'Application\Controller\Supply' => 'Application\Controller\SupplyController',
+            'Application\Controller\Oldhouse' => 'Application\Controller\OldhouseController',
+
         ),
     ),
     'view_manager' => array(
