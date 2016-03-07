@@ -324,7 +324,7 @@ function creatChildNodeDeleteAction(object){
   var parentObj = $(object).parent().parent().parent().parent();
   var id = parentObj.prop("id");
   // console.log(parentClass);
-  $.post(configObject.WebAPI + "/waDataBase/api/Eng/setEngDelect",{id:id},function(rs){
+  $.post(configObject.WebAPI + "/waDataBase/api/Eng/setEngDelete",{id:id},function(rs){
     parentObj.remove();
     reloadTreeData();
   });
