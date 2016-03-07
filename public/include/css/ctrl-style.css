@@ -260,3 +260,11 @@ a:hover{
 .ui-state-highlight { 
 	height: 1.5em; line-height: 1.2em; 
 }
+
+.oh-img img{
+	height: 205px;
+}
+
+.oh-td-height{
+	height: 40px;
+}
