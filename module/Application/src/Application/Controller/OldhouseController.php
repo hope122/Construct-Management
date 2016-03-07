@@ -75,8 +75,7 @@ class OldhouseController extends AbstractActionController
 	// 	$this->viewContnet['pageContent'] = $pageContent;
  //        return new ViewModel($this->viewContnet);
  //    }
-    public function reportAction()
-    {
+    public function reportAction(){
         //echo "targetid:".$_GET["targetid"];
         //session_start();
         $VTs = new clsSystem;
@@ -122,7 +121,7 @@ class OldhouseController extends AbstractActionController
                     "license" => $data[0]["license"]
                 ];
                 $html = $VTs->ContentReplace($dataArr,$html);
-//print_r($html);
+            //print_r($html);
                 
                 #量化資料
                 $quantity_tr_path = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\oldhouse\\tr1.html";
@@ -161,17 +160,17 @@ class OldhouseController extends AbstractActionController
                     }
 
                     #讀圖檔
-                    $filePath = "D:\\php_dev\\AP-Service\\public\\old_house_img\\";
+                    $filePath = "C:\\xampp\\htdocs\\AP-Service\\public\\old_house_img\\";
                     $filePath .= $data[$i]["imgfile"];
                     //print_r($filePath);
                     if(file_exists($filePath)){
                         $imgArr = $VTs->GetINIInfo($filePath,"","","",true);
                     //$VTs->debug($imgArr["img0"]);
-                        $img = "<img src='".$imgArr["img0"]."' width='30%' />
-                                <img src='".$imgArr["img1"]."' width='30%' />
-                                <img src='".$imgArr["img2"]."' width='30%' />";
+                        $img = "<img src='".$imgArr["img0"]."' width='60%' />
+                                <img src='".$imgArr["img1"]."' width='60%' />
+                                <img src='".$imgArr["img2"]."' width='60%' />";
                     }else{
-                        print_r("沒圖片");
+                        //print_r("沒圖片");
                     }
 
                     #替換@@
@@ -210,7 +209,7 @@ class OldhouseController extends AbstractActionController
                                 LEFT JOIN qc_checkitem AS t11 ON t11.uid = t1.ciid
                                 LEFT JOIN eng_unit AS t12 ON t12.uid = t1.val
                                 LEFT JOIN img_picture AS t13 ON t13.`uid` = t1.`imgids`
-                            WHERE t3.uid = ".$_GET["targetid"]." AND t1.`length` = 0 OR t1.width = 0 OR t1.depth = 0 OR t1.`area` = 0
+                            WHERE t3.uid = ".$_GET["targetid"]." AND t1.`length` = 0 and t1.width = 0 and t1.depth = 0 and t1.`area` = 0
                             ORDER BY t1.val DESC, t1.uid ASC";
                 $data = $VTs->QueryData($strSQL);
             //$VTs->Debug($data);
@@ -222,17 +221,17 @@ class OldhouseController extends AbstractActionController
                     $tr = $quality_tr;
 
                     #讀圖檔
-                    $filePath = "D:\\php_dev\\AP-Service\\public\\old_house_img\\";
+                    $filePath = "C:\\xampp\\htdocs\\AP-Service\\public\\old_house_img\\";
                     $filePath .= $data[$i]["imgfile"];
                     //print_r($filePath);
                     if(file_exists($filePath)){
                         $imgArr = $VTs->GetINIInfo($filePath,"","","",true);
                     //$VTs->debug($imgArr["img0"]);
-                        $img = "<img src='".$imgArr["img0"]."' width='30%' />
-                                <img src='".$imgArr["img1"]."' width='30%' />
-                                <img src='".$imgArr["img2"]."' width='30%' />";
+                        $img = "<img src='".$imgArr["img0"]."' width='60%' />
+                                <img src='".$imgArr["img1"]."' width='60%' />
+                                <img src='".$imgArr["img2"]."' width='60%' />";
                     }else{
-                        print_r("沒圖片");
+                        //print_r("沒圖片");
                     }
 
                     $dataArr = [
@@ -273,4 +272,49 @@ class OldhouseController extends AbstractActionController
     }
    
 
+    public function ListAction(){
+        $VTs = new clsSystem;
+        $VTs->initialization('oldhouseDB');
+        
+        try{
+        //-----BI開始-----
+            $strSQL = "SELECT t2.`hname`, t2.`htel`, t2.`hmobil`,
+                               t2.`ZipCode`, t2.`City`, t2.`Area`, t2.`Vil`, t2.`Verge`, t2.`Road`, t2.`addr`,
+                               t3.desc 'strType', t4.desc 'scale', t5.desc 'type', t1.date, t8.name 'ename', t7.`licenseid` 'license'
+                        FROM qc_info AS t1
+                            LEFT JOIN qc_house AS t2 ON t2.uid = t1.`huid`
+                            LEFT JOIN house_type AS t3 ON t3.`uid` = t1.htid
+                            LEFT JOIN house_type_model AS T4 ON t4.uid = t1.`htmid1`
+                            LEFT JOIN house_type_structure AS t5 ON t5.uid = t1.htsid
+                            LEFT JOIN `eng_engineer_city` AS t6 ON t6.uid = t2.`ecid`
+                            LEFT JOIN `eng_engineer` AS t7 ON t7.uid = t6.`eid`
+                            LEFT JOIN `ass_common` AS t8 ON t8.uid = t7.`cmid`";
+            $data = $VTs->QueryData($strSQL);
+            //$VTs->Debug($data);
+
+            //$Path = "D:\\php_dev\\AP-Service\\public\\old_house_pdf\\";
+            $Path = "..\\..\\public\\old_house_pdf\\";
+            $link_html = "";
+
+            if(!empty($data)){
+                foreach ($data as $key => $value) {
+                    $filePath = $Path . $value["hname"]."-".$value["htel"].".pdf";
+                    $link = $value["hname"]."-".$value["htel"]."<a href = '".$filePath."'>下載PDF</a><br>";
+
+                    $link_html .= $link;
+                }
+            }
+            
+        //-----BI結束-----
+        }catch(Exception $error){
+            //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
+            $VTs->WriteLog("IndexController", "indexAction", $error->getMessage());
+        }
+         //關閉資料庫連線
+        $VTs->DBClose();
+        //釋放
+        $VTs = null;
+        $this->viewContnet['pageContent'] = $link_html;
+        return new ViewModel($this->viewContnet);
+    }
 }
