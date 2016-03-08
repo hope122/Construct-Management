@@ -9,25 +9,38 @@ $(function() {
 });
 
 function treeData(){
-  $.getJSON(configObject.WebAPI + "/waDataBase/api/Eng/GetEngList",{},function(rs){
-     // console.log(rs)
-    // console.log(rs.data);
-    if(rs.status){
-      var datas = processTreeData( rs.data, true, "root", "工項建立" );
-      var options = {
-        bootstrap2: false, 
-        showTags: false,
-        levels: 3,
-        data: datas,
-        
-        //showBorder: false,
-        onNodeSelected: function(event, node) {
-          // console.log(event, node);
-          nodeDataContents(node.id,node);
-          $("#nodeData").click();
-        }
-      };
-      $('#treeview').treeview(options);
+  $.ajax({
+    url: configObject.WebAPI + "/waDataBase/api/Eng/GetEngList",
+    type: "GET",
+    dataType: "JSON",
+    timeout: 30000,
+    success: function(rs){
+      if(rs.status){
+        var datas = processTreeData( rs.data, true, "root", "工項建立" );
+        var options = {
+          bootstrap2: false, 
+          showTags: false,
+          levels: 3,
+          data: datas,
+          
+          //showBorder: false,
+          onNodeSelected: function(event, node) {
+            // console.log(event, node);
+            nodeDataContents(node.id,node);
+            $("#nodeData").click();
+          }
+        };
+        $(".err_msg").empty().hide();
+        $(".tree-menus").show();
+        $('#treeview').treeview(options);
+      }
+    },
+    error:function(){
+      $(".tree-menus").hide();
+      $(".err_msg").empty().show();
+      $.get('pages/style/engineering/tree_error.html',function(rs){
+        $(".err_msg").html(rs);
+      });
     }
   });
   // var data = [{"uid":"A1","name":"建築工程","parent":"0"},{"uid":"A2","name":"水電工程","parent":"0"},{"uid":"A6","name":"正是工程一","parent":"0"},{"uid":"A7","name":"幀幀政治","parent":"0"},{"uid":"B1","name":"結構工程","parent":"A1"},{"uid":"B2","name":"粉刷工程","parent":"A1"},{"uid":"B3","name":"電氣工程","parent":"A2"},{"uid":"B4","name":"測試工程地二層","parent":"A6"},{"uid":"C1","name":"鋼筋工程","parent":"B1"},{"uid":"C2","name":"模板工程","parent":"B1"},{"uid":"C3","name":"混凝土工程","parent":"B1"},{"uid":"C4","name":"泥作工程\r\n","parent":"B2"},{"uid":"C5","name":"PVC管 3/4吋 (22mm∮)\r\n","parent":"B3"},{"uid":"C6","name":"PVC管 1吋 (28mm∮)\r\n","parent":"B3"},{"uid":"C7","name":"PVC管 1 1/4吋 (35m∮)\r\n","parent":"B3"},{"uid":"C8","name":"PVC管 1 1/2吋 (41mm∮)\r\n","parent":"B3"},{"uid":"D1","name":"加工","parent":"C1"},{"uid":"D10","name":"粗底","parent":"C4"},{"uid":"D11","name":"粉光","parent":"C4"},{"uid":"D2","name":"綁紮","parent":"C1"},{"uid":"D3","name":"拆、傳料","parent":"C2"},{"uid":"D4","name":"立模","parent":"C2"},{"uid":"D5","name":"緊結","parent":"C2"},{"uid":"D6","name":"搗築","parent":"C3"},{"uid":"D7","name":"素面清理","parent":"C4"},{"uid":"D8","name":"吊料","parent":"C4"},{"uid":"D9","name":"吊線","parent":"C4"}];
