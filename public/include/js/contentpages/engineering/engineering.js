@@ -80,8 +80,11 @@ function nodeDataContents(nodeID,node){
         $(pages).find("#fid").val(nodesContent.fid);
         //放入名稱
         $(pages).find("#node-name").html(nodeContent.text);
-
-
+        if(typeof nodesContent.fCodeType != "undefined"){
+          $(pages).find("#fatherCode").html(nodesContent.fCodeType);
+        }else{
+          $(pages).find("#fatherCode").remove();  
+        }
         //工種相關設定
         if(typeof nodesContent.code != "undefined"){
           $(pages).find(".code-content").html(nodesContent.code);
