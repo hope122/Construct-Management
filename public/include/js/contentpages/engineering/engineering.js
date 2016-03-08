@@ -33,6 +33,12 @@ function treeData(){
         $(".err_msg").empty().hide();
         $(".tree-menus").show();
         $('#treeview').treeview(options);
+      }else{
+        $(".tree-menus").hide();
+        $(".err_msg").empty().show();
+        $.get('pages/style/engineering/tree_error.html',function(rs){
+          $(".err_msg").html(rs);
+        });
       }
     },
     error:function(){
