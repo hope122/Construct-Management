@@ -143,7 +143,7 @@ class OldhouseController extends AbstractActionController
                          LEFT JOIN qc_checkitem AS t11 ON t11.uid = t1.ciid
                          LEFT JOIN eng_unit AS t12 ON t12.uid = t1.val
                          LEFT JOIN img_picture AS t13 ON t13.`uid` = t1.`imgids`
-                        WHERE t1.ifid = ".$_GET["targetid"]." AND (t1.`length` > 0 OR t1.width > 0 OR t1.depth > 0 OR t1.`area` > 0)
+                        WHERE t2.huid = ".$_GET["targetid"]." AND (t1.`length` > 0 OR t1.width > 0 OR t1.depth > 0 OR t1.`area` > 0)
                         ORDER BY t1.val DESC, t1.uid ASC";
                 $data = $VTs->QueryData($strSQL);
             //$VTs->Debug($data[0]);
@@ -209,7 +209,7 @@ class OldhouseController extends AbstractActionController
                                 LEFT JOIN qc_checkitem AS t11 ON t11.uid = t1.ciid
                                 LEFT JOIN eng_unit AS t12 ON t12.uid = t1.val
                                 LEFT JOIN img_picture AS t13 ON t13.`uid` = t1.`imgids`
-                            WHERE t1.ifid = ".$_GET["targetid"]." AND (t1.`length` = 0 and t1.width = 0 and t1.depth = 0 and t1.`area` = 0)
+                            WHERE t2.huid = ".$_GET["targetid"]." AND (t1.`length` = 0 and t1.width = 0 and t1.depth = 0 and t1.`area` = 0)
                             ORDER BY t1.val DESC, t1.uid ASC";
                 $data = $VTs->QueryData($strSQL);
             //$VTs->Debug($data);
