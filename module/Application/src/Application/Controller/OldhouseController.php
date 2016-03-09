@@ -90,18 +90,31 @@ class OldhouseController extends AbstractActionController
                 
                 $no = 1;
 
-                #檢驗基本資料
+                //檢驗基本資料
+                // $strSQL = "select t2.`hname`, t2.`htel`, t2.`hmobil`,
+                //                    t2.`ZipCode`, t2.`City`, t2.`Area`, t2.`Vil`, t2.`Verge`, t2.`Road`, t2.`addr`,
+                //                    t3.desc 'strType', t4.desc 'scale', t5.desc 'type', t1.date, t8.name 'ename', t7.`licenseid` 'license'
+                //             from qc_info as t1
+                //                 left join qc_house as t2 on t2.uid = t1.`huid`
+                //                 left join house_type as t3 on t3.`uid` = t1.htid
+                //                 left join house_type_model AS T4 ON t4.uid = t1.`htmid1`
+                //                 left join house_type_structure as t5 on t5.uid = t1.htsid
+                //                 left join `eng_engineer_city` as t6 on t6.uid = t2.`ecid`
+                //                 left join `eng_engineer` as t7 on t7.uid = t6.`eid`
+                //                 left join `ass_common` as t8 on t8.uid = t7.`cmid`
+                //             where huid = ".$_GET["targetid"]."
+                //             limit 1";
+                
                 $strSQL = "select t2.`hname`, t2.`htel`, t2.`hmobil`,
                                    t2.`ZipCode`, t2.`City`, t2.`Area`, t2.`Vil`, t2.`Verge`, t2.`Road`, t2.`addr`,
-                                   t3.desc 'strType', t4.desc 'scale', t5.desc 'type', t1.date, t8.name 'ename', t7.`licenseid` 'license'
+                                   t3.desc 'strType', t1.`htmid1`, t1.`htmid2`, t5.desc 'type', t1.date, t8.name 'ename', t7.`licenseid` 'license'
                             from qc_info as t1
                                 left join qc_house as t2 on t2.uid = t1.`huid`
-                                left join house_type as t3 on t3.`uid` = t1.htid
-                                left join house_type_model AS T4 ON t4.uid = t1.`htmid1`
+                                    left join house_type as t3 on t3.`uid` = t1.htid
                                 left join house_type_structure as t5 on t5.uid = t1.htsid
                                 left join `eng_engineer_city` as t6 on t6.uid = t2.`ecid`
                                 left join `eng_engineer` as t7 on t7.uid = t6.`eid`
-                                left join `ass_common` as t8 on t8.uid = t7.`cmid`
+                                    left join `ass_common` as t8 on t8.uid = t7.`cmid`
                             where huid = ".$_GET["targetid"]."
                             limit 1";
                 $data = $VTs->QueryData($strSQL);
@@ -166,11 +179,12 @@ class OldhouseController extends AbstractActionController
                     if(file_exists($filePath)){
                         $imgArr = $VTs->GetINIInfo($filePath,"","","",true);
                     //$VTs->debug($imgArr["img0"]);
-                        $img = "<img src='".$imgArr["img0"]."' width='60%' />
-                                <img src='".$imgArr["img1"]."' width='60%' />
-                                <img src='".$imgArr["img2"]."' width='60%' />";
+                        // $img = "<img src='".$imgArr["img0"]."' width='60%' />
+                        //         <img src='".$imgArr["img1"]."' width='60%' />
+                        //         <img src='".$imgArr["img2"]."' width='60%' />";
+                        $img = count($imgArr) . "張";
                     }else{
-                        //print_r("沒圖片");
+                        $img = "0張";
                     }
 
                     #替換@@
@@ -227,11 +241,12 @@ class OldhouseController extends AbstractActionController
                     if(file_exists($filePath)){
                         $imgArr = $VTs->GetINIInfo($filePath,"","","",true);
                     //$VTs->debug($imgArr["img0"]);
-                        $img = "<img src='".$imgArr["img0"]."' width='60%' />
-                                <img src='".$imgArr["img1"]."' width='60%' />
-                                <img src='".$imgArr["img2"]."' width='60%' />";
+                        // $img = "<img src='".$imgArr["img0"]."' width='60%' />
+                        //         <img src='".$imgArr["img1"]."' width='60%' />
+                        //         <img src='".$imgArr["img2"]."' width='60%' />";
+                        $img = count($imgArr) . "張";
                     }else{
-                        //print_r("沒圖片");
+                        $img = "0張";
                     }
 
                     $dataArr = [
