@@ -143,7 +143,7 @@ class OldhouseController extends AbstractActionController
                          LEFT JOIN qc_checkitem AS t11 ON t11.uid = t1.ciid
                          LEFT JOIN eng_unit AS t12 ON t12.uid = t1.val
                          LEFT JOIN img_picture AS t13 ON t13.`uid` = t1.`imgids`
-                        WHERE t3.uid = ".$_GET["targetid"]." AND t1.`length` > 0 OR t1.width > 0 OR t1.depth > 0 OR t1.`area` > 0
+                        WHERE t2.huid = ".$_GET["targetid"]." AND (t1.`length` > 0 OR t1.width > 0 OR t1.depth > 0 OR t1.`area` > 0)
                         ORDER BY t1.val DESC, t1.uid ASC";
                 $data = $VTs->QueryData($strSQL);
             //$VTs->Debug($data[0]);
@@ -160,7 +160,7 @@ class OldhouseController extends AbstractActionController
                     }
 
                     #讀圖檔
-                    $filePath = "D:\\php_dev\\AP-Service\\public\\old_house_img\\";
+                    $filePath = "C:\\xampp\\htdocs\\AP-Service\\public\\old_house_img\\";
                     $filePath .= $data[$i]["imgfile"];
                     //print_r($filePath);
                     if(file_exists($filePath)){
@@ -209,7 +209,7 @@ class OldhouseController extends AbstractActionController
                                 LEFT JOIN qc_checkitem AS t11 ON t11.uid = t1.ciid
                                 LEFT JOIN eng_unit AS t12 ON t12.uid = t1.val
                                 LEFT JOIN img_picture AS t13 ON t13.`uid` = t1.`imgids`
-                            WHERE t3.uid = ".$_GET["targetid"]." AND t1.`length` = 0 OR t1.width = 0 OR t1.depth = 0 OR t1.`area` = 0
+                            WHERE t2.huid = ".$_GET["targetid"]." AND (t1.`length` = 0 and t1.width = 0 and t1.depth = 0 and t1.`area` = 0)
                             ORDER BY t1.val DESC, t1.uid ASC";
                 $data = $VTs->QueryData($strSQL);
             //$VTs->Debug($data);
@@ -221,7 +221,7 @@ class OldhouseController extends AbstractActionController
                     $tr = $quality_tr;
 
                     #讀圖檔
-                    $filePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\old_house_img\\";
+                    $filePath = "C:\\xampp\\htdocs\\AP-Service\\public\\old_house_img\\";
                     $filePath .= $data[$i]["imgfile"];
                     //print_r($filePath);
                     if(file_exists($filePath)){
@@ -293,14 +293,14 @@ class OldhouseController extends AbstractActionController
             //$VTs->Debug($data);
 
             //$Path = "D:\\php_dev\\AP-Service\\public\\old_house_pdf\\";
-            $Path = "..\\..\\public\\old_house_pdf\\";
+            $Path = "..\\old_house_pdf\\";
             $link_html = "";
 
             if(!empty($data)){
                 foreach ($data as $key => $value) {
                     $filePath = $Path . $value["hname"]."-".$value["htel"].".pdf";
-                    $link = $value["hname"]."-".$value["htel"]."<a href = '".$filePath."'>下載PDF</a><br>";
-
+                    //$link = $value["hname"]."-".$value["htel"]."<a href = '".$filePath."'>下載PDF</a><br>";
+                    $link = $value["ZipCode"].$value["City"].$value["Area"].$value["Vil"].$value["Verge"].$value["Road"].$value["addr"]."<a href = '".$filePath."'>下載PDF</a><br>";
                     $link_html .= $link;
                 }
             }
