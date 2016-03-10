@@ -49,6 +49,8 @@ class OldhouseController extends AbstractActionController
                     $data = $VTs->QueryData($strSQL);
                 //$VTs->Debug($data);
 
+                    $scale1 = (!empty($data[0]["htmid1"])) ? " ".$data[0]["htmid1"]." ": " _ ";
+                    $scale2 = (!empty($data[0]["htmid2"])) ? " ".$data[0]["htmid2"]." ": " _ ";
                     #主頁面基本資料置換
                     $dataArr = [
                         "owner" => $data[0]["hname"],
@@ -56,7 +58,7 @@ class OldhouseController extends AbstractActionController
                         "mobile" => $data[0]["hmobil"],
                         "addr" => $data[0]["ZipCode"]." ".$data[0]["City"]." ".$data[0]["Area"]." ".$data[0]["Vil"]." ".$data[0]["Verge"]." ".$data[0]["Road"]." ".$data[0]["addr"],
                         "strType" => $data[0]["strType"],
-                        "scale" => $data[0]["scale"],
+                        "scale" => "地上".$scale1."層  地下".$scale2."層",
                         "type" => $data[0]["type"],
                         "date" => $data[0]["date"],
                         "ename" => $data[0]["ename"],
@@ -436,7 +438,7 @@ class OldhouseController extends AbstractActionController
             if(!empty($data)){
                 foreach ($data as $key => $value) {
                     $mainFile = $Path . $value["hname"]."-".$value["htel"].".pdf";
-                    $imgsFile = $Path . $value["hname"]."-".$value["htel"]."-img.pdf";
+                    $imgsFile = $Path . $value["hname"]."-".$value["htel"]."-imgs.pdf";
                     //$link = $value["hname"]."-".$value["htel"]."<a href = '".$filePath."'>下載PDF</a><br>";
                     $link = $value["ZipCode"].$value["City"].$value["Area"].$value["Vil"].$value["Verge"].$value["Road"].$value["addr"]."<a href = '".$mainFile."'>下載PDF</a>_<a href = '".$imgsFile."'>下載PDF</a><br>";
                     $link_html .= $link;
