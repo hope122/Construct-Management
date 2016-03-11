@@ -33,7 +33,7 @@ function getChartsData(){
 	var chartsData;
 
 	    $.ajax({
-	    url: configObject.chartsWS+'/Construction/wsConstruction.asmx/GetScheduleChart_JSON',
+	    url: configObject.WebAPI+'/Construction/wsConstruction.asmx/GetScheduleChart_JSON',
 	    type: "GET",
 	    dataType: "xml",
 	    async: false,
@@ -48,7 +48,7 @@ function getChartsData(){
 function getGanttChartsData(){
 	var chartsData;
 	$.ajax({
-	    url: configObject.chartsWS+'/Construction/wsConstruction.asmx/GetGanttChart_JSON',
+	    url: configObject.WebAPI+'/Construction/wsConstruction.asmx/GetGanttChart_JSON',
 	    type: "GET",
 	    dataType: "xml",
 	    async: false,

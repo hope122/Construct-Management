@@ -1,6 +1,10 @@
 //整理樹狀資料
-function processTreeData(treeData, showRoot, rootID, rootName){
+function processTreeData(treeData, showRoot, rootID, rootName, options){
 	var tmpMenuObj = {};
+    if(typeof options == "undefined"){
+        options = {};
+        options.idName = "id";
+    }
 	if(typeof showRoot == "undefined"){
 		showRoot = true;
 	}
@@ -18,11 +22,11 @@ function processTreeData(treeData, showRoot, rootID, rootName){
     		tmpMenuObj[node.parent] = {};
     		tmpMenuObj[node.parent]["nodes"] = {};
     	}
-    	tmpMenuObj[node.parent]["nodes"][node.uid] = {id: node.uid, text: node.name};
+    	tmpMenuObj[node.parent]["nodes"][node[options.idName]] = {id: node[options.idName], text: node.name};
     });
 	tmpMenuObj[0].id = rootID;
 	tmpMenuObj[0].text = rootName;
-
+    // console.log(tmpMenuObj);
     // ---------------------------------------------------------------------
 
     //放好第一層級的資料

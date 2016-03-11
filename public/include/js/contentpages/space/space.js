@@ -8,15 +8,16 @@ $(function() {
     
 });
 
-function treeData(nodeID){
+function treeData(){
   $.ajax({
-    url: configObject.WebAPI + "/waDataBase/api/Eng/GetEngList",
+    url: configObject.WebAPI + "/waDataBase/api/Str/GetStrList",
     type: "GET",
     dataType: "JSON",
     timeout: 30000,
     success: function(rs){
+      console.log(rs);
       if(rs.status){
-        var datas = processTreeData( rs.data, true, "root", "工項建立" );
+        var datas = processTreeData( rs.data, true, "root", "空間建立" );
         var options = {
           bootstrap2: false, 
           showTags: false,
@@ -27,7 +28,7 @@ function treeData(nodeID){
           onNodeSelected: function(event, node) {
             // console.log(event, node);
             nodeDataContents(node.id,node);
-            if(node.id == "root"){
+            if(node.parentId == 0){
               $("#nodeData").parent().hide();
               $("#nodeData-content").hide();
               $("#nodeOption").click();
@@ -43,9 +44,6 @@ function treeData(nodeID){
         $(".err_msg").empty().hide();
         $(".tree-menus").show();
         $('#treeview').treeview(options);
-        if(typeof nodeID != "undefined"){
-           $('#treeview').treeview("expandNode",nodeID);
-        }
       }else{
         $(".tree-menus").hide();
         $(".err_msg").empty().show();
@@ -67,64 +65,67 @@ function treeData(nodeID){
 }
 
 function nodeDataContents(nodeID,node){
-  $("#select-nodeContents").show();
-  $("#tab-content").hide();
-  $("#nodeData-content").show();
-  
-  var nodesContentObj;
-  $.getJSON(configObject.WebAPI + "/waDataBase/api/Eng/getEngContent",{id:nodeID},function(rs){
-     // console.log(rs);
-    nodesContentObj = rs;
-    nodeOrderContents(nodeID, node, nodesContentObj.addStatus, nodesContentObj.seqStatus);
-  }).done(function(){
-    // console.log(nodesContentObj);
-    $.get("pages/style/engineering/engineering_data_option_style.html",function(pageContent){
-      var pages = $.parseHTML(pageContent);
-      //取得樹狀結構的資料
-      var nodeContent = $('#treeview').treeview('getSelected', nodeID);
-      nodeContent = nodeContent[0];
-      // console.log(nodeContent);
-      var nodesContent = nodesContentObj;
+  if(nodeID != "root"){
+    $("#select-nodeContents").show();
+    $("#tab-content").hide();
 
-      $("#nodeData-content").empty();
+    
+    var nodesContentObj;
+    $.getJSON(configObject.WebAPI + "/waDataBase/api/Str/GetStrContent",{id:nodeID},function(rs){
+       // console.log(rs);
+      nodesContentObj = rs;
+      nodeOrderContents(nodeID, node, nodesContentObj.addStatus, nodesContentObj.seqStatus);
+    }).done(function(){
+      // console.log(nodesContentObj);
+      $.get("pages/style/engineering/engineering_data_option_style.html",function(pageContent){
+        var pages = $.parseHTML(pageContent);
+        //取得樹狀結構的資料
+        var nodeContent = $('#treeview').treeview('getSelected', nodeID);
+        nodeContent = nodeContent[0];
+        // console.log(nodeContent);
+        var nodesContent = nodesContentObj;
 
-      $(pages).find("#nodeID").val(nodeContent.id);
-      $(pages).find("#fid").val(nodesContent.fid);
-      //放入名稱
-      $(pages).find("#node-name").html(nodeContent.text);
-      if(typeof nodesContent.fCodeType != "undefined"){
-        $(pages).find("#fatherCode").html(nodesContent.fCodeType);
-      }else{
-        $(pages).find("#fatherCode").remove();  
-      }
-      //工種相關設定
-      if(typeof nodesContent.code != "undefined"){
-        $(pages).find(".code-content").html(nodesContent.code);
-        $(pages).find("#code").val(nodesContent.code);
-      }else{
-        $(pages).find(".code").remove();
-      }
+        $("#nodeData-content").empty();
 
-      //工種相關設定
-      if(typeof nodesContent.worksid != "undefined"){
-        worksList(pages,nodesContent.worksid);
-      }else{
-        $(pages).find(".worksid").remove();
-      }
+        $(pages).find("#nodeID").val(nodeContent.id);
+        $(pages).find("#fid").val(nodesContent.fid);
+        //放入名稱
+        $(pages).find("#node-name").html(nodeContent.text);
+        if(typeof nodesContent.fCodeType != "undefined"){
+          $(pages).find("#fatherCode").html(nodesContent.fCodeType);
+        }else{
+          $(pages).find("#fatherCode").remove();  
+        }
+        //工種相關設定
+        if(typeof nodesContent.code != "undefined"){
+          $(pages).find(".code-content").html(nodesContent.code);
+          $(pages).find("#code").val(nodesContent.code);
+        }else{
+          $(pages).find(".code").remove();
+        }
 
-      //計數單位相關設定
-      if(typeof nodesContent.typeid_u != "undefined"){
-        typeUnitList(pages,nodesContent.typeid_u,nodeID);
-      }else{
-        $(pages).find(".unitid").remove();
-      }
+        //工種相關設定
+        if(typeof nodesContent.worksid != "undefined"){
+          worksList(pages,nodesContent.worksid);
+        }else{
+          $(pages).find(".worksid").remove();
+        }
 
-      $(pages).find("#name").val(nodeContent.text);
-      $(pages).find(".edit-item").hide();
-      $(pages).appendTo("#nodeData-content");
+        //計數單位相關設定
+        if(typeof nodesContent.typeid_u != "undefined"){
+          typeUnitList(pages,nodesContent.typeid_u,nodeID);
+        }else{
+          $(pages).find(".unitid").remove();
+        }
+
+        $(pages).find("#name").val(nodeContent.text);
+        $(pages).find(".edit-item").hide();
+        $(pages).appendTo("#nodeData-content");
+      });
     });
-  });
-  
+  }else{
+    $("#select-nodeContents").hide();
+  }
 }
 
 function nodeOrderContents(nodeID,node,addStatus,seqStatus){
@@ -300,19 +301,16 @@ function creatChildNodeSaveAction(object){
       name:name,
       fid:fid
     };
-    console.log(option);
-    $.post(configObject.WebAPI + "/waDataBase/api/Eng/setEngContentModify",option,function(rs){
+    // console.log(option);
+    $.post(configObject.WebAPI + "/waDataBase/api/Str/setEngContentModify",option,function(rs){
       console.log(rs);
       reloadTreeData();
     })
   }else{//是新增物件
     // console.log({fid:fid,name:name});
-    if(fid == "root"){
-      fid = 0;
-    }
-    $.post(configObject.WebAPI + "/waDataBase/api/Eng/setEngNameInsert",{fid:fid,name:name},function(rs){
+    $.post(configObject.WebAPI + "/waDataBase/api/Str/setStrNameInsert",{fid:fid,name:name},function(rs){
       // http://211.21.170.18:8080/waDataBase/api/Eng/setEngNameInsert?fid=B1&name=test
-      console.log(rs);
+      // console.log(rs);
       parentObj.removeClass("newChildItem");
       parentObj.prop("id",rs.uid);
       reloadTreeData();
@@ -361,7 +359,7 @@ function creatChildNodeDeleteAction(object){
   var parentObj = $(object).parent().parent().parent().parent();
   var id = parentObj.prop("id");
   // console.log(parentClass);
-  $.post(configObject.WebAPI + "/waDataBase/api/Eng/setEngDelete",{id:id},function(rs){
+  $.post(configObject.WebAPI + "/waDataBase/api/Str/setStrDelete",{id:id},function(rs){
     parentObj.remove();
     reloadTreeData();
   });
@@ -369,9 +367,8 @@ function creatChildNodeDeleteAction(object){
 }
 
 function reloadTreeData(){
-  var nodeID = $("nodeID").val();
   $('#treeview').treeview("remove");
-  treeData(nodeID);
+  treeData();
 }
 
 //工種列表
@@ -451,7 +448,7 @@ function toNodeSettingSave(){
   userObj.fid = fid;
   console.log(userObj);
   // console.log(option);
-  $.post(configObject.WebAPI + "/waDataBase/api/Eng/setEngContentModify",userObj,function(rs){
+  $.post(configObject.WebAPI + "/waDataBase/api/Eng/setStrContentModify",userObj,function(rs){
     reloadTreeData();
   });
 }
@@ -466,7 +463,7 @@ function setChildItemSeq(){
     idStr = idStr.substring(0, idStr.length-1);
   }
   // console.log(idStr);
-  $.post(configObject.WebAPI + "/waDataBase/api/Eng/setEngSeq",{id:idStr},function(rs){
+  $.post(configObject.WebAPI + "/waDataBase/api/Str/setStrSeq",{id:idStr},function(rs){
     reloadTreeData();
   });
 }

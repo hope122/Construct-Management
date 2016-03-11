@@ -187,7 +187,7 @@
                     $saveFileName .= ".pdf";
                 }
                 $saveFileName = str_replace("\\","/",$saveFileName);
-                $pdfCommand = $wkhtmltopdfPath.' '.$zoomStr.' '.$ChangePagePagth.' '.$saveFileName;
+                $pdfCommand = $wkhtmltopdfPath.' '.$zoomStr.' "'.$ChangePagePagth.'" '.$saveFileName;
                 try{
                     return $this->cmdExecute($pdfCommand);
                 }catch(Exception $error){
