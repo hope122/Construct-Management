@@ -1,10 +1,6 @@
 
 $(function(){
-  setTimeout(function(){
-    getQCTableTypeList();
-  },1);
-  
-  getQCTableTitleList();
+  getQCTableTypeList();
 });
 
 var QCAPI = configObject.WebAPI + "/QC/waCheckList/api/CheckList/";
@@ -40,6 +36,7 @@ function getQCTableTypeList(){
         selectOptionPut("tebleType",content.Uid,content.Name);
         
       });
+      getQCTableTitleList();
     }
   });
 }
