@@ -1,6 +1,9 @@
 
 $(function(){
-  getQCTableTypeList();
+  setTimeout(function(){
+    getQCTableTypeList();
+  },1);
+  
   getQCTableTitleList();
 });
 
@@ -206,7 +209,7 @@ function saveQCTable(){
 
     });
   });
-    console.log(MyContent);
+    // console.log(MyContent);
   var sendObj = {
       MyHead:{
         Project:{

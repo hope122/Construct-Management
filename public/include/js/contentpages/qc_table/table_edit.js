@@ -1,6 +1,8 @@
 
 $(function(){
-  getQCTableTypeList();
+    setTimeout(function(){
+    getQCTableTypeList();
+  },1);
   getQCTableTitleList();
 });
 
