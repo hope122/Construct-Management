@@ -1,9 +1,10 @@
 $(function(){
   if(location.pathname.search("login.html") == -1){
-  	checkUserLogin();
-  	checkGoogleApi();
-  	firstLoadPage();
-	
+    if(typeof checkUserLogin != "undefined" && typeof checkGoogleApi != "undefined" && typeof firstLoadPage != "undefined" ){
+    	checkUserLogin();
+    	checkGoogleApi();
+    	firstLoadPage();
+    }
   }
 });
 
@@ -60,12 +61,19 @@ function getUserInput(objectID){
   var tmpObj = {};
   $("#"+objectID).find(".userInput").each(function(){
     var userInputType = $(this).prop("type");
-    if( userInputType != "radio" ){
+    if( userInputType != "radio" && userInputType != "checkbox"){
       var id= $(this).prop("id");
+      var value = $(this).val();
     }else{
-      var id= $(this).prop("name");
+      var id = $(this).prop("name");
+      var value = $("[name="+id+"]:checked").val();
+      if(value == undefined){
+        value = null;
+      }
     }
-    tmpObj[id] = $(this).val();
+    if(typeof tmpObj[id] == "undefined"){
+      tmpObj[id] = value;
+    }
   });
   return tmpObj;
 }
@@ -175,3 +183,10 @@ Object.size = function(obj) {
     }
     return size;
 };
+
+// 選單放入選項
+function selectOptionPut(selectID,putVal,putText){
+  if(selectID != "" && selectID.search("#") == -1){
+    $("<option>").appendTo("#"+selectID).prop("value",putVal).text(putText);
+  }
+}

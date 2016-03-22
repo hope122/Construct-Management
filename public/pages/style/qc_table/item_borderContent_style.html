@@ -1,0 +1,22 @@
+<li class="list-group-item qcTableItem">
+	<h3 class="list-group-item-heading">
+		<input type="text" class="form-control item-title f20">
+		<select class="qcItemSelect form-control item-display-n" onchange="QCItemSelect($(this))"></select>
+		<i class="fa fa-plus send-btn mouse-pointer" onclick="addListContent($(this));"></i>
+		<i class="fa fa-trash cancel-btn mouse-pointer" onclick="removeItem($(this))"></i>
+		<div class="checkbox">
+		  <label>
+		  	<input type="checkbox" class="aplyQCItemSelect" onchange="QCItemCheckSelect($(this));">
+		  	套用項目範本
+		  </label>
+		</div>
+	</h3>
+	<div class="list-group">
+		<!--group content start-->
+		<div class="list-group-item none-border item-content">
+			<ol class="item-list">
+			</ol>
+		</div>
+		<!--group content end-->
+  	</div>
+</li>
