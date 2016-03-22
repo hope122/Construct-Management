@@ -222,8 +222,10 @@ function saveQCTable(){
       },
       MyContent:MyContent
     };
-  $.post(QCAPI + "SaveEmptyCheckList",sendObj);
-  // console.log(sendObj);
+  if(selectTableObj.tableType != "null"){
+    $.post(QCAPI + "SaveEmptyCheckList",sendObj);
+  }
+  // console.log(selectTableObj);
 }
 
 
