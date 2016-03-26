@@ -31,6 +31,18 @@
 	font-size: 20px;
 }
 
+.f30{
+	font-size: 30px;
+}
+
+.f-width{
+	font-weight: bold;
+}
+
+.form-control-f30{
+	height: 50px;
+}
+
 .f-lg{
 	font-size:larger;
 }
@@ -223,6 +235,10 @@ a:hover{
 	border: 1px solid #E6E6E6;
 }
 
+.item-border-bottom{
+	border-bottom: 1px solid #E6E6E6;
+}
+
 .table-th-center th{
 	text-align: center;
 }
@@ -271,4 +287,8 @@ a:hover{
 
 .item-margin-bottom-40{
 	margin-bottom: 75px;
+}
+
+.item-padding-top{
+	padding: 20px;
 }
