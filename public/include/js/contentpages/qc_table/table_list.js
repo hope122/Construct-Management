@@ -4,6 +4,27 @@ $(function(){
 
 var QCAPI = configObject.WebAPI + "/QC/waCheckList/api/CheckList/";
 var qcTableListAPI = configObject.WebAPI + "/waDataBase/api/Eng/";
+
+// 取得標題相關
+function getQCTemplate(){
+  $("#table-template").empty();
+  selectOptionPut("table-template","null","請選擇自檢表");
+  var typeId = $("#tebleType").val();
+
+  $.getJSON(QCAPI + "GetTempTitle",{typeId:typeId},function(rs){
+    // console.log(rs);
+
+    if(rs.Status){
+      // console.log(rs);
+      // var optionStr = '';
+      $.each(rs.Data,function(index,content){
+        selectOptionPut("table-template",content.Uid,content.Name);
+        
+      });
+    }
+  });
+}
+
 // 取得標題相關
 function getQCTableTitleList(){
   $("#titleID").empty();
@@ -16,7 +37,12 @@ function getQCTableTitleList(){
       // var optionStr = '';
       $.each(rs.data,function(index,content){
         selectOptionPut("titleID",content.uid,content.name);
-        
+      });
+      selectOptionPut("table-template","null","請選擇自檢表");
+      $("#tebleType").unbind("change").change(function(){
+        if($(this).val() != "null"){
+          getQCTemplate();
+        }
       });
     }
   });
@@ -78,7 +104,7 @@ function qcItemSelectContent(callback){
 // GET /api/CheckList/GetTemplate
 function getQCTableTitleContent(){
   var selectTableObj = getUserInput("selectTableItem");
-  
+  console.log(selectTableObj);
   if(selectTableObj.titleID != "null"){
     // 放入標題
     var tableTitle = $("#titleID :selected").text();
@@ -88,11 +114,11 @@ function getQCTableTitleContent(){
     if(selectTableObj.templateSelect == "1"){
 
       $("#table-totalContent").empty();
-      $.getJSON(QCAPI + "GetEmptyCheckList", {titleID:selectTableObj.titleID}, function(rs){
-
+      $.getJSON(QCAPI + "GetTemplate", {tempTitleID:selectTableObj["table-template"]}, function(rs){
+        console.log(rs);
         if(rs.Status){
 
-          var tableDataObj = processTableData(rs.Data.MyContent);
+          var tableDataObj = processTableData(rs.Data);
           // 取得最外匡的樣式
           getBorderStyle(function(pageBorder){
             // 取得內匡的樣式

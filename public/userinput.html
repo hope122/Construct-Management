@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>List border</title>
+
+		<!-- Bootstrap CSS -->
+		<link href="include/css/bootstrap.min.css" rel="stylesheet">
+		<link href="include/css/font-awesome.min.css" rel="stylesheet">
+		<link href="include/css/ctrl-style.css" rel="stylesheet">
+
+		<!-- jQuery -->
+		<script src="include/js/jquery/jquery.min.js"></script>
+		<!-- Bootstrap JavaScript -->
+		<script src="include/js/bootstrap/bootstrap.min.js"></script>
+		<script src="include/js/main/getStyle.js"></script>
+		<script src="include/js/main/bsDialog.js"></script>
+
+		<script>
+			$(function(){
+				var option = {styleKind:"userInfo-input",style:"input-basic"};
+				getStyle(option,function(pageStyle){
+					$("#grid").append(pageStyle);
+				});
+				$("#testBs").bsDialog({
+					autoShow:true,
+					showFooterBtn:false
+				});
+			});
+			function addListItem(object,listStyle){
+				var object = object.parents(".listContent").find("ol");
+				var listStyleObj = $.parseHTML(listStyle);
+				$(listStyleObj).find(".fa-trash").click(function(){
+					$(this).parents("li").remove();
+				});
+				// console.log(object,listStyle);
+				$(listStyleObj).appendTo(object);
+			}
+
+			function openDialog(){
+				$("#testBs").bsDialog("show");
+			}
+		</script>
+	</head>
+	<body>
+
+		<div class="container">
+			<div class="row">
+				<!-- 內容 -->
+				<div class="col-xs-12 col-md-12" id="grid">
+				</div>
+			</div> 
+		</div>
+		<button type="button" class="btn btn-info btn-lg" onclick="openDialog();">Open Modal</button>
+		<div id="testBs">
+			<div>test</div>
+		</div>
+	</body>
+</html>
