@@ -1,30 +1,38 @@
 $(function(){
   getQCTableTypeList();
+  // getQCTableTitleList();
 });
 
-var QCAPI = configObject.WebAPI + "/QC/waCheckList/api/CheckList/";
-var qcTableListAPI = configObject.WebAPI + "/waDataBase/api/Eng/";
 // 取得標題相關
 function getQCTableTitleList(){
-  $("#titleID").empty();
-  selectOptionPut("titleID","null","請選擇自檢表");
-  $.getJSON(qcTableListAPI + "GetEngSingleList",{type:"c"},function(rs){
-    console.log(rs);
+  $("#table-list").empty();
+  // selectOptionPut("titleID","null","請選擇自檢表");
+  $.getJSON(QCAPI + "GetTitle",function(rs){
+    // console.log(rs);
 
-    if(rs.status){
+    if(rs.Status){
+        getTableListStyle(function(tableListStyle){
+
+            $.each(rs.Data,function(index,content){
+                var tableList = $.parseHTML(tableListStyle);
+                $(tableList).find(".table-name").html(content.Name);
+                $(tableList).find(".edit-btn").click(function(){
+                    content.Uid;
+                    console.log(content.Uid);
+                });
+                // selectOptionPut("titleID",content.Uid,content.Name);
+                $(tableList).appendTo("#table-list");
+            });
+            $("#table-list").find(".listContent").last().removeClass("item-border-bottom");
+
+        });
       
-      // var optionStr = '';
-      $.each(rs.data,function(index,content){
-        selectOptionPut("titleID",content.uid,content.name);
-        
-      });
     }
+
   });
 }
 
 function getQCTableTypeList(){
-  
-  selectOptionPut("tebleType","null","請選擇自檢表類別");
   $.getJSON(QCAPI + "GetCheckListType",function(rs){
     // console.log(rs);
 
@@ -32,104 +40,50 @@ function getQCTableTypeList(){
       
       // var optionStr = '';
       $.each(rs.Data,function(index,content){
-        selectOptionPut("tebleType",content.Uid,content.Name);
-        
+        // selectOptionPut("tebleType",content.Uid,content.Name);
+        var liItem = $.parseHTML("<li>");
+        var tabBtnItem = $.parseHTML("<a>");
+        var tabContentItem = $.parseHTML("<div>");
+
+        $(tabContentItem).addClass("col-xs-12 col-md-12 tab-border item-display-n tableTypeTab-tab-content")
+        .prop("id","tableTab-"+content.Uid+"-content");
+
+        $(tabBtnItem).prop("href","#")
+        .prop("id","tableTab-"+content.Uid)
+        .html(content.Name).click(function(){
+          $("#tebleType").val(content.Uid);
+        });
+
+        $(liItem).attr("role","presentation")
+        .append(tabBtnItem)
+        .appendTo("#tableTypeTab");
+
+        $("#tableTypeTab").after(tabContentItem);
+        if(index == 0){
+          $("#tebleType").val(content.Uid);
+        }
+
       });
+      //tab事件
+      tabCtrl("tableTypeTab");
+      // 第一個增加選取ＣＬＡＳＳ和點擊
+      $("#tableTypeTab").find("li").first().addClass("active")
+      .find("a").click();
+
       getQCTableTitleList();
+
     }
-  });
-}
-
-// 頁面樣式
-function getBorderStyle(callback){
-  $.get("pages/style/qc_table/item_borderContent_style.html").done(function(data){
-    // manipulation to get required data
-    // var d = data;
-    var tmpData = $.parseHTML(data);
-    qcItemSelectContent(function(itemSelectContent){
-      $("<option>").val("null").text("請選擇項目").appendTo($(tmpData).find(".qcItemSelect"));
-      $.each(itemSelectContent.Data,function(i,content){
-        $("<option>").val(content.Uid).text(content.Name).appendTo( $(tmpData).find(".qcItemSelect") );
-      });
-      data = $(tmpData)[0].outerHTML;
-      // console.log(data);
-      callback(data);
-    });
-
   });
 }
 
 // 頁面列表樣式
-function getListStyle(callback){
+function getTableListStyle(callback){
   // console.log(tableDataObj);
-  $.get("pages/style/qc_table/item_list_style.html").done(function(pageList){
+  $.get("pages/style/qc_table/table_listContent_style.html").done(function(pageList){
     callback(pageList);
   });
 }
 
-//項目選項
-function qcItemSelectContent(callback){
-  $.getJSON(QCAPI + "GetItem").done(function(data){
-    callback(data);
-  });
-}
-
-// 取得標題內容
-// GET /api/CheckList/GetTemplate
-function getQCTableTitleContent(){
-  var selectTableObj = getUserInput("selectTableItem");
-  
-  if(selectTableObj.titleID != "null"){
-    // 放入標題
-    var tableTitle = $("#titleID :selected").text();
-    $("#qc_table_title").prop("readonly",true).val(tableTitle);
-
-
-    if(selectTableObj.templateSelect == "1"){
-
-      $("#table-totalContent").empty();
-      $.getJSON(QCAPI + "GetEmptyCheckList", {titleID:selectTableObj.titleID}, function(rs){
-
-        if(rs.Status){
-
-          var tableDataObj = processTableData(rs.Data.MyContent);
-          // 取得最外匡的樣式
-          getBorderStyle(function(pageBorder){
-            // 取得內匡的樣式
-            getListStyle(function(pageList){
-              //放入
-              $.each(tableDataObj, function(index,content){
-                var pageBorderObj = $.parseHTML(pageBorder);
-                // console.log(content);
-                // $(pageBorderObj).find(".item-title").val(content.name);
-                $(pageBorderObj).find(".aplyQCItemSelect").prop("checked",true);
-                QCItemCheckSelect($(pageBorderObj).find(".aplyQCItemSelect"));
-                $(pageBorderObj).find(".qcItemSelect").val(content.uid);
-
-                $.each(content.child,function(childIndex,childContent){
-                  var pageListObj = $.parseHTML(pageList);
-                  $(pageListObj).addClass("qcDetialItem");
-                  $(pageListObj).find(".item-list-title").prop("id",childContent.DI_uid).val(childContent.DI_Name);
-                  $(pageListObj).find(".standard-value").prop("id",childContent.SV_uid).val(childContent.SV_Name);
-                  // standard-value
-                  // console.log(childIndex,childContent)
-                  $(pageListObj).appendTo( $(pageBorderObj).find(".item-list") );
-                });
-                $(pageBorderObj).appendTo("#table-totalContent");
-              });
-              // 放入結束
-            });
-            // 內匡樣式結束
-
-          });
-          // 外匡樣式結束
-
-        }
-      });
-
-    }
-  }
-}
 
 function addContent(){
   // 取得最外匡的樣式
@@ -222,9 +176,9 @@ function saveQCTable(){
       MyContent:MyContent
     };
   if(selectTableObj.tableType != "null"){
-    $.post(QCAPI + "SaveEmptyCheckList",sendObj);
+    // $.post(QCAPI + "SaveEmptyCheckList",sendObj);
   }
-  // console.log(selectTableObj);
+  console.log(selectTableObj);
 }
 
 
@@ -299,4 +253,33 @@ function processTableData(data){
   });
   return obj;
   // console.log(obj);
+}
+
+// 頁面新增樣式
+function getTableInsertStyle(callback){
+  // console.log(tableDataObj);
+  $.get("pages/style/qc_table/table_insert_style.html").done(function(insertPage){
+    callback(insertPage);
+  });
+}
+
+function openDialog(){
+  $("#myModal").on('show.bs.modal', function(event){
+      console.log(event);
+        // var button = $(event.relatedTarget);  // Button that triggered the modal
+        // var titleData = button.data('title'); // Extract value from data-* attributes
+        // $(this).find('.modal-title').text(titleData + ' Form');
+        var thisObj = $(this).find(".modal-body");
+        getTableInsertStyle(function(insertPage){
+          thisObj.html(insertPage);
+        });
+  }).on('hidden.bs.modal',function(event){
+      console.log(event);
+
+  });
+
+  $("#myModal").modal({
+    backdrop: 'static',
+    // remote: 'pages/style/qc_table/table_insert_style.html'
+  });
 }

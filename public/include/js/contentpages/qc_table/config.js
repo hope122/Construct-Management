@@ -1,0 +1,1 @@
+var QCAPI = configObject.WebAPI + "/QC/waCheckList/api/CheckList/";
