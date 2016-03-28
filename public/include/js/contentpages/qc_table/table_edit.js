@@ -9,7 +9,8 @@ var QCAPI = configObject.WebAPI + "/QC/waCheckList/api/CheckList/";
 function getQCTableTitleList(){
   $("#titleID").empty();
   selectOptionPut("titleID","null","請選擇自檢表");
-  $.getJSON(QCAPI + "GetTitle",function(rs){
+  var typeId = $("#tableType").val();
+  $.getJSON(QCAPI + "GetEmptyList",{typeId:typeId},function(rs){
     // console.log(rs);
 
     if(rs.Status){
@@ -25,7 +26,7 @@ function getQCTableTitleList(){
 
 function getQCTableTypeList(){
   
-  selectOptionPut("tebleType","null","請選擇自檢表類別");
+  selectOptionPut("tableType","null","請選擇自檢表類別");
   $.getJSON(QCAPI + "GetCheckListType",function(rs){
     // console.log(rs);
 
@@ -33,10 +34,16 @@ function getQCTableTypeList(){
       
       // var optionStr = '';
       $.each(rs.Data,function(index,content){
-        selectOptionPut("tebleType",content.Uid,content.Name);
+        selectOptionPut("tableType",content.Uid,content.Name);
         
       });
-      getQCTableTitleList();
+      selectOptionPut("titleID","null","請選擇自檢表");
+      $("#tableType").unbind("change").change(function(){
+        if($(this).val() != "null"){
+          getQCTableTitleList();
+        }
+      });
+     
     }
   });
 }

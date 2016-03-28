@@ -104,7 +104,7 @@ function qcItemSelectContent(callback){
 // GET /api/CheckList/GetTemplate
 function getQCTableTitleContent(){
   var selectTableObj = getUserInput("selectTableItem");
-  console.log(selectTableObj);
+  // console.log(selectTableObj);
   if(selectTableObj.titleID != "null"){
     // 放入標題
     var tableTitle = $("#titleID :selected").text();
@@ -115,7 +115,7 @@ function getQCTableTitleContent(){
 
       $("#table-totalContent").empty();
       $.getJSON(QCAPI + "GetTemplate", {tempTitleID:selectTableObj["table-template"]}, function(rs){
-        console.log(rs);
+        // console.log(rs);
         if(rs.Status){
 
           var tableDataObj = processTableData(rs.Data);
