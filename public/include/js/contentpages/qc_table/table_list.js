@@ -9,7 +9,7 @@ var qcTableListAPI = configObject.WebAPI + "/waDataBase/api/Eng/";
 function getQCTemplate(){
   $("#table-template").empty();
   selectOptionPut("table-template","null","請選擇自檢表");
-  var typeId = $("#tebleType").val();
+  var typeId = $("#tableType").val();
 
   $.getJSON(QCAPI + "GetTempTitle",{typeId:typeId},function(rs){
     // console.log(rs);
@@ -39,7 +39,7 @@ function getQCTableTitleList(){
         selectOptionPut("titleID",content.uid,content.name);
       });
       selectOptionPut("table-template","null","請選擇自檢表");
-      $("#tebleType").unbind("change").change(function(){
+      $("#tableType").unbind("change").change(function(){
         if($(this).val() != "null"){
           getQCTemplate();
         }
@@ -50,7 +50,7 @@ function getQCTableTitleList(){
 
 function getQCTableTypeList(){
   
-  selectOptionPut("tebleType","null","請選擇自檢表類別");
+  selectOptionPut("tableType","null","請選擇自檢表類別");
   $.getJSON(QCAPI + "GetCheckListType",function(rs){
     // console.log(rs);
 
@@ -58,7 +58,7 @@ function getQCTableTypeList(){
       
       // var optionStr = '';
       $.each(rs.Data,function(index,content){
-        selectOptionPut("tebleType",content.Uid,content.Name);
+        selectOptionPut("tableType",content.Uid,content.Name);
         
       });
       getQCTableTitleList();
@@ -183,7 +183,7 @@ function removeItem(object){
 //新增與修改
 function saveQCTable(){
   var selectTableObj = getUserInput("selectTableItem");
-  // var tebleType = $("#tebleType").val();
+  // var tableType = $("#tableType").val();
   var tableTitle,
     TitleUid,
     MyContent=[];
