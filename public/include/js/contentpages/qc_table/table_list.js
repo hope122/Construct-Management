@@ -248,7 +248,6 @@ function saveQCTable(){
       MyContent:MyContent
     };
   if(selectTableObj.tableType != "null"){
-    sendObj = JSON.stringify(sendObj);
     $.post(QCAPI + "SaveEmptyCheckList",sendObj);
   }
   // console.log(selectTableObj);
