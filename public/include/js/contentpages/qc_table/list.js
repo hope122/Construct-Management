@@ -301,18 +301,18 @@ function getQCTableModifyContent(uid){
   var selectTableObj = getUserInput("selectTableItem");
   
   if(uid != "null"){
-    $(".qc-table-content").show();
+    $("#modifyDialog").find(".qc-table-content").show();
     // 放入標題
     // var tableTitle = $("#titleID :selected").text();
 
-    $("#table-totalContent").empty();
+    $("#modifyDialog").find("#table-totalContent").empty();
     $.getJSON(QCAPI + "GetEmptyCheckList", {titleID:uid}, function(rs){
       // console.log(rs);
       // return;
       if(rs.Status){
 
         var tableDataObj = processTableData(rs.Data.MyContent);
-        $("#qc_table_title_modify").html(rs.Data.MyHead.Title.Name);
+        $("#modifyDialog").find("#qc_table_title_modify").html(rs.Data.MyHead.Title.Name);
 
         // 取得最外匡的樣式
         getBorderStyle(function(pageBorder){
@@ -336,7 +336,7 @@ function getQCTableModifyContent(uid){
                 // console.log(childIndex,childContent)
                 $(pageListObj).appendTo( $(pageBorderObj).find(".item-list") );
               });
-              $(pageBorderObj).appendTo("#table-totalContent");
+              $(pageBorderObj).appendTo($("#modifyDialog").find("#table-totalContent"));
             });
             // 放入結束
           });
