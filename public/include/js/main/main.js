@@ -11,9 +11,9 @@ $(function(){
 //相關頁面轉換
 function redirectPage(result){
   if(result.status){
-        $.post(configObject.processLoginUrl,result,function(rs){
-           location.href = location.origin;
-        });
+    $.post(configObject.processLoginUrl,result,function(rs){
+      location.href = location.origin+"/content.html";
+    });
   }else{
     alert(result.error);
     showLoading(false);
