@@ -422,6 +422,7 @@ function saveQCTable(){
   if(selectTableObj.tableType != "null"){
     $.post(QCAPI + "SaveEmptyCheckList",sendObj,function(){
         $("#insertDialog").bsDialog("close");
+        $("#myModal").bsDialog("close");
     });
   }
   // console.log(sendObj);
