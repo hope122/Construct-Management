@@ -334,3 +334,14 @@ a:hover{
     filter: alpha(opacity=20);
     box-shadow:none !important;
 }
+
+.contents{
+	margin-right: -15px;
+    margin-left: -15px;
+}
+.contents:after,.contents:before{
+	content: '';
+    display: block;
+    clear: both;
+    height: 0;
+}
