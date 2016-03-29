@@ -349,3 +349,7 @@ a:hover{
 .item-ol{
 	list-style-type:decimal !important;
 }
+
+.none-border{
+	border: none !important;
+}
