@@ -11,7 +11,7 @@ function getQCTableTitleList(){
   selectOptionPut("titleID","null","請選擇自檢表");
   var typeId = $("#tableType").val();
   $.getJSON(QCAPI + "GetEmptyList",{typeId:typeId},function(rs){
-    // console.log(rs);
+    console.log(rs);
 
     if(rs.Status){
       

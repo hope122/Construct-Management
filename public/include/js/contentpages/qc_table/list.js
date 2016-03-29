@@ -1,7 +1,7 @@
-$(function(){
-  getQCTableTypeList();
-  // getQCTableTitleList();
-});
+// $(function(){
+//   getQCTableTypeList();
+//   // getQCTableTitleList();
+// });
 
 // 取得範本相關
 function getQCTemplate(){
@@ -23,12 +23,73 @@ function getQCTemplate(){
   });
 }
 
-// 取得標題相關
-function getQCTableTitleList(showArea){
-  $("#table-list").empty();
+// 取得總表內容
+function getQCTotalTableList(showArea){
+  $("#"+showArea).empty();
   // selectOptionPut("titleID","null","請選擇自檢表");
   // $.getJSON(QCAPI + "GetTitle",function(rs){
-  $.getJSON(qcTableListAPI + "GetEngSingleList",{type:"c"},function(rs){
+  var typeId = $("#totalTableType").val();
+  $.getJSON(QCAPI + "GetEmptyList",{typeId:typeId},function(rs){
+    // console.log(rs);
+
+    if(rs.Status){
+        var option = {
+          styleKind:"list",
+          style:"1grid-modify"
+        }
+        getStyle(option, function(tableListStyle){
+
+            $.each(rs.Data,function(index,content){
+                var tableList = $.parseHTML(tableListStyle);
+                $(tableList).addClass("listContent");
+                $(tableList).find(".name").html(content.Name);
+                // 編輯按鈕
+                $(tableList).find(".fa-pencil-square-o").click(function(){
+                    // console.log(content.uid);
+
+                  openModifyDialog(content.Uid);
+                });
+                // 修改按鈕
+                $(tableList).find(".fa-trash-o").click(function(){
+                  var data = $.param({checkListID: content.Uid});
+                  console.log(data);
+                  $.ajax({
+                    url: QCAPI + "DeleteEmptyCheckList?"+data,
+                    // data: data,
+                    type:"DELETE",
+                    success: function(){
+                      getQCTotalTableList(showArea);
+                    }
+                  });
+                  
+                });
+                // selectOptionPut("titleID",content.Uid,content.Name);
+                $(tableList).appendTo("#"+showArea);
+            });
+            // console.log($("#"+showArea).find(".listContent").last());
+            $("#"+showArea).find(".listContent").last().removeClass("list-items-bottom");
+
+        });
+      
+    }
+
+  });
+}
+
+// 取得標題相關內容
+function getQCTableTitleList(showArea, API){
+  // console.log(API);
+  $("#"+showArea).empty();
+  // selectOptionPut("titleID","null","請選擇自檢表");
+  // $.getJSON(QCAPI + "GetTitle",function(rs){
+  if(API == "GetEngSingleList"){
+    API = qcTableListAPI + API;
+    option = {type:"c"};
+  }else{
+    API = qcMaterielAPI + API;
+    option = {};
+  }
+  $.getJSON(API,option,function(rs){
     // console.log(rs);
 
     if(rs.status){
@@ -54,7 +115,11 @@ function getQCTableTitleList(showArea){
   });
 }
 
-function getQCTableTypeList(){
+function getQCTableTypeList(objectID,typeValID,isInsert){
+  if(typeof isInsert == "undefined"){
+    isInsert = false;
+  }
+
   $.getJSON(QCAPI + "GetCheckListType",function(rs){
     // console.log(rs);
 
@@ -67,33 +132,43 @@ function getQCTableTypeList(){
         var tabBtnItem = $.parseHTML("<a>");
         var tabContentItem = $.parseHTML("<div>");
 
-        $(tabContentItem).addClass("col-xs-12 col-md-12 tab-border item-display-n tableTypeTab-tab-content")
-        .prop("id","tableTab-"+content.Uid+"-content");
+        $(tabContentItem).addClass("col-xs-12 col-md-12 tab-border item-display-n "+objectID+"-tab-content")
+        .prop("id",objectID+"-"+content.Uid+"-content");
 
         $(tabBtnItem).prop("href","#")
-        .prop("id","tableTab-"+content.Uid)
+        .prop("id",objectID+"-"+content.Uid)
         .html(content.Name).click(function(){
-          $("#tableType").val(content.Uid);
-          getQCTableTitleList("tableTab-"+content.Uid+"-content");
+          $("#"+typeValID).val(content.Uid);
+           // console.log(isInsert);
+          if(isInsert){
+            // console.log("T");
+            var API = "GetEngSingleList";
+            if(content.Uid == 1){
+              API = "getMaterielList";
+            }
+            getQCTableTitleList(objectID+"-"+content.Uid+"-content", API);
+          }else{
+            getQCTotalTableList(objectID+"-"+content.Uid+"-content");
+          }
         });
 
         $(liItem).attr("role","presentation")
         .append(tabBtnItem)
-        .appendTo("#tableTypeTab");
+        .appendTo("#"+objectID);
 
-        $("#tableTypeTab").after(tabContentItem);
+        $("#"+objectID).after(tabContentItem);
         if(index == 0){
           $("#tableType").val(content.Uid);
         }
 
       });
       //tab事件
-      tabCtrl("tableTypeTab");
+      tabCtrl(objectID);
       // 第一個增加選取ＣＬＡＳＳ和點擊
-      $("#tableTypeTab").find("li").first().addClass("active")
+      $("#"+objectID).find("li").first().addClass("active")
       .find("a").click();
 
-      getQCTableTitleList();
+      // getQCTableTitleList();
 
     }
   });
@@ -218,7 +293,62 @@ function getQCTableTitleContent(){
   }
 }
 
-//新增與修改
+// 取得編輯內容
+// GET /api/CheckList/GetTemplate
+function getQCTableModifyContent(uid){
+  var selectTableObj = getUserInput("selectTableItem");
+  
+  if(uid != "null"){
+    $(".qc-table-content").show();
+    // 放入標題
+    // var tableTitle = $("#titleID :selected").text();
+
+    $("#table-totalContent").empty();
+    $.getJSON(QCAPI + "GetEmptyCheckList", {titleID:uid}, function(rs){
+      // console.log(rs);
+      // return;
+      if(rs.Status){
+
+        var tableDataObj = processTableData(rs.Data.MyContent);
+        $("#qc_table_title_modify").html(rs.Data.MyHead.Title.Name);
+
+        // 取得最外匡的樣式
+        getBorderStyle(function(pageBorder){
+          // 取得內匡的樣式
+          getListStyle(function(pageList){
+            //放入
+            $.each(tableDataObj, function(index,content){
+              var pageBorderObj = $.parseHTML(pageBorder);
+              // console.log(content);
+              // $(pageBorderObj).find(".item-title").val(content.name);
+              $(pageBorderObj).find(".aplyQCItemSelect").prop("checked",true);
+              QCItemCheckSelect($(pageBorderObj).find(".aplyQCItemSelect"));
+              $(pageBorderObj).find(".qcItemSelect").val(content.uid);
+
+              $.each(content.child,function(childIndex,childContent){
+                var pageListObj = $.parseHTML(pageList);
+                $(pageListObj).addClass("qcDetialItem");
+                $(pageListObj).find(".item-list-title").prop("id",childContent.DI_uid).val(childContent.DI_Name);
+                $(pageListObj).find(".standard-value").prop("id",childContent.SV_uid).val(childContent.SV_Name);
+                // standard-value
+                // console.log(childIndex,childContent)
+                $(pageListObj).appendTo( $(pageBorderObj).find(".item-list") );
+              });
+              $(pageBorderObj).appendTo("#table-totalContent");
+            });
+            // 放入結束
+          });
+          // 內匡樣式結束
+
+        });
+        // 外匡樣式結束
+
+      }
+    });
+  }
+}
+
+//新增
 function saveQCTable(){
   var selectTableObj = getUserInput("selectTableItem");
   // var tableType = $("#tableType").val();
@@ -295,6 +425,64 @@ function saveQCTable(){
   // console.log(sendObj);
 }
 
+
+//修改
+function saveModifyQCTable(){
+  var selectTableObj = getUserInput("selectTableItem");
+
+  var tableTitle,
+    TitleUid,
+    MyContent=[];
+  TitleUid = $("#titleID").val();
+  
+
+  $("#table-totalContent").find(".qcTableItem").each(function(){
+    var aplyQCItemChecked = $(this).find(".aplyQCItemSelect").prop("checked");
+    if(!aplyQCItemChecked){
+      var itemTitle = $(this).find(".item-title").val();
+    }else{
+      var itemTitle = $(this).find(".qcItemSelect :selected").text();
+      var itemtUid = $(this).find(".qcItemSelect").val();
+    }
+
+
+    $(this).find(".item-list li").each(function(){
+      var DITitle = $(this).find(".item-list-title").val();
+      var standardValue = $(this).find(".standard-value").val();
+      var tmpDIUid = $(this).find(".item-list-title").prop("id");
+      var tmpDIStdVal = $(this).find(".standard-value").prop("id");
+      var DIUid = (tmpDIUid == "" ) ? 0:tmpDIUid;
+      var DIStdVal = (tmpDIStdVal == "")? 0:tmpDIStdVal;
+      var tmpObj = {
+        "Item": {
+          "Uid": itemtUid,//大於0就不用帶ＮＡＭＥ
+          "Name": itemTitle
+        },
+        "DetialItem": {
+          "Uid": DIUid,
+          "Name": DITitle
+        },
+        "StdVal": {
+          "Uid": DIStdVal,
+          "Name": standardValue
+        }
+      };
+      MyContent.push(tmpObj);
+
+    });
+  });
+    // console.log(MyContent);
+
+  var sendObj = {
+      checkListID:TitleUid,
+      cnt:MyContent
+    };
+  // console.log(sendObj);
+
+    // return;
+  $.post(QCAPI + "UpdateEmptyCheckList",sendObj);
+  // console.log(sendObj);
+}
 
 // 套用項目範本
 function QCItemCheckSelect(object){
@@ -391,6 +579,9 @@ function openDialog(title, uid){
   //     console.log(event);
 
   // });
+  $("#myModal").remove();
+  var myModalDialog = $("<div>").prop("id","myModal");
+  myModalDialog.appendTo("body");
   
   $("#myModal").bsDialog({
     title: "新增自檢表 - "+title,
@@ -426,8 +617,73 @@ function openDialog(title, uid){
       },
       {
         text: "取消",
+        className: "btn-default-font-color",
         click: function(){
           $("#myModal").bsDialog("close");
+        }
+      },
+    ]
+  });
+}
+// 新增Dialog
+function openInsertDialog(){
+  $("#insertDialog").remove();
+  var insertDialog = $("<div>").prop("id","insertDialog");
+  insertDialog.appendTo("body");
+  
+  $("#insertDialog").bsDialog({
+    title: "新增自檢表",
+    start: function(){
+      var option = {styleKind:"qc_table",style:"table-insert"};
+      getStyle(option,function(insertPage){
+        var insertPageObj = $.parseHTML(insertPage);
+
+        $("#insertDialog").find(".modal-body").html(insertPageObj);
+        $("#insertDialog").bsDialog("show");
+        getQCTableTypeList("tableTypeTab","tableType",true);
+
+      });
+    },
+    showFooterBtn: false
+  });
+}
+
+// 修改Dialog
+function openModifyDialog(uid){
+  $("#modifyDialog").remove();
+  var modifyDialog = $("<div>").prop("id","modifyDialog");
+  modifyDialog.appendTo("body");
+  
+  $("#modifyDialog").bsDialog({
+    start: function(){
+      var option = {styleKind:"qc_table",style:"table_insert_style"};
+
+      getStyle(option,function(insertPage){
+        var insertPageObj = $.parseHTML(insertPage);
+        insertPageObj = $("<div>").html(insertPageObj);
+        $(insertPageObj).find(".insertItem").remove();
+        $(insertPageObj).find("#titleID").val(uid);
+        // console.log(insertPageObj);
+        $("#modifyDialog").find(".modal-body").html(insertPageObj);
+        $("#modifyDialog").bsDialog("show");
+        // getQCTableTypeList("tableTypeTab","tableType",true);
+        // console.log(uid);
+        getQCTableModifyContent(uid);
+      });
+    },
+    button:[
+      {
+        text:"儲存",
+        className: "btn-success",
+        click: function(){
+          saveModifyQCTable();
+        }
+      },
+      {
+        text: "取消",
+        className: "btn-default-font-color",
+        click: function(){
+          $("#modifyDialog").bsDialog("close");
         }
       },
     ]
