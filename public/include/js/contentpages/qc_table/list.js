@@ -425,6 +425,7 @@ function saveQCTable(){
     $.post(QCAPI + "SaveEmptyCheckList",sendObj,function(){
         $("#insertDialog").bsDialog("close");
         $("#myModal").bsDialog("close");
+        getQCTableTypeList("totalTableTypeTab","totalTableType");
     });
   }
   // console.log(sendObj);
@@ -485,7 +486,9 @@ function saveModifyQCTable(){
   // console.log(sendObj);
 
     // return;
-  $.post(QCAPI + "UpdateEmptyCheckList",sendObj);
+  $.post(QCAPI + "UpdateEmptyCheckList",sendObj,function(){
+    getQCTableTypeList("totalTableTypeTab","totalTableType");
+  });
   // console.log(sendObj);
 }
 
