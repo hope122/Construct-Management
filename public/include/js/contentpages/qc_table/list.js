@@ -51,11 +51,11 @@ function getQCTotalTableList(showArea){
                 });
                 // 修改按鈕
                 $(tableList).find(".fa-trash-o").click(function(){
-                  var data = $.param({checkListID: content.Uid});
-                  console.log(data);
+                  // var data = $.param({checkListID: content.Uid});
+                  // console.log(data);
                   $.ajax({
-                    url: QCAPI + "DeleteEmptyCheckList?"+data,
-                    // data: data,
+                    url: QCAPI + "DeleteEmptyCheckList",
+                    data: {checkListID: content.Uid},
                     type:"DELETE",
                     success: function(){
                       getQCTotalTableList(showArea);
