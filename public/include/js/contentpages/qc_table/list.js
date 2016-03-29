@@ -277,7 +277,9 @@ function getQCTableTitleContent(){
                 // console.log(childIndex,childContent)
                 $(pageListObj).appendTo( $(pageBorderObj).find(".item-list") );
               });
+              $(pageBorderObj).find(".qcTableItem").last().removeClass("list-items-bottom");
               $(pageBorderObj).appendTo("#table-totalContent");
+
             });
             // 放入結束
           });

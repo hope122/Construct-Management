@@ -345,3 +345,7 @@ a:hover{
     clear: both;
     height: 0;
 }
+
+.item-ol{
+	list-style-type:decimal !important;
+}
