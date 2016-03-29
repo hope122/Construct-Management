@@ -119,7 +119,7 @@ function getQCTableTypeList(objectID,typeValID,isInsert){
   if(typeof isInsert == "undefined"){
     isInsert = false;
   }
-
+  $("#"+objectID).empty();
   $.getJSON(QCAPI + "GetCheckListType",function(rs){
     // console.log(rs);
 
