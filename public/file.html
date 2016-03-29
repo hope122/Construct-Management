@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>List border</title>
+
+		<!-- Bootstrap CSS -->
+		<link href="include/css/bootstrap.min.css" rel="stylesheet">
+		<link href="include/css/font-awesome.min.css" rel="stylesheet">
+		<link href="include/css/ctrl-style.css" rel="stylesheet">
+
+		<!-- jQuery -->
+		<script src="include/js/jquery/jquery.min.js"></script>
+		<!-- Bootstrap JavaScript -->
+		<script src="include/js/bootstrap/bootstrap.min.js"></script>
+		<script src="include/js/main/getStyle.js"></script>
+		<script src="include/js/main/bsDialog.js"></script>
+		<script src="include/js/jquery/jquery.form.min.js"></script>
+
+		<script>
+
+// (function() {
+    
+// var bar = $('.bar');
+// var percent = $('.percent');
+// var status = $('#status');
+   
+// $('form').ajaxForm({
+//     beforeSend: function() {
+//         status.empty();
+//         var percentVal = '0%';
+//         bar.width(percentVal)
+//         percent.html(percentVal);
+//     },
+//     uploadProgress: function(event, position, total, percentComplete) {
+//         var percentVal = percentComplete + '%';
+//         bar.width(percentVal)
+//         percent.html(percentVal);
+//     },
+//     success: function() {
+//         var percentVal = '100%';
+//         bar.width(percentVal)
+//         percent.html(percentVal);
+//     },
+// 	complete: function(xhr) {
+// 		status.html(xhr.responseText);
+// 	}
+// }); 
+
+// })();       
+			$(function(){
+				$("#testBs").bsDialog({autoShow:true,showFooterBtn:false});
+			});
+
+			function openDialog(){
+				$("#testBs").bsDialog("show");
+			}
+			function send(){
+				options = {
+					// beforeSubmit:  showRequest,
+					// uploadProgress: function(event, position, total, percentComplete) {
+					// 	console.log(event, position, total, percentComplete);
+				 //        // var percentVal = percentComplete + '%';
+				 //        // // bar.width(percentVal)
+				 //        // percent.html(percentVal);
+				 //    },
+					success:       showResponse
+				};
+				$("#fileForm").ajaxSubmit(options); 
+			}
+			 
+			// post-submit callback 
+			function showResponse(responseText, statusText, xhr, $form)  { 
+			    // for normal html responses, the first argument to the success callback 
+			    // is the XMLHttpRequest object's responseText property 
+			 
+			    // if the ajaxSubmit method was passed an Options Object with the dataType 
+			    // property set to 'xml' then the first argument to the success callback 
+			    // is the XMLHttpRequest object's responseXML property 
+			 
+			    // if the ajaxSubmit method was passed an Options Object with the dataType 
+			    // property set to 'json' then the first argument to the success callback 
+			    // is the json data object returned by the server 
+			 
+			    console.log('status: ' + statusText + '\n\nresponseText: \n' + responseText + 
+			        '\n\nThe output div should have already been updated with the responseText.'); 
+			} 
+		</script>
+	</head>
+	<body>
+
+		<div class="container">
+			<div class="row">
+				<!-- 內容 -->
+				<div class="col-xs-12 col-md-12" id="grid">
+				</div>
+			</div> 
+		</div>
+		<button type="button" class="btn btn-info btn-lg" onclick="openDialog();">Open Modal</button>
+		<div id="testBs">
+			<form id="fileForm" action="http://127.0.0.1:200/upload.php" method="POST" >
+				<input type="file" name="RS_file">
+			</form>
+			<button onclick="send()">send</button>
+		</div>
+	</body>
+</html>

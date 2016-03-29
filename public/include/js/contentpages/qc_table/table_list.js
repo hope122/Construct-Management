@@ -5,7 +5,7 @@ $(function(){
 var QCAPI = configObject.WebAPI + "/QC/waCheckList/api/CheckList/";
 var qcTableListAPI = configObject.WebAPI + "/waDataBase/api/Eng/";
 
-// 取得標題相關
+// 取得範本相關
 function getQCTemplate(){
   $("#table-template").empty();
   selectOptionPut("table-template","null","請選擇自檢表");

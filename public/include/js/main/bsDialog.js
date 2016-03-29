@@ -29,12 +29,25 @@
 
     	// footer Button
     	if(option.showFooterBtn){
-    		$("<div>").addClass("modal-footer").appendTo(bsModalContent);
+    		var buttonArea = $("<div>").addClass("modal-footer");
+                // console.log(typeof option.button, option.button);
+
+            $.each(option.button,function(index,content){
+                $("<button>").addClass("btn btn-default "+content.className).text(content.text).click(function(){
+                    content["click"]();
+                }).appendTo(buttonArea);
+                    
+            });
+            buttonArea.appendTo(bsModalContent);
     	}
+
+        option["start"]();
 
     	// auto show
     	if(option.autoShow){
-    		this.modal("show");
+    		this.modal({
+                backdrop: 'static',
+            });
     	}
     }
 
@@ -45,6 +58,7 @@
 			showFooterBtn: true,
 			autoShow: false,
 			button: {},
+            start: function(){}
 		};
     	if(option != undefined){
     		$.each(tmpOption,function(index,value){
@@ -59,7 +73,9 @@
     function openDialog(status,thisObj){
     	switch(status){
     		case "show":
-    			thisObj.modal("show");
+    			thisObj.modal({
+                    backdrop: 'static',
+                });
     		break;
     		case "close":
     			thisObj.modal("hide");
