@@ -420,7 +420,9 @@ function saveQCTable(){
       MyContent:MyContent
     };
   if(selectTableObj.tableType != "null"){
-    $.post(QCAPI + "SaveEmptyCheckList",sendObj);
+    $.post(QCAPI + "SaveEmptyCheckList",sendObj,function(){
+        $("#insertDialog").bsDialog("close");
+    });
   }
   // console.log(sendObj);
 }
