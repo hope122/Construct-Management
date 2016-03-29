@@ -277,7 +277,7 @@ function getQCTableTitleContent(){
                 // console.log(childIndex,childContent)
                 $(pageListObj).appendTo( $(pageBorderObj).find(".item-list") );
               });
-              $(pageBorderObj).find(".qcTableItem").last().removeClass("list-items-bottom");
+              $(pageBorderObj).find(".list-items-bottom").last().removeClass("list-items-bottom");
               $(pageBorderObj).appendTo("#table-totalContent");
 
             });
@@ -494,10 +494,12 @@ function QCItemCheckSelect(object){
   var checked = object.prop("checked");
 
   object = object.parent().parent().parent().parent();
+  // console.log(object);
   if(checked){
     object.find(".item-title").hide();
     object.find(".qcItemSelect").show();
   }else{
+    // console.log(checked);
     object.find(".item-title").show();
     object.find(".qcItemSelect").hide();
     object.find(".qcItemSelect").val("null");
@@ -511,12 +513,13 @@ function QCItemSelect(object){
   object = object.parent().parent();
   object.find(".item-list").find(".qcDetialItem").remove();
   if(itemID != "null"){
-    putQCItemSelect( object.parent(), itemID );
+    putQCItemSelect( object, itemID );
   }
 }
 
 //放入套用項目範本
 function putQCItemSelect(object,itemID){
+  console.log(object);
   $.getJSON(QCAPI + "GetDetialItem",{itemID:itemID}).done(function(DIItem){
     // console.log(DIItem);
     // 取得內匡的樣式
@@ -525,6 +528,7 @@ function putQCItemSelect(object,itemID){
         $.each(DIItem.Data,function(childIndex,childContent){
           // console.log(childContent);
           var pageListObj = $.parseHTML(pageList);
+          $(pageListObj).addClass("qcDetialItem");
           $(pageListObj).find(".item-list-title").prop("id",childContent.DetialItem.Uid).val(childContent.DetialItem.Name).prop("readonly",true);
           // $(pageListObj).find(".standard-value").prop("id",childContent.SV_uid).val(childContent.SV_Name);
           $(pageListObj).find(".standard-value").prop("id",childContent.StdVal.Uid).val(childContent.StdVal.Name).prop("readonly",true);
