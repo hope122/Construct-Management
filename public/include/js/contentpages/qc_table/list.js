@@ -538,7 +538,8 @@ function putQCItemSelect(object,itemID){
           $(pageListObj).addClass("qcDetialItem");
           $(pageListObj).find(".item-list-title").prop("id",childContent.DetialItem.Uid).val(childContent.DetialItem.Name).prop("readonly",true);
           // $(pageListObj).find(".standard-value").prop("id",childContent.SV_uid).val(childContent.SV_Name);
-          $(pageListObj).find(".standard-value").prop("id",childContent.StdVal.Uid).val(childContent.StdVal.Name).prop("readonly",true);
+          // $(pageListObj).find(".standard-value").prop("id",childContent.StdVal.Uid).val(childContent.StdVal.Name).prop("readonly",true);
+          $(pageListObj).find(".standard-value").prop("id",childContent.StdVal.Uid);
           // standard-value
           // console.log(childIndex,childContent)
           $(pageListObj).appendTo( object.find(".item-list") );
