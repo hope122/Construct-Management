@@ -221,6 +221,9 @@ function addContent(){
   getBorderStyle(function(pageBorder){
     var pageBorderObj = $.parseHTML(pageBorder);
     $(pageBorderObj).appendTo("#table-totalContent");
+    var pOffset = $(pageBorderObj).offset();
+    $("#modifyDialog").scrollTop(pOffset.top);
+    $("#myModal").scrollTop(pOffset.top);
   });
   // 外匡樣式結束
 }
@@ -234,7 +237,7 @@ function addListContent(object){
       var pOffset = $(pageListObj).offset();
       $("#modifyDialog").scrollTop(pOffset.top);
       $("#myModal").scrollTop(pOffset.top);
-      // console.log($(pageListObj),$(pageListObj).offset());
+      console.log($(pageListObj),$(pageListObj).offset());
     });
   // console.log(object);
 }
