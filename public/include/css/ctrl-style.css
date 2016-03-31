@@ -353,3 +353,7 @@ a:hover{
 .none-border{
 	border: none !important;
 }
+
+.font-lineHeight{
+	line-height: 2.5;
+}
