@@ -17,17 +17,27 @@
         title: "&nbsp;",
         showFooterBtn: true,
         autoShow: true,
+        width: null,
+        height: null,
+        modalClass: null,
         button: [],
         start: function(){}
     };
 
     function BsDialog($selector, option, action){
         var self = this;
-
         this.bsDialogShow = function(){
             $selector.modal({
                 backdrop: 'static',
+            }).on("shown.bs.modal",function(event){
+                // console.log(event);
+                var lastBackdrop = $("body").find(".modal-backdrop").last();
+                var last2ItemBackdrop = $("body").find(".modal-backdrop").eq(-2);
+                var last2ItemBackdropZindex = parseInt(last2ItemBackdrop.css("z-index"));
+                $selector.css("z-index",last2ItemBackdropZindex+12)
+                lastBackdrop.css("z-index",last2ItemBackdropZindex + 10);
             });
+
         };
 
         this.bsDialogClose = function(){
@@ -42,7 +52,20 @@
             $selector.addClass("modal fade");
             var originContent = $selector.html();
             $selector.empty();
-            var bsModal = $("<div>").addClass("modal-dialog").appendTo($selector);
+            var bsModal = $("<div>").addClass("modal-dialog");
+            if(option.width != null){
+                bsModal.css("width", option.width);
+            }
+
+            if(option.height != null){
+                bsModal.css("height", option.height);
+            }
+
+            if(option.modalClass != null){
+                bsModal.addClass(option.modalClass);
+            }
+
+            bsModal.appendTo($selector);
             var bsModalContent = $("<div>").addClass("modal-content").appendTo(bsModal);
             var bsModalHeader = $("<div>").addClass("modal-header");
             // title Button

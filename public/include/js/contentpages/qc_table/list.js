@@ -42,7 +42,7 @@ function getQCTotalTableList(showArea){
             $.each(rs.Data,function(index,content){
                 var tableList = $.parseHTML(tableListStyle);
                 $(tableList).addClass("listContent");
-                $(tableList).find(".name").html(content.Name);
+                $(tableList).find(".list-items").eq(0).html(content.Name);
                 // 編輯按鈕
                 $(tableList).find(".fa-pencil-square-o").click(function(){
                     // console.log(content.uid);
