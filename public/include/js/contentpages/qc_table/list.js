@@ -231,6 +231,10 @@ function addListContent(object){
     getListStyle(function(pageList){
       var pageListObj = $.parseHTML(pageList);
       $(pageListObj).appendTo(object);
+      var pOffset = $(pageListObj).offset();
+      $("#modifyDialog").scrollTop(pOffset.top);
+      $("#myModal").scrollTop(pOffset.top);
+      // console.log($(pageListObj),$(pageListObj).offset());
     });
   // console.log(object);
 }
