@@ -357,3 +357,18 @@ a:hover{
 .font-lineHeight{
 	line-height: 2.5;
 }
+.bsDialogWindow {
+	width: 65%;
+}
+
+@media (max-width: 998px) {
+  .bsDialogWindow {
+    width: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .bsDialogWindow {
+    width: auto;
+  }
+}

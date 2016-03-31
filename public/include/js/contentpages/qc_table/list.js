@@ -1,12 +1,7 @@
-// $(function(){
-//   getQCTableTypeList();
-//   // getQCTableTitleList();
-// });
-
 // 取得範本相關
 function getQCTemplate(){
   $("#table-template").empty();
-  selectOptionPut("table-template","null","請選擇自檢表");
+  selectOptionPut("table-template","null","請選擇範本");
   var typeId = $("#tableType").val();
   // console.log(typeId);
   $.getJSON(QCAPI + "GetTempTitle",{typeId:typeId},function(rs){
@@ -132,8 +127,12 @@ function getQCTableTypeList(objectID,typeValID,isInsert){
         var tabBtnItem = $.parseHTML("<a>");
         var tabContentItem = $.parseHTML("<div>");
 
-        $(tabContentItem).addClass("col-xs-12 col-md-12 tab-border item-display-n "+objectID+"-tab-content")
+        $(tabContentItem).addClass("col-xs-12 col-md-12 item-display-n "+objectID+"-tab-content")
         .prop("id",objectID+"-"+content.Uid+"-content");
+
+        if(!isInsert){
+           $(tabContentItem).addClass("tab-border");
+        }
 
         $(tabBtnItem).prop("href","#")
         .prop("id",objectID+"-"+content.Uid)
@@ -182,9 +181,10 @@ function getTableListStyle(callback){
   });
 }
 
-// 頁面樣式
-function getBorderStyle(callback){
-  $.get("pages/style/qc_table/item_borderContent_style.html").done(function(data){
+// 取得最外匡的樣式
+function thisBorderStyle(callback){
+  var option = {styleKind:"qc_table",style:"item_borderContent_style"};
+  getStyle(option, function(data){
     // manipulation to get required data
     // var d = data;
     var tmpData = $.parseHTML(data);
@@ -197,7 +197,6 @@ function getBorderStyle(callback){
       // console.log(data);
       callback(data);
     });
-
   });
 }
 
@@ -218,9 +217,13 @@ function qcItemSelectContent(callback){
 
 function addContent(){
   // 取得最外匡的樣式
-  getBorderStyle(function(pageBorder){
+  thisBorderStyle(function(pageBorder){
+    $(".startEmptyData").remove();
     var pageBorderObj = $.parseHTML(pageBorder);
     $(pageBorderObj).appendTo("#table-totalContent");
+
+    $("#table-totalContent").find(".qcTableItem").removeClass("list-items-bottom").addClass("list-items-bottom").last().removeClass("list-items-bottom");
+
     var pOffset = $(pageBorderObj).offset();
     $("#modifyDialog").scrollTop(pOffset.top);
     $("#myModal").scrollTop(pOffset.top);
@@ -229,7 +232,10 @@ function addContent(){
 }
 
 function addListContent(object){
-  var object = object.parent().parent().find(".item-list");
+  // console.log(object.parents(".contents"));
+
+  var object = object.parents(".qcTableItem").find(".item-list");
+  // console.log(object);
   // 取得內匡的樣式
     getListStyle(function(pageList){
       var pageListObj = $.parseHTML(pageList);
@@ -237,13 +243,17 @@ function addListContent(object){
       var pOffset = $(pageListObj).offset();
       $("#modifyDialog").scrollTop(pOffset.top);
       $("#myModal").scrollTop(pOffset.top);
-      console.log($(pageListObj),$(pageListObj).offset());
+      // console.log($(pageListObj),$(pageListObj).offset());
     });
   // console.log(object);
 }
 
+function removeTotalItem(object){
+  object.parents(".qcTableItem").remove();
+}
+
 function removeItem(object){
-  object.parent().parent().remove();
+  object.parent().parent().parent().remove();
 }
 
 //套用範本
@@ -263,7 +273,7 @@ function getQCTableTitleContent(){
 
         var tableDataObj = processTableData(rs.Data);
         // 取得最外匡的樣式
-        getBorderStyle(function(pageBorder){
+        thisBorderStyle(function(pageBorder){
           // 取得內匡的樣式
           getListStyle(function(pageList){
             //放入
@@ -284,10 +294,11 @@ function getQCTableTitleContent(){
                 // console.log(childIndex,childContent)
                 $(pageListObj).appendTo( $(pageBorderObj).find(".item-list") );
               });
-              $(pageBorderObj).find(".list-items-bottom").last().removeClass("list-items-bottom");
+              
               $(pageBorderObj).appendTo("#table-totalContent");
 
             });
+            $("#table-totalContent").find(".qcTableItem").last().removeClass("list-items-bottom");
             // 放入結束
           });
           // 內匡樣式結束
@@ -300,203 +311,6 @@ function getQCTableTitleContent(){
 
     
   }
-}
-
-// 取得編輯內容
-// GET /api/CheckList/GetTemplate
-function getQCTableModifyContent(uid){
-  var selectTableObj = getUserInput("selectTableItem");
-  
-  if(uid != "null"){
-    $("#modifyDialog").find(".qc-table-content").show();
-    // 放入標題
-    // var tableTitle = $("#titleID :selected").text();
-
-    $("#modifyDialog").find("#table-totalContent").empty();
-    $.getJSON(QCAPI + "GetEmptyCheckList", {titleID:uid}, function(rs){
-      // console.log(rs);
-      // return;
-      if(rs.Status){
-
-        var tableDataObj = processTableData(rs.Data.MyContent);
-        $("#modifyDialog").find("#qc_table_title_modify").html(rs.Data.MyHead.Title.Name);
-
-        // 取得最外匡的樣式
-        getBorderStyle(function(pageBorder){
-          // 取得內匡的樣式
-          getListStyle(function(pageList){
-            //放入
-            $.each(tableDataObj, function(index,content){
-              var pageBorderObj = $.parseHTML(pageBorder);
-              // console.log(content);
-              // $(pageBorderObj).find(".item-title").val(content.name);
-              $(pageBorderObj).find(".aplyQCItemSelect").prop("checked",true);
-              QCItemCheckSelect($(pageBorderObj).find(".aplyQCItemSelect"));
-              $(pageBorderObj).find(".qcItemSelect").val(content.uid);
-
-              $.each(content.child,function(childIndex,childContent){
-                var pageListObj = $.parseHTML(pageList);
-                $(pageListObj).addClass("qcDetialItem");
-                $(pageListObj).find(".item-list-title").prop("id",childContent.DI_uid).val(childContent.DI_Name);
-                $(pageListObj).find(".standard-value").prop("id",childContent.SV_uid).val(childContent.SV_Name);
-                // standard-value
-                // console.log(childIndex,childContent)
-                $(pageListObj).appendTo( $(pageBorderObj).find(".item-list") );
-              });
-              $(pageBorderObj).appendTo($("#modifyDialog").find("#table-totalContent"));
-            });
-            // 放入結束
-          });
-          // 內匡樣式結束
-
-        });
-        // 外匡樣式結束
-
-      }
-    });
-  }
-}
-
-//新增
-function saveQCTable(){
-  var selectTableObj = getUserInput("selectTableItem");
-  // var tableType = $("#tableType").val();
-  var tableTitle,
-    TitleUid,
-    MyContent=[];
-  var titleID = $("#titleID").val();
-  // 放入標題
-  var tableTitle = $("#tableTitleName").val();
-  var templateUse = $("#templateUse").prop("checked");
-  // 使用範本
-  if(templateUse){
-    tableTitle = tableTitle;
-    TitleUid = titleID;
-  }else{ // 不使用範本
-    tableTitle = $("#qc_table_title").val();
-    TitleUid = 0;
-  }
-
-  $("#table-totalContent").find(".qcTableItem").each(function(){
-    var aplyQCItemChecked = $(this).find(".aplyQCItemSelect").prop("checked");
-    if(!aplyQCItemChecked){
-      var itemTitle = $(this).find(".item-title").val();
-    }else{
-      var itemTitle = $(this).find(".qcItemSelect :selected").text();
-      var itemtUid = $(this).find(".qcItemSelect").val();
-    }
-
-
-    $(this).find(".item-list li").each(function(){
-      var DITitle = $(this).find(".item-list-title").val();
-      var standardValue = $(this).find(".standard-value").val();
-      var tmpDIUid = $(this).find(".item-list-title").prop("id");
-      var tmpDIStdVal = $(this).find(".standard-value").prop("id");
-      var DIUid = (tmpDIUid == "" ) ? 0:tmpDIUid;
-      var DIStdVal = (tmpDIStdVal == "")? 0:tmpDIStdVal;
-      var tmpObj = {
-        "Item": {
-          "Uid": itemtUid,//大於0就不用帶ＮＡＭＥ
-          "Name": itemTitle
-        },
-        "DetialItem": {
-          "Uid": DIUid,
-          "Name": DITitle
-        },
-        "StdVal": {
-          "Uid": DIStdVal,
-          "Name": standardValue
-        }
-      };
-      MyContent.push(tmpObj);
-
-    });
-  });
-    // console.log(MyContent);
-  var sendObj = {
-      MyHead:{
-        Project:{
-          Uid: 1
-        },
-        Title:{
-          Uid:TitleUid, 
-          Name:tableTitle
-        },
-        Type:{
-          Uid: selectTableObj.tableType
-        }
-      },
-      MyContent:MyContent
-    };
-  if(selectTableObj.tableType != "null"){
-    $.post(QCAPI + "SaveEmptyCheckList",sendObj,function(){
-        $("#insertDialog").bsDialog("close");
-        $("#myModal").bsDialog("close");
-        getQCTableTypeList("totalTableTypeTab","totalTableType");
-    });
-  }
-  // console.log(sendObj);
-}
-
-
-//修改
-function saveModifyQCTable(){
-  var selectTableObj = getUserInput("selectTableItem");
-
-  var tableTitle,
-    TitleUid,
-    MyContent=[];
-  TitleUid = $("#titleID").val();
-  
-
-  $("#table-totalContent").find(".qcTableItem").each(function(){
-    var aplyQCItemChecked = $(this).find(".aplyQCItemSelect").prop("checked");
-    if(!aplyQCItemChecked){
-      var itemTitle = $(this).find(".item-title").val();
-    }else{
-      var itemTitle = $(this).find(".qcItemSelect :selected").text();
-      var itemtUid = $(this).find(".qcItemSelect").val();
-    }
-
-
-    $(this).find(".item-list li").each(function(){
-      var DITitle = $(this).find(".item-list-title").val();
-      var standardValue = $(this).find(".standard-value").val();
-      var tmpDIUid = $(this).find(".item-list-title").prop("id");
-      var tmpDIStdVal = $(this).find(".standard-value").prop("id");
-      var DIUid = (tmpDIUid == "" ) ? 0:tmpDIUid;
-      var DIStdVal = (tmpDIStdVal == "")? 0:tmpDIStdVal;
-      var tmpObj = {
-        "Item": {
-          "Uid": itemtUid,//大於0就不用帶ＮＡＭＥ
-          "Name": itemTitle
-        },
-        "DetialItem": {
-          "Uid": DIUid,
-          "Name": DITitle
-        },
-        "StdVal": {
-          "Uid": DIStdVal,
-          "Name": standardValue
-        }
-      };
-      MyContent.push(tmpObj);
-
-    });
-  });
-    // console.log(MyContent);
-
-  var sendObj = {
-      checkListID:TitleUid,
-      cnt:MyContent
-    };
-  // console.log(sendObj);
-
-    // return;
-  $.post(QCAPI + "UpdateEmptyCheckList",sendObj,function(){
-    getQCTableTypeList("totalTableTypeTab","totalTableType");
-  });
-  // console.log(sendObj);
 }
 
 // 套用項目範本
@@ -520,7 +334,7 @@ function QCItemCheckSelect(object){
 
 function QCItemSelect(object){
   var itemID = object.val();
-  object = object.parent().parent();
+  object = object.parents(".qcTableItem");
   object.find(".item-list").find(".qcDetialItem").remove();
   if(itemID != "null"){
     putQCItemSelect( object, itemID );
@@ -529,10 +343,9 @@ function QCItemSelect(object){
 
 //放入套用項目範本
 function putQCItemSelect(object,itemID){
-  console.log(object);
   $.getJSON(QCAPI + "GetDetialItem",{itemID:itemID}).done(function(DIItem){
-    // console.log(DIItem);
-    // 取得內匡的樣式
+    console.log(DIItem);
+    // // 取得內匡的樣式
     getListStyle(function(pageList){
 
         $.each(DIItem.Data,function(childIndex,childContent){
@@ -549,6 +362,8 @@ function putQCItemSelect(object,itemID){
         });
       // 放入結束
     });
+
+
   });
 }
 
@@ -577,135 +392,33 @@ function processTableData(data){
   // console.log(obj);
 }
 
-// 頁面新增樣式
-function getTableInsertStyle(callback){
-  // console.log(tableDataObj);
-  $.get("pages/style/qc_table/table_insert_style.html").done(function(insertPage){
-    callback(insertPage);
-  });
-}
-
-function openDialog(title, uid){
-  // $("#myModal").on('show.bs.modal', function(event){
-  //     console.log(event);
-  //       // var button = $(event.relatedTarget);  // Button that triggered the modal
-  //       // var titleData = button.data('title'); // Extract value from data-* attributes
-  //       // $(this).find('.modal-title').text(titleData + ' Form');
-  //       var thisObj = $(this).find(".modal-body");
-  //       getTableInsertStyle(function(insertPage){
-  //         thisObj.html(insertPage);
-  //       });
-  // }).on('hidden.bs.modal',function(event){
-  //     console.log(event);
-
-  // });
-  $("#myModal").remove();
-  var myModalDialog = $("<div>").prop("id","myModal");
-  myModalDialog.appendTo("body");
-  
-  $("#myModal").bsDialog({
-    title: "新增自檢表 - "+title,
-    start: function(){
-      getTableInsertStyle(function(insertPage){
-        var insertPageObj = $.parseHTML(insertPage);
-        // $("#myModal").find(".modal-body").empty();
-
-        $(insertPageObj).find("#titleID").val(uid);
-        $(insertPageObj).find("#tableTitleName").val(title);
-        $(insertPageObj).find(".templateUse").change(function(){
-          // console.log($(this).prop("checked"));
-          if($(this).prop("checked")){
-            getQCTableTitleContent();
-          }else{
-            $("#table-totalContent").empty();
-            $("#qc_table_title").prop("readonly",false).val("");
+// 項目-縮合功能
+function hideContents(object){
+  var iconObj = object;
+  object = object.parents(".qcTableItem");
+  var option = {
+    effect: "blind",
+    duration: 500,
+    complete: function(){
+      var status = $(this).css("display");
+      var aplyQCItemSelect = object.find(".aplyQCItemSelect").prop("checked");
+      if(status == "none"){
+        iconObj.removeClass("fa-sort-up").addClass("fa-sort-down");
+        var putText = "尚未輸入項目標題";
+        if(aplyQCItemSelect){
+          putText = object.find(".qcItemSelect option:selected").text();
+        }else{
+          var tmpPutText = object.find(".item-title").val();
+          if(tmpPutText){
+            putText = tmpPutText;
           }
-        });
-        $(insertPageObj).appendTo( $("#myModal").find(".modal-body") );
-
-        getQCTemplate();
-        $("#myModal").bsDialog("show");
-      });
-    },
-    button:[
-      {
-        text: "新增",
-        className: "btn-success",
-        click: function(){
-          saveQCTable();
         }
-      },
-      {
-        text: "取消",
-        className: "btn-default-font-color",
-        click: function(){
-          $("#myModal").bsDialog("close");
-        }
-      },
-    ]
-  });
-}
-// 新增Dialog
-function openInsertDialog(){
-  $("#insertDialog").remove();
-  var insertDialog = $("<div>").prop("id","insertDialog");
-  insertDialog.appendTo("body");
-  
-  $("#insertDialog").bsDialog({
-    title: "新增自檢表",
-    start: function(){
-      var option = {styleKind:"qc_table",style:"table-insert"};
-      getStyle(option,function(insertPage){
-        var insertPageObj = $.parseHTML(insertPage);
-
-        $("#insertDialog").find(".modal-body").html(insertPageObj);
-        $("#insertDialog").bsDialog("show");
-        getQCTableTypeList("tableTypeTab","tableType",true);
-
-      });
-    },
-    showFooterBtn: false
-  });
-}
-
-// 修改Dialog
-function openModifyDialog(uid){
-  $("#modifyDialog").remove();
-  var modifyDialog = $("<div>").prop("id","modifyDialog");
-  modifyDialog.appendTo("body");
-  
-  $("#modifyDialog").bsDialog({
-    start: function(){
-      var option = {styleKind:"qc_table",style:"table_insert_style"};
-
-      getStyle(option,function(insertPage){
-        var insertPageObj = $.parseHTML(insertPage);
-        insertPageObj = $("<div>").html(insertPageObj);
-        $(insertPageObj).find(".insertItem").remove();
-        $(insertPageObj).find("#titleID").val(uid);
-        // console.log(insertPageObj);
-        $("#modifyDialog").find(".modal-body").html(insertPageObj);
-        $("#modifyDialog").bsDialog("show");
-        // getQCTableTypeList("tableTypeTab","tableType",true);
-        // console.log(uid);
-        getQCTableModifyContent(uid);
-      });
-    },
-    button:[
-      {
-        text:"儲存",
-        className: "btn-success",
-        click: function(){
-          saveModifyQCTable();
-        }
-      },
-      {
-        text: "取消",
-        className: "btn-default-font-color",
-        click: function(){
-          $("#modifyDialog").bsDialog("close");
-        }
-      },
-    ]
-  });
+        object.find(".titleShow").html(putText);
+      }else{
+        iconObj.removeClass("fa-sort-down").addClass("fa-sort-up");
+        object.find(".titleShow").empty();
+      }
+    }
+  }
+  object.find(".media").toggle( option );
 }
