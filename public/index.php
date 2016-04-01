@@ -3,6 +3,17 @@
  * This makes our life easier when dealing with paths. Everything is relative
  * to the application root now.
  */
+$REQUEST_URI = $_SERVER["REQUEST_URI"];
+
+if(strpos($REQUEST_URI,"deletemethod") >= 0){
+	header("Access-Control-Allow-Origin: *");
+}
+
+include('include/config.php');
+
+//Router
+include("../config/router.php");
+
 chdir(dirname(__DIR__));
 
 // Decline static file requests back to the PHP built-in webserver
@@ -15,13 +26,9 @@ if (php_sapi_name() === 'cli-server') {
 }
 // header("Access-Control-Allow-Origin: *");
 
-$REQUEST_URI = $_SERVER["REQUEST_URI"];
 
-if(strpos($REQUEST_URI,"deletemethod") >= 0){
-	header("Access-Control-Allow-Origin: *");
-}
 
-include('include/config.php');
+
 // Setup autoloading
 require 'init_autoloader.php';
 
