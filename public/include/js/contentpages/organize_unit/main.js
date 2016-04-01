@@ -5,10 +5,10 @@ $(function(){
 // 取得資料
 function getOUData(uid){
     if(uid == undefined){
-        uid = null;
+        uid = 0;
     }
     // ＡＰＩ呼叫
-    $.getJSON(ctrlAdminAPI + "GetData_AssTypeOffice", { iUid : uid } ).done(function(rs){
+    $.getJSON(ctrlAdminAPI + "GetData_AssTypeOffice", { iUid : 0 } ).done(function(rs){
         if(uid == null){
             // putDataToPage(rs);
         }else{
@@ -98,10 +98,10 @@ function saveData(){
     uid = (uid) ? parseInt(uid): 0;
 
     var sendData = {
-        stData:{
+        // stData:{
             uid: uid,
             name: name
-        }
+        // }
     },
     method = "Insert_AssTypeOffice";
     console.log(sendData);

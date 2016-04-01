@@ -28,44 +28,48 @@ function getQCTotalTableList(showArea){
     // console.log(rs);
 
     if(rs.Status){
-        var option = {
-          styleKind:"list",
-          style:"1grid-modify"
-        }
-        getStyle(option, function(tableListStyle){
+      var option = {
+        styleKind:"list",
+        style:"1grid-modify"
+      }
+      getStyle(option, function(tableListStyle){
 
-            $.each(rs.Data,function(index,content){
-                var tableList = $.parseHTML(tableListStyle);
-                $(tableList).addClass("listContent");
-                $(tableList).find(".list-items").eq(0).html(content.Name);
-                // 編輯按鈕
-                $(tableList).find(".fa-pencil-square-o").click(function(){
-                    // console.log(content.uid);
+          $.each(rs.Data,function(index,content){
+              var tableList = $.parseHTML(tableListStyle);
+              $(tableList).addClass("listContent");
+              $(tableList).find(".list-items").eq(0).html(content.Name);
+              // 編輯按鈕
+              $(tableList).find(".fa-pencil-square-o").click(function(){
+                  // console.log(content.uid);
 
-                  openModifyDialog(content.Uid);
+                openModifyDialog(content.Uid);
+              });
+              // 修改按鈕
+              $(tableList).find(".fa-trash-o").click(function(){
+                // var data = $.param({checkListID: content.Uid});
+                // console.log(data);
+                $.ajax({
+                  url: QCAPI + "DeleteEmptyCheckList",
+                  data: {checkListID: content.Uid},
+                  type:"DELETE",
+                  success: function(){
+                    getQCTotalTableList(showArea);
+                  }
                 });
-                // 修改按鈕
-                $(tableList).find(".fa-trash-o").click(function(){
-                  // var data = $.param({checkListID: content.Uid});
-                  // console.log(data);
-                  $.ajax({
-                    url: QCAPI + "DeleteEmptyCheckList",
-                    data: {checkListID: content.Uid},
-                    type:"DELETE",
-                    success: function(){
-                      getQCTotalTableList(showArea);
-                    }
-                  });
-                  
-                });
-                // selectOptionPut("titleID",content.Uid,content.Name);
-                $(tableList).appendTo("#"+showArea);
-            });
-            // console.log($("#"+showArea).find(".listContent").last());
-            $("#"+showArea).find(".listContent").last().removeClass("list-items-bottom");
+                
+              });
+              // selectOptionPut("titleID",content.Uid,content.Name);
+              $(tableList).appendTo("#"+showArea);
+          });
+          // console.log($("#"+showArea).find(".listContent").last());
+          $("#"+showArea).find(".listContent").last().removeClass("list-items-bottom");
 
-        });
-      
+      }); 
+    }else{
+      var option = {styleKind:"system", style: "data-empty"}
+      getStyle(option,function(emptyPage){
+        $("#"+showArea).html(emptyPage);
+      });
     }
 
   });
@@ -344,7 +348,7 @@ function QCItemSelect(object){
 //放入套用項目範本
 function putQCItemSelect(object,itemID){
   $.getJSON(QCAPI + "GetDetialItem",{itemID:itemID}).done(function(DIItem){
-    console.log(DIItem);
+    // console.log(DIItem);
     // // 取得內匡的樣式
     getListStyle(function(pageList){
 
@@ -352,10 +356,11 @@ function putQCItemSelect(object,itemID){
           // console.log(childContent);
           var pageListObj = $.parseHTML(pageList);
           $(pageListObj).addClass("qcDetialItem");
-          $(pageListObj).find(".item-list-title").prop("id",childContent.DetialItem.Uid).val(childContent.DetialItem.Name).prop("readonly",true);
+          // $(pageListObj).find(".item-list-title").prop("id",childContent.DetialItem.Uid).val(childContent.DetialItem.Name).prop("readonly",true);
+          $(pageListObj).find(".item-list-title").prop("id",childContent.Uid).val(childContent.Name).prop("readonly",true);
           // $(pageListObj).find(".standard-value").prop("id",childContent.SV_uid).val(childContent.SV_Name);
           // $(pageListObj).find(".standard-value").prop("id",childContent.StdVal.Uid).val(childContent.StdVal.Name).prop("readonly",true);
-          $(pageListObj).find(".standard-value").prop("id",childContent.StdVal.Uid);
+          // $(pageListObj).find(".standard-value").prop("id",childContent.StdVal.Uid);
           // standard-value
           // console.log(childIndex,childContent)
           $(pageListObj).appendTo( object.find(".item-list") );
