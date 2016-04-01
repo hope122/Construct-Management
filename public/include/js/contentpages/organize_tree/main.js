@@ -13,33 +13,29 @@
 // ];
 var testData = [];
 $(function(){
-    if(testData.length > 0){
-        createTree();
-        $(".createBtn").remove();
+    getOrgData();
+    // if(testData.length > 0){
+    //     createTree();
+    //     $(".createBtn").remove();
         
-    }else{
-        addDialog("","root");
-    }
+    // }else{
+    //     addDialog("","root");
+    // }
 });
 
 function getOrgData(){
-	$.getJSON(ctrlAdminAPI + "GetData_AssOrg",{},function(rs){
-		
+	$.getJSON(ctrlAdminAPI + "GetData_AssOrg",function(rs){
+        //有資料
+        if(rs.Status){
+
+        }else{ //沒有資料
+            addDialog("",0);
+        }
+		console.log(rs);
 	});
 }
 
-// function putRootData(){
-//     var rootObj = {
-//         id: "root",
-//         name: $("#rootName").val(),
-//         parent: 0
-//     };
-//     addDialog("","root");
-//     // Insert_AssOrg
-//     testData.push(rootObj);
-//     createTree();
-//     // $(".createBtn").remove();
-// }
+// 創建組織樹狀圖
 function createTree(){
     orgTreeChart = $('#orgChart').orgChart({
         data: testData,
@@ -48,7 +44,8 @@ function createTree(){
         onAddNode: function(node){ 
             // log('Created new node on node '+node.data.id);
             // org_chart.newNode(node.data.id); 
-            addDialog(orgTreeChart,node.data.id);
+            var parentID = node.data.id;
+            addDialog(orgTreeChart, parentID);
         },
         onDeleteNode: function(node){
             log('Deleted node '+node.data.id);
@@ -61,7 +58,33 @@ function createTree(){
     });
 }
 
-function addDialog(orgTreeChart, nodeID){
+// 取得組織資料
+function getOUData(uid){
+    var sendData = {}
+    if(uid != undefined){
+        sendData = { iUid : uid };
+    }
+    // ＡＰＩ呼叫
+    $.getJSON(ctrlAdminAPI + "GetData_AssTypeOffice", sendData ).done(function(rs){
+        if(rs.Status){
+            if(uid == null){
+                putDataToPage(rs.Data);
+            }else{
+                // insertDialog(uid,name);
+            }
+        }else{
+            // 放入空的
+            putDataEmptyInfo($("#grid"));
+        }
+        // console.log(rs);
+    }).fail(function(){
+        // 放入空的
+        putDataEmptyInfo($("#grid"));
+    });
+}
+
+// 新增
+function addDialog(orgTreeChart, parentID){
     $("#addDialog").remove();
 
     var addDialog = $("<div>").prop("id","addDialog");
@@ -80,29 +103,37 @@ function addDialog(orgTreeChart, nodeID){
         headerCloseBtn: headerCloseBtn,
         title: "組織單位選單",
         start: function(){
+            // 取得組織資料
+            $.getJSON(ctrlAdminAPI + "GetData_AssTypeOffice").done(function(rs){
+                console.log(rs);
+                if(rs.Status){
+                    createOtgList(parentID, orgTreeChart,rs.Data,false);
+                }
+            });
+        },
+        showFooterBtn:false,
+    });
+}
 
-            var option = {styleKind:"list",style:"1grid-add"};
+function createOtgList(parentID, orgTreeChart,data,isEmpty){
+    if(isEmpty == undefined){
+        isEmpty = false;
+    }
 
-            getStyle(option,function(insertPage){
+    if(!isEmpty){
+        var option = {styleKind:"list",style:"1grid-add"};
+        // 取得選單樣式
+        getStyle(option,function(insertPage){
+
+            $.each(data, function(index, content){
+                // 轉物件
                 var insertPageObj = $.parseHTML(insertPage);
+                $(insertPageObj).find(".list-items").eq(0).html(content.name);
+                // 新增按鈕事件
                 $(insertPageObj).find(".fa-plus-square-o").click(function(){
-
-                    if(orgTreeChart != ""){
-                        // 新增
-                        orgTreeChart.newNode(nodeID,"test");
-                    }else{
-                        //root
-                        var rootObj = {
-                            id: "root",
-                            name: "root",
-                            parent: 0
-                        };
-                        testData.push(rootObj);
-                        createTree();
-                    }
-                    // 關閉
-                    $("#addDialog").bsDialog("close");
-                    // $("#addDialog").bsDialogClose();
+                    // 創建組織資料與節點
+                    creatOrgData(orgTreeChart, content, parentID);
+                   // console.log();
                 });
                 $(insertPageObj).appendTo( $("#addDialog").find(".modal-body").find(".contents") );
                 // 找最後一項去除底線
@@ -112,13 +143,48 @@ function addDialog(orgTreeChart, nodeID){
                 .removeClass("list-items-bottom");
 
                 // $("#addDialog").bsDialog("show");
-                
-
             });
-        },
-        showFooterBtn:false,
+
+        });
+    }else{
+        var option = {styleKind:"system",style:"data-empty"};
+        // 取得選單樣式
+        getStyle(option,function(emptyStyle){
+            $$("#addDialog").find(".modal-body").find(".contents").html(insertPageObj);
+        });
+    }
+}
+
+function creatOrgData(orgTreeChart,contentObj,parentID){
+    var sendObj = {
+      "officeid": contentObj.uid,
+      "faid": parentID,
+      "suid": 1
+    };
+    console.log(sendObj);
+    $.post(ctrlAdminAPI + "Insert_AssOrg",sendObj).done(function(rs){
+        console.log(rs);
+        if(rs.Status){
+            if(orgTreeChart != ""){
+                // 新增
+                // newNode : parentId,name,childID
+                orgTreeChart.newNode( parentID, contentObj.name, rs.Data );
+            }else{
+                // ROOT
+                var rootObj = {
+                    id: rs.Data,
+                    name: contentObj.name,
+                    parent: parentID
+                };
+                testData.push(rootObj);
+                createTree();
+                // 關閉
+                $("#addDialog").bsDialog("close");
+            }
+        }
     });
 }
+
 // just for example purpose
 function log(text){
     $('#consoleOutput').append('<p>'+text+'</p>')

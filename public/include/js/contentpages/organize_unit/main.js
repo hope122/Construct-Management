@@ -20,7 +20,7 @@ function getOUData(uid){
             // 放入空的
             putDataEmptyInfo($("#grid"));
         }
-        console.log(rs);
+        // console.log(rs);
     }).fail(function(){
         // 放入空的
         putDataEmptyInfo($("#grid"));
@@ -187,6 +187,7 @@ function deleteData(uid, removeItem){
             iUid: uid
         }
     };
+
     $.post(configObject.deleteAPI,sendData,function(rs){
         if($("#grid").find("div").length){
             var option = {styleKind:"system",style:"data-empty"};
@@ -197,4 +198,11 @@ function deleteData(uid, removeItem){
         removeItem.remove();
         // console.log(rs);
     });
+    // $.ajax({
+    //     url:ctrlAdminAPI+"Delete_AssTypeOffice?iUid="+uid,
+    //     type: "delete",
+    //     success:function(rs){
+    //         console.log(rs);
+    //     }
+    // });
 }

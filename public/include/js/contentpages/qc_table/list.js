@@ -44,19 +44,33 @@ function getQCTotalTableList(showArea){
 
                 openModifyDialog(content.Uid);
               });
-              // 修改按鈕
+              // 刪除按鈕
               $(tableList).find(".fa-trash-o").click(function(){
+
+                var tabAreaObj = $(this).parents(".listContent").parent();
+                $(this).parents(".listContent").remove();
+
+                if(!tabAreaObj.find("div").length){
+                  putDataEmptyInfo(tabAreaObj);
+                }
+
                 // var data = $.param({checkListID: content.Uid});
                 // console.log(data);
-                $.ajax({
-                  url: QCAPI + "DeleteEmptyCheckList",
-                  data: {checkListID: content.Uid},
-                  type:"DELETE",
-                  success: function(){
-                    getQCTotalTableList(showArea);
+                // $.ajax({
+                //   url: QCAPI + "DeleteEmptyCheckList",
+                //   data: {checkListID: content.Uid},
+                //   type:"DELETE",
+                //   success: function(){
+                //     getQCTotalTableList(showArea);
+                //   }
+                // });
+                var sendData = {
+                  apiMethod: QCDeleteAPI+"DeleteEmptyCheckList",
+                  deleteObj:{
+                    checkListID: content.Uid
                   }
-                });
-                
+                }
+                $.post(configObject.deleteAPI,sendData);
               });
               // selectOptionPut("titleID",content.Uid,content.Name);
               $(tableList).appendTo("#"+showArea);
@@ -426,4 +440,16 @@ function hideContents(object){
     }
   }
   object.find(".media").toggle( option );
+}
+
+function putDataEmptyInfo(putArea){
+    // 畫面設定值
+    var option = {styleKind:"system",style:"data-empty"};
+    // 取得畫面樣式
+    getStyle(option,function(pageStyle){
+        // 相關設定
+        putArea.append(pageStyle);
+
+        putArea.find(".list-items-bottom").last().removeClass("list-items-bottom");
+    });
 }

@@ -90,10 +90,14 @@
             })
         }
 
-        this.newNode = function(parentId,name){
-            var nextId = Object.keys(nodes).length;
-            while(nextId in nodes){
-                nextId++;
+        this.newNode = function(parentId,name,childID){
+            if(childID == undefined){
+                var nextId = Object.keys(nodes).length;
+                while(nextId in nodes){
+                    nextId++;
+                }
+            }else{
+                nextId = childID;
             }
             if(name == undefined){
                 name = '';
