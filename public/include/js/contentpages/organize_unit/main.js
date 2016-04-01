@@ -110,6 +110,9 @@ function insertDialog(uid, name, modifyItem){
             text: saveBtn,
             className: "btn-success",
             click: function(){
+                if(uid == undefined){
+                    $("#grid").find(".date-empty").remove();
+                }
                 saveData(modifyItem);
                 $("#insertDialog").bsDialog("close");
             }
@@ -156,10 +159,21 @@ function saveData(modifyItem){
                 var firstItem = $(pageStyleObj).find(".list-items").eq(0);
                 firstItem.html(name);
 
+                // 修改
                 $(pageStyleObj).find(".fa-pencil-square-o").click(function(){
                     insertDialog(rs.Data, name, firstItem);
                 });
-                $("#grid").find("div").eq(0).before(pageStyleObj);
+
+                // 刪除
+                $(pageStyleObj).find(".fa-trash-o").click(function(){
+                    deleteData(uid, $(this).parents(".list-items").parent());
+                });
+                if($("#grid").find("div").length){
+                    $("#grid").find("div").eq(0).before(pageStyleObj);
+                }else{
+                    $(pageStyleObj).removeClass("list-items-bottom").appendTo("#grid");
+
+                }
             });
         }
     });
@@ -167,24 +181,20 @@ function saveData(modifyItem){
 
 // 刪除
 function deleteData(uid, removeItem){
-    // $.ajax({
-    //     url: ctrlAdminAPI + "Delete_AssTypeOffice",
-    //     type: "DELETE",
-    //     data: {iUid: uid},
-    //     success: function(){
-    //         getOUData();
-    //     }
-    // });
-    console.log(uid);
     var sendData = {
-        apiMethod: ctrlAdminDelAPI + "Insert_AssTypeOffice",
+        apiMethod: ctrlAdminDelAPI + "Delete_AssTypeOffice",
         deleteObj:{
             iUid: uid
         }
     };
     $.post(configObject.deleteAPI,sendData,function(rs){
-        // getOUData();
+        if($("#grid").find("div").length){
+            var option = {styleKind:"system",style:"data-empty"};
+            getStyle(option,function(pageStyle){
+                $("#grid").html(pageStyle);
+            });
+        }
         removeItem.remove();
-        console.log(rs);
+        // console.log(rs);
     });
 }
