@@ -22,7 +22,7 @@ class DeletemethodController extends AbstractActionController
         $SysClass->initialization();
         try{
             if(!empty($_POST["apiMethod"]) && !empty($_POST["deleteObj"])){
-                $apiServer = __DIR__ . '/../../../../../public/include/apiServer.ini';
+                $apiServer = dirname(__DIR__) . '/../../../../public/include/apiServer.ini';
 
                 // 取得ＡＰＩ設定檔
                 $apiURLIni = $SysClass->GetINIInfo($apiServer,"",'server','',true,false);
@@ -30,9 +30,22 @@ class DeletemethodController extends AbstractActionController
                 
                 $sendDeleteObj = http_build_query($_POST["deleteObj"]);
                 $apiMethod = $_POST["apiMethod"];
-                // 刪除方法
+
+                // 判斷作業系統
+                $OSCommand = 'ver';
+                $OS = $this->cmdExecute($OSCommand);
+                // 刪除方法 組合指令
                 // EX: $apiURL 加上 'ASS/api/ctrlAdmin/Delete_AssTypeOffice?iUid=1'
-                $curlCMD = "curl '".$apiURL.$apiMethod."?".$sendDeleteObj."' -X DELETE --compressed";
+                // windows
+                if($OS){
+                    $curlPath = dirname(__DIR__).'\\..\\..\\..\\..\\public\\include\\windows_curl\\curl.exe';
+                    $curlCMD = $curlPath." '".$apiURL.$apiMethod."?".$sendDeleteObj."' -X DELETE --compressed";
+                }else{//other
+                    $curlCMD = "curl '".$apiURL.$apiMethod."?".$sendDeleteObj."' -X DELETE --compressed";
+                }
+
+                
+                
                 $pageContent = $SysClass->cmdExecute($curlCMD);
             }else{
                 $action = [];
