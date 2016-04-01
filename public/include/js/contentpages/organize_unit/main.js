@@ -4,27 +4,38 @@ $(function(){
 
 // 取得資料
 function getOUData(uid){
-    if(uid == undefined){
-        uid = 0;
+    var sendData = {}
+    if(uid != undefined){
+        sendData = { iUid : uid };
     }
     // ＡＰＩ呼叫
-    $.getJSON(ctrlAdminAPI + "GetData_AssTypeOffice", { iUid : 0 } ).done(function(rs){
-        if(uid == null){
-            // putDataToPage(rs);
+    $.getJSON(ctrlAdminAPI + "GetData_AssTypeOffice", sendData ).done(function(rs){
+        if(rs.Status){
+            if(uid == null){
+                putDataToPage(rs.Data);
+            }else{
+                // insertDialog(uid,name);
+            }
         }else{
-            // insertDialog(uid,name);
+            // 放入空的
+            putDataEmptyInfo($("#grid"));
         }
         console.log(rs);
     }).fail(function(){
-        // 畫面設定值
-        var option = {styleKind:"system",style:"data-empty"};
-        // 取得畫面樣式
-        getStyle(option,function(pageStyle){
-            // 相關設定
-            $("#grid").append(pageStyle);
+        // 放入空的
+        putDataEmptyInfo($("#grid"));
+    });
+}
 
-            $("#grid").find(".list-items-bottom").last().removeClass("list-items-bottom");
-        });
+function putDataEmptyInfo(putArea){
+    // 畫面設定值
+    var option = {styleKind:"system",style:"data-empty"};
+    // 取得畫面樣式
+    getStyle(option,function(pageStyle){
+        // 相關設定
+        putArea.append(pageStyle);
+
+        putArea.find(".list-items-bottom").last().removeClass("list-items-bottom");
     });
 }
 
@@ -34,6 +45,7 @@ function putDataToPage(data){
     var option = {styleKind:"list",style:"1grid-modify"};
     // 取得畫面樣式
     getStyle(option,function(pageStyle){
+        // $.each();
         // 相關設定
         $("#grid").append(pageStyle);
         $("#grid").append(pageStyle);

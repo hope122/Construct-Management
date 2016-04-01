@@ -252,6 +252,16 @@ return array(
 					),
 				),
 			),
+			'deletemethod'=> array(
+				'type'    => 'segment',
+				'options' => array(
+					'route'    => '/deletemethod',
+					'defaults' => array(
+						'controller' => 'Application\Controller\deletemethod',
+						'action'     => 'delete',
+					),
+				),
+			),
         ),
     ),
     'service_manager' => array(
@@ -280,6 +290,7 @@ return array(
             'Application\Controller\Dailyconstruction' => 'Application\Controller\DailyconstructionController',
             'Application\Controller\Supply' => 'Application\Controller\SupplyController',
             'Application\Controller\Oldhouse' => 'Application\Controller\OldhouseController',
+            'Application\Controller\Deletemethod' => 'Application\Controller\DeletemethodController',
 
         ),
     ),

@@ -63,13 +63,22 @@ function createTree(){
 
 function addDialog(orgTreeChart, nodeID){
     $("#addDialog").remove();
+
     var addDialog = $("<div>").prop("id","addDialog");
+
     $("<div>").addClass("contents").appendTo(addDialog);
     addDialog.appendTo("body");
 
+    var headerCloseBtn = true;
+
+    if(orgTreeChart == ""){
+        headerCloseBtn = false;
+    }
+
     $("#addDialog").bsDialog({
         autoShow:true,
-        title: "單位選單",
+        headerCloseBtn: headerCloseBtn,
+        title: "組織單位選單",
         start: function(){
 
             var option = {styleKind:"list",style:"1grid-add"};
@@ -77,6 +86,7 @@ function addDialog(orgTreeChart, nodeID){
             getStyle(option,function(insertPage){
                 var insertPageObj = $.parseHTML(insertPage);
                 $(insertPageObj).find(".fa-plus-square-o").click(function(){
+
                     if(orgTreeChart != ""){
                         // 新增
                         orgTreeChart.newNode(nodeID,"test");
