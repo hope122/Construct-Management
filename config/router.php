@@ -36,7 +36,7 @@
         // 顯示結果
         $viewContnet = $methodClass->viewContnet;
         foreach ($viewContnet as $key => $content) {
-            print_r($content);
+            echo $content;
         }
         exit();
     }
