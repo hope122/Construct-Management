@@ -39,10 +39,13 @@ class DeletemethodController extends AbstractActionController
                 // windows
                 if($OS){
                     $curlPath = dirname(__DIR__).'\\..\\..\\..\\..\\public\\include\\windows_curl\\curl.exe';
-                    $curlCMD = $curlPath." '".$apiURL.$apiMethod."?".$sendDeleteObj."' -X DELETE --compressed";
+                    $curlCMD = $curlPath;
+
                 }else{//other
-                    $curlCMD = "curl '".$apiURL.$apiMethod."?".$sendDeleteObj."' -X DELETE --compressed";
+                    $curlCMD = "curl";
                 }
+                
+                $curlCMD = $curlCMD.' "'.$apiURL.$apiMethod."?".$sendDeleteObj.'" -X DELETE --compressed';
                 // echo $curlCMD;
                 // echo $pageContent;
                 $pageContent = $SysClass->cmdExecute($curlCMD);
