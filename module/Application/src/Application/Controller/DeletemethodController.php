@@ -33,7 +33,7 @@ class DeletemethodController extends AbstractActionController
 
                 // 判斷作業系統
                 $OSCommand = 'ver';
-                $OS = $this->cmdExecute($OSCommand);
+                $OS = $SysClass->cmdExecute($OSCommand);
                 // 刪除方法 組合指令
                 // EX: $apiURL 加上 'ASS/api/ctrlAdmin/Delete_AssTypeOffice?iUid=1'
                 // windows
@@ -43,9 +43,8 @@ class DeletemethodController extends AbstractActionController
                 }else{//other
                     $curlCMD = "curl '".$apiURL.$apiMethod."?".$sendDeleteObj."' -X DELETE --compressed";
                 }
-
-                
-                
+                // echo $curlCMD;
+                // echo $pageContent;
                 $pageContent = $SysClass->cmdExecute($curlCMD);
             }else{
                 $action = [];
