@@ -13,6 +13,14 @@ if (php_sapi_name() === 'cli-server') {
     }
     unset($path);
 }
+// header("Access-Control-Allow-Origin: *");
+
+$REQUEST_URI = $_SERVER["REQUEST_URI"];
+
+if(strpos($REQUEST_URI,"deletemethod") >= 0){
+	header("Access-Control-Allow-Origin: *");
+}
+
 include('include/config.php');
 // Setup autoloading
 require 'init_autoloader.php';
