@@ -61,5 +61,6 @@ var configObject = {
     "getPurchaseImg": apurl+"/material/getpurchaseimg",
 
     //"chartsWS": location.origin+":8080"
-    "WebAPI": "http://211.21.170.18:8080"
+    "WebAPI": "http://211.21.170.18:8080",
+    "deleteAPI" : "http://211.21.170.18/deletemethod"
 };

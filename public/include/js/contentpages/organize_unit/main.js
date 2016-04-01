@@ -45,19 +45,41 @@ function putDataToPage(data){
     var option = {styleKind:"list",style:"1grid-modify"};
     // 取得畫面樣式
     getStyle(option,function(pageStyle){
-        // $.each();
-        // 相關設定
-        $("#grid").append(pageStyle);
-        $("#grid").append(pageStyle);
+        $.each(data,function(index,content){
+            var pageStyleObj = $.parseHTML(pageStyle);
+            var firstItem = $(pageStyleObj).find(".list-items").eq(0);
+            firstItem.html(content.name);
+            // 修改
+            $(pageStyleObj).find(".fa-pencil-square-o").click(function(){
+                insertDialog(content.uid, content.name, firstItem);
+            });
+
+            // 刪除
+            $(pageStyleObj).find(".fa-trash-o").click(function(){
+                deleteData(content.uid, $(this).parents(".list-items").parent());
+            });
+
+            $(pageStyleObj).appendTo($("#grid"));
+
+        });
 
         $("#grid").find(".list-items-bottom").last().removeClass("list-items-bottom");
     });
 }
 
-// 新增Dialog
-function insertDialog(uid,name){
+// 新增&修改Dialog
+function insertDialog(uid, name, modifyItem){
     if(name == undefined){
         name = "";
+    }
+    if(modifyItem == undefined){
+        modifyItem = null;
+    }
+    var saveBtn = "";
+    if(uid != undefined){
+        saveBtn = "修改";
+    }else{
+        saveBtn = "新增";
     }
     $("#insertDialog").remove();
     var insertDialog = $("<div>").prop("id","insertDialog");
@@ -73,7 +95,7 @@ function insertDialog(uid,name){
         $(insertPageObj).find(".control-label").text("單位名稱");
         $(insertPageObj).find("input:text").val(name);
         
-        if(uid == undefined){
+        if(uid != undefined){
             $("<input>").attr("type","hidden").prop("id","uid").val(uid).appendTo(insertPageObj);
         }
         $("#insertDialog").find(".modal-body").html(insertPageObj);
@@ -85,10 +107,11 @@ function insertDialog(uid,name){
     },
     button:[
         {
-            text: "新增",
+            text: saveBtn,
             className: "btn-success",
             click: function(){
-                saveData();
+                saveData(modifyItem);
+                $("#insertDialog").bsDialog("close");
             }
         },
         {
@@ -104,7 +127,7 @@ function insertDialog(uid,name){
 }
 
 // 儲存
-function saveData(){
+function saveData(modifyItem){
     var name = $("#insertDialog").find("input:text").val(), 
     uid = $("#insertDialog").find("#uid").val();
     uid = (uid) ? parseInt(uid): 0;
@@ -116,29 +139,52 @@ function saveData(){
         // }
     },
     method = "Insert_AssTypeOffice";
-    console.log(sendData);
+    // console.log(sendData);
     // return;
     if(uid != 0){
         method = "Update_AssTypeOffice";
+        modifyItem.html(name);
     }
+
     $.post(ctrlAdminAPI + "Insert_AssTypeOffice",sendData,function(rs){
         // getOUData();
-        console.log(rs);
+        // console.log(rs);
+        if(uid == 0){
+            var option = {styleKind:"list",style:"1grid-modify"};
+            getStyle(option,function(pageStyle){
+                var pageStyleObj = $.parseHTML(pageStyle);
+                var firstItem = $(pageStyleObj).find(".list-items").eq(0);
+                firstItem.html(name);
+
+                $(pageStyleObj).find(".fa-pencil-square-o").click(function(){
+                    insertDialog(rs.Data, name, firstItem);
+                });
+                $("#grid").find("div").eq(0).before(pageStyleObj);
+            });
+        }
     });
 }
 
 // 刪除
-function deleteData(uid){
-    $.ajax({
-        url: ctrlAdminAPI + "Delete_AssTypeOffice",
-        type: "DELETE",
-        data: {iUid: uid},
-        success: function(){
-            getOUData();
+function deleteData(uid, removeItem){
+    // $.ajax({
+    //     url: ctrlAdminAPI + "Delete_AssTypeOffice",
+    //     type: "DELETE",
+    //     data: {iUid: uid},
+    //     success: function(){
+    //         getOUData();
+    //     }
+    // });
+    console.log(uid);
+    var sendData = {
+        apiMethod: ctrlAdminDelAPI + "Insert_AssTypeOffice",
+        deleteObj:{
+            iUid: uid
         }
-    });
-    $.post(ctrlAdminAPI + "Insert_AssTypeOffice",sendData,function(rs){
+    };
+    $.post(configObject.deleteAPI,sendData,function(rs){
         // getOUData();
+        removeItem.remove();
         console.log(rs);
     });
 }
