@@ -83,6 +83,18 @@ function getOUData(uid){
     });
 }
 
+function putDataEmptyInfo(putArea){
+    // 畫面設定值
+    var option = {styleKind:"system",style:"data-empty"};
+    // 取得畫面樣式
+    getStyle(option,function(pageStyle){
+        // 相關設定
+        putArea.append(pageStyle);
+
+        putArea.find(".list-items-bottom").last().removeClass("list-items-bottom");
+    });
+}
+
 // 新增
 function addDialog(orgTreeChart, parentID){
     $("#addDialog").remove();
