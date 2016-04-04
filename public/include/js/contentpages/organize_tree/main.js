@@ -13,6 +13,7 @@
 // ];
 var testData = [];
 $(function(){
+    loader($("#orgChart"));
     getOrgData();
     // if(testData.length > 0){
     //     createTree();
@@ -24,6 +25,7 @@ $(function(){
 });
 
 function getOrgData(){
+
 	$.getJSON(ctrlAdminAPI + "GetData_AssOrg",function(rs){
         //有資料
         if(rs.Status){
@@ -108,6 +110,7 @@ function addDialog(orgTreeChart, parentID){
 
     if(orgTreeChart == ""){
         headerCloseBtn = false;
+        $("#orgChart").empty();
     }
 
     $("#addDialog").bsDialog({
@@ -115,8 +118,10 @@ function addDialog(orgTreeChart, parentID){
         headerCloseBtn: headerCloseBtn,
         title: "組織單位選單",
         start: function(){
+            loader( $("#addDialog").find(".contents") );
             // 取得組織資料
             $.getJSON(ctrlAdminAPI + "GetData_AssTypeOffice").done(function(rs){
+                $("#addDialog").find(".contents").empty();
                 console.log(rs);
                 if(rs.Status){
                     createOtgList(parentID, orgTreeChart, rs.Data,false);

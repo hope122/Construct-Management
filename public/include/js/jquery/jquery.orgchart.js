@@ -121,7 +121,7 @@
             for(var i=0;i<nodes[id].children.length;i++){
                 self.deleteNode(nodes[id].children[i].data.id);
             }
-            console.log(nodes[id].data.parent);
+            
             if(nodes[id].data.parent != 0){
                 nodes[nodes[id].data.parent].removeChild(id);
                 delete nodes[id];
