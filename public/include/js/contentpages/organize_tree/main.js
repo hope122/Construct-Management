@@ -119,7 +119,7 @@ function addDialog(orgTreeChart, parentID){
             $.getJSON(ctrlAdminAPI + "GetData_AssTypeOffice").done(function(rs){
                 console.log(rs);
                 if(rs.Status){
-                    createOtgList(parentID, orgTreeChart,rs.Data,false);
+                    createOtgList(parentID, orgTreeChart, rs.Data,false);
                 }
             });
         },
@@ -173,13 +173,14 @@ function creatOrgData(orgTreeChart,contentObj,parentID){
       "faid": parentID,
       "suid": 1
     };
-    console.log(sendObj);
+    // console.log(sendObj);
     $.post(ctrlAdminAPI + "Insert_AssOrg",sendObj).done(function(rs){
         console.log(rs);
         if(rs.Status){
             if(orgTreeChart != ""){
                 // 新增
                 // newNode : parentId,name,childID
+                // console.log(parentID, contentObj.name, rs.Data);
                 orgTreeChart.newNode( parentID, contentObj.name, rs.Data );
             }else{
                 // ROOT
@@ -190,9 +191,11 @@ function creatOrgData(orgTreeChart,contentObj,parentID){
                 };
                 testData.push(rootObj);
                 createTree();
-                // 關閉
-                $("#addDialog").bsDialog("close");
+                
             }
+            // 關閉
+            $("#addDialog").bsDialog("close");
+
         }
     });
 }
