@@ -13,7 +13,6 @@
 // ];
 var testData = [];
 $(function(){
-    loader($("#orgChart"));
     getOrgData();
     // if(testData.length > 0){
     //     createTree();
@@ -25,15 +24,20 @@ $(function(){
 });
 
 function getOrgData(){
-
-	$.getJSON(ctrlAdminAPI + "GetData_AssOrg",function(rs){
+    loader($("#orgChart"));
+	$.getJSON(ctrlAdminAPI + "GetData_AssOrg",{iSu_Id: 1},function(rs){
+        console.log(rs);
+        $("#orgChart").empty();
         //有資料
         if(rs.Status){
-
+            $.each(rs.Data, function(index, content){
+                createTreeData(content.uid,content.name,content.faid);
+            });
+            createTree();
         }else{ //沒有資料
             addDialog("",0);
         }
-		console.log(rs);
+		// console.log(rs);
 	});
 }
 
@@ -50,7 +54,8 @@ function createTree(){
             addDialog(orgTreeChart, parentID);
         },
         onDeleteNode: function(node){
-            log('Deleted node '+node.data.id);
+            // log('Deleted node '+node.data.id);
+            deleteNode(node.data.id);
             orgTreeChart.deleteNode(node.data.id); 
         },
         onClickNode: function(node){
@@ -122,7 +127,7 @@ function addDialog(orgTreeChart, parentID){
             // 取得組織資料
             $.getJSON(ctrlAdminAPI + "GetData_AssTypeOffice").done(function(rs){
                 $("#addDialog").find(".contents").empty();
-                console.log(rs);
+                // console.log(rs);
                 if(rs.Status){
                     createOtgList(parentID, orgTreeChart, rs.Data,false);
                 }
@@ -189,19 +194,37 @@ function creatOrgData(orgTreeChart,contentObj,parentID){
                 orgTreeChart.newNode( parentID, contentObj.name, rs.Data );
             }else{
                 // ROOT
-                var rootObj = {
-                    id: rs.Data,
-                    name: contentObj.name,
-                    parent: parentID
-                };
-                testData.push(rootObj);
-                createTree();
+                createRoot(rs.Data,contentObj.name,parentID);
                 
             }
             // 關閉
             $("#addDialog").bsDialog("close");
 
         }
+    });
+}
+
+// 創建組織樹的資訊
+function createTreeData(ID,Name,parentID){
+    // console.log(ID,Name,parentID);
+    var treeObj = {
+        id: ID,
+        name: Name,
+        parent: parentID
+    };
+    testData.push(treeObj);
+}
+
+function deleteNode(uid){
+    var sendObj = {
+        apiMethod: ctrlAdminDelAPI+"Delete_AssOrg",
+        deleteObj:{
+            iUid: uid
+        }
+    }
+    console.log(uid);
+    $.post(configObject.deleteAPI , sendObj).done(function(rs){
+        console.log(rs);
     });
 }
 
