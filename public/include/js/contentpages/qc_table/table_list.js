@@ -183,6 +183,7 @@ function removeItem(object){
 //新增與修改
 function saveQCTable(){
   var selectTableObj = getUserInput("selectTableItem");
+  console.log(selectTableObj);
   // var tableType = $("#tableType").val();
   var tableTitle,
     TitleUid,

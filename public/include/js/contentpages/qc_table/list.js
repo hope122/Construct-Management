@@ -54,16 +54,6 @@ function getQCTotalTableList(showArea){
                   putDataEmptyInfo(tabAreaObj);
                 }
 
-                // var data = $.param({checkListID: content.Uid});
-                // console.log(data);
-                // $.ajax({
-                //   url: QCAPI + "DeleteEmptyCheckList",
-                //   data: {checkListID: content.Uid},
-                //   type:"DELETE",
-                //   success: function(){
-                //     getQCTotalTableList(showArea);
-                //   }
-                // });
                 var sendData = {
                   apiMethod: QCDeleteAPI+"DeleteEmptyCheckList",
                   deleteObj:{

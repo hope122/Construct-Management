@@ -55,11 +55,16 @@ function getQCTableModifyContent(uid){
 
 // 修改Dialog
 function openModifyDialog(uid){
+  $("#insertDialog").remove();
+  $("#myModal").remove();
+  // console.log(uid);
+  // return;
   $("#modifyDialog").remove();
   var modifyDialog = $("<div>").prop("id","modifyDialog");
   modifyDialog.appendTo("body");
   
   $("#modifyDialog").bsDialog({
+    title: "修改自檢表",
     modalClass:"bsDialogWindow",
     start: function(){
       var option = {styleKind:"qc_table",style:"table_insert_style"};
@@ -99,14 +104,15 @@ function openModifyDialog(uid){
 //修改
 function saveModifyQCTable(){
   var selectTableObj = getUserInput("selectTableItem");
+  // console.log(selectTableObj);
 
   var tableTitle,
     TitleUid,
     MyContent=[];
-  TitleUid = $("#titleID").val();
+  TitleUid = $("#modifyDialog").find("#titleID").val();
   
 
-  $("#table-totalContent").find(".qcTableItem").each(function(){
+  $("#modifyDialog").find("#table-totalContent").find(".qcTableItem").each(function(){
     var aplyQCItemChecked = $(this).find(".aplyQCItemSelect").prop("checked");
     if(!aplyQCItemChecked){
       var itemTitle = $(this).find(".item-title").val();
@@ -148,9 +154,10 @@ function saveModifyQCTable(){
       cnt:MyContent
     };
   // console.log(sendObj);
-
+  // return;
     // return;
   $.post(QCAPI + "UpdateEmptyCheckList",sendObj,function(){
+    $("#modifyDialog").bsDialog("close");
     getQCTableTypeList("totalTableTypeTab","totalTableType");
   });
   // console.log(sendObj);

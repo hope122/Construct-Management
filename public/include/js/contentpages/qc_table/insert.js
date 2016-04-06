@@ -55,7 +55,7 @@ function openDialog(title, uid){
 		            $("#qc_table_title").prop("readonly",false).val("");
 		          }
 		        });
-	    	});
+	    	  });
 	        
 	        
 	        $(insertPageObj).appendTo( $("#myModal").find(".modal-body") );
