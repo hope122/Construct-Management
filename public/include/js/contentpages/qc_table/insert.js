@@ -32,6 +32,7 @@ function openDialog(title, uid){
     // width: "60%",
     modalClass:"bsDialogWindow",
     start: function(){
+      // 外框
     	var option = {styleKind:"qc_table",style:"table_insert_style"};
       	getStyle(option,function(insertPage){
 	        var insertPageObj = $.parseHTML(insertPage);

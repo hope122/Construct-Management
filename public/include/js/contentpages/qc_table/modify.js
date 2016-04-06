@@ -14,7 +14,7 @@ function getQCTableModifyContent(uid){
       if(rs.Status){
 
         var tableDataObj = processTableData(rs.Data.MyContent);
-        $("#modifyDialog").find("#qc_table_title_modify").html(rs.Data.MyHead.Title.Name);
+        $("#modifyDialog").find("#qc_table_title_modify").html(rs.Data.MyHead.Title.Name).parents(".form-group").hide();
 
         // 取得最外匡的樣式
         thisBorderStyle(function(pageBorder){
@@ -54,7 +54,7 @@ function getQCTableModifyContent(uid){
 }
 
 // 修改Dialog
-function openModifyDialog(uid){
+function openModifyDialog(uid, name){
   $("#insertDialog").remove();
   $("#myModal").remove();
   // console.log(uid);
@@ -64,7 +64,7 @@ function openModifyDialog(uid){
   modifyDialog.appendTo("body");
   
   $("#modifyDialog").bsDialog({
-    title: "修改自檢表",
+    title: "修改 "+name+" 自檢表",
     modalClass:"bsDialogWindow",
     start: function(){
       var option = {styleKind:"qc_table",style:"table_insert_style"};

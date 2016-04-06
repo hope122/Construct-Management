@@ -376,3 +376,8 @@ a:hover{
 textarea{
 	 resize : none !important; 
 }
+
+.input-group[class*="col-"]{
+	padding-right: 15px !important;
+	padding-left: 15px !important;
+}

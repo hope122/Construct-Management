@@ -42,7 +42,7 @@ function getQCTotalTableList(showArea){
               $(tableList).find(".fa-pencil-square-o").click(function(){
                   // console.log(content.uid);
 
-                openModifyDialog(content.Uid);
+                openModifyDialog(content.Uid,content.Name);
               });
               // 刪除按鈕
               $(tableList).find(".fa-trash-o").click(function(){
