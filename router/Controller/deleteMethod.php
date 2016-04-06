@@ -23,23 +23,32 @@ class deleteMethodController
                 $apiMethod = $_POST["apiMethod"];
 
                 // 判斷作業系統
-                $OSCommand = 'ver';
-                $OS = $SysClass->cmdExecute($OSCommand);
-                // 刪除方法 組合指令
-                // EX: $apiURL 加上 'ASS/api/ctrlAdmin/Delete_AssTypeOffice?iUid=1'
-                // windows
-                if($OS){
-                    $curlPath = dirname(__DIR__).'\\..\\public\\include\\windows_curl\\curl.exe';
-                    $curlCMD = $curlPath;
+                // $OSCommand = 'ver';
+                // $OS = $SysClass->cmdExecute($OSCommand);
+                // // 刪除方法 組合指令
+                // // EX: $apiURL 加上 'ASS/api/ctrlAdmin/Delete_AssTypeOffice?iUid=1'
+                // // windows
+                // if($OS){
+                //     $curlPath = dirname(__DIR__).'\\..\\public\\include\\windows_curl\\curl.exe';
+                //     $curlCMD = $curlPath;
 
-                }else{//other
-                    $curlCMD = "curl";
-                }
+                // }else{//other
+                //     $curlCMD = "curl";
+                // }
                 
-                $curlCMD = $curlCMD.' "'.$apiURL.$apiMethod."?".$sendDeleteObj.'" -X DELETE --compressed';
-                // echo $curlCMD;
-                // echo $pageContent;
-                $pageContent = $SysClass->cmdExecute($curlCMD);
+                // $curlCMD = $curlCMD.' "'.$apiURL.$apiMethod."?".$sendDeleteObj.'" -X DELETE --compressed';
+                // // echo $curlCMD;
+                // // echo $pageContent;
+                // $pageContent = $SysClass->cmdExecute($curlCMD);
+                $target_url = $apiURL.$apiMethod."?".$sendDeleteObj;
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL,$target_url);
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+                // curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $rs = curl_exec ($ch);
+                curl_close ($ch);
+                $pageContent = $rs;
             }else{
                 $action = [];
                 $action["status"] = false;
