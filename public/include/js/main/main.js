@@ -186,7 +186,11 @@ Object.size = function(obj) {
 
 // 選單放入選項
 function selectOptionPut(selectID,putVal,putText){
-  if(selectID != "" && selectID.search("#") == -1){
-    $("<option>").appendTo("#"+selectID).prop("value",putVal).text(putText);
+  if(typeof selectID == "string"){
+    if(selectID != "" && selectID.search("#") == -1){
+      $("<option>").appendTo("#"+selectID).prop("value",putVal).text(putText);
+    }
+  }else{
+    $("<option>").appendTo(selectID).prop("value",putVal).text(putText);
   }
 }

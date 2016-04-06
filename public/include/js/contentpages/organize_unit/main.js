@@ -41,6 +41,7 @@ function putDataEmptyInfo(putArea){
 
 // 放資料
 function putDataToPage(data){
+    // console.log(data);
     // 畫面設定值
     var option = {styleKind:"list",style:"1grid-modify"};
     // 取得畫面樣式
@@ -56,7 +57,7 @@ function putDataToPage(data){
 
             // 刪除
             $(pageStyleObj).find(".fa-trash-o").click(function(){
-                deleteData(content.uid, $(this).parents(".list-items").parent());
+                deleteData(content.uid, $(this).parents(".list-items").parent(), content.name);
             });
 
             $(pageStyleObj).appendTo($("#grid"));
@@ -131,10 +132,11 @@ function insertDialog(uid, name, modifyItem){
 
 // 儲存
 function saveData(modifyItem){
+    console.log(modifyItem);
     var name = $("#insertDialog").find("input:text").val(), 
     uid = $("#insertDialog").find("#uid").val();
     uid = (uid) ? parseInt(uid): 0;
-
+    console.log(uid);
     var sendData = {
         // stData:{
             uid: uid,
@@ -148,8 +150,9 @@ function saveData(modifyItem){
         method = "Update_AssTypeOffice";
         modifyItem.html(name);
     }
-
-    $.post(ctrlAdminAPI + "Insert_AssTypeOffice",sendData,function(rs){
+    // console.log(method);
+// return;
+    $.post(ctrlAdminAPI + method,sendData,function(rs){
         // getOUData();
         // console.log(rs);
         if(uid == 0){
@@ -166,7 +169,7 @@ function saveData(modifyItem){
 
                 // 刪除
                 $(pageStyleObj).find(".fa-trash-o").click(function(){
-                    deleteData(uid, $(this).parents(".list-items").parent());
+                    deleteData(uid, $(this).parents(".list-items").parent(),name);
                 });
                 if($("#grid").find("div").length){
                     $("#grid").find("div").eq(0).before(pageStyleObj);
@@ -180,29 +183,54 @@ function saveData(modifyItem){
 }
 
 // 刪除
-function deleteData(uid, removeItem){
+function deleteData(uid, removeItem, name){
     var sendData = {
         apiMethod: ctrlAdminDelAPI + "Delete_AssTypeOffice",
         deleteObj:{
             iUid: uid
         }
     };
+    // console.log(removeItem);
+        
 
+    // return;
     $.post(configObject.deleteAPI,sendData,function(rs){
-        if($("#grid").find("div").length){
-            var option = {styleKind:"system",style:"data-empty"};
-            getStyle(option,function(pageStyle){
-                $("#grid").html(pageStyle);
-            });
+        rs = $.parseJSON(rs);
+        if(rs.Status){
+            removeItem.remove();
+            if(!$("#grid").find("div").length){
+                var option = {styleKind:"system",style:"data-empty"};
+                getStyle(option,function(pageStyle){
+                    $("#grid").html(pageStyle);
+                });
+            }
+        }else{
+            // 無法刪除
+            couldNotDeleteDialog(name);
         }
-        removeItem.remove();
-        // console.log(rs);
+        // removeItem.remove();
+        console.log(rs);
     });
-    // $.ajax({
-    //     url:ctrlAdminAPI+"Delete_AssTypeOffice?iUid="+uid,
-    //     type: "delete",
-    //     success:function(rs){
-    //         console.log(rs);
-    //     }
-    // });
+}
+
+function couldNotDeleteDialog(name){
+    $("#couldNotDeleteDialog").remove();
+    $("<div>").prop("id","couldNotDeleteDialog").appendTo("body");
+
+    $("#couldNotDeleteDialog").bsDialog({
+    start: function(){
+        var string = name+" 已被使用為組織上層，故無法刪除";
+        $("#couldNotDeleteDialog").find(".modal-body").html(string);
+    },
+    button:[
+        {
+            text: "關閉",
+            className: "btn-danger",
+            click: function(){
+                $("#couldNotDeleteDialog").bsDialog("close");
+            }
+        }
+    ]
+    });
+
 }
