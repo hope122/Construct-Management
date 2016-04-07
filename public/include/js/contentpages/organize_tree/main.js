@@ -38,7 +38,7 @@ function createTree(){
         },
         onClickNode: function(node){
             // log('Clicked node '+node.data.id);
-            addJobRankDialog(orgTreeChart, node.data);
+            jobRankTreeDialog(orgTreeChart, node.data);
             console.log(node);
         }
     });
@@ -116,14 +116,14 @@ function addDialog(orgTreeChart, parentID){
     });
 }
 
-// 新增職級
-function addJobRankDialog(orgTreeChart, nodeData){
-    $("#addJobRankDialog").remove();
+// 職級樹狀列表
+function jobRankTreeDialog(orgTreeChart, nodeData){
+    $("#jobRankTreeDialog").remove();
 
-    var addJobRankDialog = $("<div>").prop("id","addJobRankDialog");
+    var jobRankTreeDialog = $("<div>").prop("id","jobRankTreeDialog");
 
-    $("<div>").addClass("contents").appendTo(addJobRankDialog);
-    addJobRankDialog.appendTo("body");
+    $("<div>").addClass("contents").appendTo(jobRankTreeDialog);
+    jobRankTreeDialog.appendTo("body");
 
     var headerCloseBtn = true;
 
@@ -132,13 +132,15 @@ function addJobRankDialog(orgTreeChart, nodeData){
         $("#orgChart").empty();
     }
 
-    $("#addJobRankDialog").bsDialog({
+    $("#jobRankTreeDialog").bsDialog({
         autoShow:true,
         headerCloseBtn: headerCloseBtn,
-        title: "職務選單",
+        title: nodeData.name + " 職務架構圖",
+        modalClass: "bsDialogWindow",
         start: function(){
-            loader( $("#addJobRankDialog").find(".contents") );
-            getJobRank($("#addJobRankDialog").find(".contents"));
+            loader( $("#jobRankTreeDialog").find(".contents") );
+            getJobRank( $("#jobRankTreeDialog").find(".contents"), nodeData.id );
+            // console.log(nodeData);
             // 取得組織資料
             // $.getJSON(ctrlAdminAPI + "GetData_AssTypeOffice").done(function(rs){
             //     $("#addJobRankDialog").find(".contents").empty();
@@ -187,7 +189,7 @@ function createOtgList(parentID, orgTreeChart,data,isEmpty){
         var option = {styleKind:"system",style:"data-empty"};
         // 取得選單樣式
         getStyle(option,function(emptyStyle){
-            $$("#addDialog").find(".modal-body").find(".contents").html(insertPageObj);
+            $("#addDialog").find(".modal-body").find(".contents").html(insertPageObj);
         });
     }
 }
@@ -209,8 +211,8 @@ function creatOrgData(orgTreeChart,contentObj,parentID){
                 orgTreeChart.newNode( parentID, contentObj.name, rs.Data );
             }else{
                 // ROOT
-                createRoot(rs.Data,contentObj.name,parentID);
-                
+                createTreeData(rs.Data ,contentObj.name,parentID);
+                createTree();
             }
             // 關閉
             $("#addDialog").bsDialog("close");
@@ -237,7 +239,7 @@ function deleteNode(uid){
             iUid: uid
         }
     }
-    console.log(uid);
+    // console.log(uid);
     $.post(configObject.deleteAPI , sendObj).done(function(rs){
         console.log(rs);
     });
