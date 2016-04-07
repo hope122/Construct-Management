@@ -8,10 +8,12 @@ function getOUData(uid){
     if(uid != undefined){
         sendData = { iUid : uid };
     }
+    loader($("#grid"));
     // ＡＰＩ呼叫
-    $.getJSON(ctrlAdminAPI + "GetData_AssTypeOffice", sendData ).done(function(rs){
+    $.getJSON(ctrlPersonAPI + "GetData_AssCommon", sendData ).done(function(rs){
+        $("#grid").empty();
         if(rs.Status){
-            if(uid == null){
+            if(uid == undefined){
                 putDataToPage(rs.Data);
             }else{
                 // insertDialog(uid,name);
@@ -22,6 +24,7 @@ function getOUData(uid){
         }
         // console.log(rs);
     }).fail(function(){
+        $("#grid").empty();
         // 放入空的
         putDataEmptyInfo($("#grid"));
     });
@@ -39,8 +42,25 @@ function putDataEmptyInfo(putArea){
     });
 }
 
+function getAddrInfo(uid){
+     // 取地址資料
+    $.getJSON(ctrlPersonAPI + "GetData_AssCommonAddress", {iCmid: uid, iAddr_type: -1} ).done(function(rs){
+        console.log(rs);
+        $.each(rs.Data,function(index, content){
+            $.each(content, function(cIndex, value){
+                if(content.addr_type == 0){
+                    $("#insertDialog").find("#census-content").find("#"+cIndex).val(value);   
+                }else{
+                    $("#insertDialog").find("#communication-content").find("#"+cIndex).val(value);   
+                }
+            });
+            
+        });
+    });
+}
+
 // 放資料
-function putDataToPage(data, onlyData, resultDAta){
+function putDataToPage(data, onlyData){
     if(typeof onlyData == "undefined"){
         onlyData = false;
     }
@@ -57,7 +77,9 @@ function putDataToPage(data, onlyData, resultDAta){
                 firstItem.html(content.name);
                 // 修改
                 $(pageStyleObj).find(".fa-pencil-square-o").click(function(){
-                    insertDialog(content.uid, content.name, firstItem);
+                    // 取地址資料
+                    insertDialog(content, firstItem);
+                    getAddrInfo(content.uid);
                 });
 
                 // 刪除
@@ -76,7 +98,8 @@ function putDataToPage(data, onlyData, resultDAta){
 
             // 修改
             $(pageStyleObj).find(".fa-pencil-square-o").click(function(){
-                insertDialog(resultDAta.Data, data.name, firstItem);
+                insertDialog(data, firstItem);
+                getAddrInfo(data.uid);
             });
 
             // 刪除
@@ -96,19 +119,17 @@ function putDataToPage(data, onlyData, resultDAta){
 }
 
 // 新增&修改Dialog
-function insertDialog(uid, name, modifyItem){
-    if(name == undefined){
-        name = "";
-    }
+function insertDialog(modifyObj, modifyItem){
+    // console.log(modifyObj, modifyItem);
     if(modifyItem == undefined){
         modifyItem = null;
     }
     var saveBtn = "";
-    if(uid != undefined){
-        title = "修改組織單位";
+    if(modifyObj != undefined){
+        title = "修改自然人資料";
         saveBtn = "修改";
     }else{
-        title = "新增組織單位";
+        title = "新增自然人資料";
         saveBtn = "新增";
     }
     $("#insertDialog").remove();
@@ -116,22 +137,25 @@ function insertDialog(uid, name, modifyItem){
     insertDialog.appendTo("body");
 
     $("#insertDialog").bsDialog({
-        title:title,
+        title: title,
         start: function(){
-          var option = {styleKind:"input",style:"text-help-only"};
+          var option = {styleKind:"person",style:"in_mo"};
           getStyle(option,function(insertPage){
             var insertPageObj = $.parseHTML(insertPage);
-
-            $(insertPageObj).find(".row").removeClass("row").addClass("contents");
-            $(insertPageObj).find(".control-label").text("單位名稱");
-            $(insertPageObj).find("input:text").val(name);
-            
-            if(uid != undefined){
-                $("<input>").attr("type","hidden").prop("id","uid").val(uid).appendTo(insertPageObj);
+            // 修改
+            if(modifyObj != undefined){
+                // console.log("T");
+                $.each(modifyObj, function(index,content){
+                    if(index != "sex" ){
+                        $(insertPageObj).find("#"+index).val(content);
+                    }else{
+                        $(insertPageObj).find("[name=sex][value=" + content + "]").attr("checked",true).parent().addClass("active");
+                    }
+                });
             }
-            $("#insertDialog").find(".modal-body").html(insertPageObj);
+            $(insertPageObj).appendTo($("#insertDialog").find(".modal-body"));
             $("#insertDialog").bsDialog("show");
-            $("body").find(".modal-backdrop")
+            tabCtrl("insertDialog");
             // getQCTableTypeList("tableTypeTab","tableType",true);
 
           });
@@ -141,10 +165,32 @@ function insertDialog(uid, name, modifyItem){
                 text: saveBtn,
                 className: "btn-success",
                 click: function(){
-                    if(uid == undefined){
+                    var userInfo = getUserInput("userInfo-content");
+                    var census = getUserInput("census-content");
+                    census.addr_type = 0;
+
+                    var communication = getUserInput("communication-content");
+                    communication.addr_type = 1;
+
+                    if(modifyObj == undefined){
                         $("#grid").find(".date-empty").remove();
                     }
-                    saveData(modifyItem);
+
+                    var sendObj = {
+                        userInfo: userInfo,
+                        census:census,
+                        communication:communication
+                    }
+
+                    if(modifyObj != undefined){
+                        sendObj.userInfo.uid = modifyObj.uid;
+                        sendObj.communication.cmid = modifyObj.uid;
+                        sendObj.census.cmid = modifyObj.uid;
+                    }
+                    // console.log(sendObj);
+                    // return;
+                    saveData(sendObj, modifyItem);
+                    // console.log(sendObj);
                     $("#insertDialog").bsDialog("close");
                 }
             },
@@ -161,61 +207,72 @@ function insertDialog(uid, name, modifyItem){
 }
 
 // 儲存
-function saveData(modifyItem){
-    // console.log(modifyItem);
-    var name = $("#insertDialog").find("input:text").val(), 
-    uid = $("#insertDialog").find("#uid").val();
-    uid = (uid) ? parseInt(uid): 0;
-    // console.log(uid);
-    var sendData = {
-        // stData:{
-            uid: uid,
-            name: name
-        // }
-    },
-    method = "Insert_AssTypeOffice";
+function saveData(sendObj,modifyItem){
+    method = "Insert_AssCommon";
     // console.log(sendData);
     // return;
-    if(uid != 0){
-        method = "Update_AssTypeOffice";
+    if(sendObj.userInfo.uid != undefined){
+        method = "Update_AssCommon";
         modifyItem.html(name);
     }
-
-    $.post(ctrlAdminAPI + method,sendData,function(rs){
+    // 先新增自然人資料
+    $.post(ctrlPersonAPI + method, sendObj.userInfo, function(rs){
+        console.log(rs);
         // 新增
-        if(uid == 0){
-            sendData.uid = rs.Data;
-            putDataToPage(sendData,true, rs);
+        if(sendObj.userInfo.uid == undefined){
+            sendObj.userInfo.uid = rs.Data;
+            sendObj.census.cmid = rs.Data;
+            sendObj.communication.cmid = rs.Data;
+            // putDataToPage(sendObj, true);
+            // 地址修改ＡＰＩ
+            addrMethod = "Insert_AssCommonAddress";
+        }else{
+            addrMethod = "Update_AssCommonAddress";
+            $(modifyItem).html(sendObj.userInfo.name);
         }
+        // console.log(addrMethod);
+        // 之後放入地址資料
+        $.post(ctrlPersonAPI + addrMethod, sendObj.census, function(rs){
+            if(rs.Status){
+                sendObj.census.uid = rs.Data;
+                $.post(ctrlPersonAPI + addrMethod, sendObj.communication, function(oRs){
+                    if(oRs.Status){
+                        sendObj.communication.uid = rs.Data;
+
+                        if(addrMethod == "Insert_AssCommonAddress"){
+                            putDataToPage(sendObj.userInfo, true);
+                        }
+                    }
+                });
+
+            }
+        });
     });
 }
 
 // 刪除
 function deleteData(uid, removeItem, name){
     var sendData = {
-        apiMethod: ctrlAdminDelAPI + "Delete_AssTypeOffice",
+        apiMethod: ctrlPersonDelAPI + "Delete_AssCommon",
         deleteObj:{
             iUid: uid
         }
     };
+    removeItem.remove();
+    if(!$("#grid").find(".dataContent").length){
+        var option = {styleKind:"system",style:"data-empty"};
+        getStyle(option,function(pageStyle){
+            $("#grid").html(pageStyle);
+        });
+    }else{
+        $("#grid").find(".list-items-bottom").last().removeClass("list-items-bottom");
+    }
     // return;
     $.post(configObject.deleteAPI,sendData,function(rs){
         rs = $.parseJSON(rs);
-        if(rs.Status){
-            removeItem.remove();
-            if(!$("#grid").find(".dataContent").length){
-                var option = {styleKind:"system",style:"data-empty"};
-                getStyle(option,function(pageStyle){
-                    $("#grid").html(pageStyle);
-                });
-            }else{
-                $("#grid").find(".list-items-bottom").last().removeClass("list-items-bottom");
-
-            }
-
-        }else{
+        if(!rs.Status){
             // 無法刪除
-            couldNotDeleteDialog(name);
+            // couldNotDeleteDialog(name);
         }
     });
 }

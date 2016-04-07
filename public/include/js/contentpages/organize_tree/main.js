@@ -1,32 +1,12 @@
-//  var testData = [
-//     {id: "A", name: 'My Organization1', parent: 0},
-//     {id: "A1", name: 'CEO Office1', parent: "A"},
-    
-
-//     // {id: 3, name: 'Division 1', parent: 1},
-//     // {id: 4, name: 'Division 2', parent: 1},
-//     // {id: 6, name: 'Division 3', parent: 1},
-//     // {id: 7, name: 'Division 4', parent: 1},
-//     // {id: 8, name: 'Division 5', parent: 1},
-//     // {id: 5, name: 'Sub Division', parent: 3},
-    
-// ];
 var testData = [];
 $(function(){
     getOrgData();
-    // if(testData.length > 0){
-    //     createTree();
-    //     $(".createBtn").remove();
-        
-    // }else{
-    //     addDialog("","root");
-    // }
 });
 
 function getOrgData(){
     loader($("#orgChart"));
 	$.getJSON(ctrlAdminAPI + "GetData_AssOrg",{iSu_Id: 1},function(rs){
-        console.log(rs);
+        // console.log(rs);
         $("#orgChart").empty();
         //有資料
         if(rs.Status){
@@ -47,21 +27,20 @@ function createTree(){
         data: testData,
         showControls: true,
         allowEdit: false,
-        onAddNode: function(node){ 
-            // log('Created new node on node '+node.data.id);
-            // org_chart.newNode(node.data.id); 
+        newNodeText:"組織",
+        onAddNode: function(node){  
             var parentID = node.data.id;
             addDialog(orgTreeChart, parentID);
         },
         onDeleteNode: function(node){
-            // log('Deleted node '+node.data.id);
             deleteNode(node.data.id);
             orgTreeChart.deleteNode(node.data.id); 
         },
         onClickNode: function(node){
-            log('Clicked node '+node.data.id);
+            // log('Clicked node '+node.data.id);
+            addJobRankDialog(orgTreeChart, node.data);
+            console.log(node);
         }
-
     });
 }
 
@@ -132,6 +111,42 @@ function addDialog(orgTreeChart, parentID){
                     createOtgList(parentID, orgTreeChart, rs.Data,false);
                 }
             });
+        },
+        showFooterBtn:false,
+    });
+}
+
+// 新增職級
+function addJobRankDialog(orgTreeChart, nodeData){
+    $("#addJobRankDialog").remove();
+
+    var addJobRankDialog = $("<div>").prop("id","addJobRankDialog");
+
+    $("<div>").addClass("contents").appendTo(addJobRankDialog);
+    addJobRankDialog.appendTo("body");
+
+    var headerCloseBtn = true;
+
+    if(orgTreeChart == ""){
+        headerCloseBtn = false;
+        $("#orgChart").empty();
+    }
+
+    $("#addJobRankDialog").bsDialog({
+        autoShow:true,
+        headerCloseBtn: headerCloseBtn,
+        title: "職務選單",
+        start: function(){
+            loader( $("#addJobRankDialog").find(".contents") );
+            getJobRank($("#addJobRankDialog").find(".contents"));
+            // 取得組織資料
+            // $.getJSON(ctrlAdminAPI + "GetData_AssTypeOffice").done(function(rs){
+            //     $("#addJobRankDialog").find(".contents").empty();
+            //     // console.log(rs);
+            //     if(rs.Status){
+            //         createOtgList(parentID, orgTreeChart, rs.Data,false);
+            //     }
+            // });
         },
         showFooterBtn:false,
     });
@@ -229,6 +244,3 @@ function deleteNode(uid){
 }
 
 // just for example purpose
-function log(text){
-    $('#consoleOutput').append('<p>'+text+'</p>')
-}
