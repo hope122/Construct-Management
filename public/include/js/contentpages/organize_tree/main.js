@@ -6,7 +6,7 @@ $(function(){
 function getOrgData(){
     loader($("#orgChart"));
 	$.getJSON(ctrlAdminAPI + "GetData_AssOrg",{iSu_Id: 1},function(rs){
-        // console.log(rs);
+        console.log(rs);
         $("#orgChart").empty();
         //有資料
         if(rs.Status){

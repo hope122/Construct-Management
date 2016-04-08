@@ -3,6 +3,7 @@ var jobData = [];
 function getJobRank( putArea, orgID ){
 	jobTreeChart = null;
 	jobData = [];
+    orgID = 14;
 	// 取得行政組織內的職級資料
 	var sendObj = {
 		iSu_Id: 1,
@@ -13,7 +14,10 @@ function getJobRank( putArea, orgID ){
 	    console.log(rs);
 	    if(rs.Status){
 	    	// 顯示職務架構圖
-	    	createJobRankTree(putArea,rs.Data);
+            $.each(rs.Data,function(index, content){
+                createJobTreeData( content.uid, content.name, content.faid );
+            });
+	    	createJobRankTree(putArea,orgID);
 	        // createOtgList(parentID, jobTreeChart, rs.Data,false);
 	    }else{ // 空的代表還未新增
 	    	// 顯示新增ROOT按鈕
@@ -122,7 +126,7 @@ function createJobRankTree(putArea, orgID){
 function creatJobData(putArea, jobTreeChart, contentObj, parentID, orgID){
     var sendObj = {
       "psid": contentObj.uid,
-      "ofid": orgID,
+      "ofid": 14,
       "faid": parentID,
       "suid": 1
     };
@@ -130,7 +134,7 @@ function creatJobData(putArea, jobTreeChart, contentObj, parentID, orgID){
     // return;
     console.log(sendObj);
     $.post(ctrlAdminAPI + "Insert_AssPosition",sendObj).done(function(rs){
-        // console.log(rs);
+        console.log(rs);
         if(rs.Status){
             if(jobTreeChart != null){
                 // 新增

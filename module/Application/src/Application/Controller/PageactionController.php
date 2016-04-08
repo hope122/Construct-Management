@@ -21,6 +21,19 @@ class PageactionController extends AbstractActionController
 		$this->viewContnet['pageContent'] = 'Please Select Your Action and Try Again!';
         return new ViewModel($this->viewContnet);
     }
+
+    public function orginmenuAction(){
+    	$VTs = new clsSystem;
+		$VTs->initialization();
+    	$strSQL = "select uid,nid,parent_layer,class_style,href,click_action from sys_menu ";
+    	$strSQL .= "order by sequence,uid asc";
+		$data = $VTs->QueryData($strSQL);
+		
+		$this->viewContnet['pageContent'] = $VTs->Data2Json($data);
+
+        return new ViewModel($this->viewContnet);
+    }
+
 	//取得選單
 	public function menuprocessAction()
     {
