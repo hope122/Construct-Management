@@ -6,12 +6,12 @@ $(function(){
 function getOrgData(){
     loader($("#orgChart"));
 	$.getJSON(ctrlAdminAPI + "GetData_AssOrg",{iSu_Id: 1},function(rs){
-        console.log(rs);
+        // console.log(rs);
         $("#orgChart").empty();
         //有資料
         if(rs.Status){
             $.each(rs.Data, function(index, content){
-                createTreeData(content.uid,content.name,content.faid);
+                createTreeData(content.uid,content.name,content.faid, content.officeid);
             });
             createTree();
         }else{ //沒有資料
@@ -39,7 +39,7 @@ function createTree(){
         onClickNode: function(node){
             // log('Clicked node '+node.data.id);
             jobRankTreeDialog(orgTreeChart, node.data);
-            console.log(node);
+            // console.log(node.data);
         }
     });
 }
@@ -108,7 +108,7 @@ function addDialog(orgTreeChart, parentID){
                 $("#addDialog").find(".contents").empty();
                 // console.log(rs);
                 if(rs.Status){
-                    createOtgList(parentID, orgTreeChart, rs.Data,false);
+                    createOtgList(parentID, orgTreeChart, rs.Data, false);
                 }
             });
         },
@@ -118,6 +118,7 @@ function addDialog(orgTreeChart, parentID){
 
 // 職級樹狀列表
 function jobRankTreeDialog(orgTreeChart, nodeData){
+    // console.log(nodeData);
     $("#jobRankTreeDialog").remove();
 
     var jobRankTreeDialog = $("<div>").prop("id","jobRankTreeDialog");
@@ -139,7 +140,7 @@ function jobRankTreeDialog(orgTreeChart, nodeData){
         modalClass: "bsDialogWindow",
         start: function(){
             loader( $("#jobRankTreeDialog").find(".contents") );
-            getJobRank( $("#jobRankTreeDialog").find(".contents"), nodeData.id );
+            getJobRank( $("#jobRankTreeDialog").find(".contents"), nodeData.listID );
             // console.log(nodeData);
             // 取得組織資料
             // $.getJSON(ctrlAdminAPI + "GetData_AssTypeOffice").done(function(rs){
@@ -155,6 +156,7 @@ function jobRankTreeDialog(orgTreeChart, nodeData){
 }
 
 function createOtgList(parentID, orgTreeChart,data,isEmpty){
+
     if(isEmpty == undefined){
         isEmpty = false;
     }
@@ -195,11 +197,13 @@ function createOtgList(parentID, orgTreeChart,data,isEmpty){
 }
 
 function creatOrgData(orgTreeChart,contentObj,parentID){
+    // console.log(contentObj);
     var sendObj = {
       "officeid": contentObj.uid,
       "faid": parentID,
       "suid": 1
     };
+    // return;
     // console.log(sendObj);
     $.post(ctrlAdminAPI + "Insert_AssOrg",sendObj).done(function(rs){
         console.log(rs);
@@ -207,11 +211,11 @@ function creatOrgData(orgTreeChart,contentObj,parentID){
             if(orgTreeChart != ""){
                 // 新增
                 // newNode : parentId,name,childID
-                // console.log(parentID, contentObj.name, rs.Data);
-                orgTreeChart.newNode( parentID, contentObj.name, rs.Data );
+                console.log(parentID, contentObj.name, rs.Data);
+                orgTreeChart.newNode( parentID, contentObj.name, rs.Data, contentObj.uid );
             }else{
                 // ROOT
-                createTreeData(rs.Data ,contentObj.name,parentID);
+                createTreeData(rs.Data, contentObj.name, parentID, contentObj.officeid);
                 createTree();
             }
             // 關閉
@@ -222,12 +226,13 @@ function creatOrgData(orgTreeChart,contentObj,parentID){
 }
 
 // 創建組織樹的資訊
-function createTreeData(ID,Name,parentID){
+function createTreeData(ID,Name,parentID,officeID){
     // console.log(ID,Name,parentID);
     var treeObj = {
         id: ID,
         name: Name,
-        parent: parentID
+        parent: parentID,
+        listID: officeID
     };
     testData.push(treeObj);
 }

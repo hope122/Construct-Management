@@ -6,6 +6,7 @@
 
     $.fn.orgChart.defaults = {
         data: [{id:1, name:'Root', parent: 0}],
+        rootNodesDelete: false,
         showControls: false,
         allowEdit: false,
         onAddNode: null,
@@ -90,7 +91,7 @@
             })
         }
 
-        this.newNode = function(parentId,name,childID){
+        this.newNode = function(parentId,name,childID,listID){
             if(childID == undefined){
                 var nextId = Object.keys(nodes).length;
                 while(nextId in nodes){
@@ -102,8 +103,10 @@
             if(name == undefined){
                 name = '';
             }
-
-            self.addNode({id: nextId, name: name, parent: parentId});
+            if(listID == undefined){
+                listID = null;
+            }
+            self.addNode({id: nextId, name: name, parent: parentId, listID:listID});
         }
 
         this.addNode = function(data){
@@ -234,7 +237,7 @@
             if(opts.showControls){
                 var buttonsHtml = "<div class='org-add-button'><i class='fa fa-plus-circle'></i>"+opts.newNodeText+"</div>";
                 // It is Root, so could not del btn
-                buttonsHtml += (this.data.parent == 0)?"":"<div class='org-del-button'><i class='fa fa-minus-circle'></i></div>";
+                buttonsHtml += (this.data.parent == 0 && !opts.rootNodesDelete)?"":"<div class='org-del-button'><i class='fa fa-minus-circle'></i></div>";
             }
             else{
                 buttonsHtml = '';

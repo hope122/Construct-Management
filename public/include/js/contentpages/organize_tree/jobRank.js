@@ -1,9 +1,10 @@
 var jobTreeChart;
 var jobData = [];
 function getJobRank( putArea, orgID ){
+    // console.log(orgID);
 	jobTreeChart = null;
 	jobData = [];
-    orgID = 14;
+    // orgID = 14;
 	// 取得行政組織內的職級資料
 	var sendObj = {
 		iSu_Id: 1,
@@ -11,7 +12,7 @@ function getJobRank( putArea, orgID ){
 	}
 	$.getJSON(ctrlAdminAPI + "GetData_AssPosition",sendObj).done(function(rs){
 	    putArea.empty();
-	    console.log(rs);
+	    // console.log(rs);
 	    if(rs.Status){
 	    	// 顯示職務架構圖
             $.each(rs.Data,function(index, content){
@@ -102,6 +103,7 @@ function createJobList(putArea, parentID, jobTreeChart, data, orgID, isEmpty){
 function createJobRankTree(putArea, orgID){
     jobTreeChart = putArea.orgChart({
         data: jobData,
+        // rootNodesDelete:true,
         showControls: true,
         allowEdit: false,
         newNodeText:"職務",
@@ -126,7 +128,7 @@ function createJobRankTree(putArea, orgID){
 function creatJobData(putArea, jobTreeChart, contentObj, parentID, orgID){
     var sendObj = {
       "psid": contentObj.uid,
-      "ofid": 14,
+      "ofid": orgID,
       "faid": parentID,
       "suid": 1
     };
