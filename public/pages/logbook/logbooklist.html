@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <style>
+        fieldset {
+    padding:10px;
+    margin:10px;
+
+    border:#06c dashed 1px;
+} 
+
+            .css_table {
+                display:table;
+            }
+            .css_tr {
+                display: table-row;
+            }
+            .css_td {
+                display: table-cell;
+                margin:auto 5px auto 5px;
+            }
+
+              th, td{
+                border:1px #cccccc solid ;
+                vertical-align:middle;
+            }
+        
+        
+        </style>
+    </head>
+    <body>
+        <div class="contents">
+
+            <div id="loadpageArea">
+                <div align="center"><b><span>建築物施工日誌</span></b></div>
+                <div class='css_table' align='center' style='margin: 0px auto;'>
+                <div align='right'><a href="javascript:tosetpage();">今日日誌設定</a></div>
+                  <div id='div_tr'>
+                    <div class="css_tr">
+                        <div class="css_td" style='width:200px;'>表單編號</div>
+                        <div class="css_td" style='width:200px;'>日期</div>
+                        <div class="css_td" style='width:200px;'>詳細資料</div>  
+                    </div>
+                  </div>
+                </div>
+
+            </div>
+        </div>
+        <script src="include/js/contentpages/logbook/logbook_list.js"></script>
+    </body>
+</html>
