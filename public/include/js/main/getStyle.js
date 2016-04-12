@@ -15,3 +15,12 @@ function getBorder(style,callback){
 		callback(pageStyle);
 	});
 }
+
+function getPage(pageOption,callback){
+
+	var stylePath = pageOption.styleKind+"/"+pageOption.style;
+
+	$.get("pages/"+stylePath+".html").done(function(pageStyle){
+		callback(pageStyle);
+	});
+}

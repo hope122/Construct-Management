@@ -19,14 +19,14 @@ class LogbookController extends AbstractActionController
 	public function indexAction()
     {
 		 //session_start();
-		$VTs = new clsSystem;
-		$VTs->initialization();
+		$SysClass = new clsSystem;
+		$SysClass->initialization();
         try{
 
         //-----BI開始-----  index logbook施工日誌首頁
         if(empty($_SESSION)){
             $pagePath = dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\index\\login_page.html";
-            $pageContent = $VTs->GetHtmlContent($pagePath);
+            $pageContent = $SysClass->GetHtmlContent($pagePath);
         }else{  
             //-----BI開始-----  材料類別頁面分流
             if(!empty($_GET['ptype'])){
@@ -50,14 +50,14 @@ class LogbookController extends AbstractActionController
             } 
            //取得主頁html
             $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\index.html";
-            $html=$VTs->GetHtmlContent($mpath);
+            $html=$SysClass->GetHtmlContent($mpath);
 
 
 
             $arrdata["title"]=$title;
             $arrdata["ptype"]=$ptype;
             $arrdata["userName"]=$_SESSION['userName'];
-            $html=$VTs->ContentReplace($arrdata,$html);
+            $html=$SysClass->ContentReplace($arrdata,$html);
             $pageContent=$html;
         }
 
@@ -66,26 +66,26 @@ class LogbookController extends AbstractActionController
 
         }catch(Exception $error){
             //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
-            $VTs->WriteLog("IndexController", "indexAction", $error->getMessage());
+            $SysClass->WriteLog("IndexController", "indexAction", $error->getMessage());
         }
          //關閉資料庫連線
-        $VTs->DBClose();
+        $SysClass->DBClose();
         //釋放
-		$VTs = null;
+		$SysClass = null;
 		$this->viewContnet['pageContent'] = $pageContent;
         return new ViewModel($this->viewContnet);
     }
     public function listAction()
     {
         //session_start();
-        $VTs = new clsSystem;
-        $VTs->initialization();
+        $SysClass = new clsSystem;
+        $SysClass->initialization();
         
         //-----BI開始-----  
         try{
             $arr_data=$_POST['data'];
                 $html_path=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\list.html";
-                $html=$VTs->GetHtmlContent($html_path);
+                $html=$SysClass->GetHtmlContent($html_path);
      
                 if(empty($arr_data)){
                     
@@ -95,7 +95,7 @@ class LogbookController extends AbstractActionController
                     
                     $tr_path=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\tr.html";
                     
-                    $tr=$VTs->GetHtmlContent($tr_path);
+                    $tr=$SysClass->GetHtmlContent($tr_path);
                      $trstr='';
                     foreach($arr_data as  $data) {
                          $trs=$tr;
@@ -120,26 +120,26 @@ class LogbookController extends AbstractActionController
         //-----BI結束-----
         }catch(Exception $error){
             //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
-            $VTs->WriteLog("IndexController", "indexAction", $error->getMessage());
+            $SysClass->WriteLog("IndexController", "indexAction", $error->getMessage());
         }
          //關閉資料庫連線
-        $VTs->DBClose();
+        $SysClass->DBClose();
         //釋放
-        $VTs = null;
+        $SysClass = null;
         $this->viewContnet['pageContent'] = $pageContent;
         return new ViewModel($this->viewContnet);
     }
     public function reportAction()
     {
         //session_start();
-        $VTs = new clsSystem;
-        $VTs->initialization();
+        $SysClass = new clsSystem;
+        $SysClass->initialization();
         
         //-----BI開始-----  
         try{
             $data=$_POST['data'];
             $html_path=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\report.html";
-            $html=$VTs->GetHtmlContent($html_path);
+            $html=$SysClass->GetHtmlContent($html_path);
 
             //基本資訊info
             $info=$data["info"];
@@ -150,7 +150,7 @@ class LogbookController extends AbstractActionController
                 "indate"=>$info['date'],
                 "week"=>$info['week'],
             ];  
-            $html=$VTs->ContentReplace($arrdata,$html);
+            $html=$SysClass->ContentReplace($arrdata,$html);
 
             //表頭資訊project
             $project=$data["project"];
@@ -166,7 +166,7 @@ class LogbookController extends AbstractActionController
                 "start"=>$project["start"],
                 "end"=>$project["end"],
             ];
-            $html=$VTs->ContentReplace($arrdata,$html);
+            $html=$SysClass->ContentReplace($arrdata,$html);
             //進度
             $project=$data["schedule"];
             if(!empty($project['price_tbp'])){
@@ -181,7 +181,7 @@ class LogbookController extends AbstractActionController
             }
             //進度管理tr1
             $trpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\tr1.html";
-            $trhtml=$VTs->GetHtmlContent($trpath);
+            $trhtml=$SysClass->GetHtmlContent($trpath);
             $arr_construction=$data["construction"];
             $strhtml1='';
             if(!empty($arr_construction) ){
@@ -196,11 +196,11 @@ class LogbookController extends AbstractActionController
                 }     
             }
             $arrdata["tr1"]=$strhtml1;
-            $html=$VTs->ContentReplace($arrdata,$html);
+            $html=$SysClass->ContentReplace($arrdata,$html);
 
             //材料管理tr2
             $trpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\tr2.html";
-            $trhtml=$VTs->GetHtmlContent($trpath);
+            $trhtml=$SysClass->GetHtmlContent($trpath);
             $materielcount=$data["materielcount"];
             $strhtml2='';
             if(!empty($materielcount) ){
@@ -217,10 +217,10 @@ class LogbookController extends AbstractActionController
 
             }
             $arrdata["tr2"]=$strhtml2;
-            $html=$VTs->ContentReplace($arrdata,$html);
+            $html=$SysClass->ContentReplace($arrdata,$html);
             //取得人員機具管理tr3
             $trpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\tr3.html";
-            $trhtml=$VTs->GetHtmlContent($trpath);
+            $trhtml=$SysClass->GetHtmlContent($trpath);
             $arr_workcount= $data["workcount"];
     //        print_r($arr_workcount);
             $strhtml3='';
@@ -234,7 +234,7 @@ class LogbookController extends AbstractActionController
                 }
             }
             $arrdata["tr3"]=$strhtml3;
-            $html=$VTs->ContentReplace($arrdata,$html);
+            $html=$SysClass->ContentReplace($arrdata,$html);
 
              //日誌內容content
              $content= $data["fifth"];
@@ -244,17 +244,17 @@ class LogbookController extends AbstractActionController
                 "fourth"=>$data["fifth"],
                 "sixth"=>$data["seventh"],
             ];
-            $html=$VTs->ContentReplace($arrdata,$html);
+            $html=$SysClass->ContentReplace($arrdata,$html);
         $pageContent=$html;
         //-----BI結束-----
         }catch(Exception $error){
             //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
-            $VTs->WriteLog("IndexController", "indexAction", $error->getMessage());
+            $SysClass->WriteLog("IndexController", "indexAction", $error->getMessage());
         }
          //關閉資料庫連線
-        $VTs->DBClose();
+        $SysClass->DBClose();
         //釋放
-        $VTs = null;
+        $SysClass = null;
         $this->viewContnet['pageContent'] = $pageContent;
         return new ViewModel($this->viewContnet);
     }
@@ -262,13 +262,13 @@ class LogbookController extends AbstractActionController
        public function setcontentAction()
     {
         //session_start();
-		$VTs = new clsSystem;
-		$VTs->initialization();
+		$SysClass = new clsSystem;
+		$SysClass->initialization();
         try{
 		//-----BI開始-----  get prjuid 傳入廠商ＩＤ 回傳品項html option內容
         //取得主頁html
         $mpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\setcontent.html";
-        $html=$VTs->GetHtmlContent($mpath);
+        $html=$SysClass->GetHtmlContent($mpath);
         $data=$_POST['data'];
         $content=$data['content'];
 
@@ -291,7 +291,7 @@ class LogbookController extends AbstractActionController
 
             $arrdata['amoption']=$whtml;
             $arrdata['pmoption']=$whtml;
-            $html=$VTs->ContentReplace($arrdata,$html);
+            $html=$SysClass->ContentReplace($arrdata,$html);
         }else{
 
             if(!empty($content['dates'])){
@@ -301,7 +301,7 @@ class LogbookController extends AbstractActionController
                 $arrdata['div_inphid']='';
                 $arrdata['disabled']='';
             }
-            $html=$VTs->ContentReplace($arrdata,$html);
+            $html=$SysClass->ContentReplace($arrdata,$html);
             $weekarray=array("日","一","二","三","四","五","六");
             $arrdata = [
                 "no"=>'表單編號：'.$content['no'],
@@ -334,7 +334,7 @@ class LogbookController extends AbstractActionController
             $arrdata['amoption']=$amhtml;
             $arrdata['pmoption']=$pmhtml;
   
-            $html=$VTs->ContentReplace($arrdata,$html);
+            $html=$SysClass->ContentReplace($arrdata,$html);
         }
 
 
@@ -353,7 +353,7 @@ class LogbookController extends AbstractActionController
                 "start"=>$project["start"],
                 "end"=>$project["end"],
             ];
-            $html=$VTs->ContentReplace($arrdata,$html);
+            $html=$SysClass->ContentReplace($arrdata,$html);
             //進度
             $project=$data["schedule"];
             if(!empty($project['price_tbp'])){
@@ -368,7 +368,7 @@ class LogbookController extends AbstractActionController
             // }
             //進度管理tr1
             $trpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\tr1.html";
-            $trhtml=$VTs->GetHtmlContent($trpath);
+            $trhtml=$SysClass->GetHtmlContent($trpath);
             $arr_construction=$data["construction"];
             $strhtml1='';
 
@@ -384,11 +384,11 @@ class LogbookController extends AbstractActionController
                 }     
             }
             $arrdata["tr1"]=$strhtml1;
-            $html=$VTs->ContentReplace($arrdata,$html);
+            $html=$SysClass->ContentReplace($arrdata,$html);
 
             //材料管理tr2
             $trpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\tr2.html";
-            $trhtml=$VTs->GetHtmlContent($trpath);
+            $trhtml=$SysClass->GetHtmlContent($trpath);
             $materielcount=$data["materielcount"];
             $strhtml2='';
             if(!empty($materielcount) ){
@@ -405,10 +405,10 @@ class LogbookController extends AbstractActionController
 
             }
             $arrdata["tr2"]=$strhtml2;
-            $html=$VTs->ContentReplace($arrdata,$html);
+            $html=$SysClass->ContentReplace($arrdata,$html);
             //取得人員機具管理tr3
             $trpath=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\tr3.html";
-            $trhtml=$VTs->GetHtmlContent($trpath);
+            $trhtml=$SysClass->GetHtmlContent($trpath);
             $arr_workcount= $data["workcount"];
     //        print_r($arr_workcount);
             $strhtml3='';
@@ -423,7 +423,7 @@ class LogbookController extends AbstractActionController
                 }
             }
             $arrdata["tr3"]=$strhtml3;
-            $html=$VTs->ContentReplace($arrdata,$html);
+            $html=$SysClass->ContentReplace($arrdata,$html);
 
              //日誌內容content
              $content= $data["fifth"];
@@ -433,33 +433,33 @@ class LogbookController extends AbstractActionController
                 "fourth"=>$data["fifth"],
                 "sixth"=>$data["seventh"],
             ];
-            $html=$VTs->ContentReplace($arrdata,$html);
+            $html=$SysClass->ContentReplace($arrdata,$html);
         
             //印出html
             $pageContent=$html;
         //-----BI結束-----
         }catch(Exception $error){
             //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
-            $VTs->WriteLog("IndexController", "indexAction", $error->getMessage());
+            $SysClass->WriteLog("IndexController", "indexAction", $error->getMessage());
         }
-         //關閉資料庫連線  //       $VTs->DBClose();
+         //關閉資料庫連線  //       $SysClass->DBClose();
         //釋放
-		$VTs = null;
+		$SysClass = null;
 		$this->viewContnet['pageContent'] = $pageContent;
         return new ViewModel($this->viewContnet);
     }
     public function laborsafetyAction()
     {
         //session_start();
-        $VTs = new clsSystem;
-        $VTs->initialization();
+        $SysClass = new clsSystem;
+        $SysClass->initialization();
         
         //-----BI開始-----  
         try{
 
 
-            $html_path=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\laborsafety.html";
-            $html=$VTs->GetHtmlContent($html_path);
+            // $html_path=dirname(__DIR__) . "\\..\\..\\..\\..\\public\\include\\pageSetting\\logbook\\laborsafety.html";
+            // $html=$SysClass->GetHtmlContent($html_path);
             $laborsafety=$_POST['data'];
 
 
@@ -486,12 +486,12 @@ class LogbookController extends AbstractActionController
                     }
 
                 }
-                $html=$VTs->ContentReplace($arrdata,$html);
+                // $html=$SysClass->ContentReplace($arrdata,$html);
             }else{
                 $html="主任已確認,資料無法再進行修改";
             }
 
-            
+            // $pageContent = $
             // foreach($arr_data as  $data) {
             //      $trs=$tr;
             //     $trs=str_replace('@@no@@',$data['no'],$trs);
@@ -507,12 +507,12 @@ class LogbookController extends AbstractActionController
         //-----BI結束-----
         }catch(Exception $error){
             //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
-            $VTs->WriteLog("IndexController", "indexAction", $error->getMessage());
+            $SysClass->WriteLog("IndexController", "indexAction", $error->getMessage());
         }
          //關閉資料庫連線
-        $VTs->DBClose();
+        $SysClass->DBClose();
         //釋放
-        $VTs = null;
+        $SysClass = null;
         $this->viewContnet['pageContent'] = $pageContent;
         return new ViewModel($this->viewContnet);
     }
