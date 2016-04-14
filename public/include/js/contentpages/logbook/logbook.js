@@ -19,14 +19,24 @@ function getLaborsafetyContent(){
       }else{
         $("#isnew").val(0);
       }
+      try{
+        if(rs.fifth.contents != undefined){
+          $("#fifth").val(rs.fifth.contents);
+        }
+        if(rs.seventh.contents != undefined){
+          $("#seventh").val(rs.seventh.contents);
+        }
+      }catch(error){
+        // console.log(error);
+        if(rs.fifth != null){
+          $("#fifth").val(rs.fifth.contents);
+        }
 
-      if(rs.fifth.contents != undefined){
-        $("#fifth").val(rs.fifth.contents);
-      }
-      if(rs.seventh.contents != undefined){
-        $("#seventh").val(rs.seventh.contents);
-      }
+        if(rs.seventh != null){
+          $("#seventh").val(rs.seventh.contents);
+        }
 
+      }
       
     }else{
       $("#loadpageArea").html("主任已確認,資料無法再進行修改");
