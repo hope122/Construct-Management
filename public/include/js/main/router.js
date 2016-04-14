@@ -53,7 +53,7 @@ function loadPage(page,contentID,removeHead,popstate){
     	url: loadPage, 
     	type: "GET",
     	success: function(contents){
-    		putContent( contentID, getContent(contents), removeHead);
+    		putContent( contentID, getRouterContent(contents), removeHead);
     	},
     	error: function(xhr, status, msg){
 			putContent( contentID, "此功能暫不開放" );
@@ -76,7 +76,7 @@ function loader(itemObject,itemClass){
 	$(str).appendTo(itemObject);
 }
 
-function getContent(rsContent,removeHead){
+function getRouterContent(rsContent,removeHead){
 	var tmpBody,tmpHead;
 	if(removeHead){
 		$("head :not(.keep)").remove();

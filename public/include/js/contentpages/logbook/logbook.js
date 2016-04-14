@@ -275,28 +275,6 @@ function getReportContent(uid){
   });
 }
 
-function getContent(ptype,purl,divid,parameter,reset){
-  $.get(configObject.logbookGetData+"?type="+ptype+parameter, function( data ) {    
-    console.log(data);
-
-    //   //丟資料toCM回傳html內容
-    //   $.ajax({
-    //    url: originUrl+"logbook/"+purl,
-    //    type: "POST",
-    //    data: {data:JSON.parse(data)},
-    //    async:false,
-    //    success: function(rs){
-    //     console.log(rs);
-    //     $("#"+divid).empty();
-    //     $("#"+divid).append(rs);
-    //     if(reset){
-    //       // setBtn();
-    //     }
-    //    }
-    // });
-  });
-}
-
 function tolist(){
   // getContent('list','list','div_content','',true);
   getListContent();

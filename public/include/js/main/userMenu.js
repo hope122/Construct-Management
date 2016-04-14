@@ -6,6 +6,7 @@ function getMenus(loginInfo){
       var thisHref = $(this).attr("href");
       if(thisHref != "#"){
         //location.href = location.origin + "/" + $(this).attr("href");
+        $("#pagescontent").empty();
         loadPage($(this).attr("href"),"pagescontent");
       }
       return false;
