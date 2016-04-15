@@ -149,9 +149,12 @@ function getSetcontentContent(){
                 $(setcontentPageStyleObj).find("#workcountList").after(workcountStyleObj);
               });
             }
-            $(setcontentPageStyleObj).find("#fourth").text(rs.fifth);
-            $(setcontentPageStyleObj).find("#sixth").text(rs.seventh);
-
+            if(rs.fifth != null){
+              $(setcontentPageStyleObj).find("#fourth").text(rs.fifth);
+            }
+            if(rs.seventh != null){
+              $(setcontentPageStyleObj).find("#sixth").text(rs.seventh);
+            }
 
             $("#loadpageArea").empty().html(setcontentPageStyleObj);
             
@@ -277,6 +280,7 @@ function getReportContent(uid){
 
 function tolist(){
   // getContent('list','list','div_content','',true);
+  console.log("T");
   getListContent();
 }
 //===============list=========s

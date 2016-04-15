@@ -1,134 +1,168 @@
-<div align="center"><b><span>建築物施工日誌</span></b></div>
-<a href='javascript:tolist()'>返回日誌清單</a><br>
+
+<div class=" col-xs-12 col-md-12">
+    <div class="col-xs-12 col-md-12 text-center">
+        <i class="fa fa-angle-double-left fa-2x send-btn mouse-pointer pull-left" onclick="tolist()"></i>
+        建築物施工日誌
+    </div>
+
     <div id='div_hid' >
         <input type='button'  onclick='savecontent()' value="暫存">(暫時儲存)
         <input type='button'  onclick='savecontentcheck()' value="確認">(確認後不可再修改)
     </div>
     <!-- <a href='javascript:savecontent();'>送出<> -->
-    <div align='center'>
-    <form id='cform'  method="post">
-        <div align='center'>
+    <div class="col-xs-12 col-md-12 item-margin-top item-margin-bottom text-center">
+        <form id='cform'  method="post">
             <input type='hidden' id='isnew'>
             <input type='hidden' name='week' id="week">
             <input type='hidden' name='type' value='diary_info'>
-           <div>
-                <div align='left'>
-                    <div>表單編號：<span id="no"></span></div>
-                    <br>
-                    <b>今日日期：</b><span id="date"></span>
-                    <br>
+            <div class="col-xs-12 col-md-12 item-margin-bottom">
+                <div class="col-xs-6 col-md-6">表單編號：<span id="no"></span></div>
+                <div class="col-xs-6 col-md-6">今日日期：<span id="date"></span></div>
+            </div>
+            <div class="col-xs-12 col-md-12">
+                <div class="col-xs-2 col-md-2 f-right">上午天氣</div>
+                <div class="col-xs-4 col-md-4">
+                   <select id='amw' class='form-control' name='amwather'>
+                        <option value=0>請選擇</option>
+                    </select >
                 </div>
-
-                    <b>本日天氣：</b>
-                    <span>
-                       <b> 上午：</b>
-                       <select id='amw' class='1u 12u(mobile)' style='display:inline;' name='amwather' class='cls_input'>
-                                <option value=0>請選擇</option>
-                        </select >
-                    </span> &nbsp;&nbsp;
-                    <span>
-                        <b>下午：</b><select id='pmw' class='1u 12u(mobile)' style='display:inline;'  name='pmwather' class='cls_input'>
-                                <option value=0>請選擇</option>
-                            </select>
-                    </span>
-        </div>
-        <br>
-        <br>
-
-    </form>
+                <div class="col-xs-2 col-md-2 f-right">下午天氣</div>
+                <div class="col-xs-4 col-md-4">
+                    <select id='pmw' class='form-control' name='pmwather'>
+                        <option value=0>請選擇</option>
+                    </select>
+                </div>
+            </div>
+            
+        </form>
     </div>
-    <table class='border' align='center'  rules="all" cellpadding='10';>
-        <tr >
-            <td COLSPAN=2><b>工程名稱</b></td>
-            <td COLSPAN=2 id="prjname"></td>
-            <td COLSPAN=2><b>承攬廠商名稱</b></td>
-            <td COLSPAN=2 id="supplyname"></td>
-        </tr>
-        <tr>
-            <td><b>契約工期</b></td>
-            <td><span id="pday"></span>天</td>
-            <td><b>累計工期</b></td>
-            <td id="aday"></td>
-            <td><b>剩餘工期</b></td>
-            <td id="sday"></td>
-            <td><b>工期展延天數</b></td>
-            <td id="cday"></td>
-        </tr>
-        
-        <tr >
-            <td COLSPAN=2><b>開工日期</b></td>
-            <td COLSPAN=2 id="start"></td>
-            <td COLSPAN=2><b>完工日期</b></td>
-            <td COLSPAN=2 id="end"></td>
-        </tr>
-            <tr >
-            <td COLSPAN=2><b>預期進度（％）</b></td>
-            <td COLSPAN=2 id="price_tbp"></td>
-            <td COLSPAN=2><b>實際進度（％）</b></td>
-            <td COLSPAN=2 id="price_twp"></td>
-        </tr>
-        <tr>
-            <td COLSPAN=8>
-               <b> 一、依施工計畫書執行按圖施工概況（含約定之重要施工項目即完成數量等）：</b>
-            </td>
-        </tr>
-        <tr id="constructionList">
-            <td COLSPAN=2><b>施工項目</b></td>
-            <td><b>單位</b></td>
-            <td><b>契約數量</b></td>
-            <td><b>本日完成數量</b></td>
-            <td><b>累計完成數量</b></td>
-            <td COLSPAN=2><b>備註</b></td>
-        </tr>
-        <tr>
-            <td COLSPAN=8>
-                <b>二、工地材料管理概況（含約定之重要材料）：</b>
-            </td>
-        </tr>
-        <tr id="materielcountList">
-            <td COLSPAN=2><b>材料名稱</b></td>
-            <td><b>單位</b></td>
-            <td><b>設計數量</b></td>
-            <td><b>本日進場數量</b></td>
-            <td><b>累計進場數量</b></td>
-            <td COLSPAN=2><b>備註</b></td>
-        </tr>
-        <tr>
-        <td COLSPAN=8>
-                <b>三、工地人員及機具管理（含約定之人數及機具使用情形及數量）：</b>
-            </td>
-        </tr>
-        <tr id="workcountList">
-            <td COLSPAN=2><b>工別</b></td>
-            <td><b>本日人數</b></td>
-            <td><b>累計人數</b></td>
-            <td COLSPAN=2><b>機具名稱</b></td>
-            <td><b>本日進場數量</b></td>
-            <td><b>累計進場數量</b></td>
-        </tr>
-        <tr>
-            <td COLSPAN=8>
-                <b>四、工地勞工安全事項之督導、公共環境與安全之維護及其他工地行政事務：</b><br>
-                <span id="fourth"></span>
-            <td>
-        <tr>
-        <tr>
-            <td COLSPAN=8>
-                <b>五、施工取樣試驗紀錄：</b><br>
-                <span id="fifth"></span>
-            <td>
-        <tr>
-        <tr>
-            <td COLSPAN=8>
-                <b>六、通知協力廠商辦理事項：</b><br>
-                <span id="sixth"></span>
-            <td>
-        <tr>
-        <tr>
-            <td COLSPAN=8>
-                <b>七、重要事項紀錄：</b><br>
-                <span id="seventh"></span>
-            <td>
-        <tr>
-    </table>
-    <br>
+
+    <div class=" col-xs-12 col-md-12">
+            <div class="col-xs-12 col-md-12 item-list-border">
+                <div class="col-xs-12 col-md-12 ">
+                    <div class="col-xs-6 col-md-6 ">
+                        <div class="col-xs-6 col-md-6">工程名稱:</div>
+                        <div class="col-xs-6 col-md-6" id="prjname"></div>
+                    </div>
+                    <div class="col-xs-6 col-md-6">
+                        <div class="col-xs-6 col-md-6">承攬廠商名稱:</div>
+                        <div class="col-xs-6 col-md-6" id="supplyname"></div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-12">
+                    <div class="col-xs-6 col-md-6">
+                        <div class="col-xs-6 col-md-6">契約工期:</div>
+                        <div class="col-xs-6 col-md-6" id="pday"></div>
+                    </div>
+                    <div class="col-xs-6 col-md-6">
+                        <div class="col-xs-6 col-md-6">工期展延天數:</div>
+                        <div class="col-xs-6 col-md-6" id="cday"></div>
+                    </div>
+                </div> 
+                <div class="col-xs-12 col-md-12">
+                    <div class="col-xs-6 col-md-6">
+                        <div class="col-xs-6 col-md-6">累計工期:</div>
+                        <div class="col-xs-6 col-md-6" id="aday"></div>
+                    </div>
+                    <div class="col-xs-6 col-md-6">
+                        <div class="col-xs-6 col-md-6">剩餘工期:</div>
+                        <div class="col-xs-6 col-md-6" id="sday"></div>
+                    </div> 
+                </div>
+                
+                <div class="col-xs-12 col-md-12">
+                    <div class="col-xs-6 col-md-6">
+                        <div class="col-xs-6 col-md-6">開工日期:</div>
+                        <div class="col-xs-6 col-md-6" id="start"></div>
+                    </div>
+                    <div class="col-xs-6 col-md-6">
+                        <div class="col-xs-6 col-md-6">完工日期:</div>
+                        <div class="col-xs-6 col-md-6" id="end"></div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-12">
+                    <div class="col-xs-6 col-md-6">
+                        <div class="col-xs-6 col-md-6">預期進度（％)</div>
+                        <div class="col-xs-6 col-md-6" id="price_tbp"></div>
+                    </div>
+                    <div class="col-xs-6 col-md-6">
+                        <div class="col-xs-6 col-md-6">實際進度（％)</div>
+                        <div class="col-xs-6 col-md-6" id="price_twp"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-xs-12 col-md-12 item-list-border item-margin-top">
+                <div class="col-xs-12 col-md-12 list-items-bottom">
+                     一、依施工計畫書執行按圖施工概況（含約定之重要施工項目即完成數量等）：
+                </div>
+                <div class="col-xs-12 col-md-12 "id="constructionList">
+                    <div class="col-xs-2 col-md-2">施工項目</div>
+                    <div class="col-xs-2 col-md-2">單位</div>
+                    <div class="col-xs-2 col-md-2">契約數量</div>
+                    <div class="col-xs-2 col-md-2">本日完成數量</div>
+                    <div class="col-xs-2 col-md-2">累計完成數量</div>
+                    <div class="col-xs-2 col-md-2">備註</div>
+                </div>
+            </div>
+            
+            
+            <div class="col-xs-12 col-md-12 item-list-border item-margin-top">
+                <div class="col-xs-12 col-md-12 list-items-bottom">
+                    二、工地材料管理概況（含約定之重要材料）：
+                </div>
+                <div class="col-xs-12 col-md-12 "id="materielcountList">
+                    <div class="col-xs-2 col-md-2">材料名稱</div>
+                    <div class="col-xs-2 col-md-2">單位</div>
+                    <div class="col-xs-2 col-md-2">設計數量</div>
+                    <div class="col-xs-2 col-md-2">本日進場數量</div>
+                    <div class="col-xs-2 col-md-2">累計進場數量</div>
+                    <div class="col-xs-2 col-md-2">備註</div>
+                </div>
+            </div>
+            
+            <div class="col-xs-12 col-md-12 item-list-border item-margin-top">
+                <div class="col-xs-12 col-md-12 list-items-bottom">
+                    三、工地人員及機具管理（含約定之人數及機具使用情形及數量）：
+                </div>
+            
+                <div class="col-xs-12 col-md-12 "id="workcountList">
+                    <div class="col-xs-2 col-md-2">工別</div>
+                    <div class="col-xs-2 col-md-2">本日人數</div>
+                    <div class="col-xs-2 col-md-2">累計人數</div>
+                    <div class="col-xs-2 col-md-2">機具名稱</div>
+                    <div class="col-xs-2 col-md-2">本日進場數量</div>
+                    <div class="col-xs-2 col-md-2">累計進場數量</div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-md-12 item-list-border item-margin-top">
+                <div class="col-xs-12 col-md-12 list-items-bottom">四、工地勞工安全事項之督導、公共環境與安全之維護及其他工地行政事務：
+                </div>
+                <div class="col-xs-12 col-md-12" id="fourth">&nbsp;</div>
+            </div>
+            
+            <div class="col-xs-12 col-md-12 item-list-border item-margin-top">
+                <div class="col-xs-12 col-md-12 list-items-bottom">
+                五、施工取樣試驗紀錄：
+                </div>
+                <div class="col-xs-12 col-md-12" id="fifth">&nbsp;</div>
+            </div>
+
+            <div class="col-xs-12 col-md-12 item-list-border item-margin-top">
+                <div class="col-xs-12 col-md-12 list-items-bottom">
+                六、通知協力廠商辦理事項：
+                </div>
+                <div class="col-xs-12 col-md-12" id="sixth">&nbsp;</div>
+            </div>
+
+            <div class="col-xs-12 col-md-12 item-list-border item-margin-top">
+                <div class="col-xs-12 col-md-12 list-items-bottom">
+                七、重要事項紀錄：
+                </div>
+                <div class="col-xs-12 col-md-12" id="seventh">&nbsp;</div>
+            </div>
+            
+    </div>
+    
+</div>

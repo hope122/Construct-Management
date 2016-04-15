@@ -1,5 +1,5 @@
 $(function(){
-  getListContent('list','list','div_content','',true);
+  getListContent();
 
 });
 //影印
@@ -146,8 +146,12 @@ function getSetcontentContent(){
                 $(setcontentPageStyleObj).find("#workcountList").after(workcountStyleObj);
               });
             }
-            $(setcontentPageStyleObj).find("#fourth").text(rs.fifth);
-            $(setcontentPageStyleObj).find("#sixth").text(rs.seventh);
+            if(rs.fifth != null){
+              $(setcontentPageStyleObj).find("#fourth").text(rs.fifth);
+            }
+            if(rs.seventh != null){
+              $(setcontentPageStyleObj).find("#sixth").text(rs.seventh);
+            }
 
 
             $("#loadpageArea").empty().html(setcontentPageStyleObj);
@@ -162,6 +166,7 @@ function getSetcontentContent(){
 
 // getListContent('list','list','div_content','',true);
 function getListContent(){
+  // console.log("T");
   $.getJSON(configObject.logbookGetData,{type:"list"}, function( rs ) {    
     // console.log(rs);
     var option = {
@@ -183,8 +188,11 @@ function getListContent(){
           $(listStyleObj).find(".fa-file-o").click(function(){
             toreport(content.uid);
           });
-          $(listStyleObj).appendTo($(listPageStyleObj).find("#div_tr"));
+          $(listStyleObj).appendTo( $(listPageStyleObj).find("#div_tr") );
+          // $("#loadpageArea").find("#div_tr").append(listStyleObj);
+
         });
+        console.log(listPageStyleObj);
         // div_tr
         $("#loadpageArea").empty().html(listPageStyleObj);
       })
@@ -274,6 +282,7 @@ function getReportContent(uid){
 
 function tolist(){
   // getContent('list','list','div_content','',true);
+  console.log("t");
   getListContent();
 }
 //===============list=========s
@@ -378,7 +387,7 @@ function savelaborsafety(){
        }
     });
   }
-  getListContent('list','list','div_content','',true);
+  getListContent();
 }
 //存檔
 function save(){
