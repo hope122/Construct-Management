@@ -113,8 +113,8 @@ function createJobRankTree(putArea, orgID){
             addJobRank(putArea, orgID, jobTreeChart, parentID);
         },
         onDeleteNode: function(node){
-            deleteNode(node.data.id);
-            // jobTreeChart.deleteNode(node.data.id); 
+            jobDeleteNode(node.data.id);
+            jobTreeChart.deleteNode(node.data.id); 
         },
         onClickNode: function(node){
             // log('Clicked node '+node.data.id);
@@ -174,4 +174,17 @@ function createJobTreeData(ID, Name,parentID){
         parent: parentID
     };
     jobData.push(treeObj);
+}
+
+function jobDeleteNode(uid){
+    var sendObj = {
+        apiMethod: ctrlAdminDelAPI+"Delete_AssPosition",
+        deleteObj:{
+            iUid: uid
+        }
+    }
+    // console.log(uid);
+    $.post(configObject.deleteAPI , sendObj).done(function(rs){
+        // console.log(rs);
+    });
 }

@@ -80,25 +80,30 @@ function getQCTotalTableList(showArea){
 }
 
 // 取得標題相關內容
-function getQCTableTitleList(showArea, API){
+function getQCTableTitleList(showArea, API, typeID){
   // console.log(API);
   $("#"+showArea).empty();
   // selectOptionPut("titleID","null","請選擇自檢表");
   // $.getJSON(QCAPI + "GetTitle",function(rs){
-  if(API == "GetEngSingleList"){
-    API = qcTableListAPI + API;
-    option = {type:"c"};
-  }else{
-    API = qcMaterielAPI + API;
-    option = {};
+  // if(API == "GetEngSingleList"){
+  //   API = QCAPI + API;
+  //   option = {type:"c"};
+  // }else{
+  //   API = qcMaterielAPI + API;
+  //   option = {};
+  // }
+  API = QCAPI + API;
+  var option = {
+    typeId: typeID
   }
   $.getJSON(API,option,function(rs){
-    // console.log(rs);
+    console.log(rs);
 
-    if(rs.status){
+    if(rs.Status){
+      // console.log("T");
         getTableListStyle(function(tableListStyle){
 
-            $.each(rs.data,function(index,content){
+            $.each(rs.Data,function(index,content){
                 var tableList = $.parseHTML(tableListStyle);
                 $(tableList).find(".table-name").html(content.name);
                 $(tableList).find(".edit-btn").click(function(){
@@ -149,11 +154,12 @@ function getQCTableTypeList(objectID,typeValID,isInsert){
            // console.log(isInsert);
           if(isInsert){
             // console.log("T");
-            var API = "GetEngSingleList";
-            if(content.Uid == 1){
-              API = "getMaterielList";
-            }
-            getQCTableTitleList(objectID+"-"+content.Uid+"-content", API);
+            // var API = "GetEngSingleList";
+            // if(content.Uid == 1){
+            //   API = "getMaterielList";
+            // }
+            var API = "GetTitle";
+            getQCTableTitleList(objectID+"-"+content.Uid+"-content", API, content.Uid);
           }else{
             getQCTotalTableList(objectID+"-"+content.Uid+"-content");
           }
