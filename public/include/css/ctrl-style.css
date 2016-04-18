@@ -381,3 +381,7 @@ textarea{
 	padding-right: 15px !important;
 	padding-left: 15px !important;
 }
+
+.f-width-bolder{
+	font-weight: bold;
+}

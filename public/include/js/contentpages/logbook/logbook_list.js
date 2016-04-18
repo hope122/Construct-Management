@@ -183,6 +183,7 @@ function getListContent(){
         var listPageStyleObj = $.parseHTML(listPageStyle);
         $.each(rs, function(index,content){
           var listStyleObj = $.parseHTML(listStyle);
+          $(listStyleObj).addClass("dataContent");
           $(listStyleObj).find(".list-items").eq(0).text(content.no);
           $(listStyleObj).find(".list-items").eq(1).text(content.date);
           $(listStyleObj).find(".fa-file-o").click(function(){
@@ -192,8 +193,9 @@ function getListContent(){
           // $("#loadpageArea").find("#div_tr").append(listStyleObj);
 
         });
-        console.log(listPageStyleObj);
+        // console.log(listPageStyleObj);
         // div_tr
+        $(listPageStyleObj).find(".dataContent").last().removeClass("list-items-bottom");
         $("#loadpageArea").empty().html(listPageStyleObj);
       })
       
