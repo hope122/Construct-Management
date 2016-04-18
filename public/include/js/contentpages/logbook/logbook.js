@@ -266,8 +266,12 @@ function getReportContent(uid){
                 $(reportPageStyleObj).find("#workcountList").after(workcountStyleObj);
               });
             }
-            $(reportPageStyleObj).find("#fourth").text(rs.fifth);
-            $(reportPageStyleObj).find("#sixth").text(rs.seventh);
+            if(rs.fifth != null){
+              $(reportPageStyleObj).find("#fourth").text(rs.fifth);
+            }
+            if(rs.seventh != null){
+              $(reportPageStyleObj).find("#sixth").text(rs.seventh);
+            }
             $("#loadpageArea").empty().html(reportPageStyleObj);
 
           });
