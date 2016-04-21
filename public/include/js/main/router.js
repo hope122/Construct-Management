@@ -238,6 +238,14 @@ function elfguide(pageObject){
 						$(tmpContent).find(".date").datepicker();
 					}
 				}
+
+				if(typeof pageObject.selectData[i] == "object"){
+					$.each(pageObject.selectData[i], function(id, data){
+						data( $(tmpContent).find("#"+id) );
+						// $(putData).appendTo();
+					});
+				}
+				
 				if(typeof pageObject.nextBtnAction[i] == "function"){
 					$(tmpContent).find(".nextBtn").click(function(){
 						var nowItem = $("#"+pageObject.putArea).find("#"+i);

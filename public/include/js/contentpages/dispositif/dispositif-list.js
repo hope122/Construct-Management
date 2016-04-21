@@ -40,6 +40,25 @@ function addNewContent(){
 		putArea: "modifyArea",
 		startHide: "mainContent",
 		dataClass: "userInput",
+		selectData: {
+			dispositif_people:{
+				partyA: function( object ){
+					var sendObj = {
+						api: "V201604/Su/waSuSupply/api/ctrlSuSupply/GetData_SuSupply",
+						data: {}
+					}
+					$.getJSON(wrsUrl,sendObj,function(rs){
+						// console.log(rs);
+						if(rs.status){
+							$.each(rs.data,function(index, content){
+								selectOptionPut( $(object), content.uid, content.name);
+							});
+							// console.log($(object));
+						}
+					});
+				}
+			}
+		},
 		dataOption:{
 			dateFormat: "yy-mm-dd",
 			onSelect: function(dateText, inst) {
@@ -110,8 +129,17 @@ function addNewContent(){
 			}
 		},
 		finishBtnAction: function( data ){
-			
-			console.log(data);
+			data.partyB = 1;
+			var isNull = false;
+			$.each(data,function(i,content){
+				if($.trim(content) == ""){
+					isNull = true;
+				}
+			});
+			if(!isNull){
+				insertDispositif(data);
+			}
+			// console.log(data);
 		},
 		breadcrumbs:{
 			mean:{
@@ -158,11 +186,23 @@ function getContructList(){
 		}else{
 			putEmptyInfo( $("#contentList") );
 		}
-		console.log(rs);
+		// console.log(rs);
 	}).fail(function(){
 		putEmptyInfo( $("#contentList") );
 	});
 
 	
 	// putEmptyInfo( $("#contentList") );
+}
+
+function insertDispositif(data){
+	var sendObj = {
+		api: "waDataBase/api/Main/setMainInsert",
+		data:data
+	}
+	console.log(sendObj);
+	// return;
+	$.post(wrsUrl, sendObj,function(rs){
+		console.log(rs);
+	});
 }
