@@ -213,7 +213,7 @@ function elfguide(pageObject){
 		$.each(pageOb,function(i,v){
 			var tmpPath = eg_path + v + ".html";
 			var tmpContent;
-			$.get(tmpPath,{},function(pagesContent){
+			$.get(tmpPath,function(pagesContent){
 				tmpContent = $.parseHTML('<div class="elfguide" id="'+i+'">'+pagesContent+'</div>');
 			}).done(function(){
 				var keys = Object.keys( pageOb ),
@@ -229,6 +229,14 @@ function elfguide(pageObject){
 						itemFade(pageObject.putArea,false);
 						pageObject.backAction();
 					});
+				}
+				// 若有需要選日期的部分，自動載入datepicker
+				if($(tmpContent).find(".date").length){
+					if(pageObject.dateOption != undefined){
+						$(tmpContent).find(".date").datepicker(pageObject.dateOption);
+					}else{
+						$(tmpContent).find(".date").datepicker();
+					}
 				}
 				if(typeof pageObject.nextBtnAction[i] == "function"){
 					$(tmpContent).find(".nextBtn").click(function(){
@@ -265,6 +273,72 @@ function elfguide(pageObject){
 							preItem = null;
 						}
 						pageObject.preBtnAction[i]( nowItem, preItem );
+					});
+				}
+
+				if(typeof pageObject.finishBtnAction == "function"){
+					$(tmpContent).find(".finishBtn").click(function(){
+						var data = {};
+						// 若有設置 dataClass 參數，則以此進行資料取得
+						if(pageObject.dataClass != undefined){
+							if(typeof pageObject.dataClass == "string"){
+								$("#"+pageObject.putArea).find("."+pageObject.dataClass).each(function(){
+									var inputType = $(this).prop("type");
+									var isInput = false;
+									var value = $(this).val();
+									
+									if(inputType != "radio" && inputType != "checkbox"){
+										isInput = true;
+									}
+									if($.trim($(this).prop("name")).length && isInput){
+										data[$(this).prop("name")] = value;
+									}else if($.trim($(this).prop("id")).length && isInput){
+										data[$(this).prop("id")] = value;
+									}else{
+										var id = $(this).prop("name");
+										if(!$.trim(id).length && $(this).prop("checked")){
+											id = $(this).prop("id");
+											value = $(this).val();
+											if(value == undefined){
+												value = true;
+											}
+											data[id] = value;
+											// console.log(id,value);
+										}else if($.trim(id).length){
+											value = $("[name="+id+"]:checked").val();
+											if(value == undefined){
+												value = true;
+											}
+											data[id] = value;
+										}
+									}
+								});
+							}else{
+								$("#"+pageObject.putArea).find(pageObject.dataClass).each(function(){
+									var inputType = $(this).prop("type");
+									var isInput = false;
+									if(inputType != "radio" && inputType != "checkbox"){
+										isInput = true;
+									}
+									if($.trim($(this).prop("name").length) && isInput){
+										data[$(this).prop("name")] = $(this).val();
+									}else if($.trim($(this).prop("id").length) && isInput){
+										data[$(this).prop("id")] = $(this).val();
+									}else{
+										var id = $(this).prop("name");
+										var value = $("[name="+id+"]:checked").val();
+										if(value == undefined){
+											value = true;
+										}
+										data[id] = value;
+									}
+								});
+							}
+							pageObject.finishBtnAction( data );
+						}else{
+							pageObject.finishBtnAction( 'dataClass is not setting' );
+						}
+						
 					});
 				}
 

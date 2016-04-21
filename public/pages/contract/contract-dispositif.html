@@ -11,20 +11,23 @@
 		-->
 	</head>
 	<body>
-		<article class="box post">
-			<h2 class="item-inline">契約列表</h2>
-			<div class="item-inline">
-				<i class="fa fa-plus-square fa-2x mouse-pointer" onclick="addNewContent();"></i>
+		<div id="mainContent" class="contents">
+			<!-- 標題 -->
+			<div class="col-xs-12 col-md-12 item-title text-center">
+				<h3 class="col-xs-10 col-md-11">契約列表</h3>
+				<div class="col-xs-2 col-md-1">
+					<i class="fa fa-plus-circle fa-2x send-btn mouse-pointer" onclick="addNewContent();"></i>
+				</div>
 			</div>
-			<div id="mainContent">
-				<!--放內容-->
-				<div id="listContent"></div>
-				<!--動態載入-->
-				<div id="thisBottom"></div>
+			<!-- 內容 -->
+			<div class="col-xs-12 col-md-12 item-list-border" id="contentList">
 			</div>
-			<!--新增精靈引導區-->
-			<div id="modifyArea"></div>
-		</article>
+		</div>
+		<!--新增精靈引導區-->
+		<div id="modifyArea"></div>
+
+		<script src="include/js/contentpages/dispositif/config.js"></script>
+		<script src="include/js/contentpages/dispositif/date.js"></script>
 		<script src="include/js/contentpages/dispositif/dispositif-list.js"></script>
 	</body>
 </html>

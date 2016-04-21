@@ -194,3 +194,15 @@ function selectOptionPut(selectID,putVal,putText){
     $("<option>").appendTo(selectID).prop("value",putVal).text(putText);
   }
 }
+
+function putEmptyInfo(putArea){
+    // 畫面設定值
+    var option = {styleKind:"system",style:"data-empty"};
+    // 取得畫面樣式
+    getStyle(option,function(pageStyle){
+        // 相關設定
+        putArea.append(pageStyle);
+
+        putArea.find(".list-items-bottom").last().removeClass("list-items-bottom");
+    });
+}

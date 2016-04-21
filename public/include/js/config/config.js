@@ -1,5 +1,6 @@
 //var apurl=location.origin+":99";
 var apurl = location.protocol+"//"+location.hostname+":99";
+var wrsUrl = location.protocol+"//"+location.hostname+":88/bpsAPI";
 var originUrl = location.origin+'/';
 var configObject = {
     "LoginUrl": apurl+"/login",

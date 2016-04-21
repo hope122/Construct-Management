@@ -41,7 +41,7 @@ function getsuinfo(suid){
         var data = rs.infoList;
         info='';
         i=0;
-        console.log(data);
+        // console.log(data);
         //對應索引字串
         var objectStr = {
           company:"公司名稱",
