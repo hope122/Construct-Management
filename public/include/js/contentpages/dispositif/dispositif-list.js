@@ -7,7 +7,7 @@ $(function(){
 	//$.get().done();
 });
 
-function addNewContent(modifyData){
+function addNewContent(modifyData, uid){
 	if(modifyData == undefined){
 		modifyData = {};
 	}
@@ -124,13 +124,53 @@ function addNewContent(modifyData){
 			},
 		},
 		preBtnAction:{
-			units: function(nowItem,preItem){
-				console.log(nowItem,preItem);
+			numbers: function(nowItem,preItem){
+				
 				if(preItem != null){
 					nowItem.hide();
 					itemFade( preItem ,true);
 				}
-			}
+			},
+			contract_name: function(nowItem,preItem){
+				
+				if(preItem != null){
+					nowItem.hide();
+					itemFade( preItem ,true);
+				}
+			},
+			dispositif_people: function(nowItem,preItem){
+				
+				if(preItem != null){
+					nowItem.hide();
+					itemFade( preItem ,true);
+				}
+				
+			},
+			units: function(nowItem,preItem){
+				
+				if(preItem != null){
+					nowItem.hide();
+					itemFade( preItem ,true);
+				}
+				
+			},
+			payment: function(nowItem,preItem){
+				
+				if(preItem != null){
+					nowItem.hide();
+					itemFade( preItem ,true);
+				}
+				
+			},
+			penalty: function(nowItem,preItem){
+				
+				if(preItem != null){
+					nowItem.hide();
+					itemFade( preItem ,true);
+				}
+				console.log("end");
+				
+			},
 		},
 		finishBtnAction: function( data, finishClose ){
 			data.partyB = 1;
@@ -141,8 +181,14 @@ function addNewContent(modifyData){
 				}
 			});
 			if(!isNull){
-				insertDispositif(data);
-				finishClose();
+				console.log(uid);
+				if(uid == undefined){
+					insertDispositif(data);
+				}else{
+					// console.log("T");
+					updateDispositif(data, uid);
+				}
+				// finishClose();
 			}
 			// console.log(data);
 		},
@@ -196,9 +242,9 @@ function getContructList(){
 						// console.log(sendObj);
 						$.getJSON(wrsUrl, sendObj, function(mContent){
 							if(mContent.status){
-								addNewContent(mContent.data[0]);
+								addNewContent(mContent.data[0],content.uid);
 							}
-							// console.log(mContent);
+							console.log(mContent);
 						});
 					});
 					// 刪除事件
@@ -227,16 +273,38 @@ function insertDispositif(data){
 	}
 	// console.log(sendObj,JSON.stringify(data));
 	// return;
-	$.post(wrsUrl, sendObj,function(rs){
-		// 成功之後，執行畫面重整
-		rs = $.parseJSON(rs);
-		if(rs.status){
-			getContructList();
-		}
-		console.log(rs);
-	});
-
-	// $.post("http://211.21.170.18:8080/waDataBase/api/Main/setMainInsert",data,function(rs){
+	// $.post(wrsUrl, sendObj,function(rs){
+	// 	// 成功之後，執行畫面重整
+	// 	rs = $.parseJSON(rs);
+	// 	if(rs.status){
+	// 		getContructList();
+	// 	}
 	// 	console.log(rs);
 	// });
+
+	$.post("http://211.21.170.18:8080/waDataBase/api/Main/setMainInsert",data,function(rs){
+		console.log(rs);
+	});
+}
+
+function updateDispositif(data, uid){
+	data.uid = uid;
+	var sendObj = {
+		api: "waDataBase/api/Main/setMainModify",
+		data:data
+	}
+	console.log(JSON.stringify(data));
+	// // return;
+	// $.post(wrsUrl, sendObj,function(rs){
+	// 	// 成功之後，執行畫面重整
+	// 	rs = $.parseJSON(rs);
+	// 	if(rs.status){
+	// 		getContructList();
+	// 	}
+	// 	console.log(rs);
+	// });
+
+	$.post("http://211.21.170.18:8080/waDataBase/api/Main/setMainModify",data,function(rs){
+		console.log(rs);
+	});
 }
