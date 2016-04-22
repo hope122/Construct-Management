@@ -7,7 +7,10 @@ $(function(){
 	//$.get().done();
 });
 
-function addNewContent(){
+function addNewContent(modifyData){
+	if(modifyData == undefined){
+		modifyData = {};
+	}
 	// {
 	// 	page:{},
 	// 	itemValue:{},
@@ -37,6 +40,7 @@ function addNewContent(){
 			payment: "contract/payment",
 			penalty: "contract/penalty"
 		},
+		modifyData: modifyData,
 		putArea: "modifyArea",
 		startHide: "mainContent",
 		dataClass: "userInput",
@@ -128,7 +132,7 @@ function addNewContent(){
 				}
 			}
 		},
-		finishBtnAction: function( data ){
+		finishBtnAction: function( data, finishClose ){
 			data.partyB = 1;
 			var isNull = false;
 			$.each(data,function(i,content){
@@ -138,6 +142,7 @@ function addNewContent(){
 			});
 			if(!isNull){
 				insertDispositif(data);
+				finishClose();
 			}
 			// console.log(data);
 		},
@@ -180,6 +185,26 @@ function getContructList(){
 					$(listStyleObj).addClass("dataContent");
 					$(listStyleObj).find(".list-items").eq(0).text(content.name);
 					$(listStyleObj).appendTo($("#contentList"));
+					// 編輯事件
+					$(listStyleObj).find(".fa-pencil-square-o").click(function(){
+						var sendObj = {
+							api: "waDataBase/api/Main/getMainContent",
+							data:{
+								uid: content.uid 
+							}
+						}
+						// console.log(sendObj);
+						$.getJSON(wrsUrl, sendObj, function(mContent){
+							if(mContent.status){
+								addNewContent(mContent.data);
+							}
+							// console.log(mContent);
+						});
+					});
+					// 刪除事件
+					$(listStyleObj).find(".fa-trash-o").click(function(){
+
+					});
 				});
 				$("#contentList").find(".dataContent").last().removeClass("list-items-bottom");
 			});
@@ -200,9 +225,18 @@ function insertDispositif(data){
 		api: "waDataBase/api/Main/setMainInsert",
 		data:data
 	}
-	console.log(sendObj);
+	// console.log(sendObj,JSON.stringify(data));
 	// return;
 	$.post(wrsUrl, sendObj,function(rs){
+		// 成功之後，執行畫面重整
+		rs = $.parseJSON(rs);
+		if(rs.status){
+			getContructList();
+		}
 		console.log(rs);
 	});
+
+	// $.post("http://211.21.170.18:8080/waDataBase/api/Main/setMainInsert",data,function(rs){
+	// 	console.log(rs);
+	// });
 }

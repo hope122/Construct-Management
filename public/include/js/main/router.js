@@ -223,6 +223,17 @@ function elfguide(pageObject){
 				nextKey = keys[ nextIndex ],
 				preKey = keys[ preIndex ];
 				//尚未塞值，待會寫
+
+				// 塞值
+				if(typeof pageObject.modifyData != "object"){
+					if(Object.size(pageObject.modifyData)){
+						$.each(pageObject.modifyData, function(index, value){
+							$(tmpContent).find("#"+index).val(value);
+						});
+					}
+				}
+
+
 				if(typeof pageObject.backAction == "function"){
 					$(tmpContent).find(".backBtn").click(function(){
 						itemFade(pageObject.startHide,true);
@@ -342,9 +353,14 @@ function elfguide(pageObject){
 									}
 								});
 							}
-							pageObject.finishBtnAction( data );
+							var finishClose = function(){
+								itemFade( pageObject.putArea,false);
+								itemFade( pageObject.startHide,true);
+							};
+							pageObject.finishBtnAction( data, finishClose );
 						}else{
-							pageObject.finishBtnAction( 'dataClass is not setting' );
+							var finishClose = function(){};
+							pageObject.finishBtnAction( 'dataClass is not setting', finishClose );
 						}
 						
 					});
