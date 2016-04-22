@@ -196,7 +196,7 @@ function getContructList(){
 						// console.log(sendObj);
 						$.getJSON(wrsUrl, sendObj, function(mContent){
 							if(mContent.status){
-								addNewContent(mContent.data);
+								addNewContent(mContent.data[0]);
 							}
 							// console.log(mContent);
 						});

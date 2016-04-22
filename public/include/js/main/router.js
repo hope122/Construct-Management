@@ -225,7 +225,8 @@ function elfguide(pageObject){
 				//尚未塞值，待會寫
 
 				// 塞值
-				if(typeof pageObject.modifyData != "object"){
+				if(typeof pageObject.modifyData == "object"){
+
 					if(Object.size(pageObject.modifyData)){
 						$.each(pageObject.modifyData, function(index, value){
 							$(tmpContent).find("#"+index).val(value);
