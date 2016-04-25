@@ -181,7 +181,7 @@ function addNewContent(modifyData, uid){
 				}
 			});
 			if(!isNull){
-				console.log(uid);
+				// console.log(uid);
 				if(uid == undefined){
 					insertDispositif(data);
 				}else{
