@@ -191,7 +191,8 @@ function addNewContent(modifyData, uid){
 					// console.log("T");
 					updateDispositif(data, uid);
 				}
-				// finishClose();
+				// getContructList();
+				finishClose();
 			}
 			// console.log(data);
 		},
@@ -276,18 +277,18 @@ function insertDispositif(data){
 	}
 	// console.log(sendObj,JSON.stringify(data));
 	// return;
-	// $.post(wrsUrl, sendObj,function(rs){
-	// 	// 成功之後，執行畫面重整
-	// 	rs = $.parseJSON(rs);
-	// 	if(rs.status){
-	// 		getContructList();
-	// 	}
-	// 	console.log(rs);
-	// });
-
-	$.post("http://211.21.170.18:8080/waDataBase/api/Main/setMainInsert",data,function(rs){
+	$.post(wrsUrl, sendObj,function(rs){
+		// 成功之後，執行畫面重整
+		rs = $.parseJSON(rs);
+		if(rs.status){
+			getContructList();
+		}
 		console.log(rs);
 	});
+
+	// $.post("http://211.21.170.18:8080/waDataBase/api/Main/setMainInsert",data,function(rs){
+	// 	console.log(rs);
+	// });
 }
 
 function updateDispositif(data, uid){
@@ -296,18 +297,14 @@ function updateDispositif(data, uid){
 		api: "waDataBase/api/Main/setMainModify",
 		data:data
 	}
-	console.log(JSON.stringify(data));
-	// // return;
-	// $.post(wrsUrl, sendObj,function(rs){
-	// 	// 成功之後，執行畫面重整
-	// 	rs = $.parseJSON(rs);
-	// 	if(rs.status){
-	// 		getContructList();
-	// 	}
-	// 	console.log(rs);
-	// });
-
-	$.post("http://211.21.170.18:8080/waDataBase/api/Main/setMainModify",data,function(rs){
-		console.log(rs);
+	$.post(wrsUrl, sendObj,function(rs){
+		// console.log(rs);
+		// 成功之後，執行畫面重整
+		rs = $.parseJSON(rs);
+		if(rs.status){
+			getContructList();
+		}
+		
 	});
+	
 }
