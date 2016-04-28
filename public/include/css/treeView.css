@@ -1,0 +1,15 @@
+.treeViewContent ul,li{
+	list-style:none;
+	margin: 0.5em 0 0 0.5em;
+	font-size: 16px;
+}
+.treeContent .fa-minus-square-o,.fa-plus-square-o{
+	cursor: pointer;
+}
+.treeViewContent input[type="checkbox"]{
+	margin-right: 0.6em;
+}
+
+.treeViewContent i{
+	margin-right: 0.3em;
+}

@@ -57,7 +57,7 @@ function addNewContent(modifyData, uid){
 							$.each(rs.data,function(index, content){
 								selectOptionPut( $(object), content.uid, content.name);
 							});
-							if(modifyData != undefined){
+							if(modifyData.partyA != undefined){
 								$(object).val(modifyData.partyA);
 							}
 							// console.log($(object));

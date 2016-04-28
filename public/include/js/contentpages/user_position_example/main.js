@@ -1,9 +1,11 @@
 $(function(){
     getOUData();
 });
-
+var meunData;
+var treeView;
 // 取得資料
 function getOUData(uid){
+    getMenuData();
     loader($("#grid"));
     if(uid != undefined){
         data = { iUid : uid };
@@ -11,7 +13,7 @@ function getOUData(uid){
         data = {};
     }
     var sendData = {
-        api: ctrlAuthorityAPI+"GetData_AssTypeGroup",
+        api: ctrlAuthorityAPI+"GetData_AssBaseGroupMenu",
         data: data
     }
     
@@ -20,11 +22,7 @@ function getOUData(uid){
         // console.log(rs);
         $("#grid").empty();
         if(rs.Status){
-            if(uid == null){
-                putDataToPage(rs.Data);
-            }else{
-                // insertDialog(uid,name);
-            }
+            putDataToPage(rs.Data);
         }else{
             // 放入空的
             putEmptyInfo($("#grid"));
@@ -36,6 +34,36 @@ function getOUData(uid){
     });
 }
 
+function getMenuData(){
+    var sendData = {
+        api: ctrlAuthorityAPI+"GetData_AssTypeGroup",
+        data: {}
+    }
+    
+    // ＡＰＩ呼叫
+    $.getJSON( wrsAPI + "menuAPI/userMenuPositionList" ).done(function(rs){
+        console.log(rs);
+        if(rs.status){
+
+            var options = {
+                idName: "uid",
+                title: "memo"
+            }
+
+            meunData = processTreeDataOnly(rs.data,options);
+
+            treeView = $("#treeArea").treeView({
+                data: meunData[0]
+            });
+            // console.log(meunData);
+        }
+    });
+}
+
+function test(){
+    console.log(treeView.selected());
+}
+
 // 放資料
 function putDataToPage(data, onlyData){
     if(typeof onlyData == "undefined"){
@@ -43,7 +71,7 @@ function putDataToPage(data, onlyData){
     }
     // console.log(data);
     // 畫面設定值
-    var option = {styleKind:"list",style:"2grid-modify"};
+    var option = {styleKind:"list",style:"3grid-modify"};
     // 取得畫面樣式
     getStyle(option,function(pageStyle){
         if(!onlyData){
@@ -54,6 +82,8 @@ function putDataToPage(data, onlyData){
                 $(pageStyleObj).find(".list-items").eq(0).html(content.name);
                 // 附屬說明
                 $(pageStyleObj).find(".list-items").eq(1).html(content.remark);
+                // 附屬說明
+                $(pageStyleObj).find(".list-items").eq(2).html(content.gpname);
                 // console.log(content);
                 // 修改
                 $(pageStyleObj).find(".fa-pencil-square-o").click(function(){
@@ -75,6 +105,7 @@ function putDataToPage(data, onlyData){
             
             $(pageStyleObj).find(".list-items").eq(0).html(data.name);
             $(pageStyleObj).find(".list-items").eq(1).html(data.remark);
+            $(pageStyleObj).find(".list-items").eq(2).html(data.gpname);
 
             // 修改
             $(pageStyleObj).find(".fa-pencil-square-o").click(function(){
@@ -104,10 +135,10 @@ function insertDialog(uid, modifyItem, clickObject){
     }
     var saveBtn = "";
     if(uid != undefined){
-        title = "修改群組類別";
+        title = "修改群組範本類別";
         saveBtn = "修改";
     }else{
-        title = "新增群組類別";
+        title = "新增群組範本類別";
         saveBtn = "新增";
     }
     $("#insertDialog").remove();
@@ -117,22 +148,33 @@ function insertDialog(uid, modifyItem, clickObject){
     $("#insertDialog").bsDialog({
         title:title,
         start: function(){
-          var option = {styleKind:"input",style:"text-help-2kind"};
+          var option = {styleKind:"group_example",style:"group_example_insert"};
           getStyle(option,function(insertPage){
             var insertPageObj = $.parseHTML(insertPage);
 
             $(insertPageObj).find(".row").removeClass("row").addClass("contents");
             // 第一格是名字
-            $(insertPageObj).find(".list-items").eq(0).find(".control-label").text("群組名稱");
+            $(insertPageObj).find(".list-items").eq(0).find(".control-label").text("範本名稱");
             var nameArea = $(insertPageObj).find(".list-items").eq(0).find("input:text").addClass("userInput").prop("id","name");
 
             // 第二格是備註
-            $(insertPageObj).find(".list-items").eq(1).find(".control-label").text("備註");
+            $(insertPageObj).find(".list-items").eq(1).find(".control-label").text("範本備註");
             var remarkArea = $(insertPageObj).find(".list-items").eq(1).find("input:text").addClass("userInput").prop("id","remark");
             
+            // 第三格是
+            $(insertPageObj).find(".list-items").eq(2).find(".control-label").text("使用群組");
+            var selectArea = $(insertPageObj).find(".list-items").eq(2).find("select");
+
+            if(groupData != undefined){
+                $.each(groupData, function(index, content){
+                    selectOptionPut( selectArea, content.uid, content.name);
+                });
+            }
+
             if(modifyItem != undefined){
                 nameArea.val(modifyItem.name);
                 remarkArea.val(modifyItem.remark);
+                selectArea.val(modifyItem.groupid);
             }
 
             // 放入
@@ -150,9 +192,17 @@ function insertDialog(uid, modifyItem, clickObject){
                         data.uid = uid;
                          // console.log(data);
                     }
-                   
-                    saveData(data,clickObject);
-                    $("#insertDialog").bsDialog("close");
+                    data.gpname = $("#insertDialog").find("#groupid :selected").text();
+                    var isNull = false;
+                    $.each(data,function(i,v){
+                        if($.trim(v) == ""){
+                            isNull = true;
+                        }
+                    });
+                    if(!isNull){
+                        saveData(data,clickObject);
+                        $("#insertDialog").bsDialog("close");
+                    }
                 }
             },
             {
@@ -169,37 +219,44 @@ function insertDialog(uid, modifyItem, clickObject){
 
 // 儲存
 function saveData(data,clickObject){
-    var processAPI = "Insert_AssTypeGroup";
+
+    var processAPI = "Insert_AssBaseGroup";
+
     if(data.uid != undefined){
-        processAPI = "Update_AssTypeGroup";
+
+        processAPI = "Update_AssBaseGroup";
+
         clickObject.parents(".dataContent").find(".list-items").eq(0).text(data.name);
         clickObject.parents(".dataContent").find(".list-items").eq(1).text(data.remark);
+        clickObject.parents(".dataContent").find(".list-items").eq(2).text(data.gpname);
         clickObject.unbind("click").click(function(){
             insertDialog(data.uid, data, $(this));
         });
+
     }
+
     var sendData = {
         api:ctrlAuthorityAPI + processAPI,
         data:data
     };
     // console.log(data);
+    // console.log(sendData);
     $.post(wrsUrl, sendData,function(rs){
         rs = $.parseJSON(rs);
+        console.log(rs);
         // 新增
         if(data.uid == undefined){
             data.uid = rs.Data;
             putDataToPage(data, true);
         }
     });
-    // $.post(configObject.WebAPI+"/v201604/ASS/api/ctrlAuthority/Insert_AssTypeGroup", data,function(rs){
-    //     console.log(rs);
-    // });
+
 }
 
 // 刪除
 function deleteData(uid, removeItem, name){
     var sendData = {
-        apiMethod: ctrlAuthorityDelAPI + "Delete_AssTypeGroup",
+        apiMethod: ctrlAuthorityDelAPI + "Delete_AssBaseGroup",
         deleteObj:{
             iUid: uid
         }

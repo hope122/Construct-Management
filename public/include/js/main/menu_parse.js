@@ -1,6 +1,5 @@
-menuParse();
-function menuParse(){
-	$.getJSON("menu.json",function(rs){
-		console.log(rs);
+function menuParse(menuData){
+	$.each(menuData,function(i, content){
+
 	});
 }

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>List border</title>
+
+		<!-- Bootstrap CSS -->
+		<link href="include/css/bootstrap.min.css" rel="stylesheet">
+		<link href="include/css/font-awesome.min.css" rel="stylesheet">
+		<link href="include/css/ctrl-style.css" rel="stylesheet">
+		<link href="include/css/treeView.css" rel="stylesheet">
+
+		<!-- jQuery -->
+		<script src="include/js/jquery/jquery.min.js"></script>
+		<!-- Bootstrap JavaScript -->
+		<script src="include/js/bootstrap/bootstrap.min.js"></script>
+		<script src="include/js/main/bsDialog.js"></script>
+		<script src="include/js/main/getStyle.js"></script>
+		<script src="include/js/config/config.js" type="text/javascript"></script>
+		<script src="include/js/main/main.js" type="text/javascript"></script>
+		<script src="include/js/main/router.js" type="text/javascript"></script>
+		<script src="include/js/main/treeData.js" type="text/javascript"></script>
+		<script src="include/js/main/treeView.js" type="text/javascript"></script>
+		<script src="include/js/contentpages/user_position_example/config.js" type="text/javascript"></script>
+		<script src="include/js/contentpages/user_position_example/main.js" type="text/javascript"></script>
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-md-12 item-title text-center">
+					<h3 class="col-xs-10 col-md-11">使用者權限範本基本資料</h3>
+					<div class="col-xs-2 col-md-1 item-title-plus">
+						<i class="fa fa-plus-circle fa-2x send-btn mouse-pointer" onclick="insertDialog();"></i>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 item-list-border" id="grid">
+				</div>
+			</div>
+		</div>
+		<button onclick="test()">test</button>
+		<div id="treeArea"></div>
+	</body>
+</html>
