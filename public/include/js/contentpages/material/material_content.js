@@ -13,12 +13,12 @@ function setView(){
     data = rs;
   }).done(function(){
     // console.log(Object.size(data));
-    if(Object.size(data)){
-      $.get("pages/style/material/list_content.html",function(pages){
-        var title = $.parseHTML(pages);
-        title = $(title).find(".list_title");
-        $(title).appendTo("#tbList");
-        //console.log($(totalPages));
+    $.get("pages/style/material/list_content.html",function(pages){
+      var title = $.parseHTML(pages);
+      title = $(title).find(".list_title");
+      $(title).appendTo("#tbList");
+      //console.log($(totalPages));
+      if(Object.size(data)){
         var countNO = 1;
         $.each(data,function(i,v){
           var content = $.parseHTML(pages);
@@ -36,8 +36,8 @@ function setView(){
           countNO++;
           $(content).appendTo("#tbList");
         });
-      });
-    }
+      }
+    });
   });
 }
 
