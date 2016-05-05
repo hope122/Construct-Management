@@ -47,11 +47,13 @@ function cameraPlay(videoID){
 	if(cameraSupport){
 		getUserMedia.call(navigator,videoObj, function(stream) {
 			var tmpStream;
+			// console.log(window.webkitURL);
 			if (window.webkitURL) {
 		        tmpStream = window.webkitURL.createObjectURL(stream);
 		    } else {
-		        tmpStream = stream;
+		        tmpStream = URL.createObjectURL(stream);
 		    }
+		    // console.log(tmpStream);
 		    // video.src = tmpStream;
 		    // video.play();
 		    video.attr("src",tmpStream);
