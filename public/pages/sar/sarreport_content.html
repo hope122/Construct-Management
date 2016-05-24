@@ -10,6 +10,7 @@
 		<script src="https://www.google.com/jsapi"></script>
 		<script src="../../include/js/config/config.js"></script>
 		<script src="../../include/js/chart/chart.js"></script>
+		<script src="../../include/js/page/sar.js"></script>
 		<style type="text/css">
 			.css_table {
 				/*display:table;*/
@@ -33,11 +34,14 @@
 				var $date = (dateObj.getDate() < 10)? "0"+dateObj.getDate() : dateObj.getDate();
 
 				$("#report_date")
-					.datepicker({
-						dateFormat: 'yy/mm/dd'
-					})
-					.val($year+"/"+$month+"/"+$date);
-					return;
+				
+				.val($year+"/"+$month+"/"+$date)
+				.datepicker({
+					dateFormat: 'yy/mm/dd',
+					onSelect:function(){
+						reloadChart();
+					}
+				});
 				//產生圖表
 				var options = {
 				  url: configObject.SARReport,
@@ -54,10 +58,6 @@
 					
 				//顯示今日出工總人數		
 				setTotalPeople();
-				
-				$("#report_date").change(function(){
-					reloadChart();
-				});
             });
         </script>
 	</head>
