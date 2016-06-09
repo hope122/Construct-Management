@@ -11,7 +11,7 @@ div.orgChart h2 {
   min-height: 20px;
 }
 
-div.orgChart h2:hover {
+div.orgChart h2.edit:hover {
   background: #fcfaca;
   cursor: text;
 }
@@ -22,6 +22,23 @@ div.orgChart ul {
   padding : 0px;
   font-size : 0.8em;
   text-align : left;
+}
+
+div.nodeSelectModal:hover{
+  background: #fcfaca !important;
+  cursor: pointer !important;
+}
+
+div.nodeSelectModal:active{
+  background: #FFFC92 !important;
+}
+
+div.nodeSelectActive{
+  background: #FFFC92 !important;
+}
+
+div.nodeSelectActive:hover {
+  background: #FFFC92 !important;
 }
 
 div.orgChart ul.stack,
@@ -48,8 +65,8 @@ div.orgChart tr.lines td.half { width : 50%; }
 div.orgChart td {
   text-align : center;
   vertical-align : top;
-  /*padding : 0px 2px;*/
-  padding : 0px;
+  padding : 0px 2em;
+  /*padding : 0px;*/
 }
 
 div.orgChart div.node {

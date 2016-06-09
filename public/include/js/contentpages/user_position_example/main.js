@@ -53,7 +53,9 @@ function getMenuData(){
             meunData = processTreeDataOnly(rs.data,options);
 
             treeView = $("#treeArea").treeView({
-                data: meunData[0]
+                data: meunData[0],
+                expansion: false,
+                expansionLevel: 1
             });
             // console.log(meunData);
         }
@@ -162,7 +164,7 @@ function insertDialog(uid, modifyItem, clickObject){
             var remarkArea = $(insertPageObj).find(".list-items").eq(1).find("input:text").addClass("userInput").prop("id","remark");
             
             // 第三格是
-            $(insertPageObj).find(".list-items").eq(2).find(".control-label").text("使用群組");
+            $(insertPageObj).find(".list-items").eq(2).find(".control-label").text("使用類別");
             var selectArea = $(insertPageObj).find(".list-items").eq(2).find("select");
 
             if(groupData != undefined){

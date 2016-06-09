@@ -2,8 +2,11 @@ $(function(){
     getOUData();
 });
 var groupData;
+var groupExampleData;
 var treeView;
+var groupPositionData;
 var positonData;
+var suid = 1;
 // 取得資料
 function getOUData(uid){
     $.blockUI({
@@ -11,26 +14,29 @@ function getOUData(uid){
     });
     getGroupData();
     getPositionList();
+    getGroupExampleData();
 
     loader($("#grid"));
     if(uid != undefined){
-        data = { iUid : uid };
+        data = { iUid : uid, iSuid: suid };
+        // data = { iUid : uid, iSu_Id: suid };
     }else{
-        data = {};
+        data = {iSuid: suid};
+        // data = {iSu_Id: suid};
     }
     var sendData = {
-        // api: ctrlAuthorityAPI+"GetData_AssBaseGroup",
-        api: ctrlAuthorityAPI+"BPS_GetData_AssBaseGroupAuthority",
+        api: ctrlAuthorityAPI+"GetData_AssGroup",
+        // api: ctrlAuthorityAPI+"GetData_AssGroupAuthority",
         data: data
     }
+    console.log(sendData);
     
     // ＡＰＩ呼叫
     $.getJSON(wrsUrl, sendData ).done(function(rs){
-        console.log(rs);
+        // console.log(rs);
         $("#grid").empty();
         if(rs.Status){
             putDataToPage(rs.Data);
-
         }else{
             // 放入空的
             putEmptyInfo($("#grid"));
@@ -50,8 +56,41 @@ function getGroupData(){
     
     // ＡＰＩ呼叫
     $.getJSON(wrsUrl, sendData ).done(function(rs){
+        console.log(rs);
         if(rs.Status){
             groupData = rs.Data;
+        }
+    });
+}
+
+function getGroupExampleData(){
+    var sendData = {
+        api: ctrlAuthorityAPI+"BPS_GetData_AssBaseGroupAuthority",
+        data: {}
+    }
+    
+    // ＡＰＩ呼叫
+    $.getJSON(wrsUrl, sendData ).done(function(rs){
+        // console.log(rs);
+        if(rs.Status){
+            var data = {};
+            var position = {};
+            $.each(rs.Data,function(i,v){
+                data[v.stAssBaseGroup.uid] = v.stAssBaseGroup;
+                if(v.stAssBaseGroupMenu.length){
+                    var positionStr = "";
+                    $.each(v.stAssBaseGroupMenu, function(pIndex,pContent){
+                        positionStr += pContent.mid + ",";
+                    });
+                    if(positionStr.length){
+                        positionStr = positionStr.substring(0,positionStr.length-1);
+                    }
+                    position[v.stAssBaseGroup.uid] = positionStr;
+                }
+            });
+            // console.log(data,position);
+            groupExampleData = data;
+            groupPositionData = position;
         }
     });
 }
@@ -83,28 +122,26 @@ function putDataToPage(data, onlyData){
     getStyle(option,function(pageStyle){
         if(!onlyData){
             $.each(data,function(index,content){
-                var thisData = content.stAssBaseGroup;
                 var pageStyleObj = $.parseHTML(pageStyle);
                 $(pageStyleObj).addClass("dataContent");
+
                 // 名稱
-                $(pageStyleObj).find(".list-items").eq(0).html(thisData.name);
+                $(pageStyleObj).find(".list-items").eq(0).html(content.name);
+
                 // 附屬說明
-                $(pageStyleObj).find(".list-items").eq(1).html(thisData.remark);
+                $(pageStyleObj).find(".list-items").eq(1).html(content.remark);
+
                 // 附屬說明
-                var gpname = "無所屬類別";
-                if(thisData.gpname){
-                    gpname = thisData.gpname;
-                }
-                $(pageStyleObj).find(".list-items").eq(2).html(gpname);
-                // console.log(thisData);
+                $(pageStyleObj).find(".list-items").eq(2).html(content.gpname);
+                
                 // 修改
                 $(pageStyleObj).find(".fa-pencil-square-o").click(function(){
-                    insertDialog(thisData.uid, content, $(this));
+                    insertDialog(content.uid, content, $(this));
                 });
 
                 // 刪除
                 $(pageStyleObj).find(".fa-trash-o").click(function(){
-                    deleteData(thisData.uid, $(this).parents(".list-items").parent(), thisData.name);
+                    deleteData(content.uid, $(this).parents(".list-items").parent(), content.name);
                 });
 
                 $(pageStyleObj).appendTo($("#grid"));
@@ -115,18 +152,18 @@ function putDataToPage(data, onlyData){
             var pageStyleObj = $.parseHTML(pageStyle);
             $(pageStyleObj).addClass("dataContent");
             
-            $(pageStyleObj).find(".list-items").eq(0).html(data.stAssBaseGroup.name);
-            $(pageStyleObj).find(".list-items").eq(1).html(data.stAssBaseGroup.remark);
-            $(pageStyleObj).find(".list-items").eq(2).html(data.stAssBaseGroup.gpname);
+            $(pageStyleObj).find(".list-items").eq(0).html(data.name);
+            $(pageStyleObj).find(".list-items").eq(1).html(data.remark);
+            $(pageStyleObj).find(".list-items").eq(2).html(data.gpname);
 
             // 修改
             $(pageStyleObj).find(".fa-pencil-square-o").click(function(){
-                insertDialog(data.stAssBaseGroup.uid, data, $(this));
+                insertDialog(data.uid, data, $(this));
             });
 
             // 刪除
             $(pageStyleObj).find(".fa-trash-o").click(function(){
-                deleteData(data.stAssBaseGroup.uid, $(this).parents(".list-items").parent(), data.stAssBaseGroup.name);
+                deleteData(data.uid, $(this).parents(".list-items").parent(), data.name);
             });
 
             if($("#grid").find("div").length){
@@ -147,10 +184,10 @@ function insertDialog(uid, modifyItem, clickObject){
     }
     var saveBtn = "";
     if(uid != undefined){
-        title = "修改群組權限模組";
+        title = "修改公司群組類別";
         saveBtn = "修改";
     }else{
-        title = "建立群組權限模組";
+        title = "新增公司群組類別";
         saveBtn = "新增";
     }
     $("#insertDialog").remove();
@@ -158,41 +195,63 @@ function insertDialog(uid, modifyItem, clickObject){
     insertDialog.appendTo("body");
 
     $("#insertDialog").bsDialog({
-        title:title,
+        title: title,
         start: function(){
-          var option = {styleKind:"group_example",style:"group_example_insert"};
+          var option = {styleKind:"org_group",style:"org_group_insert"};
           getStyle(option,function(insertPage){
             var insertPageObj = $.parseHTML(insertPage);
 
             $(insertPageObj).find(".row").removeClass("row").addClass("contents");
             // 第一格是名字
-            $(insertPageObj).find(".list-items").eq(0).find(".control-label").text("範本名稱");
+            $(insertPageObj).find(".list-items").eq(0).find(".control-label").text("群組名稱");
             var nameArea = $(insertPageObj).find(".list-items").eq(0).find("input:text").addClass("userInput").prop("id","name");
 
             // 第二格是備註
-            $(insertPageObj).find(".list-items").eq(1).find(".control-label").text("範本備註");
+            $(insertPageObj).find(".list-items").eq(1).find(".control-label").text("群組備註");
             var remarkArea = $(insertPageObj).find(".list-items").eq(1).find("input:text").addClass("userInput").prop("id","remark");
             
-            // 第三格是
+            // 第三格是群組類別
             $(insertPageObj).find(".list-items").eq(2).find(".control-label").text("使用類別");
             var selectArea = $(insertPageObj).find(".list-items").eq(2).find("select");
-
+            if(modifyItem == null){
+                // 第四格是範本
+                $(insertPageObj).find(".list-items").eq(3).find(".control-label").text("使用範本");
+                var selectExampleArea = $(insertPageObj).find(".list-items").eq(3).find("select");
+                if(groupExampleData != undefined){
+                    $.each(groupExampleData, function(index, content){
+                        selectOptionPut( selectExampleArea, content.uid, content.name);
+                    });
+                    selectExampleArea.change(function(){
+                        var value = $(this).val();
+                        if(value){
+                            treeView.reload({selectedData:groupPositionData[value]});
+                        }else{
+                            treeView.reload();
+                        }
+                    });
+                }
+            }else{
+                $(insertPageObj).find(".list-items").eq(3).remove();
+                // treeView.reload({selectedData:groupPositionData[value]});
+            }
             if(groupData != undefined){
                 $.each(groupData, function(index, content){
                     selectOptionPut( selectArea, content.uid, content.name);
                 });
             }
 
-            // 放入
-            $(insertPageObj).appendTo( $("#insertDialog").find(".modal-body") );
             
+
             if(modifyItem != undefined){
-                nameArea.val(modifyItem.stAssBaseGroup.name);
-                remarkArea.val(modifyItem.stAssBaseGroup.remark);
-                selectArea.val(modifyItem.stAssBaseGroup.groupid);
-                
+                nameArea.val(modifyItem.name);
+                remarkArea.val(modifyItem.remark);
+                if(groupData != undefined){
+                    selectArea.val(modifyItem.groupid);
+                }
             }
 
+            // 放入
+            $(insertPageObj).appendTo( $("#insertDialog").find(".modal-body") );
             var treeArea = $('<div>').prop("id","treeArea");
             treeArea.appendTo( $("#insertDialog").find(".modal-body") );
             
@@ -202,24 +261,6 @@ function insertDialog(uid, modifyItem, clickObject){
                 selectedRturnDataIndex:"bpsID",
                 // selectedData: "1,2,3,4,5,6"
             });
-            
-            if(modifyItem != undefined){
-                if(modifyItem.stAssBaseGroup.groupid != undefined){
-                    var positionStr = "";
-                    $.each(modifyItem.stAssBaseGroupMenu, function(pIndex,pValue){
-                        positionStr += pValue.mid + ",";
-                    });
-                    // console.log(positionStr);
-                    if(positionStr.length){
-                        positionStr = positionStr.substring(0,positionStr.length - 1);
-                    }else{
-                        positionStr = null;
-                    }
-                    treeView.reload({
-                        selectedData: positionStr
-                    });
-                }
-            }
           });
         },
         button:[
@@ -232,42 +273,16 @@ function insertDialog(uid, modifyItem, clickObject){
                         data.uid = uid;
                          // console.log(data);
                     }
-                    var selectedPositon = treeView.selected();
-                    // console.log(selectedPositon);
-                    var PositonArr = [];
-                    if(selectedPositon){
-                        var selectedPositonArr = selectedPositon.split(",");
-                        
-                        $.each(selectedPositonArr,function(i,v){
-                            var selectPositonData = {};
-                            selectPositonData.mid = v;
-                            if(uid != undefined){
-                                selectPositonData.bgid = uid;
-                            }
-                            // console.log(selectPositonData);
-                            PositonArr.push(selectPositonData);
-                        });
-                    }
-                    
-                    // console.log(PositonArr);
-                    // return;
-                    if($("#insertDialog").find("#groupid").val() != ""){
-                        data.gpname = $("#insertDialog").find("#groupid :selected").text();
-                    }else{
-                        data.gpname = '無所屬類別';
-                    }
+                    data.gpname = $("#insertDialog").find("#groupid :selected").text();
+                    // 廠商ID暫時設定1
+                    data.suid = suid;
                     var isNull = false;
                     $.each(data,function(i,v){
                         if($.trim(v) == "" && i != "groupid"){
                             isNull = true;
                         }
                     });
-
-                    data = {
-                      "stAssBaseGroup": data,
-                      "stAssBaseGroupMenu": PositonArr
-                    }
-
+                    // console.log(data);
                     if(!isNull){
                         saveData(data,clickObject);
                         $("#insertDialog").bsDialog("close");
@@ -288,34 +303,34 @@ function insertDialog(uid, modifyItem, clickObject){
 
 // 儲存
 function saveData(data,clickObject){
+    console.log(data);
+    var processAPI = "Insert_AssGroup";
+    return;
+    if(data.uid != undefined){
+        processAPI = "Update_AssGroup";
 
-    var processAPI = "BPS_Insert_AssBaseGroupAuthority";
-
-    if(data.stAssBaseGroup.uid != undefined){
-
-        processAPI = "BPS_Update_AssBaseGroupAuthority";
-
-        clickObject.parents(".dataContent").find(".list-items").eq(0).text(data.stAssBaseGroup.name);
-        clickObject.parents(".dataContent").find(".list-items").eq(1).text(data.stAssBaseGroup.remark);
-        clickObject.parents(".dataContent").find(".list-items").eq(2).text(data.stAssBaseGroup.gpname);
+        clickObject.parents(".dataContent").find(".list-items").eq(0).text(data.name);
+        clickObject.parents(".dataContent").find(".list-items").eq(1).text(data.remark);
+        clickObject.parents(".dataContent").find(".list-items").eq(2).text(data.gpname);
         clickObject.unbind("click").click(function(){
             insertDialog(data.uid, data, $(this));
         });
-
     }
 
     var sendData = {
         api:ctrlAuthorityAPI + processAPI,
         data:data
     };
-    // console.log(JSON.stringify(data));
+    // console.log(data);
     // console.log(sendData);
+    console.log(JSON.stringify(data));
+
     $.post(wrsUrl, sendData,function(rs){
         rs = $.parseJSON(rs);
         console.log(rs);
         // 新增
-        if(data.stAssBaseGroup.uid == undefined){
-            data.stAssBaseGroup.uid = rs.Data;
+        if(data.uid == undefined){
+            data.uid = rs.Data;
             putDataToPage(data, true);
         }
     });
@@ -325,7 +340,7 @@ function saveData(data,clickObject){
 // 刪除
 function deleteData(uid, removeItem, name){
     var sendData = {
-        apiMethod: ctrlAuthorityDelAPI + "Delete_AssBaseGroup",
+        apiMethod: ctrlAuthorityDelAPI + "Delete_AssGroup",
         deleteObj:{
             iUid: uid
         }

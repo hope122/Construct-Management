@@ -41,7 +41,7 @@ function cameraPlay(videoID){
 	var video = $("#"+videoID),
 		videoObj = { "video": true },
 		errBack = function(error) {
-			console.log("Video capture error: ", error.code); 
+			console.log("Video capture error: ", error); 
 		};
 		//getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 	if(cameraSupport){

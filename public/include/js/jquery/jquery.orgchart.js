@@ -12,6 +12,10 @@
         onAddNode: null,
         onDeleteNode: null,
         onClickNode: null,
+        chartTitleHover: false,
+        selectModal: false,
+        selectOnly: false,
+        rootSelect: false,
         newNodeText: 'Add Child',
     };
 
@@ -28,6 +32,19 @@
             $container.find('.node').click(function(){
                 if(self.opts.onClickNode !== null){
                     self.opts.onClickNode(nodes[$(this).attr('node-id')]);
+                }
+                if(opts.selectModal){
+                    if(opts.selectOnly){
+                        $(".node").removeClass("nodeSelectActive");
+                        $(this).addClass("nodeSelectActive");
+                    }else{
+                        var isActive = $(this).prop("class").search("nodeSelectActive");
+                        if(isActive == -1){
+                            $(this).addClass("nodeSelectActive");
+                        }else{
+                            $(this).removeClass("nodeSelectActive");
+                        }
+                    }
                 }
             });
 
@@ -227,9 +244,14 @@
 
         this.formatNode = function(opts){
             var nameString = '',
-                descString = '';
+                descString = '',
+                titleClass = '',
+                selectModalClass = '';
             if(typeof data.name !== 'undefined'){
-                nameString = '<h2>'+self.data.name+'</h2>';
+                if(opts.allowEdit){
+                    titleClass = "edit";
+                }
+                nameString = '<h2 class="'+titleClass+'">'+self.data.name+'</h2>';
             }
             if(typeof data.description !== 'undefined'){
                 descString = '<p>'+self.data.description+'</p>';
@@ -242,7 +264,10 @@
             else{
                 buttonsHtml = '';
             }
-            return "<div class='node' node-id='"+this.data.id+"'>"+nameString+descString+buttonsHtml+"</div>";
+            if(opts.selectModal){
+                selectModalClass = ' nodeSelectModal';
+            }
+            return "<div class='node"+selectModalClass+"' node-id='"+this.data.id+"'>"+nameString+descString+buttonsHtml+"</div>";
         }
     }
 

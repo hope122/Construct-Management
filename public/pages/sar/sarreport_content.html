@@ -4,6 +4,7 @@
 		<link class="keep" rel="stylesheet" href="../../include/css/font-awesome.min.css">
         <link class="keep" rel="stylesheet" href="../../include/css/jquery-ui.min.css" />
         <link class="keep" rel="stylesheet" href="../../include/css/ctrl-style.css" />
+        <link class="keep" rel="stylesheet" href="../../include/css/bootstrap.min.css" />
 
 		<script src="../../include/js/jquery/jquery.min.js"></script>
 		<script src="../../include/js/jquery/jquery-ui.min.js"></script>
@@ -62,18 +63,30 @@
         </script>
 	</head>
 	<body>
-		<!-- Post -->
-		<article class="box post">
-			<div  class='css_table' align='center' style='margin: 0px auto;'>
-				<label>查詢日期：<input type="text" id="report_date" name="report_date" value=""></label>
-				<div>
-					<div class='css_table' align='center' style='margin: 0px auto;'>
-						<div><label id="has_people">今日出工總人數：<span id="totalPeople" name="totalPeople"></span>人</label></div>
-						<div><label id="no_people">今日無人出工</label></div>
-						<div id="SARChart" style="height:300px;"></div>
-					</div>
+
+		<div  class='contents'>
+			<div class="col-xs-12 col-md-12 list-items">
+				<div class="form-group">
+				    <div class="col-xs-12 col-md-2 control-label font-lineHeight f-right">
+				    	<i class="fa fa-calendar fa-lg"></i>
+				    </div>
+				    <div class="col-xs-12 col-md-10">
+						<input type="text" id="report_date" class="form-control" name="report_date" value="">
+				    </div>
 				</div>
 			</div>
-		</article>
+			<div class="col-xs-12 col-md-12 list-items">
+				<div class="form-group">
+				    <div class="col-xs-12 col-md-12 control-label font-lineHeight text-center" id="has_people">
+				    	今日出工總人數：<h3 id="totalPeople" name="totalPeople" class="item-inline"></h3>人
+				    </div>
+				    <div class="col-xs-12 col-md-12 control-label font-lineHeight text-center" id="no_people">
+				    	今日無人出工
+				    </div>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-12 list-items" id="SARChart" style="height:300px;">
+			</div>
+		</div>
 	</body>
 </html>

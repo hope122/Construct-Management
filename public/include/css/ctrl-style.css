@@ -1,3 +1,10 @@
+#logo{
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font: inherit;
+	vertical-align: baseline;
+}
 .loading-img{
   position: absolute;
   top:50%;
@@ -76,6 +83,11 @@
 .div-radius{
 	border-radius: 5px;
 }
+
+.item-border-radius{
+	border-radius: 5px;
+}
+
 .height100pre{
 	height:100%;
 }
@@ -308,6 +320,10 @@ a:hover{
 	border-bottom: 1px #E6E6E6 solid;
 }
 
+.list-items-bottom-dash{
+	border-bottom: 1px #E6E6E6 dashed;
+}
+
 .item-title-plus{
 	margin-top: 20px;
     margin-bottom: 10px;
@@ -319,6 +335,20 @@ a:hover{
 	-o-text-overflow:ellipsis;
 	overflow:hidden;
 }
+
+.list-item-text-nowrap{
+	white-space:nowrap;
+}
+
+.list-item-date-range{
+	font-size: 13px;
+}
+
+.list-item-title{
+	font-weight: bold;
+	border-bottom: 1px #E6E6E6 solid;
+}
+
 .btn-default-font-color{
     color: #333 !important;
 }
@@ -355,7 +385,7 @@ a:hover{
 }
 
 .font-lineHeight{
-	line-height: 2.5;
+	line-height: 2.1;
 }
 .bsDialogWindow {
 	width: 65%;
@@ -377,6 +407,10 @@ textarea{
 	 resize : none !important; 
 }
 
+.item-textarea-height{
+	height: 10em !important;
+}
+
 .input-group[class*="col-"]{
 	padding-right: 15px !important;
 	padding-left: 15px !important;
@@ -384,4 +418,66 @@ textarea{
 
 .f-width-bolder{
 	font-weight: bold;
+}
+
+.modal-select-header{
+	min-height: 16.5px;
+    /*padding: 15px;*/
+    padding-right: 15px;
+    padding-top: 15px;
+    padding-left: 15px;
+}
+
+.modal-select-title{
+	margin: 0;
+    line-height: 1.428571429;
+}
+
+.modal-select-title-bar{
+	padding: 16px 0 16px 0;
+}
+
+.modal-title{
+	height: 25px;
+}
+
+.modal-select-search{
+	/*float: right;*/
+    font-weight: bold;
+    line-height: 1.8;
+    text-shadow: 0 1px 0 #fff;
+    opacity: .2;
+    filter: alpha(opacity=20);
+    box-shadow: none !important;
+}
+
+.modal-items{
+	overflow: scroll;
+}
+
+.signStyleContent{
+	font-family:DFKai-sb;
+}
+
+.signTitle{
+	font-size: 1.4em;
+	margin-bottom: 0.8em;
+}
+
+.signMainTitle{
+	margin-top: 0.6em;
+	margin-bottom: 0.6em;
+}
+
+.signContent{
+	padding-top: 0.6em;
+	padding-left: 2em;
+}
+
+.received-back{
+	color:#FF6464;
+}
+
+.received-finish{
+	color:#0089DE;
 }

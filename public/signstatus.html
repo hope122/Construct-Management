@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html><head>
+		<meta name="viewport" content="initial-scale=1">
+		<meta name="viewport" content="user-scalable=yes,width=device-width,initial-scale=1">
+		<title class="keep">建築物雲端全生命週期履歷平台</title>
+		<meta class="keep" charset="utf-8">
+		<meta class="keep" name="viewport" content="width=device-width, initial-scale=1">
+		<link class="keep" rel="stylesheet" href="include/css/font-awesome.min.css">
+
+		<!--[if lte IE 8]><script src="include/strongly/assets/js/ie/html5shiv.js"></script><![endif]-->
+		<link class="keep" href="include/css/bootstrap.min.css" rel="stylesheet">
+		<link class="keep" rel="stylesheet" href="include/strongly/assets/css/main.css">
+        <link class="keep" rel="stylesheet" href="include/css/jquery-ui.min.css">
+        <link class="keep" rel="stylesheet" href="include/css/ctrl-style.css">
+        <link class="keep" rel="stylesheet" href="include/css/signstatus.css">
+
+		<!--[if lte IE 8]><link rel="stylesheet" href="../include/strongly/assets/css/ie8.css" /><![endif]-->
+		<!-- Scripts -->
+		<script class="keep" src="include/js/jquery/jquery.min.js"></script><style type="text/css"></style>
+        <script class="keep" src="include/js/jquery/jquery-ui.min.js"></script>
+        <script class="keep" src="include/js/jquery/jquery.blockui.js"></script>
+		<script class="keep" src="include/js/bootstrap/bootstrap.min.js"></script>
+
+		<!--[if lte IE 8]><script class="keep" src="include/strongly/assets/js/ie/respond.min.js"></script><![endif]-->
+		<script class="keep" src="include/js/config/config.js"></script>
+		<script class="keep" src="include/js/main/main.js"></script>
+		<script class="keep" src="include/js/main/getStyle.js"></script>
+		<script class="keep" src="include/js/main/bsDialog.js"></script>
+		<script class="keep" src="include/js/main/bsDialogSelect.js"></script>
+		<script class="keep" src="include/js/main/tab.js"></script>
+		<script type="text/javascript">
+			$(function(){
+// 				var i = 1;
+// $('.progressBar .circle').removeClass().addClass('circle');
+// $('.progressBar .bar').removeClass().addClass('bar');
+// setInterval(function() {
+// $('.progressBar .circle:nth-of-type(' + i + ')').addClass('active');
+
+// $('.progressBar .circle:nth-of-type(' + (i - 1) + ')').removeClass('active').addClass('done');
+
+// $('.progressBar .circle:nth-of-type(' + (i - 1) + ') .label').html('&#10003;');
+
+// $('.progressBar .bar:nth-of-type(' + (i - 1) + ')').addClass('active');
+
+// $('.progressBar .bar:nth-of-type(' + (i - 2) + ')').removeClass('active').addClass('done');
+
+// i++;
+
+// if (i == 0) {
+// $('.progressBar .bar').removeClass().addClass('bar');
+// $('.progressBar div.circle').removeClass().addClass('circle');
+// i = 1;
+// }
+// }, 1000);
+				$("#testBs").bsDialog({
+					autoShow:false,
+					showFooterBtn:true,
+					title: "公文B檢視",
+					modalClass: "bsDialogWindow",
+					button:[{
+						text: "退件",
+						className:"btn-danger",
+						click: function(){
+							testBs2Show();
+						}
+					},
+					{
+						text: "通過",
+						className:"btn-success",
+						click: function(){
+							testBs3Show();
+
+						}
+					}
+					]
+				});
+				$("#testBs2").bsDialog({
+					autoShow:false,
+					showFooterBtn:true,
+					title: "退件",
+					modalClass: "bsDialogWindow",
+					button:[
+					{
+						text: "取消",
+						click: function(){
+
+						}
+					},
+					{
+						text: "退件",
+						className:"btn-danger",
+						click: function(){
+
+						}
+					}
+					]
+				});
+
+				$("#testBs3").bsDialog({
+					autoShow:false,
+					showFooterBtn:true,
+					title: "簽署通過",
+					modalClass: "bsDialogWindow",
+					button:[
+					{
+						text: "取消",
+						click: function(){
+
+						}
+					},
+					{
+						text: "通過",
+						className:"btn-success",
+						click: function(){
+
+						}
+					}
+					]
+				});
+				$("#testBs4").bsDialog({
+					autoShow:false,
+					showFooterBtn:true,
+					title: "簽署建議",
+					modalClass: "bsDialogWindow",
+					button:[
+					{
+						text: "關閉",
+						click: function(){
+
+						}
+					}
+					]
+				});
+			});
+			function testBsShow(){
+				$("#testBs").bsDialog("show");
+			}
+			function testBs2Show(){
+				$("#testBs2").bsDialog("show");
+			}
+			function testBs3Show(){
+				$("#testBs3").bsDialog("show");
+			}
+			function testBs4Show(){
+				$("#testBs4").bsDialog("show");
+			}
+		</script>
+	</head>
+	<body class="homepage is-loading">
+		<div id="page-wrapper">
+
+		<!-- Header -->
+			<div id="header-wrapper">
+				<div id="header" class="container">
+
+					<!-- Logo -->
+						<h1 id="logo"><a href="./">建築物施工管理雲端系統</a></h1>
+
+					<!-- Nav -->
+						<nav id="nav">
+							<div style="float:right;">
+								<div>Hi, <span class="user-name">Race</span> 歡迎回來</div>
+							</div>
+							<!--選單-->
+							<ul id="menus">
+								<li style="white-space: nowrap;">
+									選單
+								</li>
+							</ul>
+						</nav>
+
+				</div>
+			</div>
+
+		<!-- Main -->
+			<div id="main-wrapper">
+				<div id="main" class="container">
+					<div class="row">
+						<!-- Content -->
+							<div id="pagescontent" class="12u 12u(mobile)" style="display: block;">
+								<!-- Post -->
+				<!-- ========================= 本次設計開始 ========================= -->
+								
+								<!-- 標題 -->
+								<div class="col-xs-12 col-md-12 item-title text-center">
+									<h3 class="col-xs-10 col-md-12">簽核狀態列表</h3>
+									
+								</div>
+								<!-- 內容 -->
+								<div class="col-xs-12 col-md-12 item-border item-border-radius" id="grid">
+									<!-- 列表內容 -->
+									<div class="col-xs-12 col-md-12 list-items-bottom">
+										<div class="col-xs-5 col-md-3 list-items">
+											事2016053100333
+										</div>
+										<div class="col-xs-5 col-md-4 list-items">
+											公文B
+										</div>
+										<div class="col-xs-4 col-md-2 list-items list-item-hide-text">
+											<div class="col-xs-12 col-md-12 list-item-date-range">
+											2016-05-18
+											</div>
+											<div class="col-xs-12 col-md-12 list-item-date-range">
+											2016-06-01
+											</div>
+										</div>
+										<div class="col-xs-3 col-md-2 list-items">
+											<span class="label label-primary">不需會簽</span>
+											<span class="label label-default">簽呈未進行</span>
+										</div>
+										<div class="col-xs-3 col-md-1 list-items">
+											<div class="item-actionBtn">
+												<i class="fa fa-list-alt fa-lg mouse-pointer send-btn" onclick="testBs4Show();"></i>
+												<i class="fa fa-file-text-o fa-lg mouse-pointer send-btn" onclick="testBsShow();"></i>
+												<i class="fa fa-eye fa-lg"></i>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12 col-md-12 list-items-bottom">
+										<div class="col-xs-5 col-md-3 list-items">
+											業2016053100202
+										</div>
+										<div class="col-xs-5 col-md-4 list-items">
+											公文Ａ
+										</div>
+										<div class="col-xs-4 col-md-2 list-items list-item-hide-text">
+											<div class="col-xs-12 col-md-12 list-item-date-range">
+											2016-05-18
+											</div>
+											<div class="col-xs-12 col-md-12 list-item-date-range">
+											2016-06-02
+											</div>
+										</div>
+										<div class="col-xs-3 col-md-2 list-items">
+											<span class="label label-success">已完成會簽</span>
+											<span class="label label-warning">簽呈進行中</span>
+										</div>
+										<div class="col-xs-3 col-md-1 list-items">
+											<div class="item-actionBtn">
+												<i class="fa fa-list-alt fa-lg"></i>
+												<i class="fa fa-file-text-o fa-lg"></i>
+												<i class="fa fa-eye-slash fa-lg"></i>
+											</div>
+										</div>
+										<div class="col-xs-3 col-md-12">
+											 <div class="progressBar">
+												<div class="circle done">
+													<span class="data">2016-05-18</span>
+													<span class="label">&#10003;</span>
+													<span class="title">Race</span>
+													<span class="signData">2016-05-21</span>
+												</div>
+												<span class="bar done"></span>
+												<div class="circle done">
+													<span class="data">2016-05-21</span>
+													<span class="label">&#10003;</span>
+													<span class="title">政中</span>
+													<span class="signData">2016-05-23</span>
+												</div>
+												<span class="bar half"></span>
+												<div class="circle active">
+													<span class="data">2016-05-23</span>
+													<span class="label">3</span>
+													<span class="title">邁克</span>
+												</div>
+												<span class="bar"></span>
+												<div class="circle">
+													<span class="label">4</span>
+													<span class="title">Ginny</span>
+												</div>
+												<span class="bar"></span>
+												<div class="circle">
+													<span class="label">5</span>
+													<span class="title">呂大哥</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12 col-md-12 list-items-bottom">
+										<div class="col-xs-5 col-md-3 list-items">
+											事2016053100444
+										</div>
+										<div class="col-xs-5 col-md-4 list-items">
+											公文C
+										</div>
+										<div class="col-xs-4 col-md-2 list-items list-item-hide-text">
+											<div class="col-xs-12 col-md-12 list-item-date-range">
+											2016-05-31
+											</div>
+											<div class="col-xs-12 col-md-12 list-item-date-range">
+											2016-06-01
+											</div>
+										</div>
+										<div class="col-xs-3 col-md-2 list-items">
+											<span class="label label-warning">會簽進行中</span>
+											<span class="label label-default">簽呈未進行</span>
+										</div>
+										<div class="col-xs-3 col-md-1 list-items">
+											<div class="item-actionBtn">
+												<i class="fa fa-list-alt fa-lg"></i>
+												<i class="fa fa-file-text-o fa-lg"></i>
+												<i class="fa fa-eye-slash fa-lg"></i>
+											</div>
+										</div>
+										<div class="col-xs-3 col-md-6">
+											 <div class="progressBar">
+												<div class="circle done">
+													<span class="data">2016-05-20</span>
+													<span class="label">&#10003;</span>
+													<span class="title">Race</span>
+													<span class="signData">2016-05-21</span>
+												</div>
+												<span class="bar half"></span>
+												<div class="circle active">
+													<span class="data">2016-05-21</span>
+													<span class="label">2</span>
+													<span class="title">法務部</span>
+												</div>
+											</div>
+										</div>
+										<div class="col-xs-3 col-md-6">
+											 <div class="progressBar">
+												<div class="circle done">
+													<span class="data">2016-05-20</span>
+													<span class="label">&#10003;</span>
+													<span class="title">Race</span>
+													<span class="signData">2016-05-21</span>
+												</div>
+												<span class="bar half"></span>
+												<div class="circle active">
+													<span class="data">2016-05-21</span>
+													<span class="label">2</span>
+													<span class="title">財務部</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12 col-md-12">
+										<div class="col-xs-5 col-md-3 list-items">
+											業2016053100555
+										</div>
+										<div class="col-xs-5 col-md-4 list-items">
+											公文D
+										</div>
+										<div class="col-xs-4 col-md-2 list-items list-item-hide-text">
+											<div class="col-xs-12 col-md-12 list-item-date-range">
+											2016-05-11
+											</div>
+											<div class="col-xs-12 col-md-12 list-item-date-range">
+											2016-05-31
+											</div>
+										</div>
+										<div class="col-xs-3 col-md-2 list-items">
+											<span class="label label-success">已完成會簽</span>
+											<span class="label label-warning">簽呈進行中</span>
+										</div>
+										<div class="col-xs-3 col-md-1 list-items">
+											<div class="item-actionBtn">
+												<i class="fa fa-list-alt fa-lg"></i>
+												<i class="fa fa-file-text-o fa-lg"></i>
+												<i class="fa fa-eye-slash fa-lg"></i>
+											</div>
+										</div>
+										<div class="col-xs-3 col-md-12">
+											 <div class="progressBar">
+												<div class="circle done">
+													<span class="data">2016-05-20</span>
+													<span class="label overDataLabel">&#10003;</span>
+													<span class="title">Race</span>
+													<span class="signData">2016-05-31</span>
+												</div>
+												<span class="bar done"></span>
+												<div class="circle done">
+													<span class="data">2016-05-31</span>
+													<span class="label overDataLabel">&#10003;</span>
+													<span class="title">政中</span>
+													<span class="signData">2016-06-01</span>
+												</div>
+												<span class="bar half"></span>
+												<div class="circle active">
+													<span class="data">2016-06-01</span>
+													<span class="label">3</span>
+													<span class="title">邁克</span>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- 列表內容結束 -->
+								</div>
+				<!-- ========================= 本次設計結束 ========================= -->	
+							</div>
+
+					</div>
+				</div>
+			</div>
+
+		<!-- Footer -->
+			<div id="footer-wrapper">
+				<div id="footer" class="container">
+				</div>
+				<div id="copyright" class="container">
+					<ul class="links">
+						<li>© Untitled. All rights reserved.</li><li>Design: HTML5 UP  </li>
+					</ul>
+				</div>
+			</div>
+
+		</div>
+		<!-- 測試用內容 -->
+		<div id="testBs">
+			<div class="contents signStyleContent">
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-12 control-label font-lineHeight signTitle">
+					    	受文者：<span>ＯＯＯ營造</span>
+					    </div>
+					</div>
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-12 control-label font-lineHeight list-item-text-nowrap">
+					    	發文字號：<span>業2016053100202</span>
+					    </div>
+					</div>
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-12 control-label font-lineHeight">
+					    	速別：<span>速件</span>
+					    </div>
+					</div>
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-12 control-label font-lineHeight">
+					    	密等：<span>普通</span>
+					    </div>
+					</div>
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-12 control-label font-lineHeight">
+					    	附件：<span>無</span>
+					    </div>
+					</div>
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-12 control-label font-lineHeight signMainTitle">
+					    	主旨：<span>有關系統測試與相關工程</span>
+					    </div>
+					</div>
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-12 control-label font-lineHeight">
+					    	說明：
+					    </div>
+					    <div class="col-xs-12 col-md-12 font-lineHeight signContent">
+					      測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字測試文字
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-12 control-label font-lineHeight">
+					    	正本：<span>ＯＯＯ營造</span>
+					    </div>
+					</div>
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-12 control-label font-lineHeight">
+					    	副本：<span>ＡＡＡ營造、ＢＢＢ營造</span>
+					    </div>
+					</div>
+				</div>
+				<!-- <iframe src="1010404-克林衛署發字第1010404-1號-有關本公司承攬「行政院衛生署衛生大樓新建工程」擬調整工地組織及更換人員乙案，詳如說明，請 查照。.pdf"></iframe> -->
+			</div>
+		</div>
+		<div id="testBs2">
+			<div class="contents">
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-12 control-label font-lineHeight">
+					    	請敘述退件原因：
+					    </div>
+					    <div class="col-xs-12 col-md-12">
+					      <textarea class="form-control item-textarea-height"></textarea>
+					    </div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="testBs3">
+			<div class="contents">
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-12 control-label font-lineHeight">
+					    	貼心提醒：
+					    </div>
+					    <div class="col-xs-12 col-md-12">
+					      <textarea class="form-control item-textarea-height" placeholder="若無需提醒直接點選通過即可"></textarea>
+					    </div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="testBs4">
+			<div class="contents">
+				<div class="col-xs-12 col-md-12 list-item-title text-center">
+					<div class="col-xs-5 col-md-3 list-items">
+						簽核者
+					</div>
+					<div class="col-xs-5 col-md-3 list-items">
+						日期
+					</div>
+					<div class="col-xs-5 col-md-2 list-items">
+						決定
+					</div>
+					<div class="col-xs-5 col-md-4 list-items">
+						建議
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items-bottom">
+					<div class="col-xs-5 col-md-3 list-items">
+						資訊部 Race
+					</div>
+					<div class="col-xs-5 col-md-3 list-items text-center">
+						2016-06-01
+					</div>
+					<div class="col-xs-5 col-md-2 list-items text-center">
+						通過
+					</div>
+					<div class="col-xs-5 col-md-4 list-items">
+						務必盡速辦理
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12">
+					<div class="col-xs-5 col-md-3 list-items">
+						人事部 邱政中
+					</div>
+					<div class="col-xs-5 col-md-3 list-items text-center">
+						2016-06-01
+					</div>
+					<div class="col-xs-5 col-md-2 list-items text-center">
+						通過
+					</div>
+					<div class="col-xs-5 col-md-4 list-items">
+						盡速辦理
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

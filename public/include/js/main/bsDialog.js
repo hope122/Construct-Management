@@ -43,7 +43,9 @@
                 // option["start"]();
             }).on("hidden.bs.modal",function(event){
                 // console.log($(".modal.fade.in"));
-                $(".modal.fade.in").eq(-1).fadeIn(300);
+                $(".modal.fade.in").eq(-1).fadeIn(300,function(){
+                    $("body").addClass("modal-open");
+                });
                 $selector.off("showBSDialog");
             });
             
