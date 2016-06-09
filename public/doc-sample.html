@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html><head>
+		<meta name="viewport" content="initial-scale=1">
+		<meta name="viewport" content="user-scalable=yes,width=device-width,initial-scale=1">
+		<title class="keep">建築物雲端全生命週期履歷平台</title>
+		<meta class="keep" charset="utf-8">
+		<meta class="keep" name="viewport" content="width=device-width, initial-scale=1">
+		<link class="keep" rel="stylesheet" href="include/css/font-awesome.min.css">
+		<link rel="stylesheet" href="include/css/jquery.orgchart.css">
+
+
+		<!--[if lte IE 8]><script src="include/strongly/assets/js/ie/html5shiv.js"></script><![endif]-->
+		<link class="keep" href="include/css/bootstrap.min.css" rel="stylesheet">
+		<link class="keep" rel="stylesheet" href="include/strongly/assets/css/main.css">
+        <link class="keep" rel="stylesheet" href="include/css/jquery-ui.min.css">
+        <link class="keep" rel="stylesheet" href="include/css/ctrl-style.css">
+
+		<!--[if lte IE 8]><link rel="stylesheet" href="../include/strongly/assets/css/ie8.css" /><![endif]-->
+		<!-- Scripts -->
+		<script class="keep" src="include/js/jquery/jquery.min.js"></script><style type="text/css"></style>
+        <script class="keep" src="include/js/jquery/jquery-ui.min.js"></script>
+        <script class="keep" src="include/js/jquery/jquery.blockui.js"></script>
+        <script class="keep" src="include/js/jquery/jquery.form.min.js"></script>
+		<script class="keep" src="include/js/bootstrap/bootstrap.min.js"></script>
+		<script src="include/js/jquery/jquery.orgchart.js"></script>
+
+
+
+		<!--[if lte IE 8]><script class="keep" src="include/strongly/assets/js/ie/respond.min.js"></script><![endif]-->
+		<script class="keep" src="include/js/config/config.js"></script>
+		<script class="keep" src="include/js/main/main.js"></script>
+		<script class="keep" src="include/js/main/router.js"></script>
+		<script class="keep" src="include/js/main/getStyle.js"></script>
+		<script class="keep" src="include/js/main/bsDialog.js"></script>
+		<script class="keep" src="include/js/main/bsDialogSelect.js"></script>
+		<script class="keep" src="include/js/main/tab.js"></script>
+		<script src="include/js/contentpages/received/config.js"></script>
+		<script src="include/js/contentpages/received/main.js"></script>
+		<!-- <script src="include/js/contentpages/received/jobRank.js"></script> -->
+
+		<script type="text/javascript">
+			var formStr = "<form>";
+			var formObj;
+			$(function(){
+				$("#testBs").bsDialog({
+					autoShow:false,
+					showFooterBtn:true,
+					title: "測試資料輸入",
+					button:[{
+						text: "取消",
+						click: function(){
+
+						}
+					},
+					{
+						text: "確認",
+						className:"btn-success",
+						click: function(){
+
+						}
+					}
+					]
+				});
+				$("#testBs2").bsDialog({
+					autoShow:false,
+					showFooterBtn:true,
+					title: "新增範本",
+					button:[{
+						text: "取消",
+						click: function(){
+
+						}
+					},
+					{
+						text: "存為個人文件",
+						className:"btn-info",
+						click: function(){
+							var options = {
+							    url: "http://127.0.0.1:88/uploaderAPI",
+							    type:"POST",
+							    // data: sendObj,
+							    // dataType:"JSON",
+							    beforesend: function(xhr){
+							    	testBs3Show(xhr);
+								},
+							    uploadProgress: function(event, position, total, percentComplete) {
+							       console.log(event, position, total, percentComplete);
+
+							   	},
+							   	success: function(rs) {
+							       console.log(rs);
+							   	},
+							};
+							testBs3Show();
+							// $(formObj).ajaxSubmit(options);
+						}
+					},
+					{
+						text: "存為共用範本",
+						className:"btn-success",
+						click: function(){
+							var options = {
+							    url: "http://127.0.0.1:88/uploaderAPI",
+							    type:"POST",
+							    // data: sendObj,
+							    // dataType:"JSON",
+							    beforesend: function(xhr){
+							    	testBs3Show(xhr);
+								},
+							    uploadProgress: function(event, position, total, percentComplete) {
+							       console.log(event, position, total, percentComplete);
+
+							   	},
+							   	success: function(rs) {
+							       console.log(rs);
+							   	},
+							};
+							testBs3Show();
+							// $(formObj).ajaxSubmit(options);
+						}
+					}
+					]
+				});
+				$("#testBs10").bsDialog({
+					autoShow:false,
+					showFooterBtn:true,
+					title: "新增範本",
+					button:[{
+						text: "取消",
+						click: function(){
+
+						}
+					},
+					{
+						text: "存為共用範本",
+						className:"btn-success",
+						click: function(){
+							var options = {
+							    url: "http://127.0.0.1:88/uploaderAPI",
+							    type:"POST",
+							    // data: sendObj,
+							    // dataType:"JSON",
+							    beforesend: function(xhr){
+							    	testBs3Show(xhr);
+								},
+							    uploadProgress: function(event, position, total, percentComplete) {
+							       console.log(event, position, total, percentComplete);
+
+							   	},
+							   	success: function(rs) {
+							       console.log(rs);
+							   	},
+							};
+							testBs3Show();
+							// $(formObj).ajaxSubmit(options);
+						}
+					},
+					{
+						text: "儲存",
+						className:"btn-info",
+						click: function(){
+							var options = {
+							    url: "http://127.0.0.1:88/uploaderAPI",
+							    type:"POST",
+							    // data: sendObj,
+							    // dataType:"JSON",
+							    beforesend: function(xhr){
+							    	testBs3Show(xhr);
+								},
+							    uploadProgress: function(event, position, total, percentComplete) {
+							       console.log(event, position, total, percentComplete);
+
+							   	},
+							   	success: function(rs) {
+							       console.log(rs);
+							   	},
+							};
+							testBs3Show();
+							// $(formObj).ajaxSubmit(options);
+						}
+					},
+					]
+				});
+				tabCtrl("totalTab");
+				var data = [
+				{
+					name: "通用",
+					uid: "1"
+				},
+				{
+					name: "合約1",
+					uid: "2"
+				},
+				{
+					name: "合約2",
+					uid: "3"
+				}
+				];
+				var select1 = $("#testBs3").bsDialogSelect({
+					autoShow:false,
+					showFooterBtn:true,
+					title: "請選擇選擇契約或合約",
+					data: data,
+					// data:$("#testSelect"),
+					textTag: "name",
+					valeTag: "uid",
+					button:[{
+						text: "取消",
+						click: function(){
+
+						}
+					},
+					{
+						text: "確認",
+						className:"btn-success",
+						click: function(){
+							console.log(select1.getValue());
+							var data2 = [
+								{
+									name: "通用",
+									uid: "1"
+								},
+								{
+									name: "合約4",
+									uid: "3"
+								},
+								{
+									name: "合約1",
+									uid: "2"
+								},
+								{
+									name: "合約2",
+									uid: "3"
+								}
+							];
+							select1.reloadData(data2);
+							// $("#testBs3").bsDialogSelect("close");
+						}
+					}
+					]
+				});
+				$("#testBs4").bsDialog({
+					autoShow:false,
+					showFooterBtn:true,
+					modalClass: "bsDialogWindow",
+					title: "請選擇分文的部門",
+					button:[{
+						text: "取消",
+						// className: "btn-success",
+						click: function(){
+							// xhr.abort();
+							// $(formObj).ajaxFormUnbind();
+							$("#testBs4").bsDialog("close");
+						}
+					},{
+						text: "確定",
+						className: "btn-success",
+						click: function(){
+							// xhr.abort();
+							// $(formObj).ajaxFormUnbind();
+							$("#testBs4").bsDialog("close");
+						}
+					}
+					]
+				});
+				$(".fa-sitemap").click(function(){
+					testBs4Show();
+					getOrgData();
+				});
+				$("#testBs5").bsDialog({
+					autoShow:false,
+					showFooterBtn:true,
+					title: "修改範本",
+					button:[{
+						text: "取消",
+						click: function(){
+
+						}
+					},
+					{
+						text: "存為個人文件",
+						className:"btn-info",
+						click: function(){
+							var options = {
+							    url: "http://127.0.0.1:88/uploaderAPI",
+							    type:"POST",
+							    // data: sendObj,
+							    // dataType:"JSON",
+							    beforesend: function(xhr){
+							    	testBs3Show(xhr);
+								},
+							    uploadProgress: function(event, position, total, percentComplete) {
+							       console.log(event, position, total, percentComplete);
+
+							   	},
+							   	success: function(rs) {
+							       console.log(rs);
+							   	},
+							};
+							testBs3Show();
+							// $(formObj).ajaxSubmit(options);
+						}
+					},
+					{
+						text: "儲存",
+						className:"btn-success",
+						click: function(){
+							var options = {
+							    url: "http://127.0.0.1:88/uploaderAPI",
+							    type:"POST",
+							    // data: sendObj,
+							    // dataType:"JSON",
+							    beforesend: function(xhr){
+							    	testBs3Show(xhr);
+								},
+							    uploadProgress: function(event, position, total, percentComplete) {
+							       console.log(event, position, total, percentComplete);
+
+							   	},
+							   	success: function(rs) {
+							       console.log(rs);
+							   	},
+							};
+							testBs3Show();
+							// $(formObj).ajaxSubmit(options);
+						}
+					}
+					]
+				});
+				var data = [
+				{
+					name: "通用",
+					uid: "1"
+				},
+				{
+					name: "衛署",
+					uid: "2"
+				},
+				{
+					name: "設備",
+					uid: "3"
+				}
+				];
+				var select2 = $("#testBs6").bsDialogSelect({
+					autoShow:false,
+					showFooterBtn:true,
+					title: "請選擇類別",
+					data: data,
+					// data:$("#testSelect"),
+					textTag: "name",
+					valeTag: "uid",
+					button:[{
+						text: "取消",
+						click: function(){
+
+						}
+					},
+					{
+						text: "確認",
+						className:"btn-success",
+						click: function(){
+							console.log(select2.getValue());
+							var data2 = [
+								{
+									name: "通用",
+									uid: "1"
+								},
+								{
+									name: "合約4",
+									uid: "3"
+								},
+								{
+									name: "合約1",
+									uid: "2"
+								},
+								{
+									name: "合約2",
+									uid: "3"
+								}
+							];
+							select2.reloadData(data2);
+							// $("#testBs3").bsDialogSelect("close");
+						}
+					}
+					]
+				});
+				$("#testBs7").bsDialog({
+					autoShow:false,
+					showFooterBtn:true,
+					title: "新增類別",
+					button:[{
+						text: "取消",
+						// className: "btn-success",
+						click: function(){
+							// xhr.abort();
+							// $(formObj).ajaxFormUnbind();
+							$("#testBs7").bsDialog("close");
+						}
+					},{
+						text: "確定",
+						className: "btn-success",
+						click: function(){
+							// xhr.abort();
+							// $(formObj).ajaxFormUnbind();
+							$("#testBs7").bsDialog("close");
+						}
+					}
+					]
+				});
+
+				var data = [
+				{
+					name: "通用",
+					uid: "1"
+				},
+				{
+					name: "施工",
+					uid: "2"
+				},
+				{
+					name: "維護",
+					uid: "3"
+				}
+				];
+				var select3 = $("#testBs8").bsDialogSelect({
+					autoShow:false,
+					showFooterBtn:true,
+					title: "請選擇類別",
+					data: data,
+					// data:$("#testSelect"),
+					textTag: "name",
+					valeTag: "uid",
+					button:[{
+						text: "取消",
+						click: function(){
+
+						}
+					},
+					{
+						text: "確認",
+						className:"btn-success",
+						click: function(){
+							
+							// select3.reloadData(data2);
+							// $("#testBs3").bsDialogSelect("close");
+						}
+					}
+					]
+				});
+
+				var data = [
+				{
+					name: "通用",
+					uid: "1"
+				},
+				{
+					name: "廠商A",
+					uid: "2"
+				},
+				{
+					name: "廠商B",
+					uid: "3"
+				}
+				];
+				var select4 = $("#testBs11").bsDialogSelect({
+					autoShow:false,
+					showFooterBtn:true,
+					title: "請選擇廠商",
+					data: data,
+					// data:$("#testSelect"),
+					textTag: "name",
+					valeTag: "uid",
+					button:[{
+						text: "取消",
+						click: function(){
+
+						}
+					},
+					{
+						text: "確認",
+						className:"btn-success",
+						click: function(){
+							
+							// select3.reloadData(data2);
+							// $("#testBs3").bsDialogSelect("close");
+						}
+					}
+					]
+				});
+				$("#testBs9").bsDialog({
+					autoShow:false,
+					showFooterBtn:true,
+					title: "新增類型",
+					button:[{
+						text: "取消",
+						// className: "btn-success",
+						click: function(){
+							// xhr.abort();
+							// $(formObj).ajaxFormUnbind();
+							$("#testBs7").bsDialog("close");
+						}
+					},{
+						text: "確定",
+						className: "btn-success",
+						click: function(){
+							// xhr.abort();
+							// $(formObj).ajaxFormUnbind();
+							$("#testBs7").bsDialog("close");
+						}
+					}
+					]
+				});
+			});
+			function testBsShow(){
+				$("#testBs").bsDialog("show");
+			}
+			function testBs2Show(){
+				$("#testBs2").bsDialog("show");
+				formObj = $.parseHTML(formStr);
+			}
+			function testBs3Show(){
+				
+				$("#testBs3").bsDialog("show");
+			}
+			function testBs4Show(){
+				
+				$("#testBs4").bsDialog("show");
+			}
+			function testBs5Show(){
+				
+				$("#testBs5").bsDialog("show");
+			}
+			function testBs6Show(){
+				
+				$("#testBs6").bsDialog("show");
+			}
+			function testBs7Show(){
+				
+				$("#testBs7").bsDialog("show");
+			}
+			function testBs8Show(){
+				
+				$("#testBs8").bsDialog("show");
+			}
+			function testBs9Show(){
+				
+				$("#testBs9").bsDialog("show");
+			}
+
+			function testBs10Show(){
+				
+				$("#testBs10").bsDialog("show");
+			}
+
+			function testBs11Show(){
+				
+				$("#testBs11").bsDialog("show");
+			}
+			function fileSelect(){
+				var fileInput = $("<input>").prop("type","file").prop("name","files[]").prop("multiple",true).change(function(){
+					// console.log($(this).prop("files"));
+					var names = $.map($(this).prop("files"), function(val) { 
+						// return val.name; 
+						var infoDiv = $("<div>").addClass("col-xs-12 col-md-12").html(val.name);
+						$("#isSelectFile").find(".control-label").eq(1).append(infoDiv);
+					});
+
+					// console.log(names);
+					$(this).appendTo(formObj);
+					// console.log(formObj);
+					$("#isSelectFile").show();
+				});
+				fileInput.click();
+			}
+		</script>
+	</head>
+	<body class="homepage is-loading">
+		<div id="page-wrapper">
+
+		<!-- Header -->
+			<div id="header-wrapper">
+				<div id="header" class="container">
+
+					<!-- Logo -->
+						<h1 id="logo"><a href="./">建築物施工管理雲端系統</a></h1>
+
+					<!-- Nav -->
+						<nav id="nav">
+							<div style="float:right;">
+								<div>Hi, <span class="user-name">Race</span> 歡迎回來</div>
+							</div>
+							<!--選單-->
+							<ul id="menus">
+								<li style="white-space: nowrap;">
+									選單
+								</li>
+							</ul>
+						</nav>
+
+				</div>
+			</div>
+
+		<!-- Main -->
+			<div id="main-wrapper">
+				<div id="main" class="container">
+					<div class="row">
+						<!-- Content -->
+							<div id="pagescontent" class="12u 12u(mobile)" style="display: block;">
+								<!-- Post -->
+				<!-- ========================= 本次設計開始 ========================= -->
+								
+								<!-- 標題 -->
+								<div class="col-xs-12 col-md-12 item-title text-center">
+									<h3 class="col-xs-10 col-md-11">情境發文範本列表</h3>
+									<div class="col-xs-2 col-md-1 item-title-plus">
+										<i class="fa fa-plus-circle fa-2x send-btn mouse-pointer" onclick="testBs2Show();"></i>
+									</div>
+								</div>
+								<!-- 頁籤 -->
+								<ul class="nav nav-tabs" id="totalTab">
+									<li role="presentation" class="active">
+										<a href="#" id="total">整體</a>
+									</li>
+									<li role="presentation">
+										<a href="#" id="unreceived">共用<span class="badge">1</span></a>
+									</li>
+									<li role="presentation">
+										<a href="#" id="backReceived">個人<span class="badge">1</span></a>
+									</li>
+								</ul>
+								<!-- 內容 -->
+								<div class="col-xs-12 col-md-12 tab-border totalTab-tab-content" id="total-content">
+									<!-- 列表內容 -->
+									<div class="col-xs-12 col-md-12 list-item-title text-center">
+										<div class="col-xs-5 col-md-3 list-items">
+											範本名稱
+										</div>
+										<div class="col-xs-4 col-md-2 list-items">
+											契約/合約
+										</div>
+										<div class="col-xs-4 col-md-2 list-items">
+											包商/廠商/單位
+										</div>
+										<div class="col-xs-4 col-md-2 list-items">
+											類別
+										</div>
+										<div class="col-xs-4 col-md-1 list-items">
+											類型
+										</div>
+										<div class="col-xs-4 col-md-1 list-items">
+											分類
+										</div>
+										<div class="col-xs-3 col-md-1 list-items">
+											&nbsp;
+										</div>
+									</div>
+									<!-- 列表內容 -->
+									<div class="col-xs-12 col-md-12 list-items-bottom">
+										<div class="col-xs-5 col-md-3 list-items">
+											範本1
+										</div>
+										<div class="col-xs-4 col-md-2 list-items">
+											通用
+										</div>
+										<div class="col-xs-4 col-md-2 list-items">
+											通用
+										</div>
+										<div class="col-xs-4 col-md-2 list-items text-center list-item-hide-text">
+											通用
+										</div>
+										<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
+											通用
+										</div>
+										<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
+											共
+										</div>
+										<div class="col-xs-3 col-md-1 text-center list-items">
+											<div class="item-actionBtn">
+												<i class="fa fa-file-text-o fa-lg send-btn mouse-pointer" onclick="testBs5Show();"></i>
+												<i class="fa fa-pencil-square-o fa-lg send-btn mouse-pointer"></i>
+												<i class="fa fa-clipboard fa-lg send-btn mouse-pointer"></i>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12 col-md-12 list-items-bottom">
+										<div class="col-xs-5 col-md-3 list-items">
+											範本2
+										</div>
+										<div class="col-xs-4 col-md-2 list-items">
+											水泥合約
+										</div>
+										<div class="col-xs-4 col-md-2 list-items">
+											A小包商
+										</div>
+										<div class="col-xs-4 col-md-2 list-items text-center list-item-hide-text">
+											衛署
+										</div>
+										<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
+											施工
+										</div>
+										<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
+											個
+										</div>
+										<div class="col-xs-3 col-md-1 text-center list-items">
+											<div class="item-actionBtn">
+												<i class="fa fa-file-text-o fa-lg send-btn mouse-pointer" onclick="testBs10Show();"></i>
+												<i class="fa fa-pencil-square-o fa-lg send-btn mouse-pointer"></i>
+												<i class="fa fa-clipboard fa-lg send-btn mouse-pointer"></i>
+												<i class="fa fa-trash fa-lg send-btn mouse-pointer"></i>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12 col-md-12">
+										<div class="col-xs-5 col-md-3 list-items">
+											範本3
+										</div>
+										<div class="col-xs-4 col-md-2 list-items">
+											公共設施契約
+										</div>
+										<div class="col-xs-4 col-md-2 list-items">
+											市政單位A
+										</div>
+										<div class="col-xs-4 col-md-2 list-items text-center list-item-hide-text">
+											設備
+										</div>
+										<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
+											維護
+										</div>
+										<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
+											個
+										</div>
+										<div class="col-xs-3 col-md-1 text-center list-items">
+											<div class="item-actionBtn">
+												<i class="fa fa-file-text-o fa-lg send-btn mouse-pointer" onclick="testBs5Show();"></i>
+												<i class="fa fa-pencil-square-o fa-lg send-btn mouse-pointer"></i>
+												<i class="fa fa-clipboard fa-lg send-btn mouse-pointer"></i>
+												<i class="fa fa-trash fa-lg send-btn mouse-pointer"></i>
+											</div>
+										</div>
+									</div>
+									
+									<!-- 列表內容結束 -->
+								</div>
+								<!-- 內容 -->
+								<div class="col-xs-12 col-md-12 tab-border totalTab-tab-content" id="unreceived-content">
+									<!-- 列表內容 -->
+									<div class="col-xs-12 col-md-12 list-item-title text-center">
+										<div class="col-xs-5 col-md-3 list-items">
+											範本名稱
+										</div>
+										<div class="col-xs-4 col-md-2 list-items">
+											契約/合約
+										</div>
+										<div class="col-xs-4 col-md-2 list-items">
+											包商/廠商/單位
+										</div>
+										<div class="col-xs-4 col-md-2 list-items">
+											類別
+										</div>
+										<div class="col-xs-4 col-md-1 list-items">
+											類型
+										</div>
+										<div class="col-xs-4 col-md-1 list-items">
+											創/修
+										</div>
+										<div class="col-xs-3 col-md-1 list-items">
+											&nbsp;
+										</div>
+									</div>
+									<!-- 列表內容 -->
+									<div class="col-xs-12 col-md-12">
+										<div class="col-xs-5 col-md-3 list-items">
+											範本1
+										</div>
+										<div class="col-xs-4 col-md-2 list-items">
+											通用
+										</div>
+										<div class="col-xs-4 col-md-2 list-items">
+											通用
+										</div>
+										<div class="col-xs-4 col-md-2 list-items text-center list-item-hide-text">
+											通用
+										</div>
+										<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
+											通用
+										</div>
+										<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
+											Race
+										</div>
+										<div class="col-xs-3 col-md-1 text-center list-items">
+											<div class="item-actionBtn">
+												<i class="fa fa-file-text-o fa-lg send-btn mouse-pointer" onclick="testBs5Show();"></i>
+												<i class="fa fa-pencil-square-o fa-lg send-btn mouse-pointer"></i>
+												<i class="fa fa-clipboard fa-lg send-btn mouse-pointer"></i>
+											</div>
+										</div>
+									</div>
+									
+									<!-- 列表內容結束 -->
+								</div>
+
+								<!-- 內容 -->
+								<div class="col-xs-12 col-md-12 tab-border totalTab-tab-content" id="backReceived-content">
+									<!-- 列表內容 -->
+									<div class="col-xs-12 col-md-12 list-item-title text-center">
+										<div class="col-xs-5 col-md-3 list-items">
+											範本名稱
+										</div>
+										<div class="col-xs-4 col-md-3 list-items">
+											契約/合約
+										</div>
+										<div class="col-xs-4 col-md-2 list-items">
+											包商/廠商/單位
+										</div>
+										<div class="col-xs-4 col-md-2 list-items">
+											類別
+										</div>
+										<div class="col-xs-4 col-md-1 list-items">
+											類型
+										</div>
+										<div class="col-xs-3 col-md-1 list-items">
+											&nbsp;
+										</div>
+									</div>
+									<!-- 列表內容 -->
+									<div class="col-xs-12 col-md-12 list-items-bottom">
+										<div class="col-xs-5 col-md-3 list-items">
+											範本2
+										</div>
+										<div class="col-xs-4 col-md-3 list-items">
+											水泥合約
+										</div>
+										<div class="col-xs-4 col-md-2 list-items">
+											A小包商
+										</div>
+										<div class="col-xs-4 col-md-2 list-items text-center list-item-hide-text">
+											衛署
+										</div>
+										<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
+											施工
+										</div>
+										<div class="col-xs-3 col-md-1 text-center list-items">
+											<div class="item-actionBtn">
+												<i class="fa fa-file-text-o fa-lg send-btn mouse-pointer" onclick="testBs5Show();"></i>
+												<i class="fa fa-pencil-square-o fa-lg send-btn mouse-pointer"></i>
+												<i class="fa fa-clipboard fa-lg send-btn mouse-pointer"></i>
+												<i class="fa fa-trash fa-lg send-btn mouse-pointer"></i>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12 col-md-12">
+										<div class="col-xs-5 col-md-3 list-items">
+											範本3
+										</div>
+										<div class="col-xs-4 col-md-3 list-items">
+											公共設施契約
+										</div>
+										<div class="col-xs-4 col-md-2 list-items">
+											市政單位A
+										</div>
+										<div class="col-xs-4 col-md-2 list-items text-center list-item-hide-text">
+											設備
+										</div>
+										<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
+											維護
+										</div>
+										<div class="col-xs-3 col-md-1 text-center list-items">
+											<div class="item-actionBtn">
+												<i class="fa fa-file-text-o fa-lg send-btn mouse-pointer" onclick="testBs5Show();"></i>
+												<i class="fa fa-pencil-square-o fa-lg send-btn mouse-pointer"></i>
+												<i class="fa fa-clipboard fa-lg send-btn mouse-pointer"></i>
+												<i class="fa fa-trash fa-lg send-btn mouse-pointer"></i>
+											</div>
+										</div>
+									</div>
+									
+									<!-- 列表內容結束 -->
+								</div>
+								
+				<!-- ========================= 本次設計結束 ========================= -->	
+							</div>
+
+					</div>
+				</div>
+			</div>
+
+		<!-- Footer -->
+			<div id="footer-wrapper">
+				<div id="footer" class="container">
+				</div>
+				<div id="copyright" class="container">
+					<ul class="links">
+						<li>© Untitled. All rights reserved.</li><li>Design: HTML5 UP  </li>
+					</ul>
+				</div>
+			</div>
+
+		</div>
+		<!-- 測試用內容 -->
+		<div id="testBs2">
+			<div class="contents">
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-2 control-label font-lineHeight list-item-text-nowrap">
+					    	範本名稱
+					    </div>
+					    <div class="col-xs-12 col-md-10">
+					      <input type="text" class="form-control">
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-2 control-label font-lineHeight">
+					    	主旨
+					    </div>
+					    <div class="col-xs-12 col-md-10">
+					      <input type="text" class="form-control">
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<!-- 之後用ckeditor -->
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-2 control-label font-lineHeight">
+					    	內容
+					    </div>
+					    <div class="col-xs-12 col-md-10">
+					      <textarea class="form-control item-textarea-height"></textarea>
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-2 control-label font-lineHeight list-item-text-nowrap">
+					    	契約/合約
+					    </div>
+					    <div class="col-xs-12 col-md-10 font-lineHeight">
+					      <i class="fa fa-plus fa-lg mouse-pointer send-btn" onclick="testBs3Show();"></i>
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight list-item-text-nowrap">
+					    	包商/廠商/單位
+					    </div>
+					    <div class="col-xs-12 col-md-9 font-lineHeight">
+					      <i class="fa fa-plus fa-lg mouse-pointer send-btn" onclick="testBs11Show();"></i>
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-2 control-label font-lineHeight list-item-text-nowrap">
+					    	類別
+					    </div>
+					    <div class="col-xs-12 col-md-10 control-label font-lineHeight">
+					      <i class="fa fa-plus fa-lg mouse-pointer send-btn" onclick="testBs6Show();"></i>
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-2 control-label font-lineHeight list-item-text-nowrap">
+					    	類型
+					    </div>
+					    <div class="col-xs-12 col-md-10 control-label font-lineHeight">
+					      <i class="fa fa-plus fa-lg mouse-pointer send-btn" onclick="testBs8Show();"></i>
+					   		
+					    </div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div id="testBs3">
+		</div>
+
+		<div id="testBs6">
+			<div class="contents">
+				<i class="fa fa-plus fa-lg pull-right" onclick="testBs7Show();"></i>
+			</div>
+		</div>
+
+		<div id="testBs7">
+			<div class="contents">
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	類別名稱
+					    </div>
+					    <div class="col-xs-12 col-md-9">
+					      <input type="text" class="form-control">
+					    </div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="testBs8">
+			<div class="contents">
+				<i class="fa fa-plus fa-lg pull-right" onclick="testBs9Show();"></i>
+			</div>
+		</div>
+
+		<div id="testBs9">
+			<div class="contents">
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	類型名稱
+					    </div>
+					    <div class="col-xs-12 col-md-9">
+					      <input type="text" class="form-control">
+					    </div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="testBs11">
+			
+		</div>
+
+		<div id="testBs5">
+			<div class="contents">
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-2 control-label font-lineHeight list-item-text-nowrap">
+					    	範本名稱
+					    </div>
+					    <div class="col-xs-12 col-md-10">
+					      <input type="text" class="form-control" value="範本1">
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-2 control-label font-lineHeight">
+					    	主旨
+					    </div>
+					    <div class="col-xs-12 col-md-10">
+					      <input type="text" class="form-control" value="有關施工過程">
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<!-- 之後用ckeditor -->
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-2 control-label font-lineHeight">
+					    	內容
+					    </div>
+					    <div class="col-xs-12 col-md-10">
+					      <textarea class="form-control item-textarea-height">一、注意事項</textarea>
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-2 control-label font-lineHeight list-item-text-nowrap">
+					    	契約/合約
+					    </div>
+					    <div class="col-xs-12 col-md-5 control-label font-lineHeight list-item-text-nowrap">
+					    	通用
+					    </div>
+					    <div class="col-xs-12 col-md-5 font-lineHeight">
+					      <i class="fa fa-pencil-square-o fa-lg mouse-pointer send-btn" onclick="testBs3Show();"></i>
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight list-item-text-nowrap">
+					    	包商/廠商/單位
+					    </div>
+					    <div class="col-xs-12 col-md-4 control-label font-lineHeight list-item-text-nowrap">
+					    	通用
+					    </div>
+					    <div class="col-xs-12 col-md-5 font-lineHeight">
+					      <i class="fa fa-pencil-square-o fa-lg mouse-pointer send-btn" onclick="testBs11Show();"></i>
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-2 control-label font-lineHeight list-item-text-nowrap">
+					    	類別
+					    </div>
+					    <div class="col-xs-12 col-md-5 control-label font-lineHeight list-item-text-nowrap">
+					    	通用
+					    </div>
+					    <div class="col-xs-12 col-md-5 control-label font-lineHeight">
+					      <i class="fa fa-pencil-square-o fa-lg mouse-pointer send-btn" onclick="testBs6Show();"></i>
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-2 control-label font-lineHeight list-item-text-nowrap">
+					    	類型
+					    </div>
+					    <div class="col-xs-12 col-md-5 control-label font-lineHeight list-item-text-nowrap">
+					    	通用
+					    </div>
+					    <div class="col-xs-12 col-md-5 control-label font-lineHeight">
+					      <i class="fa fa-pencil-square-o fa-lg mouse-pointer send-btn" onclick="testBs8Show();"></i>
+					   		
+					    </div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="testBs10">
+			<div class="contents">
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-2 control-label font-lineHeight list-item-text-nowrap">
+					    	範本名稱
+					    </div>
+					    <div class="col-xs-12 col-md-10">
+					      <input type="text" class="form-control" value="範本2">
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-2 control-label font-lineHeight">
+					    	主旨
+					    </div>
+					    <div class="col-xs-12 col-md-10">
+					      <input type="text" class="form-control" value="有關施工過程">
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<!-- 之後用ckeditor -->
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-2 control-label font-lineHeight">
+					    	內容
+					    </div>
+					    <div class="col-xs-12 col-md-10">
+					      <textarea class="form-control item-textarea-height">一、注意事項</textarea>
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-2 control-label font-lineHeight list-item-text-nowrap">
+					    	契約/合約
+					    </div>
+					    <div class="col-xs-12 col-md-5 control-label font-lineHeight list-item-text-nowrap">
+					    	水泥合約
+					    </div>
+					    <div class="col-xs-12 col-md-5 font-lineHeight">
+					      <i class="fa fa-pencil-square-o fa-lg mouse-pointer send-btn" onclick="testBs3Show();"></i>
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight list-item-text-nowrap">
+					    	包商/廠商/單位
+					    </div>
+					    <div class="col-xs-12 col-md-4 control-label font-lineHeight list-item-text-nowrap">
+					    	A小包商
+					    </div>
+					    <div class="col-xs-12 col-md-5 font-lineHeight">
+					      <i class="fa fa-pencil-square-o fa-lg mouse-pointer send-btn" onclick="testBs11Show();"></i>
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-2 control-label font-lineHeight list-item-text-nowrap">
+					    	類別
+					    </div>
+					    <div class="col-xs-12 col-md-5 control-label font-lineHeight list-item-text-nowrap">
+					    	衛署
+					    </div>
+					    <div class="col-xs-12 col-md-5 control-label font-lineHeight">
+					      <i class="fa fa-pencil-square-o fa-lg mouse-pointer send-btn" onclick="testBs6Show();"></i>
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-2 control-label font-lineHeight list-item-text-nowrap">
+					    	類型
+					    </div>
+					    <div class="col-xs-12 col-md-5 control-label font-lineHeight list-item-text-nowrap">
+					    	施工
+					    </div>
+					    <div class="col-xs-12 col-md-5 control-label font-lineHeight">
+					      <i class="fa fa-pencil-square-o fa-lg mouse-pointer send-btn" onclick="testBs8Show();"></i>
+					   		
+					    </div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</body>
+</html>

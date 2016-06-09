@@ -32,6 +32,8 @@
 
     function bsDialogSelect($selector, option, action){
         var self = this;
+        var textTag = option.textTag,
+        valeTag = option.valeTag;
         this.bsDialogSelectShow = function(){     
             var nowModalIn = $(".modal.fade.in").length + 1;
             // $(".modal.fade.in").eq(-2).fadeOut(300);
@@ -100,6 +102,7 @@
 
             // bodys
             var modalBody = $("<div>").addClass("modal-body");
+            modalBody.append(originContent);
             // var 
 
             // title-bar content
@@ -144,81 +147,8 @@
 
 
             // body content
-            var windowWidth = $(window).height() * 0.33;
-            var contentArea = $("<div>").addClass("modal-items").append(originContent);
-            contentArea.css({
-                height: windowWidth
-            })
-            // 最外層框框
-            var selectItemBorder = $("<div>").addClass("col-xs-12 col-md-12 selectItem");
-            var selectItemBox = $("<div>").addClass("col-xs-2 col-md-1 text-center list-items selectItemBox");
-            var selectItemBoxEmptyStyle = "fa-square-o";
-            var selectItemBoxCheckStyle = "fa-check-square-o";
-            var selectItemBoxBtn = $('<i>').addClass('fa '+selectItemBoxEmptyStyle+' fa-lg selectItemBoxBtn');
-
-            $("<div>").addClass("item-actionBtn").append(selectItemBoxBtn).appendTo(selectItemBox);
-            // 放入
-            selectItemBox.appendTo(selectItemBorder);
-            // 內容
-            $("<div>").addClass("col-xs-10 col-md-11 list-items selectItemContent").appendTo(selectItemBorder);
-            // 值
-            $("<input>").prop("type","hidden").addClass("selectItemValue").appendTo(selectItemBorder);
             
-            // 是網頁物件
-            if (option.data.selector != undefined){
-                $(option.data).find("option").each(function(){
-                    var items = selectItemBorder.clone();
-                    var thisText = $(this).text();
-                    var thisVal = $(this).prop("value");
-                    items.find(".selectItemContent").text(thisText);
-                    items.find(".selectItemValue").val(thisVal);
-
-                    items.find(".selectItemBoxBtn").click(function(){
-                        if(option.onlySelect){
-                            items.find(selectItemBoxCheckStyle).removeClass(selectItemBoxCheckStyle);
-                            $(this).addClass(selectItemBoxEmptyStyle);
-                        }else{
-                            var thisCalss = $(this).prop("class");
-                            if(thisCalss.search(selectItemBoxEmptyStyle) == -1){
-                                $(this).removeClass(selectItemBoxCheckStyle).addClass(selectItemBoxEmptyStyle);
-                            }else{
-                                $(this).removeClass(selectItemBoxEmptyStyle).addClass(selectItemBoxCheckStyle);
-                            }
-                        }
-                    });
-
-                    items.appendTo(contentArea);
-                }).hide();
-            }else{//不是網頁物件
-                $.each(option.data,function(i,v){
-                    var items = selectItemBorder.clone();
-                    if(option.textTag){
-                        items.find(".selectItemContent").text(v[option.textTag]);
-                    }
-                    if(option.valeTag){
-                        items.find(".selectItemValue").val(v[option.valeTag]);
-                    }
-
-                    items.find(".selectItemBoxBtn").click(function(){
-                        var thisCalss = $(this).prop("class");
-                        if(option.onlySelect){
-                            contentArea.find(".selectItemBoxBtn")
-                            .removeClass(selectItemBoxCheckStyle)
-                            .removeClass(selectItemBoxEmptyStyle)
-                            .addClass(selectItemBoxEmptyStyle);
-                        }
-                            
-                        if(thisCalss.search(selectItemBoxEmptyStyle) == -1){
-                            $(this).removeClass(selectItemBoxCheckStyle).addClass(selectItemBoxEmptyStyle);
-                        }else{
-                            $(this).removeClass(selectItemBoxEmptyStyle).addClass(selectItemBoxCheckStyle);
-                        }
-                        
-                    });
-
-                    items.appendTo(contentArea);
-                });
-            }
+            var contentArea = self.createContent(option,originContent);
             // console.log(windowWidth);
             titleBar.appendTo(modalBody);
             modalBody.append(contentArea).appendTo(bsModalContent);
@@ -246,6 +176,98 @@
             }
 
             option["start"]();
+        }
+
+        this.createContent = function(option){
+            var windowWidth = $(window).height() * 0.33;
+            var contentArea = $("<div>").addClass("modal-items");
+
+            if($selector.find(".modal-items").length){
+                $selector.find(".modal-items").remove();
+            }
+            
+            contentArea.css({
+                height: windowWidth
+            })
+            // 最外層框框
+            var selectItemBorder = $("<div>").addClass("col-xs-12 col-md-12 selectItem");
+            var selectItemBox = $("<div>").addClass("col-xs-2 col-md-1 text-center list-items selectItemBox");
+            var selectItemBoxEmptyStyle = "fa-square-o";
+            var selectItemBoxCheckStyle = "fa-check-square-o";
+            var selectItemBoxBtn = $('<i>').addClass('fa '+selectItemBoxEmptyStyle+' fa-lg selectItemBoxBtn');
+
+            $("<div>").addClass("item-actionBtn").append(selectItemBoxBtn).appendTo(selectItemBox);
+            // 放入
+            selectItemBox.appendTo(selectItemBorder);
+            // 內容
+            $("<div>").addClass("col-xs-10 col-md-11 list-items selectItemContent").appendTo(selectItemBorder);
+            // 值
+            $("<input>").prop("type","hidden").addClass("selectItemValue").appendTo(selectItemBorder);
+            
+            // 是網頁物件
+            if (option.data != undefined && option.data.selector != undefined){
+                $(option.data).find("option").each(function(){
+                    var items = selectItemBorder.clone();
+                    var thisText = $(this).text();
+                    var thisVal = $(this).prop("value");
+                    items.find(".selectItemContent").text(thisText);
+                    items.find(".selectItemValue").val(thisVal);
+
+                    items.find(".selectItemBoxBtn").click(function(){
+                        if(option.onlySelect){
+                            items.find(selectItemBoxCheckStyle).removeClass(selectItemBoxCheckStyle);
+                            $(this).addClass(selectItemBoxEmptyStyle);
+                        }else{
+                            var thisCalss = $(this).prop("class");
+                            if(thisCalss.search(selectItemBoxEmptyStyle) == -1){
+                                $(this).removeClass(selectItemBoxCheckStyle).addClass(selectItemBoxEmptyStyle);
+                            }else{
+                                $(this).removeClass(selectItemBoxEmptyStyle).addClass(selectItemBoxCheckStyle);
+                            }
+                        }
+                    });
+
+                    items.appendTo(contentArea);
+                }).hide();
+            }else{//不是網頁物件
+                var data;
+                if(option.data != undefined){
+                    data = option.data;
+                }else{
+                    data = option;
+                }
+
+                $.each(data,function(i,v){
+                    var items = selectItemBorder.clone();
+                    if(textTag){
+                        items.find(".selectItemContent").text(v[textTag]);
+                    }
+                    if(valeTag){
+                        items.find(".selectItemValue").val(v[valeTag]);
+                    }
+
+                    items.find(".selectItemBoxBtn").click(function(){
+                        var thisCalss = $(this).prop("class");
+                        if(option.onlySelect){
+                            contentArea.find(".selectItemBoxBtn")
+                            .removeClass(selectItemBoxCheckStyle)
+                            .removeClass(selectItemBoxEmptyStyle)
+                            .addClass(selectItemBoxEmptyStyle);
+                        }
+                            
+                        if(thisCalss.search(selectItemBoxEmptyStyle) == -1){
+                            $(this).removeClass(selectItemBoxCheckStyle).addClass(selectItemBoxEmptyStyle);
+                        }else{
+                            $(this).removeClass(selectItemBoxEmptyStyle).addClass(selectItemBoxCheckStyle);
+                        }
+                        
+                    });
+
+                    items.appendTo(contentArea);
+                });
+            }
+            // console.log(contentArea);
+            return contentArea;
         }
 
         this.getValue = function(){
@@ -282,6 +304,14 @@
                 // console.log(valueStr);
 
             return valueStr;
+        }
+
+        this.reloadData = function(data){
+                // console.log("T");
+
+            var content = self.createContent(data);
+            $selector.find(".modal-body").append(content);
+
         }
 
         switch(action){

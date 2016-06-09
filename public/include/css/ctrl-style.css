@@ -452,7 +452,7 @@ textarea{
 }
 
 .modal-items{
-	overflow: scroll;
+	overflow: auto;
 }
 
 .signStyleContent{
