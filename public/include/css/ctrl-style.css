@@ -481,3 +481,11 @@ textarea{
 .received-finish{
 	color:#0089DE;
 }
+
+.list-item-select:hover{
+	background: #FFFFF0;
+}
+
+.list-item-select:active{
+	background: #FFFFC7;
+}
