@@ -1,8 +1,8 @@
 $(function(){
   if(location.pathname.search("login.html") == -1){
-    if(typeof checkUserLogin != "undefined" && typeof checkGoogleApi != "undefined" && typeof firstLoadPage != "undefined" ){
+    if(typeof checkUserLogin != "undefined" && typeof checkKeepItem != "undefined" && typeof firstLoadPage != "undefined" ){
     	checkUserLogin();
-    	checkGoogleApi();
+    	checkKeepItem();
     	firstLoadPage();
     }
   }

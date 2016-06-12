@@ -8,8 +8,8 @@ window.addEventListener('popstate', function(e){
 	}
 },false);
 
-//-----監聽上下頁事件-----
-function checkGoogleApi(){
+//-----確認保留物件-----
+function checkKeepItem(){
 	$("head").find("script").each(function(){
 		if($(this).prop("class").search("keep") == -1){
 			$(this).addClass("keep");
