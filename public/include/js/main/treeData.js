@@ -104,53 +104,6 @@ function processTreeDataOnly(treeData,options){
     return tmpMenuObj;
 }
 
-//整理選單樹狀資料
-function processMenuTreeDataOnly(treeData,options){
-    var tmpMenuObj = {};
-    if(typeof options == "undefined"){
-        options = {};
-        options.idName = "uid";
-        options.title = "name";
-    }
-    //先整理
-    $.each(treeData,function(i,node){
-        if(typeof tmpMenuObj[node.parent] == "undefined"){
-            tmpMenuObj[node.parent] = {};
-        }
-
-        if(typeof node[options.title] != undefined){
-            node.title = node[options.title];
-        }
-
-         if(typeof node[options.idName] != undefined){
-            node.id = node[options.idName];
-        }
-        var contentTag = $("<li>");
-        var contentATag = $("<a>").prop("href",node.url).addClass(node["class_name"]).html(node.title);
-        contentTag.append(contentATag);
-        tmpMenuObj[node.parent][node[options.idName]] = contentTag;
-    });
-    
-    // ---------------------------------------------------------------------
-    // console.log(tmpMenuObj);
-    //放好第一層級的資料
-    $.each(tmpMenuObj[0],function(i, node){
-        var otherMenuContent = {};
-        // //這代表還有第二層
-        if(typeof tmpMenuObj[i] != "undefined"){
-            //轉換為陣列
-            otherMenuContent = $.map( CreatOtherMenuData(i, tmpMenuObj) , function(v, i){
-                return v;
-            });
-            // console.log(otherMenuContent);
-            tmpMenuObj[0][i]["nodes"] = otherMenuContent;
-        }
-    });
-    // ---------------------------------------------------------------------
-    //回傳
-    return tmpMenuObj;
-}
-
 //產生其他子層
 function CreatOtherTreeDataNodes(otherLayerDataIndex, totalData){
 	var otherMenuContent = {};
@@ -205,29 +158,117 @@ function CreatOtherTreeData(otherLayerDataIndex, totalData){
     return otherMenuContent;
 }
 
-//產生其他Menu子層
-function CreatOtherMenuData(otherLayerDataIndex, totalData){
-    var otherMenuContent = {};
-    // console.log(otherLayerDataIndex);
-    // return;
-    $.each(totalData[otherLayerDataIndex],function(i,content){
-    // console.log(i,content["uid"]);
-        if(typeof otherMenuContent[i] == "undefined"){
-            otherMenuContent[i] = {};
+//整理Menu樹狀資料
+function processMenuTreeDataOnly(treeData,options){
+    var tmpMenuObj = {};
+    if(typeof options == "undefined"){
+        options = {};
+        options.idName = "uid";
+        options.title = "name";
+    }
+    var tmpMenuArr = [];
+    var finishMenuArr = {};
+    //先整理
+    $.each(treeData,function(i,node){
+        // console.log(node);
+        var parent = parseInt(node.parent);
+        // console.log(parent);
+        var putNodeID = parseInt(node[options.idName]);
+        if(typeof tmpMenuObj[parent] == "undefined"){
+            tmpMenuObj[parent] = {};
         }
-        //這代表還有第二層
-        if(typeof totalData[i] != "undefined"){
-            //重複建好
-            otherMenuContent[i] = content;
-            otherMenuContent[i]["nodes"] = $.map(CreatOtherMenuData(i, totalData),function(v, i){
+
+        if(typeof node[options.title] != "undefined"){
+            node.title = node[options.title];
+        }
+
+         if(typeof node[options.idName] != "undefined"){
+            node.id = node[options.idName];
+        }
+        var contentTag = $("<a>").prop("href",node.url).addClass(node["class_name"]).html(node.title);
+        // console.log(parent,putNodeID,contentTag);
+        // tmpMenuObj[parent][putNodeID] = contentTag;
+        tmpMenuArr.push(contentTag);
+            
+        tmpMenuObj[parent][putNodeID] = { 
+            "item": contentTag,
+            "sort": tmpMenuArr.length - 1
+        };
+        // console.log(tmpMenuObj);
+    });
+    
+    // ---------------------------------------------------------------------
+    //放好第一層級的資料
+    $.each(tmpMenuObj[0],function(i, node){
+        // console.log(node);
+        var otherMenuContent = {};
+
+        var liContent = $("<li>");
+        liContent.append(node.item);
+        // //這代表還有第二層
+        if(typeof tmpMenuObj[i] != "undefined"){
+            
+            //轉換為陣列
+            otherMenuContent = $.map( CreatOtherMenuData(i, tmpMenuObj, tmpMenuArr) , function(v, i){
                 return v;
             });
-        }else{
-            
-            otherMenuContent[i] = content;
-            
+            // tmpMenuObj[0][i]["nodes"] = otherMenuContent;
+            var childUl = $("<ul>");
+            childUl.append(otherMenuContent);
+            liContent.append(childUl);
         }
+        tmpMenuArr[node.sort] = liContent;
+        tmpMenuObj[0][i] = liContent;            
+        // tmpMenuArr.splice(node.sort,1);
+        finishMenuArr[node.sort] = tmpMenuArr[node.sort];
+    });
+    // ---------------------------------------------------------------------
+    // console.log(finishMenuArr);
+    //回傳
+    return finishMenuArr;
+}
+
+//產生其他Menu子層
+function CreatOtherMenuData(otherLayerDataIndex, totalData, menuArr){
+    var otherMenuContent = {};
+    var otherMenuArr = [];
+
+    var processData = $.map(totalData[otherLayerDataIndex],function(v, i){
+        var obj = {
+            "id":i,
+            "obj": v
+        };
+        return obj;
+    });
+    processData.sort(function (a, b) {
+        return a.obj.sort > b.obj.sort ? 1 : -1;
+    });
+
+    $.each(processData,function(i,content){
+        // console.log(content);
+        var liContent = $("<li>");
+        liContent.append(content.obj.item);
+        
+        if(typeof otherMenuContent[content.id] == "undefined"){
+            otherMenuContent[content.id] = {};
+        }
+        //這代表還有第二層
+        if(typeof totalData[content.id] != "undefined"){
+            var ul = $("<ul>");
+            $.map(CreatOtherMenuData(content.id, totalData, menuArr),function(v, dataIndex){
+                ul.append(v);
+                // return v;
+            });
+            liContent.append(ul);
+           
+
+        }
+        menuArr[content.obj.sort] = liContent;
+        otherMenuContent[content.id] = liContent;
+        otherMenuArr.push(liContent);
+        // console.log(content.id, liContent);  
+
     });
     delete totalData[otherLayerDataIndex];
-    return otherMenuContent;
+    return otherMenuArr;
 }

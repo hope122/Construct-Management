@@ -1,7 +1,7 @@
 function getMenus(loginInfo){
   var menus = porcessData(configObject.getmenu,loginInfo);
   console.log(menus);
-  
+
 	var menus = porcessData(configObject.getUserMenu,{});
 	console.log(menus);
   var options = {
@@ -11,6 +11,11 @@ function getMenus(loginInfo){
 
   meunData = processMenuTreeDataOnly(menus.data,options);
   console.log(meunData);
+  $("#menus").empty();
+  $.each(meunData,function(i, content){
+    // console.log(content);
+    content.appendTo($("#menus"));
+  });
 	// $("#menus").html(menus.menu)
 	// .find("a").click(function(){
  //      var thisHref = $(this).attr("href");
@@ -22,5 +27,5 @@ function getMenus(loginInfo){
  //      return false;
  //  	});
  //  	getLan();
-	// loadJS("include/strongly/assets/js/content-main.js","keep");
+	loadJS("include/strongly/assets/js/content-main.js","keep");
 }
