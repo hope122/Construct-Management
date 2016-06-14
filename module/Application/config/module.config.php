@@ -252,6 +252,16 @@ return array(
 					),
 				),
 			),
+			'usermenu'=> array(
+				'type'    => 'segment',
+				'options' => array(
+					'route'    => '/usermenu',
+					'defaults' => array(
+						'controller' => 'Application\Controller\Usermenu',
+						'action'     => 'index',
+					),
+				),
+			),
 			'deletemethod'=> array(
 				'type'    => 'segment',
 				'options' => array(
@@ -291,6 +301,7 @@ return array(
             'Application\Controller\Supply' => 'Application\Controller\SupplyController',
             'Application\Controller\Oldhouse' => 'Application\Controller\OldhouseController',
             'Application\Controller\Deletemethod' => 'Application\Controller\DeletemethodController',
+            'Application\Controller\Usermenu' => 'Application\Controller\UsermenuController',
 
         ),
     ),

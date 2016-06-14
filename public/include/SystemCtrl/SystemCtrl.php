@@ -24,15 +24,19 @@
     
 	//載入結束
 	//引用物件命名空間
-	// use ctrlDBService\ctrDB_MySQL;
+	use ctrlDBService\ctrDB_MySQL;
 	use ctrlToolsService\ctrlTools;
+	use ctrlAPISettingService\ctrlAPISetting;
+
 	//引用完畢
 	
 	class ctrlSystem{
 		//資料庫連線參數
-		public $SystemDBService;
+		public $ctrlDBService;
 		//相關工具
 		public $ctrlToolsService;
+		// API設置工具
+		public $ctrlAPISettingService;
 		//ini相關設定
 		public $iniSet;
 		//使用者資訊
@@ -41,7 +45,7 @@
 		public $logFileSetting;
 		
 		//供呼叫程式初始化設定
-		public function initialization($DBSection = '', $DBconn = false){
+		public function initialization($DBSection = null, $DBconn = false){
 			@session_start();
 			//相關工具設定
 			//基礎的資安防護
@@ -56,30 +60,30 @@
 			//結束基礎的資安防護
 
 			//取得資料庫設定值
-			$strIniFile = __DIR__ . '\\..\\connDB.ini';
+			$strIniFile = dirname(__DIR__) . '\\..\\..\\config\\connDB.ini';
             if(!file_exists($strIniFile)){
-                $strIniFile = __DIR__ . '/../connDB.ini';
+                $strIniFile = dirname(__DIR__) . '/../../config/connDB.ini';
             }
 			$sSection = 'connDB';
             if(!$DBSection){
                 $DBSection = 'defaultDB';
             }
 			if($DBconn){
-			//取得連線資料庫資料
-			// $sServer = $SysClass->GetINIInfo($strIniFile,$sSection,'servername','');
-			// $sUser = $SysClass->GetINIInfo($strIniFile,$sSection,'user','');
-			// $sPassWord = $SysClass->GetINIInfo($strIniFile,$sSection,'password','');
-            //取得資料庫
-			// $sDatabase = $SysClass->GetINIInfo($strIniFile,$DBSection,'defaultDB','');
-			
-			//放到共同變數中
-			// $iniSet["DBSet"]["sServer"] = $sServer;
-			// $iniSet["DBSet"]["sUser"] = $sUser;
-			// $iniSet["DBSet"]["sPassWord"] = $sPassWord;
-			// $iniSet["DBSet"]["sDatabase"] = $sDatabase;
-				//建立資料庫連線
-			// $VTc = new ctrlDB_MySQL;
-			// $VTc->CreateDBConnection($sServer,$sDatabase,$sUser,$sPassWord);
+				//取得連線資料庫資料
+				$DBConfig = $SysClass->GetINIInfo($strIniFile,$sSection,'servername','',true,true);
+				// print_r($DBConfig);
+				$sServer = $DBConfig["connDB"]["servername"];
+				$sUser = $DBConfig["connDB"]["user"];
+				$sPassWord = $DBConfig["connDB"]["password"];
+	            // 取得資料庫
+				$sDatabase = $DBConfig[$DBSection]["defaultDB"];
+				
+				// 放到共同變數中
+				$iniSet["DBSet"]["sServer"] = $sServer;
+				$iniSet["DBSet"]["sUser"] = $sUser;
+				$iniSet["DBSet"]["sPassWord"] = $sPassWord;
+				$iniSet["DBSet"]["sDatabase"] = $sDatabase;
+				
 			}
 			//載入LOG設定檔
 			$strIniFile = __DIR__ . '\\..\\setlog.ini';
@@ -95,22 +99,106 @@
 			$SysClass = null;
 			//相關工具設定結束
 			
-			
+			if($DBconn){
+				// 建立資料庫連線
+				$SysClass = new ctrDB_MySQL;
+				$SysClass->CreateDBConnection($sServer,$sDatabase,$sUser,$sPassWord);
+				//存到變數，以重複利用
+				$this->ctrlDBService = $SysClass;
+				//釋放
+				$SysClass = null;
+			}
 
-			//存到變數，以重複利用
-			// $this->SystemDBService = $VTc;
-			//釋放
-			// $SysClass = null;
+			// API設置工具
+			$SysClass = new ctrlAPISetting;
+			$this->ctrlAPISettingService = $SysClass;
+			// 釋放
+			$SysClass = null;
+			
 		}
 	#檢查ＳＥＳＳＩＯＮ
-	public function CheckLogin(){
-		if(empty($_SESSION)){
-			header("Location: ./login.html");
-			exit();
+		public function CheckLogin(){
+			if(empty($_SESSION)){
+				header("Location: ./login.html");
+				exit();
+			}else{
+				header("location: ./content.html");
+				exit();
+			}
+			return true;
 		}
-		return true;
-	}
 	#結束檢查ＳＥＳＳＩＯＮ
+
+	#ctrlDBService
+		//資料庫連線
+		public function CreateDBConnection($sServer='', $sDatabase='', $sUser='', $sPassWord=''){
+			$sServer = ($sServer)?$sServer:$iniSet["DBSet"]["sServer"];
+			$sDatabase = ($sDatabase)?$sDatabase:$iniSet["DBSet"]["sDatabase"];
+			$sUser = ($sUser)?$sUser:$iniSet["DBSet"]["sUser"];
+			$sPassWord = ($sPassWord)?$sPassWord:$iniSet["DBSet"]["sPassWord"];
+			
+			$conn = $this->ctrlDBService->CreateDBConnection($sServer,$sDatabase,$sUser,$sPassWord);
+			//回傳
+			return $conn;
+		}
+		
+		//用於單純INSERT、UPDATE、DELETE等
+		//ExecuteNonQuery(sSqlText)
+		public function Execute($sSqlText){
+			$execut = false;
+			if( !empty($sSqlText) ){
+				$execut = $this->ctrlDBService->ExecuteNonQuery($sSqlText);
+				$callFunction = debug_backtrace();
+				$callFunction = $callFunction[0];
+				if(!$execut){
+					// print_r('Error SQL: '.$sSqlText);
+					$this->WriteLog($callFunction["class"], $callFunction["function"], "SQL Error:".$sSqlText);
+				}
+				if($this->logFileSetting){
+					$this->WriteLog($callFunction["class"], $callFunction["function"], "SQL:".$sSqlText);
+				}
+			}
+			return $execut;
+		}
+		
+		//讀取資料 QueryData(sSqlText) as DataTable
+		public function QueryData($sSqlText){
+			if( !empty($sSqlText) ){
+				$data = $this->ctrlDBService->QueryData($sSqlText);
+				if($this->logFileSetting){
+					$callFunction = debug_backtrace();
+					$callFunction = $callFunction[0];
+					$this->WriteLog($callFunction["class"], $callFunction["function"], "SQL:".$sSqlText."\nData:".$this->Data2Json($data));
+				}
+			}
+			return $data;	
+		}
+		
+		//建立Transcation機制 CreateMySqlTranscation
+		public function Transcation(){
+			$this->ctrlDBService->Transcation();
+		}
+		
+		//Commit Transction機制 CommitMySqlTranscation
+		public function Commit(){
+			$this->ctrlDBService->Commit();
+		}
+		
+		//Rollback Transction機制 RollbackMySqlTranscation
+		public function Rollback(){
+			$this->ctrlDBService->Rollback();
+		}
+		
+		//關閉資料庫連線 CloseConnection
+		public function DBClose(){
+			$this->ctrlDBService->DBClose();
+		}
+
+		//取得AI新增的ＩＤ
+        public function NewInsertID(){
+            return $this->ctrlDBService->NewInsertID();
+        }
+	#這裡是ctrlDBService 結束	
 		
 	#這裡是	ctrlToolsService
 	#modIO
@@ -180,7 +268,7 @@
 			}
 
 			//釋放
-			$SystemDBService = null;
+			$ctrlDBService = null;
 			$ctrlToolsService = null;
 			$callFunction = null;
 		}
@@ -200,7 +288,7 @@
 					$cHost = "系統動作";
 				}
 				//寫入
-				$this->SystemDBService->SetAPPLog($uuid, $sClerk, $cHost, $sLogMsg, $blCn2, $sLogSource, $iLogType, $sPhyAddr);
+				$this->ctrlDBService->SetAPPLog($uuid, $sClerk, $cHost, $sLogMsg, $blCn2, $sLogSource, $iLogType, $sPhyAddr);
 			}catch(Exception $error){
 				$this->WriteLog("ctrlTools", "SetAPPLog", $error->getMessage(), "", 1);
 			}
@@ -225,8 +313,8 @@
 		}
 		
 		//json轉換成資料轉(decode)
-		public function Json2Data($JsonData){
-			return $this->ctrlToolsService->Json2Data($JsonData);
+		public function Json2Data($JsonData,$original = true){
+			return $this->ctrlToolsService->Json2Data($JsonData, $original);
 		}
 		//資料內容取代
 		public function ContentReplace($processData,$replaceContent){
@@ -257,14 +345,24 @@
 	
 	#modCurl相關
 		//POST
-		public function UrlDataPost($url, $SendArray) {
+		public function UrlDataPost($url, $SendArray, $contentType = "application/x-www-form-urlencoded; charset=UTF-8") {
 			//回傳結果是對象URL執行結果
-			return $this->ctrlToolsService->UrlDataPost($url, $SendArray);
+			return $this->ctrlToolsService->UrlDataPost($url, $SendArray,$contentType);
 		}
 		//GET
 		public function UrlDataGet($url,$obj) {
 			//回傳結果是對象URL執行結果
 			return $this->ctrlToolsService->UrlDataGet($url,$obj);
+		}
+		//DELETE
+		public function UrlDataDelete($url, $SendArray, $contentType = "application/x-www-form-urlencoded; charset=UTF-8") {
+			//回傳結果是對象URL執行結果
+			return $this->ctrlToolsService->UrlDataDelete($url,$SendArray,$contentType);
+		}
+		//DELETE
+		public function UrlDataPut($url, $SendArray, $contentType = "application/x-www-form-urlencoded; charset=UTF-8") {
+			//回傳結果是對象URL執行結果
+			return $this->ctrlToolsService->UrlDataPut($url,$SendArray,$contentType);
 		}
 	#modCurl結束
 	#modMail
@@ -279,6 +377,11 @@
 			$this->ctrlToolsService->creatINI($assoc_arr, $path, $has_sections, $append);
 		}
     #這裡是	ctrlToolsService 結束
+
+	#API Setting
+		public function GetAPIUrl($iniIndex = "", $original = false){
+			return $this->ctrlAPISettingService->GetAPIUrl($iniIndex, $original);
+		}
 	}
 	
 	

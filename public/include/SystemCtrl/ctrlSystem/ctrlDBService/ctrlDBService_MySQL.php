@@ -20,7 +20,7 @@
 		//ExecuteNonQuery(sSqlText)
 		public function ExecuteNonQuery($sSqlText){
 			if( !empty($sSqlText) ){
-				$stmt = $this->conn->query($sSqlText);
+				$stmt = $this->conn->multi_query($sSqlText);
 				return ($stmt)?true:false;
 			}
 		}
@@ -58,6 +58,11 @@
 		public function DBClose(){
 			$this->conn->close();
 		}
+
+		//取得AI新增的ＩＤ
+        public function NewInsertID(){
+           return $this->conn->insert_id;
+        }
 		
 		//資料庫轉換資料
 		private function Data2Array($DBQueryData, $kind=0){

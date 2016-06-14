@@ -288,8 +288,32 @@
 		}
 		
 		//json轉換成資料轉(decode)
-		public function Json2Data($JsonData){
-			return json_decode($JsonData);
+		public function Json2Data($JsonData, $original){
+			if($original){
+				return json_decode($JsonData);
+			}else{
+				$tmpArr = $this->JsonData2Array(json_decode($JsonData));
+				return $tmpArr;
+			}
+		}
+
+		// 轉陣列
+		private function JsonData2Array($data){
+			if(!empty($data)){
+				$tmpArr = [];
+				foreach ($data as $key => $content) {
+					if( is_object($content) || is_array($content)){
+						$tmpArr[$key] = $this->JsonData2Array( (array)$content );
+						// print_r($content);
+					}else{
+						$tmpArr[$key] = $content;
+					}
+				}
+				// exit();
+				return $tmpArr;
+			}else{
+				return $data;
+			}
 		}
 
 		//資料內容取代
@@ -332,34 +356,115 @@
 		}
 	#modArrayDebug結束
 	#modCurl取得網址相關內容
-		public function UrlDataPost($url, $SendArray) {
+		public function UrlDataPost($url, $SendArray, $contentType) {
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_URL,$url);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);	//quick fix for SSL
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+				'Accept: application/json',
+				'content-type: '.$contentType
+				)
+			);
+			if(is_array($SendArray)){
+				$SendArray = http_build_query($SendArray);
+			}
+			// curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+			curl_setopt($ch, CURLINFO_HEADER_OUT, true);
 			curl_setopt($ch, CURLOPT_POST, 1);
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $SendArray);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);  //skip ssl verify
-															
+
 			$response = curl_exec($ch);
-			curl_close ($ch);
+			$header=curl_getinfo($ch);
 			
-			return $response;
+			curl_close ($ch);
+			$ServerInfo = [];
+			$ServerInfo["http_code"] = $header["http_code"];
+			$ServerInfo["http_header"] = $header;
+			$ServerInfo["result"] = $response;
+			return $ServerInfo;
 		}
 		
-		public function UrlDataGet($url, $obj) {
+		public function UrlDataGet($url, $SendArray) {
+
+			if(!empty($SendArray)){
+				$url .= "?".http_build_query($SendArray);
+			}
 
 			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-			curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($obj));
-			curl_setopt($ch, CURLOPT_URL, $url );
+						
+			curl_setopt($ch, CURLOPT_URL,$url);
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept: application/json'));
+			curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+    		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);  //skip ssl verify
-															
 			$result = curl_exec($ch);
+			$header=curl_getinfo($ch);
 			curl_close ($ch);
 
-			return $result;
+			$ServerInfo = [];
+			$ServerInfo["http_code"] = $header["http_code"];
+			$ServerInfo["http_header"] = $header;
+			$ServerInfo["result"] = $result;
+			return $ServerInfo;
+		}
+
+		public function UrlDataDelete($url, $SendArray, $contentType) {
+
+			if($SendArray){
+				$url .= "?".http_build_query($SendArray);
+			}
+
+			$ch = curl_init();
+						
+			curl_setopt($ch, CURLOPT_URL,$url);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            	// 'Accept: application/json',
+            	'content-type: '.$contentType
+            	)
+            );
+			curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+    		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);  //skip ssl verify
+			$result = curl_exec($ch);
+			$header=curl_getinfo($ch);
+			curl_close ($ch);
+			// print_r($body);
+			$ServerInfo = [];
+			$ServerInfo["http_code"] = $header["http_code"];
+			$ServerInfo["http_header"] = $header;
+			$ServerInfo["result"] = $result;
+			return $ServerInfo;
+		}
+
+		public function UrlDataPut($url, $SendArray, $contentType) {
+
+			if($SendArray){
+				$url .= "?".http_build_query($SendArray);
+			}
+
+			$ch = curl_init();
+						
+			curl_setopt($ch, CURLOPT_URL,$url);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            	// 'Accept: application/json',
+            	'content-type: '.$contentType
+            	)
+            );
+			curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+    		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);  //skip ssl verify
+			$result = curl_exec($ch);
+			$header=curl_getinfo($ch);
+			curl_close ($ch);
+			// print_r($body);
+			$ServerInfo = [];
+			$ServerInfo["http_code"] = $header["http_code"];
+			$ServerInfo["http_header"] = $header;
+			$ServerInfo["result"] = $result;
+			return $ServerInfo;
 		}
 	#modCurl結束
 	#modMail

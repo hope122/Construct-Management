@@ -22,11 +22,13 @@ class DeletemethodController extends AbstractActionController
         $SysClass->initialization();
         try{
             if(!empty($_POST["apiMethod"]) && !empty($_POST["deleteObj"])){
-                $apiServer = dirname(__DIR__) . '/../../../../public/include/apiServer.ini';
+                // $apiServer = dirname(__DIR__) . '/../../../../public/include/apiServer.ini';
 
                 // 取得ＡＰＩ設定檔
-                $apiURLIni = $SysClass->GetINIInfo($apiServer,"",'server','',true,false);
-                $apiURL = $apiURLIni["apiURL"];
+                // $apiURLIni = $SysClass->GetINIInfo($apiServer,"",'server','',true,false);
+
+                // $apiURL = $apiURLIni["apiURL"];
+                $apiURL = $SysClass->GetAPIUrl('apiURL');
                 
                 $sendDeleteObj = http_build_query($_POST["deleteObj"]);
                 $apiMethod = $_POST["apiMethod"];

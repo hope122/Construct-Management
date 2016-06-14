@@ -104,6 +104,51 @@ function processTreeDataOnly(treeData,options){
     return tmpMenuObj;
 }
 
+//整理選單樹狀資料
+function processMenuTreeDataOnly(treeData,options){
+    var tmpMenuObj = {};
+    if(typeof options == "undefined"){
+        options = {};
+        options.idName = "uid";
+        options.title = "name";
+    }
+    //先整理
+    $.each(treeData,function(i,node){
+        if(typeof tmpMenuObj[node.parent] == "undefined"){
+            tmpMenuObj[node.parent] = {};
+        }
+
+        if(typeof node[options.title] != undefined){
+            node.title = node[options.title];
+        }
+
+         if(typeof node[options.idName] != undefined){
+            node.id = node[options.idName];
+        }
+        
+        tmpMenuObj[node.parent][node[options.idName]] = node;
+    });
+    
+    // ---------------------------------------------------------------------
+    // console.log(tmpMenuObj);
+    //放好第一層級的資料
+    $.each(tmpMenuObj[0],function(i, node){
+        var otherMenuContent = {};
+        // //這代表還有第二層
+        if(typeof tmpMenuObj[i] != "undefined"){
+            //轉換為陣列
+            otherMenuContent = $.map( CreatOtherTreeData(i, tmpMenuObj) , function(v, i){
+                return v;
+            });
+            // console.log(otherMenuContent);
+            tmpMenuObj[0][i]["nodes"] = otherMenuContent;
+        }
+    });
+    // ---------------------------------------------------------------------
+    //回傳
+    return tmpMenuObj;
+}
+
 //產生其他子層
 function CreatOtherTreeDataNodes(otherLayerDataIndex, totalData){
 	var otherMenuContent = {};
