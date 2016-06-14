@@ -1,5 +1,7 @@
 function getMenus(loginInfo){
-  // var menus = porcessData(configObject.getmenu,loginInfo);
+  var menus = porcessData(configObject.getmenu,loginInfo);
+  console.log(menus);
+  
 	var menus = porcessData(configObject.getUserMenu,{});
 	console.log(menus);
   var options = {

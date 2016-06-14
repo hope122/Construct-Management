@@ -125,8 +125,10 @@ function processMenuTreeDataOnly(treeData,options){
          if(typeof node[options.idName] != undefined){
             node.id = node[options.idName];
         }
-        
-        tmpMenuObj[node.parent][node[options.idName]] = node;
+        var contentTag = $("<li>");
+        var contentATag = $("<a>").prop("href",node.url).addClass(node["class_name"]).html(node.title);
+        contentTag.append(contentATag);
+        tmpMenuObj[node.parent][node[options.idName]] = contentTag;
     });
     
     // ---------------------------------------------------------------------
@@ -137,7 +139,7 @@ function processMenuTreeDataOnly(treeData,options){
         // //這代表還有第二層
         if(typeof tmpMenuObj[i] != "undefined"){
             //轉換為陣列
-            otherMenuContent = $.map( CreatOtherTreeData(i, tmpMenuObj) , function(v, i){
+            otherMenuContent = $.map( CreatOtherMenuData(i, tmpMenuObj) , function(v, i){
                 return v;
             });
             // console.log(otherMenuContent);
@@ -191,6 +193,60 @@ function CreatOtherTreeData(otherLayerDataIndex, totalData){
             //重複建好
             otherMenuContent[i] = content;
             otherMenuContent[i]["nodes"] = $.map(CreatOtherTreeData(i, totalData),function(v, i){
+                return v;
+            });
+        }else{
+            
+            otherMenuContent[i] = content;
+            
+        }
+    });
+    delete totalData[otherLayerDataIndex];
+    return otherMenuContent;
+}
+
+//產生其他選單子層
+function CreatOtherMenuDataNodes(otherLayerDataIndex, totalData){
+    var otherMenuContent = {};
+    //console.log(otherLayerDataIndex);
+    $.each(totalData[otherLayerDataIndex].nodes,function(i,content){
+    // console.log(i,content["uid"]);
+        if(typeof otherMenuContent[i] == "undefined"){
+            otherMenuContent[i] = {};
+        }
+        //這代表還有第二層
+        if(typeof totalData[i] != "undefined"){
+            //重複建好
+            otherMenuContent[i].id = i;
+            otherMenuContent[i].text = content.text;
+            otherMenuContent[i].nodes = $.map(CreatOtherMenuDataNodes(i, totalData),function(v, i){
+                return v;
+            });
+        }else{
+            
+            otherMenuContent[i] = content;
+            
+        }
+    });
+    
+    return otherMenuContent;
+}
+
+//產生其他子層
+function CreatOtherMenuData(otherLayerDataIndex, totalData){
+    var otherMenuContent = {};
+    // console.log(otherLayerDataIndex);
+    // return;
+    $.each(totalData[otherLayerDataIndex],function(i,content){
+    // console.log(i,content["uid"]);
+        if(typeof otherMenuContent[i] == "undefined"){
+            otherMenuContent[i] = {};
+        }
+        //這代表還有第二層
+        if(typeof totalData[i] != "undefined"){
+            //重複建好
+            otherMenuContent[i] = content;
+            otherMenuContent[i]["nodes"] = $.map(CreatOtherMenuDataNodes(i, totalData),function(v, i){
                 return v;
             });
         }else{
