@@ -7,6 +7,7 @@ var configObject = {
     "LoginUrl": apurl+"/login",
     "langSet": apurl+"/lang/page",
     "processLoginUrl": originUrl+"menter/setlogin",
+    "processLogin": originUrl+"menter/setlogininfo",
     "getmenu": apurl+"/pageaction/getmenu",
     "menuProcess": originUrl+"pageaction/menuprocess",
     "getPosition": originUrl+"pageaction/acposition",

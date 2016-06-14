@@ -102,32 +102,27 @@ class PageactionController extends AbstractActionController
     
     //取得帳號資訊(須登入後才可以使用)
     public function acinfoAction(){
-        $VTs = new clsSystem;
-        $VTs->initialization();
         try{
         //-----BI開始-----
 	        $action = array();
 	        $action["status"] = false;
-	        $start_time = microtime(true);
+	        // $start_time = microtime(true);
 	        if(!empty($_SESSION["uuid"]) and !empty($_SESSION["userName"])){
 	            $action["uuid"] = $_SESSION["uuid"];
 	            $action["userName"] = $_SESSION["userName"];
+	            // $action["menuPosition"] = $_SESSION["menuPosition"];
 	            $action["status"] = true;
-	            
-
-				
 	        }else{
 	            $action["msg"] = 'Please Login Again!';
 	        }
-	       	$end_time = microtime(true);
-	       	$action["times"] = $end_time - $start_time;
-	        $pageContent = $VTs->Data2Json($action);
+	       	// $end_time = microtime(true);
+	       	// $action["times"] = $end_time - $start_time;
+	        $pageContent = json_encode($action);
         //-----BI結束-----
 	    }catch(Exception $error){
 			//依據Controller, Action補上對應位置, $error->getMessage()為固定部份
 			$VTs->WriteLog("PageactionController", "acinfoAction", $error->getMessage());
 		}
-        $VTs = null;
         $this->viewContnet['pageContent'] = $pageContent;
         return new ViewModel($this->viewContnet);
         

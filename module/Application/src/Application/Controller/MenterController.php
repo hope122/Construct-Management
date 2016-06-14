@@ -59,10 +59,8 @@ class MenterController extends AbstractActionController
         $this->viewContnet['pageContent'] = $pageContent;
         return new ViewModel($this->viewContnet);
     }
-    
-    public function loginInfoAction(){
-        $SysClass = new clsSystem;
-        $SysClass->initialization();
+
+    public function setlogininfoAction(){
         try{
             //-----BI開始-----
             $action = array();
@@ -71,7 +69,8 @@ class MenterController extends AbstractActionController
                 if($_POST["status"]){
                    // 設置相關的帳號
                     $_SESSION["uuid"] = $_POST["uuid"];
-                    $_SESSION["position"] = $_POST["menuPosition"];
+                    $_SESSION["menuPosition"] = $_POST["menuPosition"];
+                    $_SESSION["userName"] = $_POST["name"];
                     $action["status"] = true;
                 }else{
                     $action["msg"] = 'This Login is False';
@@ -81,14 +80,12 @@ class MenterController extends AbstractActionController
                 $action["msg"] = 'This Status is False';
                 $action["code"] = 1;
             }
-            $pageContent = $SysClass->Data2Json($action);
+            $pageContent = json_encode($action);
             //----BI結束----
         }catch(Exception $error){
             //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
-            $SysClass->WriteLog("MenterController", "setloginAction", $error->getMessage());
+            // $SysClass->WriteLog("MenterController", "setloginAction", $error->getMessage());
         }
-        $SysClass->DBClose();
-        $SysClass = null;
         $this->viewContnet['pageContent'] = $pageContent;
         return new ViewModel($this->viewContnet);
     }
