@@ -489,3 +489,7 @@ textarea{
 .list-item-select:active{
 	background: #FFFFC7;
 }
+
+.calendar-over{
+	color:#FF6464;
+}

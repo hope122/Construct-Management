@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html><head>
+		<meta name="viewport" content="initial-scale=1">
+		<meta name="viewport" content="user-scalable=yes,width=device-width,initial-scale=1">
+		<title class="keep">建築物雲端全生命週期履歷平台</title>
+		<meta class="keep" charset="utf-8">
+		<meta class="keep" name="viewport" content="width=device-width, initial-scale=1">
+		<link class="keep" rel="stylesheet" href="include/css/font-awesome.min.css">
+		<link rel="stylesheet" href="include/css/jquery.orgchart.css">
+
+
+		<!--[if lte IE 8]><script src="include/strongly/assets/js/ie/html5shiv.js"></script><![endif]-->
+		<link class="keep" href="include/css/bootstrap.min.css" rel="stylesheet">
+		<link class="keep" rel="stylesheet" href="include/strongly/assets/css/main.css">
+        <link class="keep" rel="stylesheet" href="include/css/jquery-ui.min.css">
+        <link class="keep" rel="stylesheet" href="include/css/ctrl-style.css">
+        <link class="keep" rel="stylesheet" href="include/css/signstatus.css">
+
+
+		<!--[if lte IE 8]><link rel="stylesheet" href="../include/strongly/assets/css/ie8.css" /><![endif]-->
+		<!-- Scripts -->
+		<script class="keep" src="include/js/jquery/jquery.min.js"></script><style type="text/css"></style>
+        <script class="keep" src="include/js/jquery/jquery-ui.min.js"></script>
+        <script class="keep" src="include/js/jquery/jquery.blockui.js"></script>
+        <script class="keep" src="include/js/jquery/jquery.form.min.js"></script>
+		<script class="keep" src="include/js/bootstrap/bootstrap.min.js"></script>
+		<script src="include/js/jquery/jquery.orgchart.js"></script>
+
+
+
+		<!--[if lte IE 8]><script class="keep" src="include/strongly/assets/js/ie/respond.min.js"></script><![endif]-->
+		<script class="keep" src="include/js/config/config.js"></script>
+		<script class="keep" src="include/js/main/main.js"></script>
+		<script class="keep" src="include/js/main/router.js"></script>
+		<script class="keep" src="include/js/main/getStyle.js"></script>
+		<script class="keep" src="include/js/main/bsDialog.js"></script>
+		<script class="keep" src="include/js/main/bsDialogSelect.js"></script>
+		<script class="keep" src="include/js/main/tab.js"></script>
+		<!-- <script src="include/js/contentpages/received/jobRank.js"></script> -->
+
+		<script src="include/js/contentpages/undertake/config.js"></script>
+		<script src="include/js/contentpages/undertake/main.js"></script>
+
+		<script type="text/javascript">
+			$(function(){
+				$("#testBs").bsDialog({
+					autoShow:false,
+					showFooterBtn:true,
+					title: "新增待辦事項",
+					// modalClass: "bsDialogWindow",
+					button:[{
+						text: "取消",
+						click: function(){
+
+						}
+					},
+					{
+						text: "第二種",
+						className:"btn-success",
+						click: function(){
+							
+							testBs2Show();
+							// $(formObj).ajaxSubmit(options);
+						}
+					},
+					{
+						text: "新增",
+						className:"btn-success",
+						click: function(){
+							
+							// testBs2Show();
+							// $(formObj).ajaxSubmit(options);
+						}
+					}
+					]
+				});
+				$("#testBs2").bsDialog({
+					autoShow:false,
+					showFooterBtn:true,
+					title: "新增待辦事項-第二種",
+					// modalClass: "bsDialogWindow",
+					button:[{
+						text: "取消",
+						click: function(){
+
+						}
+					},
+					{
+						text: "第一種",
+						className:"btn-success",
+						click: function(){
+							
+							// testBsShow();
+							$("#testBs2").bsDialog("close");
+							// $(formObj).ajaxSubmit(options);
+						}
+					},
+					{
+						text: "確認",
+						className:"btn-success",
+						click: function(){
+							
+							// $(formObj).ajaxSubmit(options);
+						}
+					}
+					]
+				});
+				tabCtrl("totalTab");
+				$("#testBs8").bsDialog({
+					autoShow:false,
+					showFooterBtn:true,
+					// modalClass: "bsDialogWindow",
+					title: "請選擇會簽部門",
+					button:[{
+						text: "取消",
+						// className: "btn-success",
+						click: function(){
+							// xhr.abort();
+							// $(formObj).ajaxFormUnbind();
+							$("#testBs8").bsDialog("close");
+						}
+					},{
+						text: "確定",
+						className: "btn-success",
+						click: function(){
+							// xhr.abort();
+							// $(formObj).ajaxFormUnbind();
+							$("#testBs8").bsDialog("close");
+						}
+					}
+					]
+				});
+				$("#testBs5").bsDialog({
+					autoShow:false,
+					showFooterBtn:true,
+					title: "事項預覽",
+					button:[{
+						text: "關閉",
+						// className: "btn-success",
+						click: function(){
+							// xhr.abort();
+							// $(formObj).ajaxFormUnbind();
+							$("#testBs5").bsDialog("close");
+						}
+					}
+					]
+				});
+				$("#testBs6").bsDialog({
+					autoShow:false,
+					showFooterBtn:true,
+					title: "修改指派項目",
+					button:[{
+						text: "取消",
+						// className: "btn-success",
+						click: function(){
+							// xhr.abort();
+							// $(formObj).ajaxFormUnbind();
+							$("#testBs6").bsDialog("close");
+						}
+					},
+					{
+						text: "儲存",
+						className: "btn-success",
+						click: function(){
+							// xhr.abort();
+							// $(formObj).ajaxFormUnbind();
+							$("#testBs6").bsDialog("close");
+						}
+					}
+					]
+				});
+				$("#testBs7").bsDialog({
+					autoShow:false,
+					showFooterBtn:true,
+					title: "被指派項目細項修改",
+					button:[{
+						text: "取消",
+						// className: "btn-success",
+						click: function(){
+							// xhr.abort();
+							// $(formObj).ajaxFormUnbind();
+							$("#testBs7").bsDialog("close");
+						}
+					},
+					{
+						text: "儲存",
+						className: "btn-success",
+						click: function(){
+							// xhr.abort();
+							// $(formObj).ajaxFormUnbind();
+							testBs8Show();
+							getOrgData();
+						}
+					}
+					]
+				});
+			});
+			function testBsShow(){
+				$("#testBs").bsDialog("show");
+			}
+			function testBs2Show(){
+				$("#testBs2").bsDialog("show");
+				// formObj = $.parseHTML(formStr);
+			}
+			function testBs3Show(){
+				
+				$("#testBs3").bsDialog("show");
+			}
+			function testBs5Show(){
+				
+				$("#testBs5").bsDialog("show");
+			}
+			function testBs6Show(){
+				
+				$("#testBs6").bsDialog("show");
+			}
+			function testBs7Show(){
+				
+				$("#testBs7").bsDialog("show");
+			}
+			function testBs8Show(){
+				
+				$("#testBs8").bsDialog("show");
+			}
+			function fileSelect(){
+				var fileInput = $("<input>").prop("type","file").prop("name","files[]").prop("multiple",true).change(function(){
+					// console.log($(this).prop("files"));
+					var names = $.map($(this).prop("files"), function(val) { 
+						// return val.name; 
+						var infoDiv = $("<div>").addClass("col-xs-12 col-md-12").html(val.name);
+						$("#isSelectFile").find(".control-label").eq(1).append(infoDiv);
+					});
+
+					// console.log(names);
+					$(this).appendTo(formObj);
+					// console.log(formObj);
+					$("#isSelectFile").show();
+				});
+				fileInput.click();
+			}
+		</script>
+	</head>
+	<body class="homepage is-loading">
+		<div id="page-wrapper">
+
+		<!-- Header -->
+			<div id="header-wrapper">
+				<div id="header" class="container">
+
+					<!-- Logo -->
+						<h1 id="logo"><a href="./">建築物施工管理雲端系統</a></h1>
+
+					<!-- Nav -->
+						<nav id="nav">
+							<div style="float:right;">
+								<div>Hi, <span class="user-name">Race</span> 歡迎回來</div>
+							</div>
+							<!--選單-->
+							<ul id="menus">
+								<li style="white-space: nowrap;">
+									選單
+								</li>
+							</ul>
+						</nav>
+
+				</div>
+			</div>
+
+		<!-- Main -->
+			<div id="main-wrapper">
+				<div id="main" class="container">
+					<div class="row">
+						<!-- Content -->
+							<div id="pagescontent" class="12u 12u(mobile)" style="display: block;">
+								<!-- Post -->
+				<!-- ========================= 本次設計開始 ========================= -->
+								
+								<!-- 標題 -->
+								<div class="col-xs-12 col-md-12 item-title text-center">
+									<h3 class="col-xs-10 col-md-11">個人待辦事項列表</h3>
+									<div class="col-xs-2 col-md-1 item-title-plus">
+										<i class="fa fa-plus-circle fa-2x send-btn mouse-pointer" onclick="testBsShow();"></i>
+									</div>
+								</div>
+								<!-- 頁籤 -->
+								<ul class="nav nav-tabs" id="totalTab">
+									<li role="presentation" class="active">
+										<a href="#" id="total">整體</a>
+									</li>
+									<li role="presentation">
+										<a href="#" id="today">本日<span class="badge">1</span></a>
+									</li>
+									<li role="presentation">
+										<a href="#" id="beDesignated">被指派<span class="badge">1</span></a>
+									</li>
+									<li role="presentation">
+										<a href="#" id="designate">指派<span class="badge">1</span></a>
+									</li>
+									<li role="presentation">
+										<a href="#" id="unfinish">未完成<span class="badge">1</span></a>
+									</li>
+									<li role="presentation">
+										<a href="#" id="finish">完成<span class="badge">1</span></a>
+									</li>
+									<li role="presentation">
+										<a href="#" id="systems">系統<span class="badge">1</span></a>
+									</li>
+								</ul>
+								<!-- 內容 -->
+								<div class="col-xs-12 col-md-12 tab-border totalTab-tab-content" id="total-content">
+									<!-- 列表內容 -->
+									<div class="col-xs-12 col-md-12 list-item-title text-center">
+										<div class="col-xs-5 col-md-4 list-items">
+											事項
+										</div>
+										<div class="col-xs-4 col-md-3 list-items">
+											類型
+										</div>
+										
+										<div class="col-xs-4 col-md-3 list-items">
+											迄日
+										</div>
+										<div class="col-xs-4 col-md-1 list-items">
+											進度
+										</div>
+										<div class="col-xs-3 col-md-1 list-items">
+											&nbsp;
+										</div>
+									</div>
+									<!-- 列表內容 -->
+									<div class="col-xs-12 col-md-12 list-items-bottom">
+										<div class="col-xs-5 col-md-4 list-items">
+											<a href="#" onclick="testBs5Show(); return false">連絡廠商場地清掃
+											</a>
+										</div>
+										<div class="col-xs-4 col-md-3 list-items text-center">
+											指
+										</div>
+										<div class="col-xs-4 col-md-3 list-items text-center calendar-over">
+											2016-06-01
+										</div>
+										<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
+											0%
+										</div>
+										
+										<div class="col-xs-3 col-md-1 text-center list-items">
+											<div class="item-actionBtn">
+
+												<i class="fa fa-pencil-square-o fa-lg send-btn mouse-pointer" onclick="testBs6Show();"></i>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12 col-md-12 list-items-bottom">
+										<div class="col-xs-5 col-md-4 list-items">
+											連絡廠商進場整地
+										</div>
+										<div class="col-xs-4 col-md-3 list-items text-center">
+											被指
+										</div>
+										<div class="col-xs-4 col-md-3 list-items text-center">
+											2016-06-30
+										</div>
+										<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
+											20%
+										</div>
+										
+										<div class="col-xs-3 col-md-1 text-center list-items">
+											<div class="item-actionBtn">
+
+												<i class="fa fa-pencil-square-o fa-lg send-btn mouse-pointer" onclick="testBs7Show();"></i>
+												<i class="fa fa-check fa-lg"></i>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12 col-md-12 list-items-bottom">
+										<div class="col-xs-5 col-md-4 list-items">
+											連絡廠商圍籬施作
+										</div>
+										<div class="col-xs-4 col-md-3 list-items text-center">
+											被指
+										</div>
+										<div class="col-xs-4 col-md-3 list-items text-center">
+											2016-06-25
+										</div>
+										<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
+											0%
+										</div>
+										
+										<div class="col-xs-3 col-md-1 text-center list-items">
+											<div class="item-actionBtn">
+
+												<i class="fa fa-pencil-square-o fa-lg send-btn mouse-pointer" onclick="testBs5Show();"></i>
+												<i class="fa fa-check fa-lg"></i>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12 col-md-12">
+										<div class="col-xs-5 col-md-4 list-items">
+											連絡填寫工作日誌
+										</div>
+										<div class="col-xs-4 col-md-3 list-items text-center">
+											System
+										</div>
+										<div class="col-xs-4 col-md-3 list-items text-center">
+											2016-06-01
+										</div>
+										<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
+											-
+										</div>
+										<div class="col-xs-3 col-md-1 text-center list-items">
+											-
+										</div>
+									</div>
+									
+									<!-- 列表內容結束 -->
+								</div>
+
+								<!-- 內容 -->
+								<div class="col-xs-12 col-md-12 tab-border totalTab-tab-content" id="today-content">
+									<!-- 列表內容 -->
+									<div class="col-xs-12 col-md-12 list-item-title text-center">
+										<div class="col-xs-5 col-md-4 list-items">
+											事項
+										</div>
+										<div class="col-xs-4 col-md-3 list-items">
+											類型
+										</div>
+										
+										<div class="col-xs-4 col-md-3 list-items">
+											迄日
+										</div>
+										<div class="col-xs-4 col-md-1 list-items">
+											進度
+										</div>
+										<div class="col-xs-3 col-md-1 list-items">
+											&nbsp;
+										</div>
+									</div>
+									<!-- 列表內容 -->
+									<div class="col-xs-12 col-md-12 list-items-bottom">
+										<div class="col-xs-5 col-md-4 list-items">
+											連絡廠商場地清掃
+										</div>
+										<div class="col-xs-4 col-md-3 list-items text-center">
+											指
+										</div>
+										<div class="col-xs-4 col-md-3 list-items text-center calendar-over">
+											2016-06-01
+										</div>
+										<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
+											0%
+										</div>
+										
+										<div class="col-xs-3 col-md-1 text-center list-items">
+											<div class="item-actionBtn">
+
+												<i class="fa fa-pencil-square-o fa-lg send-btn mouse-pointer" onclick="testBs5Show();"></i>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12 col-md-12 list-items-bottom">
+										<div class="col-xs-5 col-md-4 list-items">
+											連絡廠商進場整地
+										</div>
+										<div class="col-xs-4 col-md-3 list-items text-center">
+											被指
+										</div>
+										<div class="col-xs-4 col-md-3 list-items text-center">
+											2016-06-30
+										</div>
+										<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
+											20%
+										</div>
+										
+										<div class="col-xs-3 col-md-1 text-center list-items">
+											<div class="item-actionBtn">
+
+												<i class="fa fa-pencil-square-o fa-lg send-btn mouse-pointer" onclick="testBs5Show();"></i>
+												<i class="fa fa-check fa-lg"></i>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12 col-md-12 list-items-bottom">
+										<div class="col-xs-5 col-md-4 list-items">
+											連絡廠商圍籬施作
+										</div>
+										<div class="col-xs-4 col-md-3 list-items text-center">
+											被指
+										</div>
+										<div class="col-xs-4 col-md-3 list-items text-center">
+											2016-06-25
+										</div>
+										<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
+											0%
+										</div>
+										
+										<div class="col-xs-3 col-md-1 text-center list-items">
+											<div class="item-actionBtn">
+
+												<i class="fa fa-pencil-square-o fa-lg send-btn mouse-pointer" onclick="testBs5Show();"></i>
+												<i class="fa fa-check fa-lg"></i>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12 col-md-12">
+										<div class="col-xs-5 col-md-4 list-items">
+											連絡填寫工作日誌
+										</div>
+										<div class="col-xs-4 col-md-3 list-items text-center">
+											System
+										</div>
+										<div class="col-xs-4 col-md-3 list-items text-center">
+											2016-06-01
+										</div>
+										<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
+											-
+										</div>
+										<div class="col-xs-3 col-md-1 text-center list-items">
+											-
+										</div>
+									</div>
+									<!-- 列表內容結束 -->
+								</div>
+
+								<!-- 內容 -->
+								<div class="col-xs-12 col-md-12 tab-border totalTab-tab-content" id="beDesignated-content">
+									<!-- 列表內容 -->
+									<div class="col-xs-12 col-md-12 list-item-title text-center">
+										<div class="col-xs-5 col-md-4 list-items">
+											事項
+										</div>
+										<div class="col-xs-4 col-md-3 list-items">
+											類型
+										</div>
+										
+										<div class="col-xs-4 col-md-3 list-items">
+											迄日
+										</div>
+										<div class="col-xs-4 col-md-1 list-items">
+											進度
+										</div>
+										<div class="col-xs-3 col-md-1 list-items">
+											&nbsp;
+										</div>
+									</div>
+									<!-- 列表內容 -->
+									<div class="col-xs-12 col-md-12 list-items-bottom">
+										<div class="col-xs-5 col-md-4 list-items">
+											連絡廠商進場整地
+										</div>
+										<div class="col-xs-4 col-md-3 list-items text-center">
+											被指
+										</div>
+										<div class="col-xs-4 col-md-3 list-items text-center">
+											2016-06-30
+										</div>
+										<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
+											20%
+										</div>
+										
+										<div class="col-xs-3 col-md-1 text-center list-items">
+											<div class="item-actionBtn">
+
+												<i class="fa fa-pencil-square-o fa-lg send-btn mouse-pointer" onclick="testBs5Show();"></i>
+												<i class="fa fa-check fa-lg"></i>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12 col-md-12 ">
+										<div class="col-xs-5 col-md-4 list-items">
+											連絡廠商圍籬施作
+										</div>
+										<div class="col-xs-4 col-md-3 list-items text-center">
+											被指
+										</div>
+										<div class="col-xs-4 col-md-3 list-items text-center">
+											2016-06-25
+										</div>
+										<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
+											0%
+										</div>
+										
+										<div class="col-xs-3 col-md-1 text-center list-items">
+											<div class="item-actionBtn">
+
+												<i class="fa fa-pencil-square-o fa-lg send-btn mouse-pointer" onclick="testBs5Show();"></i>
+												<i class="fa fa-check fa-lg"></i>
+											</div>
+										</div>
+									</div>
+									
+									
+									<!-- 列表內容結束 -->
+								</div>
+
+								<!-- 內容 -->
+								<div class="col-xs-12 col-md-12 tab-border totalTab-tab-content" id="designate-content">
+									<!-- 列表內容 -->
+									<div class="col-xs-12 col-md-12 list-item-title text-center">
+										<div class="col-xs-5 col-md-4 list-items">
+											事項
+										</div>
+										<div class="col-xs-4 col-md-3 list-items">
+											類型
+										</div>
+										
+										<div class="col-xs-4 col-md-3 list-items">
+											迄日
+										</div>
+										<div class="col-xs-4 col-md-1 list-items">
+											進度
+										</div>
+										<div class="col-xs-3 col-md-1 list-items">
+											&nbsp;
+										</div>
+									</div>
+									<!-- 列表內容 -->
+									<div class="col-xs-12 col-md-12">
+										<div class="col-xs-5 col-md-4 list-items">
+											連絡廠商場地清掃
+										</div>
+										<div class="col-xs-4 col-md-3 list-items text-center">
+											指
+										</div>
+										<div class="col-xs-4 col-md-3 list-items text-center calendar-over">
+											2016-06-01
+										</div>
+										<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
+											0%
+										</div>
+										
+										<div class="col-xs-3 col-md-1 text-center list-items">
+											<div class="item-actionBtn">
+
+												<i class="fa fa-pencil-square-o fa-lg send-btn mouse-pointer" onclick="testBs5Show();"></i>
+											</div>
+										</div>
+									</div>
+									<!-- 列表內容結束 -->
+								</div>
+
+								<!-- 內容 -->
+								<div class="col-xs-12 col-md-12 tab-border totalTab-tab-content" id="unfinish-content">
+									<!-- 列表內容 -->
+									<div class="col-xs-12 col-md-12 list-item-title text-center">
+										<div class="col-xs-5 col-md-4 list-items">
+											事項
+										</div>
+										<div class="col-xs-4 col-md-3 list-items">
+											類型
+										</div>
+										
+										<div class="col-xs-4 col-md-3 list-items">
+											迄日
+										</div>
+										<div class="col-xs-4 col-md-1 list-items">
+											進度
+										</div>
+										<div class="col-xs-3 col-md-1 list-items">
+											&nbsp;
+										</div>
+									</div>
+									<!-- 列表內容 -->
+									<div class="col-xs-12 col-md-12 list-items-bottom">
+										<div class="col-xs-5 col-md-4 list-items">
+											連絡廠商場地清掃
+										</div>
+										<div class="col-xs-4 col-md-3 list-items text-center">
+											指
+										</div>
+										<div class="col-xs-4 col-md-3 list-items text-center calendar-over">
+											2016-06-01
+										</div>
+										<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
+											0%
+										</div>
+										
+										<div class="col-xs-3 col-md-1 text-center list-items">
+											<div class="item-actionBtn">
+
+												<i class="fa fa-pencil-square-o fa-lg send-btn mouse-pointer" onclick="testBs5Show();"></i>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12 col-md-12 list-items-bottom">
+										<div class="col-xs-5 col-md-4 list-items">
+											連絡廠商進場整地
+										</div>
+										<div class="col-xs-4 col-md-3 list-items text-center">
+											被指
+										</div>
+										<div class="col-xs-4 col-md-3 list-items text-center">
+											2016-06-30
+										</div>
+										<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
+											20%
+										</div>
+										
+										<div class="col-xs-3 col-md-1 text-center list-items">
+											<div class="item-actionBtn">
+
+												<i class="fa fa-pencil-square-o fa-lg send-btn mouse-pointer" onclick="testBs5Show();"></i>
+												<i class="fa fa-check fa-lg"></i>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12 col-md-12 ">
+										<div class="col-xs-5 col-md-4 list-items">
+											連絡廠商圍籬施作
+										</div>
+										<div class="col-xs-4 col-md-3 list-items text-center">
+											被指
+										</div>
+										<div class="col-xs-4 col-md-3 list-items text-center">
+											2016-06-25
+										</div>
+										<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
+											0%
+										</div>
+										
+										<div class="col-xs-3 col-md-1 text-center list-items">
+											<div class="item-actionBtn">
+
+												<i class="fa fa-pencil-square-o fa-lg send-btn mouse-pointer" onclick="testBs5Show();"></i>
+												<i class="fa fa-check fa-lg"></i>
+											</div>
+										</div>
+									</div>
+									
+									<!-- 列表內容結束 -->
+								</div>
+
+								<!-- 內容 -->
+								<div class="col-xs-12 col-md-12 tab-border totalTab-tab-content" id="finish-content">
+									<!-- 列表內容 -->
+									<div class="col-xs-12 col-md-12 list-item-title text-center">
+										<div class="col-xs-5 col-md-4 list-items">
+											事項
+										</div>
+										<div class="col-xs-4 col-md-3 list-items">
+											類型
+										</div>
+										
+										<div class="col-xs-4 col-md-3 list-items">
+											完成日
+										</div>
+										<div class="col-xs-4 col-md-1 list-items">
+											進度
+										</div>
+										<div class="col-xs-3 col-md-1 list-items">
+											&nbsp;
+										</div>
+									</div>
+									<!-- 列表內容 -->
+									<div class="col-xs-12 col-md-12 list-items-bottom">
+										<div class="col-xs-5 col-md-4 list-items">
+											連絡廠商掃地
+										</div>
+										<div class="col-xs-4 col-md-3 list-items text-center">
+											-
+										</div>
+										<div class="col-xs-4 col-md-3 list-items text-center">
+											2016-05-01
+										</div>
+										<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
+											100%
+										</div>
+										
+										<div class="col-xs-3 col-md-1 text-center list-items">
+											<div class="item-actionBtn">
+												-
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12 col-md-12">
+										<div class="col-xs-5 col-md-4 list-items">
+											連絡廠商進水泥
+										</div>
+										<div class="col-xs-4 col-md-3 list-items text-center">
+											被指
+										</div>
+										<div class="col-xs-4 col-md-3 list-items text-center">
+											2016-04-01
+										</div>
+										<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
+											100%
+										</div>
+										
+										<div class="col-xs-3 col-md-1 text-center list-items">
+											<div class="item-actionBtn">
+												<i class="fa fa-comment-o fa-lg"></i>
+											</div>
+										</div>
+									</div>
+									
+									<!-- 列表內容結束 -->
+								</div>
+
+								<!-- 內容 -->
+								<div class="col-xs-12 col-md-12 tab-border totalTab-tab-content" id="systems-content">
+									<!-- 列表內容 -->
+									<div class="col-xs-12 col-md-12 list-item-title text-center">
+										<div class="col-xs-5 col-md-7 list-items">
+											事項
+										</div>
+										<div class="col-xs-4 col-md-5 list-items">
+											迄日
+										</div>
+									</div>
+									<!-- 列表內容 -->
+									<div class="col-xs-12 col-md-12">
+										<div class="col-xs-5 col-md-7 list-items">
+											連絡填寫工作日誌
+										</div>
+										<div class="col-xs-4 col-md-5 list-items text-center">
+											2016-06-01
+										</div>
+									</div>
+									
+									<!-- 列表內容結束 -->
+								</div>
+				<!-- ========================= 本次設計結束 ========================= -->	
+							</div>
+
+					</div>
+				</div>
+			</div>
+
+		<!-- Footer -->
+			<div id="footer-wrapper">
+				<div id="footer" class="container">
+				</div>
+				<div id="copyright" class="container">
+					<ul class="links">
+						<li>© Untitled. All rights reserved.</li><li>Design: HTML5 UP  </li>
+					</ul>
+				</div>
+			</div>
+
+		</div>
+		<!-- 測試用內容 -->
+		<div id="testBs">
+			<div class="contents">
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	事項
+					    </div>
+					    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+					    	<input type="text" class="form-control">
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	<i class="fa fa-check-square-o fa-lg"></i>
+					    	指派
+					    </div>
+					    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+					    	<select class="form-control">
+					    		<option>Race</option>
+					    	</select>
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	<i class="fa fa-square-o fa-lg"></i>
+					    	回報
+					    </div>
+					    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+					    	<!-- <select class="form-control">
+					    		<option>Race</option>
+					    	</select> -->
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	起日
+					    </div>
+					    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+					    	<i class="fa fa-calendar"></i>
+					    </div>
+					</div>
+					
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	迄日
+					    </div>
+					    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+					    	<i class="fa fa-calendar"></i>
+					    </div>
+					</div>
+					
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	地點
+					    </div>
+					    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+					    	<input type="text" class="form-control">
+					    </div>
+					</div>
+					
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+						<div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	細項
+					    </div>
+					    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+					    	<div class="col-xs-12 col-md-12 control-label font-lineHeight">
+					    		<i class="fa fa-plus fa-lg pull-right"></i>
+					    	</div>
+					    	<div class="col-xs-12 col-md-12 control-label font-lineHeight">
+					    		<div class="col-xs-12 col-md-10 control-label font-lineHeight">
+					    			<input type="text" class="form-control" value="地點測試">
+							    </div>
+							    <div class="col-xs-12 col-md-2 control-label font-lineHeight">
+							    	<i class="fa fa-trash-o"></i>
+							    </div>
+					    	</div>
+					    	<div class="col-xs-12 col-md-12 control-label font-lineHeight">
+					    		<div class="col-xs-12 col-md-10 control-label font-lineHeight">
+					    			<input type="text" class="form-control" value="地點測試2">
+							    	
+							    </div>
+							    <div class="col-xs-12 col-md-2 control-label font-lineHeight">
+							    	<i class="fa fa-trash-o"></i>
+							    </div>
+					    	</div>
+					    </div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="testBs2">
+			<div class="contents">
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	事項
+					    </div>
+					    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+					    	<input type="text" class="form-control">
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	<!-- <i class="fa fa-check-square-o fa-lg"></i> -->
+					    	指派人
+					    </div>
+					    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+					    	<select class="form-control">
+					    		<option>Race</option>
+					    	</select>
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	
+					    	回報對象
+					    </div>
+					    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+					    	<select class="form-control">
+					    		<option>Race</option>
+					    	</select>
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	起日
+					    </div>
+					    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+					    	<i class="fa fa-calendar"></i>
+					    </div>
+					</div>
+					
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	迄日
+					    </div>
+					    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+					    	<i class="fa fa-calendar"></i>
+					    </div>
+					</div>
+					
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	地點
+					    </div>
+					    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+					    	<input type="text" class="form-control">
+					    </div>
+					</div>
+					
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+						<div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	細項
+					    </div>
+					    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+					    	<div class="col-xs-12 col-md-12 control-label font-lineHeight">
+					    		<i class="fa fa-plus fa-lg pull-right"></i>
+					    	</div>
+					    	<div class="col-xs-12 col-md-12 control-label font-lineHeight">
+					    		<div class="col-xs-12 col-md-10 control-label font-lineHeight">
+					    			<input type="text" class="form-control" value="地點測試">
+							    </div>
+							    <div class="col-xs-12 col-md-2 control-label font-lineHeight">
+							    	<i class="fa fa-trash-o"></i>
+							    </div>
+					    	</div>
+					    	<div class="col-xs-12 col-md-12 control-label font-lineHeight">
+					    		<div class="col-xs-12 col-md-10 control-label font-lineHeight">
+					    			<input type="text" class="form-control" value="地點測試2">
+							    	
+							    </div>
+							    <div class="col-xs-12 col-md-2 control-label font-lineHeight">
+							    	<i class="fa fa-trash-o"></i>
+							    </div>
+					    	</div>
+					    </div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="testBs5">
+			<div class="contents">
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	事項
+					    </div>
+					    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+					    	連絡廠商場地清掃
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	<!-- <i class="fa fa-check-square-o fa-lg"></i> -->
+					    	指派人
+					    </div>
+					    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+					    	Race
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	
+					    	承辦人
+					    </div>
+					    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+					    	邁克
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	起日
+					    </div>
+					    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+					    	2016-06-01
+					    </div>
+					</div>
+					
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	迄日
+					    </div>
+					    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+					    	2016-06-30
+					    </div>
+					</div>
+					
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	地點
+					    </div>
+					    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+					    	A工地旁空地
+					    </div>
+					</div>
+					
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+						<div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	細項
+					    </div>
+					    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+					    	<div class="col-xs-12 col-md-12 control-label font-lineHeight">
+					    		<div class="col-xs-12 col-md-2 control-label font-lineHeight">
+							    	<i class="fa fa-square-o fa-lg"></i>
+							    </div>
+					    		<div class="col-xs-12 col-md-10 control-label font-lineHeight">
+					    			垃圾桶清空
+							    </div>
+							    
+					    	</div>
+					    	<div class="col-xs-12 col-md-12 control-label font-lineHeight">
+					    		<div class="col-xs-12 col-md-2 control-label font-lineHeight">
+							    	<i class="fa fa-square-o fa-lg"></i>
+							    </div>
+					    		<div class="col-xs-12 col-md-10 control-label font-lineHeight">
+					    			便當盒疊起
+							    </div>
+					    	</div>
+					    </div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="testBs6">
+			<div class="contents">
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	事項
+					    </div>
+					    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+					    	<input type="text" class="form-control" value="連絡廠商場地清掃">
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	<!-- <i class="fa fa-check-square-o fa-lg"></i> -->
+					    	指派人
+					    </div>
+					    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+					    	Race
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	
+					    	承辦人
+					    </div>
+					    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+					    	<select class="form-control">
+						    	<option>邁克</option>
+					    	
+					    	</select>
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	起日
+					    </div>
+					    <div class="col-xs-12 col-md-4 control-label font-lineHeight">
+					    	2016-06-01
+					    </div>
+					    <div class="col-xs-12 col-md-5 control-label font-lineHeight">
+					    	<i class="fa fa-calendar"></i>
+					    </div>
+					</div>
+					
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	迄日
+					    </div>
+					    <div class="col-xs-12 col-md-4 control-label font-lineHeight">
+					    	2016-06-30
+					    </div>
+					    <div class="col-xs-12 col-md-5 control-label font-lineHeight">
+					    	<i class="fa fa-calendar"></i>
+					    </div>
+					</div>
+					
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	地點
+					    </div>
+					    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+					    	<input type="text" class="form-control" value="A工地旁空地">
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+						<div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	細項
+					    </div>
+					    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+					    	<div class="col-xs-12 col-md-12 control-label font-lineHeight">
+					    		<i class="fa fa-plus fa-lg pull-right"></i>
+					    	</div>
+					    	<div class="col-xs-12 col-md-12 control-label font-lineHeight">
+					    		
+					    		<div class="col-xs-12 col-md-10 control-label font-lineHeight">
+							    	<input type="text" class="form-control" value="垃圾桶清空">
+					    			
+							    </div>
+							    <div class="col-xs-12 col-md-2 control-label font-lineHeight">
+					    			<i class="fa fa-trash-o"></i>
+							    </div>
+							    
+					    	</div>
+					    	<div class="col-xs-12 col-md-12 control-label font-lineHeight">
+					    		
+					    		<div class="col-xs-12 col-md-10 control-label font-lineHeight">
+							    	<input type="text" class="form-control" value="便當盒疊起">
+					    			
+							    </div>
+							    <div class="col-xs-12 col-md-2 control-label font-lineHeight">
+					    			<i class="fa fa-trash-o"></i>
+							    </div>
+					    	</div>
+					    </div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="testBs7">
+			<div class="contents">
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	事項
+					    </div>
+					    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+					    	連絡廠商進場整地
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	<!-- <i class="fa fa-check-square-o fa-lg"></i> -->
+					    	指派人
+					    </div>
+					    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+					    	Race
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	
+					    	承辦人
+					    </div>
+					    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+					    	邁克
+					    </div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	起日
+					    </div>
+					    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+					    	2016-06-01
+					    </div>
+					</div>
+					
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	迄日
+					    </div>
+					    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+					    	2016-06-30
+					    </div>
+					</div>
+					
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+					    <div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	地點
+					    </div>
+					    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+					    	A工地旁空地
+					    </div>
+					</div>
+					
+				</div>
+				<div class="col-xs-12 col-md-12 list-items">
+					<div class="form-group">
+						<div class="col-xs-12 col-md-3 control-label font-lineHeight">
+					    	細項
+					    </div>
+					    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+					    	<div class="col-xs-12 col-md-12 control-label font-lineHeight">
+					    		<i class="fa fa-plus fa-lg pull-right"></i>
+					    	</div>
+					    	<div class="col-xs-12 col-md-12 control-label font-lineHeight">
+					    		
+					    		<div class="col-xs-12 col-md-10 control-label font-lineHeight">
+							    	<input type="text" class="form-control" value="垃圾桶清空">
+					    			
+							    </div>
+							    <div class="col-xs-12 col-md-2 control-label font-lineHeight">
+					    			<i class="fa fa-trash-o"></i>
+							    </div>
+							    
+					    	</div>
+					    	<div class="col-xs-12 col-md-12 control-label font-lineHeight">
+					    		
+					    		<div class="col-xs-12 col-md-10 control-label font-lineHeight">
+							    	<input type="text" class="form-control" value="便當盒疊起">
+					    			
+							    </div>
+							    <div class="col-xs-12 col-md-2 control-label font-lineHeight">
+					    			<i class="fa fa-trash-o"></i>
+							    </div>
+					    	</div>
+					    </div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- 組織架構圖 -->
+		<div id="testBs8">
+			<div class="contents modal-items">
+				<div id="orgChartContainer" style="width: 100%">
+			        <div id="orgChart"></div>
+			    </div>
+			</div>
+		</div>
+
+	</body>
+</html>
