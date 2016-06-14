@@ -14,6 +14,7 @@ function redirectPage(result){
         // configObject.processLoginUrl 舊版
         $.post(configObject.processLogin,result,function(rs){
            location.href = location.origin + "/content.html";
+           // console.log(rs);
         });
   }else{
     alert(result.error);
