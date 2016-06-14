@@ -107,6 +107,9 @@
 		if(empty($_SESSION)){
 			header("Location: ./login.html");
 			exit();
+		}else{
+			header("location: ./content.html");
+			exit();
 		}
 		return true;
 	}

@@ -59,6 +59,40 @@ class MenterController extends AbstractActionController
         $this->viewContnet['pageContent'] = $pageContent;
         return new ViewModel($this->viewContnet);
     }
+    
+    public function loginInfoAction(){
+        $SysClass = new clsSystem;
+        $SysClass->initialization();
+        try{
+            //-----BI開始-----
+            $action = array();
+            $action["status"] = false;
+            if(!empty($_POST)){
+                if($_POST["status"]){
+                   // 設置相關的帳號
+                    $_SESSION["uuid"] = $_POST["uuid"];
+                    $_SESSION["position"] = $_POST["menuPosition"];
+                    $action["status"] = true;
+                }else{
+                    $action["msg"] = 'This Login is False';
+                    $action["code"] = 2;
+                }
+            }else{
+                $action["msg"] = 'This Status is False';
+                $action["code"] = 1;
+            }
+            $pageContent = $SysClass->Data2Json($action);
+            //----BI結束----
+        }catch(Exception $error){
+            //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
+            $SysClass->WriteLog("MenterController", "setloginAction", $error->getMessage());
+        }
+        $SysClass->DBClose();
+        $SysClass = null;
+        $this->viewContnet['pageContent'] = $pageContent;
+        return new ViewModel($this->viewContnet);
+    }
+
     public function logoutAction()
     {
 		@session_start();
