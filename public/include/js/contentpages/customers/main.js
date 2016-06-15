@@ -20,9 +20,9 @@ function getData(uid){
     $.getJSON(wrsUrl, sendData ).done(function(rs){
         console.log(rs);
         $("#grid").empty();
-        if(rs.Status){
+        if(rs.status){
             if(uid == null){
-                putDataToPage(rs.Data);
+                putDataToPage(rs.data);
             }else{
                 // insertDialog(uid,name);
             }
@@ -44,7 +44,7 @@ function putDataToPage(data, onlyData){
     }
     // console.log(data);
     // 畫面設定值
-    var option = {styleKind:"list",style:"2grid-modify"};
+    var option = {styleKind:"list",style:"3grid-modify"};
     // 取得畫面樣式
     getStyle(option,function(pageStyle){
         if(!onlyData){
@@ -54,7 +54,8 @@ function putDataToPage(data, onlyData){
                 // 名稱
                 $(pageStyleObj).find(".list-items").eq(0).html(content.name);
                 // 附屬說明
-                $(pageStyleObj).find(".list-items").eq(1).html(content.remark);
+                $(pageStyleObj).find(".list-items").eq(1).html(content.address);
+                $(pageStyleObj).find(".list-items").eq(2).html(content.admin);
                 // console.log(content);
                 // 修改
                 $(pageStyleObj).find(".fa-pencil-square-o").click(function(){
@@ -75,7 +76,8 @@ function putDataToPage(data, onlyData){
             $(pageStyleObj).addClass("dataContent");
             
             $(pageStyleObj).find(".list-items").eq(0).html(data.name);
-            $(pageStyleObj).find(".list-items").eq(1).html(data.remark);
+            $(pageStyleObj).find(".list-items").eq(1).html(data.address);
+            $(pageStyleObj).find(".list-items").eq(2).html(data.admin);
 
             // 修改
             $(pageStyleObj).find(".fa-pencil-square-o").click(function(){
@@ -127,7 +129,7 @@ function insertDialog(uid, modifyItem, clickObject){
             var nameArea = $(insertPageObj).find(".list-items").eq(0).find("input:text");
 
             // 第二格是電話
-            var phonekArea = $(insertPageObj).find(".list-items").eq(1).find("input:text");
+            var phoneArea = $(insertPageObj).find(".list-items").eq(1).find("input:text");
 
             // 第一格是名字
             var addressArea = $(insertPageObj).find(".list-items").eq(2).find("input:text");
@@ -220,7 +222,8 @@ function saveData(data,clickObject){
 
         // 新增
         if(data.uid == undefined){
-            data.uid = rs.Data;
+            data.uid = rs.data.uid;
+            data.admin = rs.data.admin;
             putDataToPage(data, true);
         }
     });
