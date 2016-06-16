@@ -493,3 +493,14 @@ textarea{
 .calendar-over{
 	color:#FF6464;
 }
+
+.signflowItem{
+	margin:0;
+	margin-top: 3px;
+}
+.flowName{
+	display: inline-block;
+}
+.flowBtn{
+	display: inline-block;
+}

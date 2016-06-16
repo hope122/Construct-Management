@@ -157,6 +157,29 @@
             return outData;
         }
 
+        this.getSelectData = function(){
+            // console.log($container.find(".nodeSelectActive"));
+            var outData = {};
+            outData.obj = [];
+            outData.pageObj = [];
+            outData.idArr = [];
+
+            var idStr = "";
+            $container.find(".nodeSelectActive").each(function(){
+                // console.log($(this).attr("node-id"));
+                var thisNodeID = $(this).attr("node-id");
+                outData.obj.push(nodes[thisNodeID].data);
+                outData.idArr.push(thisNodeID);
+                outData.pageObj.push($(this).find("h2").text());
+
+                idStr += thisNodeID + ",";
+
+            });
+            idStr = idStr.substr(0,idStr.length-1);
+            outData.idStr = idStr;
+            return outData;
+        }
+
         // constructor
         for(var i in data){
             var node = new Node(data[i]);

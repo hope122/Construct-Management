@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html><head>
+		<meta name="viewport" content="initial-scale=1">
+		<meta name="viewport" content="user-scalable=yes,width=device-width,initial-scale=1">
+		<title class="keep">建築物雲端全生命週期履歷平台</title>
+		<meta class="keep" charset="utf-8">
+		<meta class="keep" name="viewport" content="width=device-width, initial-scale=1">
+		<link class="keep" rel="stylesheet" href="include/css/font-awesome.min.css">
+		<link rel="stylesheet" href="include/css/jquery.orgchart.css">
+
+
+		<!--[if lte IE 8]><script src="include/strongly/assets/js/ie/html5shiv.js"></script><![endif]-->
+		<link class="keep" href="include/css/bootstrap.min.css" rel="stylesheet">
+		<link class="keep" rel="stylesheet" href="include/strongly/assets/css/main.css">
+        <link class="keep" rel="stylesheet" href="include/css/jquery-ui.min.css">
+        <link class="keep" rel="stylesheet" href="include/css/ctrl-style.css">
+
+		<!--[if lte IE 8]><link rel="stylesheet" href="../include/strongly/assets/css/ie8.css" /><![endif]-->
+		<!-- Scripts -->
+		<script class="keep" src="include/js/jquery/jquery.min.js"></script><style type="text/css"></style>
+        <script class="keep" src="include/js/jquery/jquery-ui.min.js"></script>
+        <script class="keep" src="include/js/jquery/jquery.blockui.js"></script>
+        <script class="keep" src="include/js/jquery/jquery.form.min.js"></script>
+		<script class="keep" src="include/js/bootstrap/bootstrap.min.js"></script>
+		<script src="include/js/jquery/jquery.orgchart.js"></script>
+
+
+
+		<!--[if lte IE 8]><script class="keep" src="include/strongly/assets/js/ie/respond.min.js"></script><![endif]-->
+		<script class="keep" src="include/js/config/config.js"></script>
+		<script class="keep" src="include/js/main/main.js"></script>
+		<script class="keep" src="include/js/main/router.js"></script>
+		<script class="keep" src="include/js/main/getStyle.js"></script>
+		<script class="keep" src="include/js/main/bsDialog.js"></script>
+		<script class="keep" src="include/js/main/bsDialogSelect.js"></script>
+		<script class="keep" src="include/js/main/tab.js"></script>
+		<script src="include/js/contentpages/setsignworkflow/config.js"></script>
+		<script src="include/js/contentpages/setsignworkflow/main.js"></script>
+
+		<script type="text/javascript">
+			$(function(){
+				$("#testBs").bsDialog({
+					autoShow:false,
+					showFooterBtn:true,
+					title: "測試資料輸入",
+					modalClass: "bsDialogWindow",
+					button:[{
+						text: "取消",
+						click: function(){
+
+						}
+					},
+					{
+						text: "確認",
+						className:"btn-success",
+						click: function(){
+
+						}
+					}
+					]
+				});
+				
+				
+				
+				
+			});
+			function testBsShow(){
+				$("#testBs").bsDialog("show");
+			}
+			
+			
+			
+			
+		</script>
+	</head>
+	<body class="homepage is-loading">
+		<div id="page-wrapper">
+
+		<!-- Header -->
+			<div id="header-wrapper">
+				<div id="header" class="container">
+
+					<!-- Logo -->
+						<h1 id="logo"><a href="./">建築物施工管理雲端系統</a></h1>
+
+					<!-- Nav -->
+						<nav id="nav">
+							<div style="float:right;">
+								<div>Hi, <span class="user-name">Race</span> 歡迎回來</div>
+							</div>
+							<!--選單-->
+							<ul id="menus">
+								<li style="white-space: nowrap;">
+									選單
+								</li>
+							</ul>
+						</nav>
+
+				</div>
+			</div>
+
+		<!-- Main -->
+			<div id="main-wrapper">
+				<div id="main" class="container">
+					<div class="row">
+						<!-- Content -->
+							<div id="pagescontent" class="12u 12u(mobile)" style="display: block;">
+								<!-- Post -->
+				<!-- ========================= 本次設計開始 ========================= -->
+								
+								<!-- 標題 -->
+								<div class="col-xs-12 col-md-12 item-title text-center">
+									<h3 class="col-xs-10 col-md-11">收文列表</h3>
+									<div class="col-xs-2 col-md-1 item-title-plus">
+										<i class="fa fa-plus-circle fa-2x send-btn mouse-pointer" onclick="insertDialog();"></i>
+									</div>
+								</div>
+								
+								<!-- 內容 -->
+								<div class="col-xs-12 col-md-12 item-list-border ">
+									<!-- 列表內容 -->
+									<div class="col-xs-12 col-md-12 list-item-title text-center">
+										<div class="col-xs-5 col-md-2 list-items">
+											文號
+										</div>
+										<div class="col-xs-4 col-md-2 list-items">
+											來文單位
+										</div>
+										<div class="col-xs-4 col-md-3 list-items">
+											主旨
+										</div>
+										<div class="col-xs-4 col-md-1 list-items">
+											速別
+										</div>
+										<div class="col-xs-4 col-md-1 list-items">
+											密等
+										</div>
+										<div class="col-xs-4 col-md-1 list-items">
+											狀態
+										</div>
+										<div class="col-xs-4 col-md-1 list-items">
+											部門
+										</div>
+										<div class="col-xs-3 col-md-1 list-items">
+											&nbsp;
+										</div>
+									</div>
+									<!-- 列表內容 -->
+									<div class="col-xs-12 col-md-12">
+										<div class="col-xs-5 col-md-2 list-items">
+											業00123456789
+										</div>
+										<div class="col-xs-4 col-md-2 list-items">
+											市政單位Ａ
+										</div>
+										<div class="col-xs-4 col-md-3 list-items">
+											有關施工流程修繕
+										</div>
+										<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
+											速
+										</div>
+										<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
+											普
+										</div>
+										<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
+											-
+										</div>
+										<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
+											-
+										</div>
+										<div class="col-xs-3 col-md-1 text-center list-items">
+											<div class="item-actionBtn">
+												<i class="fa fa-file-text-o fa-lg send-btn mouse-pointer" onclick="testBs5Show();"></i>
+												<i class="fa fa-sitemap fa-lg send-btn mouse-pointer" onclick="orgContentShow();"></i>
+											</div>
+										</div>
+									</div>
+									
+									<!-- 列表內容結束 -->
+								</div>
+								
+				<!-- ========================= 本次設計結束 ========================= -->	
+							</div>
+
+					</div>
+				</div>
+			</div>
+
+		<!-- Footer -->
+			<div id="footer-wrapper">
+				<div id="footer" class="container">
+				</div>
+				<div id="copyright" class="container">
+					<ul class="links">
+						<li>© Untitled. All rights reserved.</li><li>Design: HTML5 UP  </li>
+					</ul>
+				</div>
+			</div>
+
+		</div>
+		<!-- 測試用內容 -->
+		
+	</body>
+</html>

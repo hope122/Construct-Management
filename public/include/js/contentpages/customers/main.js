@@ -206,7 +206,7 @@ function insertDialog(uid, modifyItem, clickObject){
 function saveData(data,clickObject){
     var processAPI = "registered";
     if(data.uid != undefined){
-        processAPI = "Update_AssTypeGroup";
+        processAPI = "modify";
         clickObject.parents(".dataContent").find(".list-items").eq(0).text(data.name);
         clickObject.parents(".dataContent").find(".list-items").eq(1).text(data.address);
         clickObject.unbind("click").click(function(){
