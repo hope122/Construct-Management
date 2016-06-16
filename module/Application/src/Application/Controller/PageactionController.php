@@ -107,9 +107,12 @@ class PageactionController extends AbstractActionController
 	        $action = array();
 	        $action["status"] = false;
 	        // $start_time = microtime(true);
-	        if(!empty($_SESSION["uuid"]) and !empty($_SESSION["userName"])){
+	        if(!empty($_SESSION["uuid"])){
 	            $action["uuid"] = $_SESSION["uuid"];
 	            $action["userName"] = $_SESSION["userName"];
+	            $action["isAdmin"] = $_SESSION["isAdmin"];
+	            $action["sysCode"] = $_SESSION["sysCode"];
+	            $action["sysList"] = $_SESSION["sysList"];
 	            // $action["menuPosition"] = $_SESSION["menuPosition"];
 	            $action["status"] = true;
 	        }else{

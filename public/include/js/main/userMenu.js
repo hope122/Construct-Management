@@ -15,8 +15,12 @@ function getMenus(loginInfo){
         $("#pagescontent").empty();
         loadPage($(this).attr("href"),"pagescontent");
       }
+      // 登出機制，只要再CLASS裡面有logout關鍵字的連結走這裡
+      if($(this).prop("class").search("logout") != -1){
+        logoutEven();
+      }
       return false;
-   });
+    });
     content.appendTo($("#menus"));
   });
  //  	getLan();

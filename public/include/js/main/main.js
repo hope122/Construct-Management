@@ -1,3 +1,4 @@
+var SysCode;
 $(function(){
   if(location.pathname.search("login.html") == -1){
     if(typeof checkUserLogin != "undefined" && typeof checkKeepItem != "undefined" && typeof firstLoadPage != "undefined" ){
@@ -12,9 +13,13 @@ $(function(){
 function redirectPage(result){
   if(result.status){
         // configObject.processLoginUrl 舊版
-        $.post(configObject.processLogin,result,function(rs){
-           location.href = location.origin + "/content.html";
-           // console.log(rs);
+        $.post(configObject.processLogin, result, function(rs){
+          var rs = $.parseJSON(rs);
+          if(rs.status){
+            location.href = location.origin + "/content.html";
+          }else{
+            alert(rs.msg);
+          }
         });
   }else{
     alert(result.error);

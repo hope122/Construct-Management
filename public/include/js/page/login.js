@@ -10,6 +10,8 @@ function loginEven(){
 	      showLoading(true);
 	    },
 		success: function(rs){
+			// console.log(rs);
+			// return;
 			var result = $.parseJSON(rs);
 			setTimeout(function(){
 				redirectPage(result);
