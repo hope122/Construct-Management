@@ -71,6 +71,9 @@ function putDataToPage(data, onlyData){
 
             });
         }else{
+            if($("#grid").find(".date-empty").length){
+                $("#grid").find(".date-empty").remove();
+            }
             // console.log(data);
             var pageStyleObj = $.parseHTML(pageStyle);
             $(pageStyleObj).addClass("dataContent");
@@ -178,7 +181,7 @@ function insertDialog(uid, modifyItem, clickObject){
                             }
                         }
                     });
-                    console.log(data);
+                    // console.log(data);
                     if(isEmpty){
                         return;
                     }
@@ -217,9 +220,10 @@ function saveData(data,clickObject){
     };
     // console.log(data);
     $.post(wrsUrl, sendData,function(rs){
-        
+        // console.log(rs);
         rs = $.parseJSON(rs);
-
+        // console.log(rs);
+        
         // 新增
         if(data.uid == undefined){
             data.uid = rs.data.uid;
