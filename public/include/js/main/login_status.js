@@ -5,10 +5,6 @@ function checkUserLogin(){
 		if(!rs.status){
            location.href = location.origin;
 		}else{
-            // if(rs.sysList.length == 1){
-            //   setUserSysCode(rs.sysList[0]);
-            // }else if(rs.sysList.length > 1){
-            // }
             if(location.search.search("select-sys") != -1){
             	$("#nav").hide();
             }
