@@ -285,14 +285,7 @@ function deleteData(uid, removeItem, name){
         }
     };
     
-    if(!$("#grid").find(".dataContent").length){
-        var option = {styleKind:"system",style:"data-empty"};
-        getStyle(option,function(pageStyle){
-            $("#grid").html(pageStyle);
-        });
-    }else{
-        $("#grid").find(".list-items-bottom").last().removeClass("list-items-bottom");
-    }
+    
     // console.log(sendData);
     // return;
     $.ajax({
@@ -307,6 +300,14 @@ function deleteData(uid, removeItem, name){
                 couldNotDeleteDialog(name);
             }else{
                 removeItem.remove();
+                if(!$("#grid").find(".dataContent").length){
+                    var option = {styleKind:"system",style:"data-empty"};
+                    getStyle(option,function(pageStyle){
+                        $("#grid").html(pageStyle);
+                    });
+                }else{
+                    $("#grid").find(".dataContent").last().removeClass("list-items-bottom");
+                }
             }
         },
         error:function(rs){
