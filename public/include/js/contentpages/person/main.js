@@ -248,8 +248,8 @@ function saveData(sendObj,modifyItem){
         }
         // console.log(addrMethod);
         // 之後放入地址資料
-        console.log(sendObj.census);
-        if(sendObj.census.Size()){
+        // console.log(sendObj.census);
+        // if(sendObj.census.Size()){
             $.post(ctrlPersonAPI + addrMethod, sendObj.census, function(rs){
                 if(rs.Status){
                     sendObj.census.uid = rs.Data;
@@ -265,7 +265,7 @@ function saveData(sendObj,modifyItem){
 
                 }
             });
-        }
+        // }
     });
 }
 
@@ -294,7 +294,7 @@ function deleteData(uid, removeItem, name){
         data: sendData,
         dataType: "json",
         success:function(rs){
-            console.log(rs);
+            // console.log(rs);
             if(!rs.Status){
                 // 無法刪除
                 couldNotDeleteDialog(name);
