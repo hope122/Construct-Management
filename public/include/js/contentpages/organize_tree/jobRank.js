@@ -101,6 +101,7 @@ function createJobList(putArea, parentID, jobTreeChart, data, orgID, isEmpty){
 
 // 創建組織樹狀圖
 function createJobRankTree(putArea, orgID){
+    // console.log(jobData);
     jobTreeChart = putArea.orgChart({
         data: jobData,
         // rootNodesDelete:true,
@@ -136,7 +137,7 @@ function creatJobData(putArea, jobTreeChart, contentObj, parentID, orgID){
     // return;
     console.log(sendObj);
     $.post(ctrlAdminAPI + "Insert_AssPosition",sendObj).done(function(rs){
-        console.log(rs);
+        // console.log(rs);
         if(rs.Status){
             if(jobTreeChart != null){
                 // 新增

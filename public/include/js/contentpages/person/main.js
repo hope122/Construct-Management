@@ -1,16 +1,25 @@
 $(function(){
     getOUData();
 });
-
+// var sys_code = SysCode;
+var sys_code = 2;
 // 取得資料
 function getOUData(uid){
-    var sendData = {}
+    // var sendData = {}
+    var sendData = {
+        api: "AssCommon/GetData_AssCommon",
+        threeModal: true,
+        data:{
+            sys_code: sys_code
+        }
+    };
     if(uid != undefined){
-        sendData = { iUid : uid };
+        sendData.data.iUid = uid;
     }
     loader($("#grid"));
     // ＡＰＩ呼叫
-    $.getJSON(ctrlPersonAPI + "GetData_AssCommon", sendData ).done(function(rs){
+    // $.getJSON(ctrlPersonAPI + "GetData_AssCommon", sendData ).done(function(rs){
+    $.getJSON(wrsUrl, sendData ).done(function(rs){
         $("#grid").empty();
         if(rs.Status){
             if(uid == undefined){
@@ -175,11 +184,12 @@ function insertDialog(modifyObj, modifyItem){
                     if(modifyObj == undefined){
                         $("#grid").find(".date-empty").remove();
                     }
-
+                    userInfo.sys_code = sys_code;
                     var sendObj = {
                         userInfo: userInfo,
                         census:census,
-                        communication:communication
+                        communication:communication,
+                        // sys_code: sys_code
                     }
 
                     if(modifyObj != undefined){
@@ -215,9 +225,15 @@ function saveData(sendObj,modifyItem){
         method = "Update_AssCommon";
         modifyItem.html(name);
     }
+    var sendData ={
+        api: threeModelPersonAPI+method,
+        threeModal: true,
+        data: sendObj.userInfo
+    };
     // 先新增自然人資料
-    $.post(ctrlPersonAPI + method, sendObj.userInfo, function(rs){
-        console.log(rs);
+    // $.post(ctrlPersonAPI + method, sendObj.userInfo, function(rs){
+    $.post(wrsUrl, sendData, function(rs){
+        // console.log(rs);
         // 新增
         if(sendObj.userInfo.uid == undefined){
             sendObj.userInfo.uid = rs.Data;
@@ -232,33 +248,43 @@ function saveData(sendObj,modifyItem){
         }
         // console.log(addrMethod);
         // 之後放入地址資料
-        $.post(ctrlPersonAPI + addrMethod, sendObj.census, function(rs){
-            if(rs.Status){
-                sendObj.census.uid = rs.Data;
-                $.post(ctrlPersonAPI + addrMethod, sendObj.communication, function(oRs){
-                    if(oRs.Status){
-                        sendObj.communication.uid = rs.Data;
+        console.log(sendObj.census);
+        if(sendObj.census.Size()){
+            $.post(ctrlPersonAPI + addrMethod, sendObj.census, function(rs){
+                if(rs.Status){
+                    sendObj.census.uid = rs.Data;
+                    $.post(ctrlPersonAPI + addrMethod, sendObj.communication, function(oRs){
+                        if(oRs.Status){
+                            sendObj.communication.uid = rs.Data;
 
-                        if(addrMethod == "Insert_AssCommonAddress"){
-                            putDataToPage(sendObj.userInfo, true);
+                            if(addrMethod == "Insert_AssCommonAddress"){
+                                putDataToPage(sendObj.userInfo, true);
+                            }
                         }
-                    }
-                });
+                    });
 
-            }
-        });
+                }
+            });
+        }
     });
 }
 
 // 刪除
 function deleteData(uid, removeItem, name){
+    // var sendData = {
+    //     apiMethod: ctrlPersonDelAPI + "Delete_AssCommon",
+    //     data:{
+    //         iUid: uid
+    //     }
+    // };
     var sendData = {
-        apiMethod: ctrlPersonDelAPI + "Delete_AssCommon",
-        deleteObj:{
+        api: threeModelPersonDelAPI,
+        threeModal: true,
+        data:{
             iUid: uid
         }
     };
-    removeItem.remove();
+    
     if(!$("#grid").find(".dataContent").length){
         var option = {styleKind:"system",style:"data-empty"};
         getStyle(option,function(pageStyle){
@@ -267,14 +293,35 @@ function deleteData(uid, removeItem, name){
     }else{
         $("#grid").find(".list-items-bottom").last().removeClass("list-items-bottom");
     }
+    // console.log(sendData);
     // return;
-    $.post(configObject.deleteAPI,sendData,function(rs){
-        rs = $.parseJSON(rs);
-        if(!rs.Status){
-            // 無法刪除
-            // couldNotDeleteDialog(name);
+    $.ajax({
+        url: wrsUrl,
+        type:"DELETE",
+        data: sendData,
+        dataType: "json",
+        success:function(rs){
+            console.log(rs);
+            if(!rs.Status){
+                // 無法刪除
+                couldNotDeleteDialog(name);
+            }else{
+                removeItem.remove();
+            }
+        },
+        error:function(rs){
+            couldNotDeleteDialog(name);
         }
     });
+    // $.post(wrsUrl,sendData,function(rs){
+    //     rs = $.parseJSON(rs);
+    //     if(!rs.Status){
+    //         // 無法刪除
+    //         couldNotDeleteDialog(name);
+    //     }else{
+    //         removeItem.remove();
+    //     }
+    // });
 }
 
 // 當無法刪除時，提供說明
