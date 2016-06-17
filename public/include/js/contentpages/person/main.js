@@ -233,29 +233,32 @@ function saveData(sendObj,modifyItem){
     // 先新增自然人資料
     // $.post(ctrlPersonAPI + method, sendObj.userInfo, function(rs){
     $.post(wrsUrl, sendData, function(rs){
+        var rs = $.parseJSON(rs);
+
         // console.log(rs);
         // 新增
-        if(sendObj.userInfo.uid == undefined){
-            sendObj.userInfo.uid = rs.Data;
-            sendObj.census.cmid = rs.Data;
-            sendObj.communication.cmid = rs.Data;
-            // putDataToPage(sendObj, true);
-            // 地址修改ＡＰＩ
-            addrMethod = "Insert_AssCommonAddress";
-        }else{
-            addrMethod = "Update_AssCommonAddress";
-            $(modifyItem).html(sendObj.userInfo.name);
-        }
-        // console.log(addrMethod);
-        // 之後放入地址資料
-        // console.log(sendObj.census);
-        // if(sendObj.census.Size()){
-            $.post(ctrlPersonAPI + addrMethod, sendObj.census, function(rs){
-                if(rs.Status){
-                    sendObj.census.uid = rs.Data;
+        if(rs.Status){
+            if(sendObj.userInfo.uid == undefined){
+                sendObj.userInfo.uid = rs.Data;
+                sendObj.census.cmid = rs.Data;
+                sendObj.communication.cmid = rs.Data;
+                // putDataToPage(sendObj, true);
+                // 地址修改ＡＰＩ
+                addrMethod = "Insert_AssCommonAddress";
+            }else{
+                addrMethod = "Update_AssCommonAddress";
+                $(modifyItem).html(sendObj.userInfo.name);
+            }
+            // 之後放入地址資料
+            
+            $.post(ctrlPersonAPI + addrMethod, sendObj.census, function(addressRs){
+                var addressRs = $.parseJSON(addressRs);
+
+                if(addressRs.Status){
+                    sendObj.census.uid = addressRs.Data;
                     $.post(ctrlPersonAPI + addrMethod, sendObj.communication, function(oRs){
                         if(oRs.Status){
-                            sendObj.communication.uid = rs.Data;
+                            sendObj.communication.uid = addressRs.Data;
 
                             if(addrMethod == "Insert_AssCommonAddress"){
                                 putDataToPage(sendObj.userInfo, true);
@@ -265,7 +268,10 @@ function saveData(sendObj,modifyItem){
 
                 }
             });
-        // }
+            
+        }else{
+            alert("新增失敗");
+        }
     });
 }
 
