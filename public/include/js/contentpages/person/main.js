@@ -252,7 +252,7 @@ function saveData(sendObj,modifyItem){
             // 之後放入地址資料
             
             $.post(ctrlPersonAPI + addrMethod, sendObj.census, function(addressRs){
-                var addressRs = $.parseJSON(addressRs);
+                // var addressRs = $.parseJSON(addressRs);
 
                 if(addressRs.Status){
                     sendObj.census.uid = addressRs.Data;
