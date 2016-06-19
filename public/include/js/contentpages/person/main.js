@@ -1,10 +1,14 @@
 $(function(){
     getOUData();
 });
-// var sys_code = SysCode;
+// var sys_code = userLoginInfo.SysCode;
 var sys_code = 2;
 var testData = [];
+// var userLoginUuid = userLoginInfo.uuid;
+var userLoginUuid = "bcd32178-4def-11e5-896f-00ff1020660e";
 var orgTreeChart;
+var jobTreeChart;
+var jobData = [];
 // 取得資料
 function getOUData(uid){
     // var sendData = {}
@@ -388,8 +392,7 @@ function saveData(sendObj,modifyItem){
                                 cmid: sendObj.org.cmid,
                                 orgid: sendObj.org.org[0],
                                 posid: posid,
-                                // uuid: userLoginInfo.uuid
-                                uuid: "bcd32178-4def-11e5-896f-00ff1020660e",
+                                uuid: userLoginUuid,
                                 sid: sendObj.userInfo.sid,
                                 sys_code: sys_code,
                                 userID: sendObj.userInfo.userID
@@ -569,8 +572,6 @@ function createTree(){
     });
 }
 
-var jobTreeChart;
-var jobData = [];
 // 創建職務
 function getJobRank( putArea, orgID ){
     jobTreeChart = null;
