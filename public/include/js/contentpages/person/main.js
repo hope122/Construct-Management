@@ -520,12 +520,20 @@ function getOrgVal(){
 // 取得部門資訊
 function getOrgData(){
     loader( $("#orgChart") );
+    // var sendData = {
+    //     // api: ctrlAdminAPI,
+    //     api: "AssOrg/GetData_AssOrg"
+    //     data:{
+    //         iSu_Id: 1
+    //     }
+    // }
     var sendData = {
-        api: ctrlAdminAPI,
+        api: "AssOrg/GetData_AssOrg",
+        threeModal:true,
         data:{
-            iSu_Id: 1
+            sys_code: sys_code,
         }
-    }
+    }; 
     $.getJSON(wrsUrl,sendData,function(rs){
         // console.log(rs);
         $("#orgChart").empty();
@@ -577,13 +585,21 @@ function getJobRank( putArea, orgID ){
     jobTreeChart = null;
     jobData = [];
     
+    // var sendData = {
+    //     api: ctrlAdminJobAPI,
+    //     data:{
+    //         iSu_Id: 1,
+    //         iOfid: orgID
+    //     }
+    // }
     var sendData = {
-        api: ctrlAdminJobAPI,
+        api: threeModelJobAPI,
+        threeModal:true,
         data:{
-            iSu_Id: 1,
+            sys_code: sys_code,
             iOfid: orgID
         }
-    }
+    }; 
     $.getJSON(wrsUrl,sendData,function(rs){
         putArea.empty();
         console.log(rs);

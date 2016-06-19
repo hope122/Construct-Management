@@ -1,6 +1,7 @@
 var testData = [];
-var sysCode = 1;
 var userID = 1;
+// var sys_code = userLoginInfo.SysCode;
+var sys_code = 2;
 
 function orgContentShow(putArea){
     $("#orgContent").remove();
@@ -63,7 +64,7 @@ function orgContentShow(putArea){
         ]
     });
 }
-
+// 新增流程
 function insertDialog(){
     $("#insertDialog").remove();
     
@@ -93,6 +94,7 @@ function insertDialog(){
 
                     $(flowStyleObj).appendTo($(pageStyleObj).find(".modal-items"));
                     $(flowStyleObj).find(".flowName").text("階段"+totalFlowLayerNumber);
+                    // 垃圾桶按鈕
                     var trash = $('<i class="fa fa-trash mouse-pointer fa-lg cancel-btn"></i>');
                     trash.click(function(){
                         $(flowStyleObj).remove();
@@ -140,7 +142,7 @@ function insertDialog(){
                 data.layer = layerObj;
                 data.title = $("#insertDialog").find(".list-items").find("input:text").val();
                 data.menuCode = "eab";
-                data.sysCode = sysCode;
+                data.sysCode = sys_code;
                 data.user = userID;
                 saveData(data);
                 console.log(data);
@@ -150,9 +152,17 @@ function insertDialog(){
     });
 }
 
+// 取得組織資料
 function getOrgData(){
     loader($("#orgChart"));
-	$.getJSON(ctrlAdminAPI + "GetData_AssOrg",{iSu_Id: 1},function(rs){
+    var sendData = {
+        api: "AssOrg/GetData_AssOrg",
+        threeModal:true,
+        data:{
+            sys_code: sys_code,
+        }
+    }; 
+    $.getJSON(wrsUrl,sendData,function(rs){
         // console.log(rs);
         $("#orgChart").empty();
         //有資料
