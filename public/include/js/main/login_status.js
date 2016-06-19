@@ -1,7 +1,6 @@
 var userLoginInfo;
 function checkUserLogin(){
 	$.getJSON(configObject.getAcInfo,{},function(rs){
-		console.log(rs);
 		if(!rs.status){
            location.href = location.origin;
 		}else{
@@ -45,6 +44,7 @@ function setUserSysCode(sysCode){
 			// }else{
 			// 	// 一般使用者，看是否要選擇專案
 			// }
+			userLoginInfo.sysCode = sysCode;
 			$("#nav").show();
    			//取得選單
    			getMenus(rs);
