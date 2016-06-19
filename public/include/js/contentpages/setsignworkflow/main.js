@@ -1,4 +1,5 @@
 var testData = [];
+// var userID = userLoginInfo.userID;
 var userID = 1;
 // var sys_code = userLoginInfo.SysCode;
 var sys_code = 2;

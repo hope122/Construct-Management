@@ -112,6 +112,7 @@ class PageactionController extends AbstractActionController
 	            $action["userName"] = $_SESSION["userName"];
 	            $action["isAdmin"] = $_SESSION["isAdmin"];
 	            $action["sysCode"] = $_SESSION["sysCode"];
+	            $action["userID"] = $_SESSION["userID"];
 	            $action["sysList"] = $_SESSION["sysList"];
 	            // $action["menuPosition"] = $_SESSION["menuPosition"];
 	            $action["status"] = true;

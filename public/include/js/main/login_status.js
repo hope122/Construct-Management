@@ -45,6 +45,7 @@ function setUserSysCode(sysCode){
 			// 	// 一般使用者，看是否要選擇專案
 			// }
 			userLoginInfo.sysCode = sysCode;
+			userLoginInfo.userID = rs.userID;
 			$("#nav").show();
    			//取得選單
    			getMenus(rs);

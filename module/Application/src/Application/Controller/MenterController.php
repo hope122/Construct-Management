@@ -37,14 +37,18 @@ class MenterController extends AbstractActionController
                     $sendData["uuid"] = $_POST["uuid"];                    
                     // 送出
                     $userPosition = $SysClass->UrlDataPost($APIUrl,$sendData);
+                    // print_r($userPosition);
+                    // exit();
                     $userPosition = $SysClass->Json2Data($userPosition["result"],false);
-
+                    // print_r($userPosition);
+                    // exit();
                     if($userPosition["status"]){
                         // 設置相關的帳號
                         $_SESSION["uuid"] = $userPosition["uuid"];
                         $_SESSION["menuPosition"] = $userPosition["menuPosition"];
                         $_SESSION["isAdmin"] = $userPosition["isAdmin"];
                         $_SESSION["sysList"] = $userPosition["sysList"];
+                        $_SESSION["userIDList"] = $userPosition["userIDList"];
                         $_SESSION["userName"] = $_POST["name"];
                         $action["msg"] = "驗證成功";
                         $action["sysList"] = $userPosition["sysList"];
@@ -89,9 +93,20 @@ class MenterController extends AbstractActionController
             if(!empty($_POST)){
                 if($_POST["sysCode"]){
                     if(in_array($_POST["sysCode"], $_SESSION["sysList"])){
-                        $_SESSION["sysCode"] = $_POST["sysCode"];
-                        $_SESSION["projectID"] = null;
 
+                        $_SESSION["sysCode"] = $_POST["sysCode"];
+                        if(!empty($_SESSION["userIDList"])){
+                            foreach ($_SESSION["userIDList"] as $content) {
+                                if($content["sysID"] == $_POST["sysCode"]){
+                                    $_SESSION["userID"] = $content["userID"];
+                                }
+                            }
+                        }else{
+                            $_SESSION["userID"] = 0;
+                        }
+                        
+                        $_SESSION["projectID"] = null;
+                        $action["userID"] = $_SESSION["userID"];
                         $action["status"] = true;
                     }else{
                         $action["msg"] = "System Code is error";
