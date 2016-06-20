@@ -5,7 +5,7 @@ function checkUserLogin(){
            location.href = location.origin;
 		}else{
             if(location.search.search("select-sys") != -1){
-            	$("#nav").hide();
+            	$(".topInfo").hide();
             }
             userLoginInfo = rs;
             $(".user-name").html(rs.userName);
@@ -46,7 +46,7 @@ function setUserSysCode(sysCode){
 			// }
 			userLoginInfo.sysCode = sysCode;
 			userLoginInfo.userID = rs.userID;
-			$("#nav").show();
+			$(".topInfo").show();
    			//取得選單
    			getMenus(rs);
 			loadPage("home","pagescontent");
