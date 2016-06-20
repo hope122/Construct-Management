@@ -49,7 +49,7 @@ function setUserSysCode(sysCode){
 			$(".topInfo").show();
    			//取得選單
    			getMenus(rs);
-			loadPage("home","pagescontent");
+			// loadPage("home","pagescontent");
 		}
 	});
 }
