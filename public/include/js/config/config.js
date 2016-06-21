@@ -9,6 +9,7 @@ var configObject = {
     "processLoginUrl": originUrl+"menter/setlogin",
     "processLogin": originUrl+"menter/setlogininfo",
     "setSysCode": originUrl+"menter/setsyscode",
+    "setUserID": originUrl+"menter/setuserid",
     "getmenu": apurl+"/pageaction/getmenu",
     "getUserMenu": originUrl+"usermenu",
     "menuProcess": originUrl+"pageaction/menuprocess",

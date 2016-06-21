@@ -1,14 +1,12 @@
-$(function(){
-    getOUData();
-});
-// var sys_code = userLoginInfo.SysCode;
-var sys_code = 2;
+var sys_code = userLoginInfo.sysCode;
 var testData = [];
-// var userLoginUuid = userLoginInfo.uuid;
-var userLoginUuid = "bcd32178-4def-11e5-896f-00ff1020660e";
+var userLoginUuid = userLoginInfo.uuid;
 var orgTreeChart;
 var jobTreeChart;
 var jobData = [];
+$(function(){
+    getOUData();
+});
 // 取得資料
 function getOUData(uid){
     // var sendData = {}
@@ -16,7 +14,7 @@ function getOUData(uid){
         api: "AssCommon/GetData_AssCommon",
         threeModal: true,
         data:{
-            sys_code: sys_code
+            "sys_code": sys_code
         }
     };
     if(uid != undefined){
@@ -26,7 +24,6 @@ function getOUData(uid){
     // ＡＰＩ呼叫
     // $.getJSON(ctrlPersonAPI + "GetData_AssCommon", sendData ).done(function(rs){
     $.getJSON(wrsUrl, sendData ).done(function(rs){
-        console.log(rs);
         $("#grid").empty();
         if(rs.Status){
             if(uid == undefined){

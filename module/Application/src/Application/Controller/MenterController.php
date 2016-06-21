@@ -128,6 +128,43 @@ class MenterController extends AbstractActionController
         
     }
 
+    // 設定userID
+    public function setuseridAction()
+    {
+        $SysClass = new ctrlSystem;
+        // 預設不連資料庫
+        $SysClass->initialization();
+        // 連線指定資料庫
+        // $SysClass->initialization("設定檔[名稱]",true); -> 即可連資料庫
+        // 連線預設資料庫
+        // $SysClass->initialization(null,true);
+        try{
+            //-----BI開始-----
+            $action = array();
+            $action["status"] = false;
+            if(!empty($_POST)){
+                if($_POST["userID"]){
+                    if(!$_SESSION["userID"]){
+                        $_SESSION["userID"] = $_POST["userID"];
+                        $action["status"] = true;
+                    }
+                }
+                
+            }else{
+                $action["msg"] = 'This Status is False';
+                $action["code"] = 1;
+            }
+            $pageContent = json_encode($action);
+            //----BI結束----
+        }catch(Exception $error){
+            //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
+            // $SysClass->WriteLog("MenterController", "setloginAction", $error->getMessage());
+        }
+        $this->viewContnet['pageContent'] = $pageContent;
+        return new ViewModel($this->viewContnet);
+        
+    }
+
     // 設定專案編號
     public function setprojectidAction()
     {

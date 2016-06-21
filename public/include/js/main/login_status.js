@@ -4,12 +4,12 @@ function checkUserLogin(){
 		if(!rs.status){
            location.href = location.origin;
 		}else{
-            if(location.search.search("select-sys") != -1){
+            if(location.search.search("select-sys") != -1 || location.search.search("user-mana%2Fadmin") != -1){
             	$(".topInfo").hide();
             }
             userLoginInfo = rs;
             $(".user-name").html(rs.userName);
-            if(rs.sysCode){
+            if(rs.sysCode && rs.userID){
        			//取得選單
        			getMenus(rs);
        		}else{
@@ -46,9 +46,16 @@ function setUserSysCode(sysCode){
 			// }
 			userLoginInfo.sysCode = sysCode;
 			userLoginInfo.userID = rs.userID;
-			$(".topInfo").show();
-   			//取得選單
-   			getMenus(rs);
+			// 當admin使用者資料已有，則導入
+			if(rs.userID){
+				$(".topInfo").show();
+	   			//取得選單
+	   			getMenus(rs);
+   			}else{
+   				if(location.search.search("user-mana%2Fadmin") == -1){
+					loadPage("user-mana/admin","pagescontent");
+				}
+   			}
 			// loadPage("home","pagescontent");
 		}
 	});

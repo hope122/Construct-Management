@@ -1,4 +1,8 @@
 var testData = [];
+var sys_code = userLoginInfo.sysCode;
+var userID = userLoginInfo.userID;
+var menu_code = "eab";
+var orgTreeChart;
 // ----------測試用---------------
 $(function(){
     $("#testBs").bsDialog({
@@ -61,30 +65,7 @@ $(function(){
         ]
     });
     tabCtrl("totalTab");
-    $("#testBs8").bsDialog({
-        autoShow:false,
-        showFooterBtn:true,
-        modalClass: "bsDialogWindow",
-        title: "請選擇會簽部門",
-        button:[{
-            text: "取消",
-            // className: "btn-success",
-            click: function(){
-                // xhr.abort();
-                // $(formObj).ajaxFormUnbind();
-                $("#testBs8").bsDialog("close");
-            }
-        },{
-            text: "確定",
-            className: "btn-success",
-            click: function(){
-                // xhr.abort();
-                // $(formObj).ajaxFormUnbind();
-                $("#testBs8").bsDialog("close");
-            }
-        }
-        ]
-    });
+    
     $("#testBs5").bsDialog({
         autoShow:false,
         showFooterBtn:true,
@@ -195,72 +176,223 @@ function fileSelect(){
 }
 // ----------測試用結束-----------
 
-function getOrgData(){
-    loader($("#orgChart"));
-	$.getJSON(ctrlAdminAPI + "GetData_AssOrg",{iSu_Id: 1},function(rs){
-        // console.log(rs);
-        $("#orgChart").empty();
-        //有資料
-        if(rs.Status){
-            $.each(rs.Data, function(index, content){
-                createTreeData(content.uid,content.name,content.faid, content.officeid);
-            });
-            createTree();
-        }else{ //沒有資料
-            addDialog("",0);
-        }
-		// console.log(rs);
-	});
-}
 
-// 創建組織樹狀圖
-function createTree(){
-    orgTreeChart = $('#orgChart').orgChart({
-        data: testData,
-        showControls: false,
-        allowEdit: false,
-        newNodeText:"組織",
-        selectModal: true,
-        selectOnly: false,
-        rootSelect: false,
-        onAddNode: function(node){  
-            var parentID = node.data.id;
-            // addDialog(orgTreeChart, parentID);
-        },
-        onDeleteNode: function(node){
-            deleteNode(node.data.id);
-            orgTreeChart.deleteNode(node.data.id); 
-        },
-        onClickNode: function(node){
-            // log('Clicked node '+node.data.id);
-            // jobRankTreeDialog(orgTreeChart, node.data);
-            console.log(node.data);
-        }
-    });
-}
-
-// 取得組織資料
-function getOUData(uid){
-    var sendData = {}
-    if(uid != undefined){
-        sendData = { iUid : uid };
+// 新增&修改Dialog
+function insertDialog(modifyObj, modifyItem){
+    // console.log(modifyObj, modifyItem);
+    if(modifyItem == undefined){
+        modifyItem = null;
     }
-    // ＡＰＩ呼叫
-    $.getJSON(ctrlAdminAPI + "GetData_AssTypeOffice", sendData ).done(function(rs){
-        if(rs.Status){
-            if(uid == null){
-                putDataToPage(rs.Data);
+    var saveBtn = "";
+    if(modifyObj != undefined){
+        title = "修改自然人資料";
+        saveBtn = "修改";
+    }else{
+        title = "新增自然人資料";
+        saveBtn = "新增";
+    }
+    $("#insertDialog").remove();
+    var insertDialog = $("<div>").prop("id","insertDialog");
+    insertDialog.appendTo("body");
+
+    $("#insertDialog").bsDialog({
+        title: title,
+        start: function(){
+          var option = {styleKind:"person",style:"in_mo"};
+          getStyle(option,function(insertPage){
+            var insertPageObj = $.parseHTML(insertPage);
+            // 點選部門按鈕，可設置
+            $(insertPageObj).find(".fa-sitemap").click(function(){
+                orgChartDialog( $(insertPageObj).find("#orgInfo"), $(insertPageObj).find("#orgJobInfo"));
+            });
+            // 修改
+            if(modifyObj != undefined){
+
+                // console.log("T");
+                $.each(modifyObj, function(index,content){
+                    if(index != "sex" ){
+                        $(insertPageObj).find("#"+index).val(content);
+                    }else{
+                        $(insertPageObj).find("[name=sex][value=" + content + "]").attr("checked",true).parent().addClass("active");
+                    }
+                });
+                var account = $(insertPageObj).find("#sid").val();
+                $(insertPageObj).find("#accountContent").text(account);
             }else{
-                // insertDialog(uid,name);
+                // 新增
+                $(insertPageObj).find("#sid").keyup(function(){
+                    var account = $(this).val();
+                    $(insertPageObj).find("#accountContent").text(account);
+                });
             }
-        }else{
-            // 放入空的
-            putDataEmptyInfo($("#grid"));
-        }
+            $(insertPageObj).appendTo($("#insertDialog").find(".modal-body"));
+            $("#insertDialog").bsDialog("show");
+            tabCtrl("insertDialog");
+            // getQCTableTypeList("tableTypeTab","tableType",true);
+
+          });
+        },
+        button:[
+            {
+                text: saveBtn,
+                className: "btn-success",
+                click: function(){
+                    // 基本資訊
+                    var userInfo = getUserInput("userInfo-content");
+                    // 通訊地址
+                    var census = getUserInput("census-content");
+                    census.addr_type = 0;
+                    // 通訊地址
+                    var communication = getUserInput("communication-content");
+                    communication.addr_type = 1;
+
+                    // 取得部門&職務資訊
+                    var accountInfo = getOrgVal();
+
+
+                    if(modifyObj == undefined){
+                        $("#grid").find(".date-empty").remove();
+                    }
+                    userInfo.sys_code = sys_code;
+                    var sendObj = {
+                        userInfo: userInfo,
+                        census:census,
+                        communication:communication,
+                        org: accountInfo,
+                        // sys_code: sys_code
+                    }
+
+                    if(modifyObj != undefined){
+                        sendObj.userInfo.uid = modifyObj.uid;
+                        sendObj.userInfo.userID = modifyObj.userID;
+                        sendObj.communication.cmid = modifyObj.uid;
+                        sendObj.census.cmid = modifyObj.uid;
+                        sendObj.org.cmid = modifyObj.uid;
+                    }
+                    console.log(sendObj);
+                    // return;
+
+                    saveData(sendObj, modifyItem);
+                    // console.log(sendObj);
+                    // $("#insertDialog").bsDialog("close");
+                }
+            },
+            {
+                text: "取消",
+                className: "btn-default-font-color",
+                click: function(){
+                    $("#insertDialog").bsDialog("close");
+                }
+            },
+        ]
+    });
+
+}
+
+// 儲存
+function saveData(sendObj,modifyItem){
+
+    method = "Insert_AssCommon";
+    // console.log(sendData);
+    // return;
+    if(sendObj.userInfo.uid != undefined){
+        method = "Update_AssCommon";
+        modifyItem.html(name);
+    }
+    var sendData ={
+        api: threeModelPersonAPI+method,
+        threeModal: true,
+        data: sendObj.userInfo
+    };
+    // 先新增自然人資料
+    // $.post(ctrlPersonAPI + method, sendObj.userInfo, function(rs){
+    $.post(wrsUrl, sendData, function(rs){
+        var rs = $.parseJSON(rs);
+
         // console.log(rs);
-    }).fail(function(){
-        // 放入空的
-        putDataEmptyInfo($("#grid"));
+        // 新增
+        if(rs.Status){
+
+            if(sendObj.userInfo.uid == undefined){
+                sendObj.userInfo.uid = rs.Data;
+                sendObj.census.cmid = rs.Data;
+                sendObj.communication.cmid = rs.Data;
+                sendObj.org.cmid = rs.Data;
+
+                // putDataToPage(sendObj, true);
+                // 地址修改ＡＰＩ
+                addrMethod = "Insert_AssCommonAddress";
+                acMethod = "Insert_AssUser";
+            }else{
+                addrMethod = "Update_AssCommonAddress";
+                acMethod = "Update_AssUser";
+                $(modifyItem).html(sendObj.userInfo.name);
+            }
+
+            // 之後放入地址資料
+            var sendData = {
+                api: "AssCommonAddress/"+addrMethod,
+                threeModal: true,
+                data: sendObj.census
+            }
+            // $.post(ctrlPersonAPI + addrMethod, sendObj.census, function(addressRs){
+            $.post(wrsUrl, sendData, function(addressRs){
+                var addressRs = $.parseJSON(addressRs);
+
+                if(addressRs.Status){
+                    if(addrMethod == "Insert_AssCommonAddress"){
+                        sendObj.census.uid = addressRs.Data;
+                    }
+                    var sendData = {
+                        api: "AssCommonAddress/"+addrMethod,
+                        threeModal: true,
+                        data: sendObj.communication
+                    };
+                    // $.post(ctrlPersonAPI + addrMethod, sendObj.communication, function(oRs){
+                    $.post(wrsUrl, sendData, function(oRs){
+                        var oRs = $.parseJSON(oRs);
+
+                        if(oRs.Status){
+
+                            if(addrMethod == "Insert_AssCommonAddress"){
+                                sendObj.communication.uid = oRs.Data;
+                            }
+                            
+                            
+                        }
+                        // 測試
+                        // acMethod = "Insert_AssUser";
+                        var posid = (sendObj.org.job.length)?sendObj.org.job[0]:"0";
+                        var sendData = {
+                            api: "AssUser/"+acMethod,
+                            threeModal: true,
+                            data: {
+                                cmid: sendObj.org.cmid,
+                                orgid: sendObj.org.org[0],
+                                posid: posid,
+                                uuid: userLoginUuid,
+                                sid: sendObj.userInfo.sid,
+                                sys_code: sys_code,
+                                userID: sendObj.userInfo.userID
+                            }
+                        };
+                        // 放入帳號設置的部分
+                        $.post(wrsUrl, sendData, function(rs){
+                            var rs = $.parseJSON(rs);
+                            if(rs.Status){
+                                sendObj.userInfo.userID = rs.Data;
+                                // putDataToPage(sendObj.userInfo, true);
+                            }
+                        });
+                    });
+                }
+
+            });
+            
+            
+        }else{
+            alert("新增失敗");
+        }
     });
 }
 
@@ -276,173 +408,158 @@ function putDataEmptyInfo(putArea){
     });
 }
 
-// 新增
-function addDialog(orgTreeChart, parentID){
-    $("#addDialog").remove();
+var sendObj = {};
+// 準備簽核前的視窗，顯示與設定最後結束日期
+function signInfoAndDate(){
+    $("#signInfoAndDateDialog").remove();
+    $("<div>").prop("id","signInfoAndDateDialog").appendTo("body");
 
-    var addDialog = $("<div>").prop("id","addDialog");
-
-    $("<div>").addClass("contents").appendTo(addDialog);
-    addDialog.appendTo("body");
-
-    var headerCloseBtn = true;
-
-    if(orgTreeChart == ""){
-        headerCloseBtn = false;
-        $("#orgChart").empty();
-    }
-
-    $("#addDialog").bsDialog({
+    $("#signInfoAndDateDialog").bsDialog({
         autoShow:true,
-        headerCloseBtn: headerCloseBtn,
-        title: "組織單位選單",
-        start: function(){
-            loader( $("#addDialog").find(".contents") );
-            // 取得組織資料
-            $.getJSON(ctrlAdminAPI + "GetData_AssTypeOffice").done(function(rs){
-                $("#addDialog").find(".contents").empty();
-                // console.log(rs);
-                if(rs.Status){
-                    createOtgList(parentID, orgTreeChart, rs.Data, false);
-                }
-            });
-        },
-        showFooterBtn:false,
-    });
-}
-
-// 職級樹狀列表
-function jobRankTreeDialog(orgTreeChart, nodeData){
-    // console.log(nodeData);
-    $("#jobRankTreeDialog").remove();
-
-    var jobRankTreeDialog = $("<div>").prop("id","jobRankTreeDialog");
-
-    $("<div>").addClass("contents").appendTo(jobRankTreeDialog);
-    jobRankTreeDialog.appendTo("body");
-
-    var headerCloseBtn = true;
-
-    if(orgTreeChart == ""){
-        headerCloseBtn = false;
-        $("#orgChart").empty();
-    }
-
-    $("#jobRankTreeDialog").bsDialog({
-        autoShow:true,
-        headerCloseBtn: headerCloseBtn,
-        title: nodeData.name + " 職務架構圖",
+        showFooterBtn:true,
+        headerCloseBtn:false,
         modalClass: "bsDialogWindow",
+        title: "設置簽核結束日期",
         start: function(){
-            loader( $("#jobRankTreeDialog").find(".contents") );
-            getJobRank( $("#jobRankTreeDialog").find(".contents"), nodeData.listID );
-            // console.log(nodeData);
-            // 取得組織資料
-            // $.getJSON(ctrlAdminAPI + "GetData_AssTypeOffice").done(function(rs){
-            //     $("#addJobRankDialog").find(".contents").empty();
-            //     // console.log(rs);
-            //     if(rs.Status){
-            //         createOtgList(parentID, orgTreeChart, rs.Data,false);
-            //     }
-            // });
-        },
-        showFooterBtn:false,
-    });
-}
-
-function createOtgList(parentID, orgTreeChart,data,isEmpty){
-
-    if(isEmpty == undefined){
-        isEmpty = false;
-    }
-
-    if(!isEmpty){
-        var option = {styleKind:"list",style:"1grid-add"};
-        // 取得選單樣式
-        getStyle(option,function(insertPage){
-
-            $.each(data, function(index, content){
-                // 轉物件
-                var insertPageObj = $.parseHTML(insertPage);
-                $(insertPageObj).find(".list-items").eq(0).html(content.name);
-                // 新增按鈕事件
-                $(insertPageObj).find(".fa-plus-square-o").click(function(){
-                    // 創建組織資料與節點
-                    creatOrgData(orgTreeChart, content, parentID);
-                   // console.log();
-                });
-                $(insertPageObj).appendTo( $("#addDialog").find(".modal-body").find(".contents") );
-                // 找最後一項去除底線
-                $("#addDialog").find(".modal-body")
-                .find(".contents")
-                .find(".list-items-bottom").last()
-                .removeClass("list-items-bottom");
-
-                // $("#addDialog").bsDialog("show");
-            });
-
-        });
-    }else{
-        var option = {styleKind:"system",style:"data-empty"};
-        // 取得選單樣式
-        getStyle(option,function(emptyStyle){
-            $("#addDialog").find(".modal-body").find(".contents").html(insertPageObj);
-        });
-    }
-}
-
-function creatOrgData(orgTreeChart,contentObj,parentID){
-    // console.log(contentObj);
-    var sendObj = {
-      "officeid": contentObj.uid,
-      "faid": parentID,
-      "suid": 1
-    };
-    // return;
-    // console.log(sendObj);
-    $.post(ctrlAdminAPI + "Insert_AssOrg",sendObj).done(function(rs){
-        console.log(rs);
-        if(rs.Status){
-            if(orgTreeChart != ""){
-                // 新增
-                // newNode : parentId,name,childID
-                console.log(parentID, contentObj.name, rs.Data);
-                orgTreeChart.newNode( parentID, contentObj.name, rs.Data, contentObj.uid );
-            }else{
-                // ROOT
-                createTreeData(rs.Data, contentObj.name, parentID, contentObj.officeid);
-                createTree();
+            var option = {
+                styleKind: "received-issued",style:"undertake-dateandtype"
             }
-            // 關閉
-            $("#addDialog").bsDialog("close");
+            getStyle(option,function(pageStyle){
+                var pageStyleObj = $.parseHTML(pageStyle);
 
-        }
+                var dateOption = {
+                    dateFormat: "yy-mm-dd",
+                    
+                    showOn: "button",
+                    buttonText: '<i class="fa fa-calendar fa-lg mouse-pointer send-btn"></i>',
+                    onSelect: function(dateText, inst) {
+                        // end_date_content
+                        $(pageStyleObj).find("#end_date_content").text(dateText);
+
+                    },
+                }
+
+                $(pageStyleObj).find("#end_date").datepicker(dateOption);
+                
+                $(pageStyleObj).appendTo($("#signInfoAndDateDialog").find(".modal-body"));
+            });
+        },
+        button:[
+            {
+                text: "匯簽",
+                className: "btn-info",
+                click: function(){
+                    var end_date = $("#signInfoAndDateDialog").find("#end_date").val();
+                    sendObj.end_date = end_date;
+                    if(end_date){
+                        sendObj.actionType = 0;
+                        signWFSelect();
+                        $("#signInfoAndDateDialog").bsDialog("close");
+
+                    }
+                }
+            },
+            {
+                text: "簽核",
+                className: "btn-success",
+                click: function(){
+                    var end_date = $("#signInfoAndDateDialog").find("#end_date").val();
+                    sendObj.end_date = end_date;
+                    if(end_date){
+                        sendObj.actionType = 1;
+                        signWFSelect();
+                        $("#signInfoAndDateDialog").bsDialog("close");
+
+                    }
+                }
+            }
+        ]
     });
 }
 
-// 創建組織樹的資訊
-function createTreeData(ID,Name,parentID,officeID){
-    // console.log(ID,Name,parentID);
-    var treeObj = {
-        id: ID,
-        name: Name,
-        parent: parentID,
-        listID: officeID
+// 簽核WF設定
+function signWFSelect(){
+    // actionType是該文件簽核類型（0:匯簽,1:簽核）
+    var data = [];
+    var sendData = {
+        api: "workflow/getWorkFlow",
+        threeModal: true,
+        data:{
+            sys_code:sys_code,
+            menu_code:menu_code
+        }
     };
-    testData.push(treeObj);
-}
 
-function deleteNode(uid){
-    var sendObj = {
-        apiMethod: ctrlAdminDelAPI+"Delete_AssOrg",
-        deleteObj:{
-            iUid: uid
+    $.getJSON(wrsUrl,sendData,function(rs){
+        // $("#signDocDialog").find(".modal-body").append(orgChart);
+        if(rs.status){
+            data = rs.data;
+            signWFDialog(data);
+        }else{
+            errorDialog("尚未有簽核流程，請新增後再嘗試");
         }
-    }
-    // console.log(uid);
-    $.post(configObject.deleteAPI , sendObj).done(function(rs){
-        console.log(rs);
     });
 }
 
-// just for example purpose
+function signWFDialog( data ){
+    // console.log(sendObj);
+    $("#signWFDialog").remove();
+    $("<div>").prop("id","signWFDialog").appendTo("body");
+    var title = "";
+
+    if(sendObj.actionType){
+        title += "請選擇簽核流程";
+    }else{
+        title += "請選擇會簽流程";
+    }
+    var signWFDialog = $("#signWFDialog").bsDialogSelect({
+        autoShow:true,
+        showFooterBtn:true,
+        modalClass: "bsDialogWindow",
+        title: title,
+        data: data,
+        textTag: "name",
+        valeTag: "uid",
+        button:[
+            {
+                text: "確定",
+                className: "btn-success",
+                click: function(){
+                    var wfID = signWFDialog.getValue();
+                    // console.log(wfID);
+                    if(wfID){
+                        sendObj.wfID = wfID;
+                        sendObj.userID = userID;
+                        sendObj["sys_code"] = sys_code;
+                        console.log(sendObj);
+                        // $("#signWFDialog").bsDialog("close");
+                    }
+                }
+            }
+        ]
+    });
+}
+
+function errorDialog(msg){
+    $("#errorDialog").remove();
+    $("<div>").prop("id","errorDialog").appendTo("body");
+
+    $("#errorDialog").bsDialog({
+        autoShow:true,
+        showFooterBtn:true,
+        title: "錯誤",
+        start:function(){
+
+            var msgDiv = $("<div>").html(msg);
+            $("#errorDialog").find(".modal-body").append(msgDiv);
+        },
+        button:[{
+            text: "關閉",
+            className: "btn-danger",
+            click: function(){
+                $("#errorDialog").bsDialog("close");
+            }
+        }
+        ]
+    });
+}
