@@ -127,15 +127,6 @@ function jobRankTreeDialog(orgTreeChart, nodeData){
         start: function(){
             loader( $("#jobRankTreeDialog").find(".contents") );
             getJobRank( $("#jobRankTreeDialog").find(".contents"), nodeData.listID );
-            // console.log(nodeData);
-            // 取得組織資料
-            // $.getJSON(ctrlAdminAPI + "GetData_AssTypeOffice").done(function(rs){
-            //     $("#addJobRankDialog").find(".contents").empty();
-            //     // console.log(rs);
-            //     if(rs.Status){
-            //         createOtgList(parentID, orgTreeChart, rs.Data,false);
-            //     }
-            // });
         },
         showFooterBtn:false,
     });
@@ -183,21 +174,24 @@ function createOtgList(parentID, orgTreeChart,data,isEmpty){
 }
 
 function creatOrgData(orgTreeChart,contentObj,parentID){
-    // console.log(contentObj);
     var sendObj = {
       "officeid": contentObj.uid,
       "faid": parentID,
-      "suid": 1
+      "sys_code": sys_code,
     };
-    // return;
-    // console.log(sendObj);
-    $.post(ctrlAdminAPI + "Insert_AssOrg",sendObj).done(function(rs){
-        console.log(rs);
+
+    var sendData = {
+        api: "AssOrg/Insert_AssOrg",
+        threeModal:true,
+        data:sendObj
+    }; 
+
+    $.post(wrsUrl,sendData,function(rs){
+        rs = $.parseJSON(rs);
         if(rs.Status){
             if(orgTreeChart != ""){
                 // 新增
                 // newNode : parentId,name,childID
-                console.log(parentID, contentObj.name, rs.Data);
                 orgTreeChart.newNode( parentID, contentObj.name, rs.Data, contentObj.uid );
             }else{
                 // ROOT
@@ -224,16 +218,20 @@ function createTreeData(ID,Name,parentID,officeID){
 }
 
 function deleteNode(uid){
-    var sendObj = {
-        apiMethod: ctrlAdminDelAPI+"Delete_AssOrg",
-        deleteObj:{
+
+    var sendData = {
+        api: "AssOrg/Delete_AssOrg",
+        threeModal:true,
+        data:{
             iUid: uid
         }
-    }
-    // console.log(uid);
-    $.post(configObject.deleteAPI , sendObj).done(function(rs){
-        console.log(rs);
+    }; 
+    $.ajax({
+        url: wrsUrl,
+        type: "DELETE",
+        data: sendData,
+        success: function(rs){
+            // console.log(rs);
+        }
     });
 }
-
-// just for example purpose

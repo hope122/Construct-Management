@@ -208,7 +208,7 @@ function jobDeleteNode(uid){
         type: "DELETE",
         data: sendData,
         success: function(rs){
-            console.log(rs);
+            // console.log(rs);
         }
     });
 }
