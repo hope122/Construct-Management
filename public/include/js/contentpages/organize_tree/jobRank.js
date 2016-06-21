@@ -4,13 +4,17 @@ function getJobRank( putArea, orgID ){
     // console.log(orgID);
 	jobTreeChart = null;
 	jobData = [];
-    // orgID = 14;
-	// 取得行政組織內的職級資料
-	var sendObj = {
-		iSu_Id: 1,
-		iOfid: orgID
-	}
-	$.getJSON(ctrlAdminAPI + "GetData_AssPosition",sendObj).done(function(rs){
+
+    var sendData = {
+        api: "AssPosition/GetData_AssPosition",
+        threeModal:true,
+        data:{
+            sys_code: sys_code,
+            iOfid: orgID
+        }
+    }; 
+
+    $.getJSON(wrsUrl,sendData,function(rs){
 	    putArea.empty();
 	    // console.log(rs);
 	    if(rs.Status){
@@ -48,7 +52,16 @@ function addJobRank(putArea, orgID, jobTreeChart, parentID){
         start: function(){
             loader( $("#addJobRank").find(".contents") );
             // 取得職務資料
-            $.getJSON(ctrlAdminAPI + "GetData_AssTypePosition",{}).done(function(rs){
+            // $.getJSON(ctrlAdminAPI + "GetData_AssTypePosition",{}).done(function(rs){
+            var sendData = {
+                api: "AssTypePosition/GetData_AssTypePosition",
+                threeModal:true,
+                data:{
+                    sys_code: sys_code,
+                }
+            }; 
+
+            $.getJSON(wrsUrl,sendData,function(rs){
                 $("#addJobRank").find(".contents").empty();
                 // console.log(rs);
                 if(rs.Status){
@@ -131,13 +144,18 @@ function creatJobData(putArea, jobTreeChart, contentObj, parentID, orgID){
       "psid": contentObj.uid,
       "ofid": orgID,
       "faid": parentID,
-      "suid": 1
+      // "suid": 1
+      "sys_code": sys_code
     };
-    // console.log(contentObj, parentID, orgID);
-    // return;
-    console.log(sendObj);
-    $.post(ctrlAdminAPI + "Insert_AssPosition",sendObj).done(function(rs){
-        // console.log(rs);
+
+    var sendData = {
+        api: "AssPosition/Insert_AssPosition",
+        threeModal:true,
+        data: sendObj
+    }; 
+
+    $.post(wrsUrl,sendData,function(rs){
+        var rs = $.parseJSON(rs);
         if(rs.Status){
             if(jobTreeChart != null){
                 // 新增
@@ -176,16 +194,21 @@ function createJobTreeData(ID, Name,parentID){
     };
     jobData.push(treeObj);
 }
-
+// 刪除
 function jobDeleteNode(uid){
-    var sendObj = {
-        apiMethod: ctrlAdminDelAPI+"Delete_AssPosition",
-        deleteObj:{
+    var sendData = {
+        api: "AssPosition/Delete_AssPosition",
+        threeModal:true,
+        data: {
             iUid: uid
         }
-    }
-    // console.log(uid);
-    $.post(configObject.deleteAPI , sendObj).done(function(rs){
-        // console.log(rs);
+    }; 
+    $.ajax({
+        url: wrsUrl,
+        type: "DELETE",
+        data: sendData,
+        success: function(rs){
+            console.log(rs);
+        }
     });
 }

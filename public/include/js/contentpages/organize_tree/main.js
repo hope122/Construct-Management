@@ -1,11 +1,22 @@
 var testData = [];
+// var sys_code = userLoginInfo.SysCode;
+var sys_code = 2;
 $(function(){
     getOrgData();
 });
 
 function getOrgData(){
     loader($("#orgChart"));
-	$.getJSON(ctrlAdminAPI + "GetData_AssOrg",{iSu_Id: 1},function(rs){
+    var sendData = {
+        api: "AssOrg/GetData_AssOrg",
+        threeModal:true,
+        data:{
+            sys_code: sys_code,
+        }
+    }; 
+
+    $.getJSON(wrsUrl,sendData,function(rs){
+
         // console.log(rs);
         $("#orgChart").empty();
         //有資料
@@ -41,31 +52,6 @@ function createTree(){
             jobRankTreeDialog(orgTreeChart, node.data);
             // console.log(node.data);
         }
-    });
-}
-
-// 取得組織資料
-function getOUData(uid){
-    var sendData = {}
-    if(uid != undefined){
-        sendData = { iUid : uid };
-    }
-    // ＡＰＩ呼叫
-    $.getJSON(ctrlAdminAPI + "GetData_AssTypeOffice", sendData ).done(function(rs){
-        if(rs.Status){
-            if(uid == null){
-                putDataToPage(rs.Data);
-            }else{
-                // insertDialog(uid,name);
-            }
-        }else{
-            // 放入空的
-            putDataEmptyInfo($("#grid"));
-        }
-        // console.log(rs);
-    }).fail(function(){
-        // 放入空的
-        putDataEmptyInfo($("#grid"));
     });
 }
 

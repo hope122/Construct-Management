@@ -1,4 +1,199 @@
 var testData = [];
+// ----------測試用---------------
+$(function(){
+    $("#testBs").bsDialog({
+        autoShow:false,
+        showFooterBtn:true,
+        title: "擬文情境選擇",
+        // modalClass: "bsDialogWindow",
+        button:[{
+            text: "不使用",
+            click: function(){
+
+            }
+        },
+        {
+            text: "使用範本",
+            className:"btn-success",
+            click: function(){
+                
+                testBs2Show();
+                // $(formObj).ajaxSubmit(options);
+            }
+        }
+        ]
+    });
+    $("#testBs2").bsDialog({
+        autoShow:false,
+        showFooterBtn:true,
+        title: "擬文",
+        modalClass: "bsDialogWindow",
+        button:[{
+            text: "取消",
+            click: function(){
+
+            }
+        },
+        {
+            text: "確認",
+            className:"btn-success",
+            click: function(){
+                var options = {
+                    url: "http://127.0.0.1:88/uploaderAPI",
+                    type:"POST",
+                    // data: sendObj,
+                    // dataType:"JSON",
+                    beforesend: function(xhr){
+                        testBs3Show(xhr);
+                    },
+                    uploadProgress: function(event, position, total, percentComplete) {
+                       console.log(event, position, total, percentComplete);
+
+                    },
+                    success: function(rs) {
+                       console.log(rs);
+                    },
+                };
+                testBs7Show();
+                // $(formObj).ajaxSubmit(options);
+            }
+        }
+        ]
+    });
+    tabCtrl("totalTab");
+    $("#testBs8").bsDialog({
+        autoShow:false,
+        showFooterBtn:true,
+        modalClass: "bsDialogWindow",
+        title: "請選擇會簽部門",
+        button:[{
+            text: "取消",
+            // className: "btn-success",
+            click: function(){
+                // xhr.abort();
+                // $(formObj).ajaxFormUnbind();
+                $("#testBs8").bsDialog("close");
+            }
+        },{
+            text: "確定",
+            className: "btn-success",
+            click: function(){
+                // xhr.abort();
+                // $(formObj).ajaxFormUnbind();
+                $("#testBs8").bsDialog("close");
+            }
+        }
+        ]
+    });
+    $("#testBs5").bsDialog({
+        autoShow:false,
+        showFooterBtn:true,
+        title: "檢閱公文",
+        button:[{
+            text: "關閉",
+            // className: "btn-success",
+            click: function(){
+                // xhr.abort();
+                // $(formObj).ajaxFormUnbind();
+                $("#testBs5").bsDialog("close");
+            }
+        }
+        ]
+    });
+    $("#testBs6").bsDialog({
+        autoShow:false,
+        showFooterBtn:true,
+        title: "檢閱公文",
+        button:[{
+            text: "關閉",
+            // className: "btn-success",
+            click: function(){
+                // xhr.abort();
+                // $(formObj).ajaxFormUnbind();
+                $("#testBs5").bsDialog("close");
+            }
+        }
+        ]
+    });
+    $("#testBs7").bsDialog({
+        autoShow:false,
+        showFooterBtn:true,
+        title: "擬文會簽與簽核",
+        button:[{
+            text: "取消",
+            // className: "btn-success",
+            click: function(){
+                // xhr.abort();
+                // $(formObj).ajaxFormUnbind();
+                $("#testBs7").bsDialog("close");
+            }
+        },
+        {
+            text: "會簽",
+            className: "btn-info",
+            click: function(){
+                // xhr.abort();
+                // $(formObj).ajaxFormUnbind();
+                testBs8Show();
+                getOrgData();
+            }
+        },
+        {
+            text: "簽核",
+            className: "btn-success",
+            click: function(){
+                // xhr.abort();
+                // $(formObj).ajaxFormUnbind();
+                $("#testBs7").bsDialog("close");
+            }
+        }
+        ]
+    });
+});
+function testBsShow(){
+    $("#testBs").bsDialog("show");
+}
+function testBs2Show(){
+    $("#testBs2").bsDialog("show");
+    // formObj = $.parseHTML(formStr);
+}
+function testBs3Show(){
+    
+    $("#testBs3").bsDialog("show");
+}
+function testBs5Show(){
+    
+    $("#testBs5").bsDialog("show");
+}
+function testBs6Show(){
+    
+    $("#testBs6").bsDialog("show");
+}
+function testBs7Show(){
+    
+    $("#testBs7").bsDialog("show");
+}
+function testBs8Show(){
+    
+    $("#testBs8").bsDialog("show");
+}
+function fileSelect(){
+    var fileInput = $("<input>").prop("type","file").prop("name","files[]").prop("multiple",true).change(function(){
+        // console.log($(this).prop("files"));
+        var names = $.map($(this).prop("files"), function(val) { 
+            // return val.name; 
+            var infoDiv = $("<div>").addClass("col-xs-12 col-md-12").html(val.name);
+            $("#isSelectFile").find(".control-label").eq(1).append(infoDiv);
+        });
+
+        // console.log(names);
+        $(this).appendTo(formObj);
+        // console.log(formObj);
+        $("#isSelectFile").show();
+    });
+    fileInput.click();
+}
+// ----------測試用結束-----------
 
 function getOrgData(){
     loader($("#orgChart"));
