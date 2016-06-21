@@ -1,8 +1,46 @@
 var testData = [];
-// var userID = userLoginInfo.userID;
-var userID = 1;
-// var sys_code = userLoginInfo.SysCode;
-var sys_code = 2;
+var userID = userLoginInfo.userID;
+var sys_code = userLoginInfo.sysCode;
+var menu_code = 'eab';
+
+$(function(){
+    getWFData();
+});
+// 取得資料
+function getWFData(){
+    var sendData = {
+        api: wrokflowAPI+"getWorkFlow",
+        threeModal:true,
+        data:{
+            sys_code: sys_code,
+            menu_code: menu_code,
+            allData: true
+        }
+    }
+    
+    $("#wfContent").empty();
+
+    $.getJSON(wrsUrl, sendData, function(rs){
+        if(rs.status){
+            var option = { styleKind: "list", style: "3grid-modify"}
+            getStyle(option,function(pageStyle){
+                $.each(rs.data,function(index,content){
+                    var pageStyleObj = $.parseHTML(pageStyle);
+                    $(pageStyleObj).addClass("dataContent");
+                    $(pageStyleObj).find(".list-items").eq(0).text(content.name);
+                    $(pageStyleObj).find(".list-items").eq(1).text("共"+(parseInt(content.maxLayer)+1) + "層");
+                    $(pageStyleObj).find(".list-items").eq(2).text(content.userName);
+                    $(pageStyleObj).appendTo($("#wfContent"));
+                });
+                $("#wfContent").find(".dataContent").last().removeClass("list-items-bottom");
+            });
+        }else{
+            putEmptyInfo($("#wfContent"));
+        }
+    }).fail(function(){
+        putEmptyInfo($("#wfContent"));
+    });
+}
 
 function orgContentShow(putArea){
     $("#orgContent").remove();

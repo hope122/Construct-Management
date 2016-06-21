@@ -102,7 +102,7 @@ function insertDialog(modifyObj, modifyItem){
 
     $("#insertDialog").bsDialog({
         title: title,
-        headerCloseBtn: true,
+        headerCloseBtn: false,
         start: function(){
           var option = {styleKind:"person",style:"in_mo"};
           getStyle(option,function(insertPage){

@@ -51,10 +51,13 @@ function setUserSysCode(sysCode){
 				$(".topInfo").show();
 	   			//取得選單
 	   			getMenus(rs);
-   			}else{
+   			}else if(userLoginInfo.isAdmin){
    				if(location.search.search("user-mana%2Fadmin") == -1){
 					loadPage("user-mana/admin","pagescontent");
 				}
+   			}else{
+   				alert("帳號設置有誤，請聯絡管理員");
+   				logoutEven();
    			}
 			// loadPage("home","pagescontent");
 		}
