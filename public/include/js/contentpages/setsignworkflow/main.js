@@ -22,14 +22,24 @@ function getWFData(){
 
     $.getJSON(wrsUrl, sendData, function(rs){
         if(rs.status){
-            var option = { styleKind: "list", style: "3grid-modify"}
+            var option = { styleKind: "list", style: "2grid-modify"}
             getStyle(option,function(pageStyle){
                 $.each(rs.data,function(index,content){
                     var pageStyleObj = $.parseHTML(pageStyle);
                     $(pageStyleObj).addClass("dataContent");
                     $(pageStyleObj).find(".list-items").eq(0).text(content.name);
-                    $(pageStyleObj).find(".list-items").eq(1).text("共"+(parseInt(content.maxLayer)+1) + "層");
-                    $(pageStyleObj).find(".list-items").eq(2).text(content.userName);
+                    // $(pageStyleObj).find(".list-items").eq(1).text("共"+(parseInt(content.maxLayer)+1) + "層");
+                    $(pageStyleObj).find(".list-items").eq(1).text(content.userName);
+
+                    // 修改鈕
+                    $(pageStyleObj).find(".fa-pencil-square-o").click(function(){
+                        getADPDataWF(content.uid);
+                    });
+                    // 刪除鈕
+                    $(pageStyleObj).find(".fa-trash-o").click(function(){
+                        deleteData(content.uid, pageStyleObj);
+                    });
+
                     $(pageStyleObj).appendTo($("#wfContent"));
                 });
                 $("#wfContent").find(".dataContent").last().removeClass("list-items-bottom");
@@ -42,6 +52,42 @@ function getWFData(){
     });
 }
 
+function getADPDataWF(wfUid){
+    var sendData = {
+        api: "ApdData/GetData_WorkFlow",
+        threeModal: true,
+        data: {
+            wf_uid: wfUid,
+            sys_code: sys_code
+        }
+    };
+    $.getJSON(wrsUrl, sendData,function(rs){
+        // console.log(rs);
+        // 整理資料
+        if(rs.status){
+            var modifyObj = {};
+            modifyObj.layer = {};
+            modifyObj.layerName = {};
+            $.each(rs.data,function(index,content){
+                if(index == 0){
+                    modifyObj.name = content.title;
+                    modifyObj.uid = content.uid;
+                }
+                if(typeof modifyObj.layer[content.layer] == "undefined"){
+                    modifyObj.layer[content.layer] = [];
+                    modifyObj.layerName[content.layer] = [];
+                }
+                modifyObj.layer[content.layer].push(content.data_uid);
+                modifyObj.layerName[content.layer].push(content.orgName);
+            });
+            insertDialog(modifyObj);
+        }else{
+            couldNotActionDialog("無法取得資料，請重新整理之後再嘗試");
+        }
+    });
+}
+
+// 組織資料
 function orgContentShow(putArea){
     $("#orgContent").remove();
     var orgContent = $("<div>").prop("id","orgContent");
@@ -55,7 +101,7 @@ function orgContentShow(putArea){
         autoShow:true,
         showFooterBtn:true,
         modalClass: "bsDialogWindow",
-        title: "欲送達流程部門",
+        title: "流程欲送達部門",
         start:function(){
             getOrgData();
         },
@@ -75,26 +121,7 @@ function orgContentShow(putArea){
                 var selectData = orgTreeChart.getSelectData();
                 // console.log(selectData);
                 $.each(selectData.pageObj,function(i,v){
-                    var dataStyle = $("<div>").addClass("col-xs-12 col-md-12 item-list-border contents signflowItem");
-                    // var content = $("<div>").addClass("col-xs-12 col-md-12");
-                    
-                    var strContent = $("<div>").addClass("col-xs-11 col-md-9");
-                    var trashContent = $("<div>").addClass("col-xs-1 col-md-3");
-                    var idContent = $("<input>").prop("type","hidden").addClass("flowID").val(selectData.idArr[i]);
-                    // <i class="fa fa-trash-o"></i>
-                    strContent.text(v).appendTo(dataStyle);
-                    var trash = $('<i class="fa fa-trash-o mouse-pointer cancel-btn"></i>');
-                    trash.click(function(){
-                        dataStyle.remove();
-                        if(!putArea.find(".signflowItem").length){
-                            var emptyContent = $("<div>").addClass("empty").html("階段未有資料");
-                            
-                            putArea.html(emptyContent);
-                        }
-                    });
-                    trashContent.append(trash).appendTo(dataStyle);
-                    idContent.appendTo(dataStyle);
-                    dataStyle.appendTo(putArea);
+                    orgContentPutList(putArea,selectData.idArr[i],v);
                 });
                 $("#orgContent").bsDialog("close");
 
@@ -103,14 +130,41 @@ function orgContentShow(putArea){
         ]
     });
 }
+// 在選擇階段加號後，放置部門的內容
+function orgContentPutList(putArea,id,name){
+    var dataStyle = $("<div>").addClass("col-xs-12 col-md-12 item-list-border contents signflowItem");
+    // var content = $("<div>").addClass("col-xs-12 col-md-12");
+    
+    var strContent = $("<div>").addClass("col-xs-11 col-md-9");
+    var trashContent = $("<div>").addClass("col-xs-1 col-md-3");
+    var idContent = $("<input>").prop("type","hidden").addClass("flowID").val(id);
+    // <i class="fa fa-trash-o"></i>
+    strContent.text(name).appendTo(dataStyle);
+    var trash = $('<i class="fa fa-trash-o mouse-pointer cancel-btn"></i>');
+    trash.click(function(){
+        dataStyle.remove();
+        if(!putArea.find(".signflowItem").length){
+            var emptyContent = $("<div>").addClass("empty").html("階段未有資料");
+            
+            putArea.html(emptyContent);
+        }
+    });
+    trashContent.append(trash).appendTo(dataStyle);
+    idContent.appendTo(dataStyle);
+    dataStyle.appendTo(putArea);
+}
+
 // 新增流程
-function insertDialog(){
+function insertDialog(modifyObj){
     $("#insertDialog").remove();
     
     var thisContent = $("<div>").prop("id","insertDialog").addClass("").css("width","100%");
     
     thisContent.appendTo("body");
-
+    var btnText = "確定";
+    if(modifyObj != undefined){
+        btnText = "修改";
+    }
     $("#insertDialog").bsDialog({
         autoShow:true,
         showFooterBtn:true,
@@ -124,32 +178,38 @@ function insertDialog(){
             getStyle(option,function(pageStyle){
                 var pageStyleObj = $.parseHTML(pageStyle);
                 var flowStyle = $(pageStyleObj).find(".modal-items").html();
+
+
+                // 按下增加流程的部分
                 $(pageStyleObj).find("#newFlow").click(function(){
-
-                    var totalFlowLayerNumber = $(pageStyleObj).find(".modal-items").find(".flowItems").length;
-                    totalFlowLayerNumber = totalFlowLayerNumber+1;
-
-                    var flowStyleObj = $.parseHTML(flowStyle);
-
-                    $(flowStyleObj).appendTo($(pageStyleObj).find(".modal-items"));
-                    $(flowStyleObj).find(".flowName").text("階段"+totalFlowLayerNumber);
-                    // 垃圾桶按鈕
-                    var trash = $('<i class="fa fa-trash mouse-pointer fa-lg cancel-btn"></i>');
-                    trash.click(function(){
-                        $(flowStyleObj).remove();
-                    });
-                    $(flowStyleObj).find(".flowBtn").append(trash);
-                    $(flowStyleObj).find(".flowPlusBtn").click(function(){
-                        var putArea = $(this).parents(".panel-default").find(".panel-body");
-                        orgContentShow(putArea);
-                    });
-
+                    putLayerContent(pageStyleObj, flowStyle);
                 });
+                // 階段新增
                 $(pageStyleObj).find(".flowPlusBtn").click(function(){
                     var putArea = $(this).parents(".panel-default").find(".panel-body");
                     orgContentShow(putArea);
                 });
                 $(pageStyleObj).appendTo($("#insertDialog").find(".modal-body"));
+                if(modifyObj != undefined){
+                    $(pageStyleObj).find(".list-items").eq(0).find("input:text").val(modifyObj.name);
+                    // console.log(modifyObj);
+                    $.each(modifyObj.layer, function(index, content){
+                        if(index != 0){
+                            // 階段新增
+                            var putArea = putLayerContent(pageStyleObj, flowStyle);
+                            putArea = $(putArea).find(".panel-default").find(".panel-body");
+                            // console.log(putArea);
+                        }else{
+                            var putArea = $(pageStyleObj).find(".panel-default").find(".panel-body");
+                        }
+                        putArea.find(".empty").remove();
+                        $.each(content, function(layerIndex,layerID){
+                            // console.log(layerID);
+                            orgContentPutList(putArea,layerID, modifyObj.layerName[index][layerIndex] );
+                        });
+                        
+                    });
+                }
             });
         },
         button:[{
@@ -159,14 +219,14 @@ function insertDialog(){
                 $("#insertDialog").bsDialog("close");
             }
         },{
-            text: "確定",
+            text: btnText,
             className: "btn-success",
             click: function(){
                 // $("#orgContent").bsDialog("close");
                 // orgTreeChart.getSelectData();
                 var layerObj = {};
                 $("#insertDialog").find(".flowItems").each(function(index){
-                    console.log(index);
+                    // console.log(index);
                     var idStr = "";
                     $(this).find(".signflowItem").each(function(){
                         var selectVale = $(this).find(".flowID").val();
@@ -183,12 +243,41 @@ function insertDialog(){
                 data.menuCode = "eab";
                 data.sysCode = sys_code;
                 data.user = userID;
-                saveData(data);
-                console.log(data);
+                if(modifyObj == undefined){
+                    saveData(data);
+                }else{
+                    saveData(data, modifyObj.uid);
+
+                }
+                $("#insertDialog").bsDialog('close');
+                // console.log(data);
             }
         }
         ]
     });
+}
+
+// 放置流程內容的東西
+function putLayerContent(putArea, flowStyle){
+    var totalFlowLayerNumber = $(putArea).find(".modal-items").find(".flowItems").length;
+    totalFlowLayerNumber = totalFlowLayerNumber+1;
+
+    var flowStyleObj = $.parseHTML(flowStyle);
+
+    $(flowStyleObj).appendTo($(putArea).find(".modal-items"));
+    $(flowStyleObj).find(".flowName").text("階段"+totalFlowLayerNumber);
+
+    // 垃圾桶按鈕
+    var trash = $('<i class="fa fa-trash mouse-pointer fa-lg cancel-btn"></i>');
+    trash.click(function(){
+        $(flowStyleObj).remove();
+    });
+    $(flowStyleObj).find(".flowBtn").append(trash);
+    $(flowStyleObj).find(".flowPlusBtn").click(function(){
+        var putArea = $(this).parents(".panel-default").find(".panel-body");
+        orgContentShow(putArea);
+    });
+    return $(flowStyleObj);
 }
 
 // 取得組織資料
@@ -217,11 +306,15 @@ function getOrgData(){
 	});
 }
 
+// 存檔
 function saveData(data,uid){
+    // console.log(data);
+    // return;
     processAPI = "insertWorkFlow";
     // 修改
     if(uid != undefined){
         processAPI = "modify";
+        data.uid = uid;
     }
     var sendData = {
         api: wrokflowAPI+processAPI,
@@ -229,8 +322,30 @@ function saveData(data,uid){
         data:data
     }
     $.post(wrsUrl,sendData,function(rs){
-        console.log(rs);
+        // console.log(rs);
+        getWFData();
     });
+}
+// 刪除
+function deleteData(uid,removeItem){
+    if(uid != undefined){
+        var sendData = {
+            api: wrokflowAPI+"deleteWF",
+            threeModal: true,
+            data:{
+                uid: uid
+            }
+        };
+
+        $.post(wrsUrl,sendData,function(rs){
+            var rs = $.parseJSON(rs);
+            if(rs.status){
+                $(removeItem).remove();
+            }else{
+                couldNotActionDialog("資料可能已被使用，無法刪除資料");
+            }
+        });
+    }
 }
 
 // 創建組織樹狀圖
@@ -254,7 +369,7 @@ function createTree(){
         onClickNode: function(node){
             // log('Clicked node '+node.data.id);
             // jobRankTreeDialog(orgTreeChart, node.data);
-            console.log(node.data);
+            // console.log(node.data);
         }
     });
 }
@@ -466,3 +581,26 @@ function deleteNode(uid){
 }
 
 // just for example purpose
+
+// 當無法刪除時，提供說明
+function couldNotActionDialog(msg){
+    $("#couldNotDeleteDialog").remove();
+    $("<div>").prop("id","couldNotDeleteDialog").appendTo("body");
+
+    $("#couldNotDeleteDialog").bsDialog({
+    start: function(){
+        var string = msg;
+        $("#couldNotDeleteDialog").find(".modal-body").html(string);
+    },
+    button:[
+        {
+            text: "關閉",
+            className: "btn-danger",
+            click: function(){
+                $("#couldNotDeleteDialog").bsDialog("close");
+            }
+        }
+    ]
+    });
+
+}
