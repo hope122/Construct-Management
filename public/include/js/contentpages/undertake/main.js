@@ -437,6 +437,7 @@ function signInfoAndDate(){
                         $(pageStyleObj).find("#end_date_content").text(dateText);
 
                     },
+                    minDate: 0
                 }
 
                 $(pageStyleObj).find("#end_date").datepicker(dateOption);
@@ -454,7 +455,7 @@ function signInfoAndDate(){
                     if(end_date){
                         sendObj.actionType = 0;
                         signWFSelect();
-                        $("#signInfoAndDateDialog").bsDialog("close");
+                        // $("#signInfoAndDateDialog").bsDialog("close");
 
                     }
                 }
@@ -468,7 +469,7 @@ function signInfoAndDate(){
                     if(end_date){
                         sendObj.actionType = 1;
                         signWFSelect();
-                        $("#signInfoAndDateDialog").bsDialog("close");
+                        // $("#signInfoAndDateDialog").bsDialog("close");
 
                     }
                 }
@@ -515,12 +516,22 @@ function signWFDialog( data ){
     var signWFDialog = $("#signWFDialog").bsDialogSelect({
         autoShow:true,
         showFooterBtn:true,
+        headerCloseBtn:false,
         modalClass: "bsDialogWindow",
         title: title,
         data: data,
         textTag: "name",
         valeTag: "uid",
         button:[
+            {
+                text: "返回",
+                // className: "btn-success",
+                click: function(){
+                
+                    $("#signWFDialog").bsDialog("close");
+                    
+                }
+            },
             {
                 text: "確定",
                 className: "btn-success",
@@ -532,11 +543,24 @@ function signWFDialog( data ){
                         sendObj.userID = userID;
                         sendObj["sys_code"] = sys_code;
                         console.log(sendObj);
+                        saveSignData(sendObj);
                         // $("#signWFDialog").bsDialog("close");
                     }
                 }
             }
         ]
+    });
+}
+
+function saveSignData(data){
+    data["doc_uid"] = 1;
+    var sendData = {
+        api: apdAPI+"Insert_ApdData",
+        threeModal: true,
+        data:data
+    }
+    $.post(wrsUrl,sendData,function(rs){
+        console.log(rs);
     });
 }
 
