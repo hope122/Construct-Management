@@ -1,34 +1,21 @@
-var socket = io.connect(configObject.socketConn);
-var systemID = '';
-var uuid = '',userName = '';
-getAcInfo();
+//var socket = io.connect(configObject.socketConn);
+var socket = io.connect("http://127.0.0.1:7077");
 
-socket.on('chatMsg', function(data) {
-    if(data.systemID != systemID){
-        showNoticeToast(data.userName+':<br/>'+data.msg);
+var sysCode, uuid, userID;
+// 登入資訊確認後才設置
+function setSocket(){
+    sysCode = userLoginInfo.sysCode;
+    uuid = userLoginInfo.uuid;
+    userID = userLoginInfo.userID;
+    var sendData = {
+        uuid: uuid,
+        userID: userID,
+        sysCode: sysCode
     }
-});
 
-socket.on('conn', function (data) {
-    var postdata = {
-        'uid': uuid,
-        'userName' : userName
-    }
-    systemID = data.systemID;
-    socket.emit('login', postdata,function(result){});
-
-});
-
-function getAcInfo(){
-   $.ajax({
-        url: configObject.getAcInfo,
-        type: "POST",
-        async:false,
-        dataType: "JSON",
-        success: function(rs){
-           uuid = rs.uuid;
-           userName = rs.userName;
-           //console.log(rs);
-        }
-    });
+    socket.emit('onlineSystem', sendData);
 }
+
+socket.on('sysPushSpecified', function(data) {
+    showNoticeToast(data.msg);
+});

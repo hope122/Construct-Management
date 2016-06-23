@@ -8,10 +8,14 @@ function checkUserLogin(){
             	$(".topInfo").hide();
             }
             userLoginInfo = rs;
+
             $(".user-name").html(rs.userName);
             if(rs.sysCode && rs.userID){
        			//取得選單
        			getMenus(rs);
+       			// 連線socket
+				setSocket();
+
        		}else{
        			if(rs.sysList.length == 1){
 	            	setUserSysCode(rs.sysList[0]);
@@ -51,6 +55,7 @@ function setUserSysCode(sysCode){
 				$(".topInfo").show();
 	   			//取得選單
 	   			getMenus(rs);
+				setSocket();
    			}else if(userLoginInfo.isAdmin){
    				if(location.search.search("user-mana%2Fadmin") == -1){
 					loadPage("user-mana/admin","pagescontent");
