@@ -6,7 +6,7 @@
 	<!-- ========================= 本次設計開始 ========================= -->				
 		<!-- 標題 -->
 		<div class="col-xs-12 col-md-12 item-title text-center">
-			<h3 class="col-xs-10 col-md-11">收發文紀錄</h3>
+			<h3 class="col-xs-10 col-md-11">個人承辦收發文紀錄</h3>
 			<div class="col-xs-2 col-md-1 item-title-plus">
 				<i class="fa fa-plus-circle fa-2x send-btn mouse-pointer" onclick="testBsShow();"></i>
 				<i class="fa fa-plus-square-o fa-2x send-btn mouse-pointer" onclick="signInfoAndDate();"></i>
@@ -22,9 +22,6 @@
 			</li>
 			<li role="presentation">
 				<a href="#" id="signBack">退件<span class="badge">1</span></a>
-			</li>
-			<li role="presentation">
-				<a href="#" id="isFinish">已完成<span class="badge">1</span></a>
 			</li>
 		</ul>
 		<!-- 內容 -->
@@ -70,6 +67,29 @@
 				<div class="col-xs-3 col-md-1 text-center list-items">
 					<div class="item-actionBtn">
 						<i class="fa fa-file-text-o fa-lg send-btn mouse-pointer" onclick="testBs5Show();"></i>
+						<i class="fa fa-sitemap fa-lg send-btn mouse-pointer" aria-hidden="true"></i>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12 col-md-12 list-items-bottom">
+				<div class="col-xs-5 col-md-2 list-items">
+					業00123456789
+				</div>
+				<div class="col-xs-4 col-md-5 list-items">
+					有關施工流程修繕
+				</div>
+				<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
+					速
+				</div>
+				<div class="col-xs-4 col-md-2 list-items text-center list-item-hide-text">
+					2016-06-30
+				</div>
+				<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
+					分文
+				</div>
+				<div class="col-xs-3 col-md-1 text-center list-items">
+					<div class="item-actionBtn">
+						<i class="fa fa-file-text-o fa-lg send-btn mouse-pointer" onclick="testBs5Show();"></i>
 						<i class="fa fa-chain-broken fa-lg send-btn mouse-pointer" aria-hidden="true"></i>
 					</div>
 				</div>
@@ -97,6 +117,57 @@
 					</div>
 				</div>
 			</div>
+			
+			<div class="col-xs-12 col-md-12">
+				<div class="col-xs-5 col-md-2 list-items">
+					營0012346666
+				</div>
+				<div class="col-xs-4 col-md-5 list-items">
+					有關地基工程
+				</div>
+				<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
+					普
+				</div>
+				<div class="col-xs-4 col-md-2 list-items text-center">
+					-
+				</div>
+				<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text received-finish">
+					完成
+				</div>
+				<div class="col-xs-3 col-md-1 text-center list-items">
+					<div class="item-actionBtn">
+						<i class="fa fa-file-text-o fa-lg send-btn mouse-pointer" onclick=""></i>
+					</div>
+				</div>
+			</div>
+			
+			<!-- 列表內容結束 -->
+		</div>
+
+		<!-- 內容 -->
+		<div class="col-xs-12 col-md-12 tab-border totalTab-tab-content" id="sendDoc-content">
+			<!-- 列表內容 -->
+			<div class="col-xs-12 col-md-12 list-item-title text-center">
+				<div class="col-xs-5 col-md-2 list-items">
+					文號
+				</div>
+				<div class="col-xs-4 col-md-5 list-items">
+					主旨
+				</div>
+				<div class="col-xs-4 col-md-1 list-items">
+					密等
+				</div>
+				<div class="col-xs-4 col-md-2 list-items">
+					預警
+				</div>
+				<div class="col-xs-4 col-md-1 list-items">
+					狀態
+				</div>
+				<div class="col-xs-3 col-md-1 list-items">
+					&nbsp;
+				</div>
+			</div>
+			<!-- 列表內容 -->
 			<div class="col-xs-12 col-md-12 list-items-bottom">
 				<div class="col-xs-5 col-md-2 list-items">
 					克林0012346666
@@ -123,10 +194,7 @@
 				<div class="col-xs-5 col-md-2 list-items">
 					克林0012346666
 				</div>
-				<div class="col-xs-4 col-md-2 list-items">
-					市政單位Z
-				</div>
-				<div class="col-xs-4 col-md-3 list-items">
+				<div class="col-xs-4 col-md-5 list-items">
 					有關模板工程
 				</div>
 				<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
@@ -149,10 +217,7 @@
 				<div class="col-xs-5 col-md-2 list-items">
 					克林0012346666
 				</div>
-				<div class="col-xs-4 col-md-2 list-items">
-					市政單位Ｆ
-				</div>
-				<div class="col-xs-4 col-md-3 list-items">
+				<div class="col-xs-4 col-md-5 list-items">
 					有關模板工程
 				</div>
 				<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
@@ -171,14 +236,12 @@
 					</div>
 				</div>
 			</div>
+			
 			<div class="col-xs-12 col-md-12">
 				<div class="col-xs-5 col-md-2 list-items">
 					營0012346666
 				</div>
-				<div class="col-xs-4 col-md-2 list-items">
-					市政單位E
-				</div>
-				<div class="col-xs-4 col-md-3 list-items">
+				<div class="col-xs-4 col-md-5 list-items">
 					有關地基工程
 				</div>
 				<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
@@ -198,269 +261,6 @@
 					</div>
 				</div>
 			</div>
-			
-			<!-- 列表內容結束 -->
-		</div>
-
-		<!-- 內容 -->
-		<div class="col-xs-12 col-md-12 tab-border totalTab-tab-content" id="unreceived-content">
-			<!-- 列表內容 -->
-			<div class="col-xs-12 col-md-12 list-item-title text-center">
-				<div class="col-xs-5 col-md-2 list-items">
-					文號
-				</div>
-				<div class="col-xs-4 col-md-2 list-items">
-					來文單位
-				</div>
-				<div class="col-xs-4 col-md-3 list-items">
-					主旨
-				</div>
-				<div class="col-xs-4 col-md-1 list-items">
-					速別
-				</div>
-				<div class="col-xs-4 col-md-1 list-items">
-					密等
-				</div>
-				<div class="col-xs-4 col-md-2 list-items">
-					預警
-				</div>
-				<div class="col-xs-3 col-md-1 list-items">
-					&nbsp;
-				</div>
-			</div>
-			<!-- 列表內容 -->
-			<div class="col-xs-12 col-md-12">
-				<div class="col-xs-5 col-md-2 list-items">
-					業00123456789
-				</div>
-				<div class="col-xs-4 col-md-2 list-items">
-					市政單位Ａ
-				</div>
-				<div class="col-xs-4 col-md-3 list-items">
-					有關施工流程修繕
-				</div>
-				<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
-					速
-				</div>
-				<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
-					普
-				</div>
-				<div class="col-xs-4 col-md-2 list-items text-center">
-					2016-06-30
-				</div>
-				<div class="col-xs-3 col-md-1 text-center list-items">
-					<div class="item-actionBtn">
-						<i class="fa fa-file-text-o fa-lg send-btn mouse-pointer" onclick="testBs5Show();"></i>
-						<i class="fa fa-chain-broken fa-lg send-btn mouse-pointer" aria-hidden="true"></i>
-					</div>
-				</div>
-			</div>
-			
-			<!-- 列表內容結束 -->
-		</div>
-
-		<!-- 內容 -->
-		<div class="col-xs-12 col-md-12 tab-border totalTab-tab-content" id="tasking-content">
-			<!-- 列表內容 -->
-			<div class="col-xs-12 col-md-12 list-item-title text-center">
-				<div class="col-xs-5 col-md-2 list-items">
-					文號
-				</div>
-				<div class="col-xs-4 col-md-3 list-items">
-					主旨
-				</div>
-				<div class="col-xs-4 col-md-1 list-items">
-					速別
-				</div>
-				<div class="col-xs-4 col-md-1 list-items">
-					密等
-				</div>
-				<div class="col-xs-4 col-md-2 list-items">
-					預警
-				</div>
-				<div class="col-xs-3 col-md-1 list-items">
-					&nbsp;
-				</div>
-			</div>
-			<!-- 列表內容 -->
-			<div class="col-xs-12 col-md-12">
-				<div class="col-xs-5 col-md-2 list-items">
-					業00123455555
-				</div>
-				<div class="col-xs-4 col-md-2 list-items">
-					市政單位B
-				</div>
-				<div class="col-xs-4 col-md-3 list-items">
-					有關水泥工程
-				</div>
-				<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
-					最速
-				</div>
-				<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
-					普
-				</div>
-				<div class="col-xs-4 col-md-2 list-items text-center">
-					2016-06-25
-				</div>
-				<div class="col-xs-3 col-md-1 text-center list-items">
-					<div class="item-actionBtn">
-						<i class="fa fa-file-text-o fa-lg send-btn mouse-pointer" onclick="testBs6Show()"></i>
-						<i class="fa fa-check-circle-o fa-lg send-btn mouse-pointer" aria-hidden="true"></i>
-					</div>
-				</div>
-			</div>
-			
-			<!-- 列表內容結束 -->
-		</div>
-
-		<!-- 內容 -->
-		<div class="col-xs-12 col-md-12 tab-border totalTab-tab-content" id="signing-content">
-			<!-- 列表內容 -->
-			<div class="col-xs-12 col-md-12 list-items-bottom">
-				<div class="col-xs-5 col-md-3 list-items">
-					事2016053100333
-				</div>
-				<div class="col-xs-5 col-md-4 list-items">
-					公文B
-				</div>
-				<div class="col-xs-4 col-md-2 list-items list-item-hide-text">
-					<div class="col-xs-12 col-md-12 list-item-date-range">
-					2016-05-18
-					</div>
-					<div class="col-xs-12 col-md-12 list-item-date-range">
-					2016-06-15
-					</div>
-				</div>
-				<div class="col-xs-3 col-md-2 list-items">
-					<span class="label label-primary">不需會簽</span>
-					<span class="label label-default">簽呈未進行</span>
-				</div>
-				<div class="col-xs-3 col-md-1 list-items">
-					<div class="item-actionBtn">
-						<i class="fa fa-list-alt fa-lg mouse-pointer send-btn" onclick="testBs4Show();"></i>
-						<i class="fa fa-file-text-o fa-lg mouse-pointer send-btn" onclick="testBsShow();"></i>
-						<i class="fa fa-eye fa-lg"></i>
-					</div>
-				</div>
-			</div>
-			<div class="col-xs-12 col-md-12">
-				<div class="col-xs-5 col-md-3 list-items">
-					業2016053100202
-				</div>
-				<div class="col-xs-5 col-md-4 list-items">
-					公文Ａ
-				</div>
-				<div class="col-xs-4 col-md-2 list-items list-item-hide-text">
-					<div class="col-xs-12 col-md-12 list-item-date-range">
-					2016-05-18
-					</div>
-					<div class="col-xs-12 col-md-12 list-item-date-range">
-					2016-06-02
-					</div>
-				</div>
-				<div class="col-xs-3 col-md-2 list-items">
-					<span class="label label-success">已完成會簽</span>
-					<span class="label label-warning">簽呈進行中</span>
-				</div>
-				<div class="col-xs-3 col-md-1 list-items">
-					<div class="item-actionBtn">
-						<i class="fa fa-list-alt fa-lg"></i>
-						<i class="fa fa-file-text-o fa-lg"></i>
-						<i class="fa fa-eye-slash fa-lg"></i>
-					</div>
-				</div>
-				<div class="col-xs-3 col-md-12">
-					 <div class="progressBar">
-						<div class="circle done">
-							<span class="data">2016-05-18</span>
-							<span class="label">&#10003;</span>
-							<span class="title">Race</span>
-							<span class="signData">2016-05-21</span>
-						</div>
-						<span class="bar done"></span>
-						<div class="circle done">
-							<span class="data">2016-05-21</span>
-							<span class="label">&#10003;</span>
-							<span class="title">政中</span>
-							<span class="signData">2016-05-23</span>
-						</div>
-						<span class="bar half"></span>
-						<div class="circle active">
-							<span class="data">2016-05-23</span>
-							<span class="label">3</span>
-							<span class="title">邁克</span>
-						</div>
-						<span class="bar"></span>
-						<div class="circle">
-							<span class="label">4</span>
-							<span class="title">Ginny</span>
-						</div>
-						<span class="bar"></span>
-						<div class="circle">
-							<span class="label">5</span>
-							<span class="title">呂大哥</span>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- 列表內容結束 -->
-		</div>
-
-		<!-- 內容 -->
-		<div class="col-xs-12 col-md-12 tab-border totalTab-tab-content" id="countersign-content">
-			<!-- 列表內容 -->
-			<div class="col-xs-12 col-md-12 list-item-title text-center">
-				<div class="col-xs-5 col-md-2 list-items">
-					文號
-				</div>
-				<div class="col-xs-4 col-md-2 list-items">
-					發文對象
-				</div>
-				<div class="col-xs-4 col-md-3 list-items">
-					主旨
-				</div>
-				<div class="col-xs-4 col-md-1 list-items">
-					速別
-				</div>
-				<div class="col-xs-4 col-md-1 list-items">
-					密等
-				</div>
-				<div class="col-xs-4 col-md-2 list-items">
-					預警
-				</div>
-				<div class="col-xs-3 col-md-1 list-items">
-					&nbsp;
-				</div>
-			</div>
-			<!-- 列表內容 -->
-			<div class="col-xs-12 col-md-12">
-				<div class="col-xs-5 col-md-2 list-items">
-					克林0012346666
-				</div>
-				<div class="col-xs-4 col-md-2 list-items">
-					市政單位Z
-				</div>
-				<div class="col-xs-4 col-md-3 list-items">
-					有關模板工程
-				</div>
-				<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
-					普
-				</div>
-				<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
-					普
-				</div>
-				<div class="col-xs-4 col-md-2 list-items text-center">
-					2016-06-29
-				</div>
-				<div class="col-xs-3 col-md-1 text-center list-items">
-					<div class="item-actionBtn">
-						<i class="fa fa-list-alt fa-lg mouse-pointer send-btn" onclick=""></i>
-						<i class="fa fa-pencil-square-o fa-lg"></i>
-						<i class="fa fa-ban fa-lg mouse-pointer send-btn"></i>
-					</div>
-				</div>
-			</div>
-			
 			<!-- 列表內容結束 -->
 		</div>
 
@@ -471,14 +271,8 @@
 				<div class="col-xs-5 col-md-2 list-items">
 					文號
 				</div>
-				<div class="col-xs-4 col-md-2 list-items">
-					來文單位
-				</div>
-				<div class="col-xs-4 col-md-3 list-items">
+				<div class="col-xs-4 col-md-6 list-items">
 					主旨
-				</div>
-				<div class="col-xs-4 col-md-1 list-items">
-					速別
 				</div>
 				<div class="col-xs-4 col-md-1 list-items">
 					密等
@@ -495,14 +289,8 @@
 				<div class="col-xs-5 col-md-2 list-items">
 					克林0012346666
 				</div>
-				<div class="col-xs-4 col-md-2 list-items">
-					市政單位Ｆ
-				</div>
-				<div class="col-xs-4 col-md-3 list-items">
+				<div class="col-xs-4 col-md-6 list-items">
 					有關模板工程
-				</div>
-				<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
-					普
 				</div>
 				<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
 					普
@@ -514,148 +302,6 @@
 					<div class="item-actionBtn">
 						<i class="fa fa-list-alt fa-lg mouse-pointer send-btn" onclick=""></i>
 						<i class="fa fa-pencil-square-o fa-lg"></i>
-						<i class="fa fa-ban fa-lg mouse-pointer send-btn"></i>
-					</div>
-				</div>
-			</div>
-			
-			<!-- 列表內容結束 -->
-		</div>
-
-		<!-- 內容 -->
-		<div class="col-xs-12 col-md-12 tab-border totalTab-tab-content" id="sendDoc-content">
-			<!-- 列表內容 -->
-			<div class="col-xs-12 col-md-12 list-item-title text-center">
-				<div class="col-xs-5 col-md-2 list-items">
-					文號
-				</div>
-				<div class="col-xs-4 col-md-2 list-items">
-					發文對象
-				</div>
-				<div class="col-xs-4 col-md-3 list-items">
-					主旨
-				</div>
-				<div class="col-xs-4 col-md-1 list-items">
-					密等
-				</div>
-				<div class="col-xs-4 col-md-2 list-items">
-					預警
-				</div>
-				<div class="col-xs-4 col-md-1 list-items">
-					狀態
-				</div>
-				<div class="col-xs-3 col-md-1 list-items">
-					&nbsp;
-				</div>
-			</div>
-			<!-- 列表內容 -->
-			<div class="col-xs-12 col-md-12 list-items-bottom">
-				<div class="col-xs-5 col-md-2 list-items">
-					營0012346666
-				</div>
-				<div class="col-xs-4 col-md-2 list-items">
-					市政單位D
-				</div>
-				<div class="col-xs-4 col-md-3 list-items">
-					有關地基工程
-				</div>
-				<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
-					普
-				</div>
-				<div class="col-xs-4 col-md-2 list-items text-center">
-					2016-06-26
-				</div>
-				<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
-					匯簽
-				</div>
-				<div class="col-xs-3 col-md-1 text-center list-items">
-					<div class="item-actionBtn">
-						<i class="fa fa-list-alt fa-lg mouse-pointer send-btn" onclick=""></i>
-						<i class="fa fa-print fa-lg send-btn mouse-pointer"></i>
-						<i class="fa fa-check-circle-o fa-lg send-btn mouse-pointer"></i>
-					</div>
-				</div>
-			</div>
-			<div class="col-xs-12 col-md-12">
-				<div class="col-xs-5 col-md-2 list-items">
-					營0012346666
-				</div>
-				<div class="col-xs-4 col-md-2 list-items">
-					市政單位D
-				</div>
-				<div class="col-xs-4 col-md-3 list-items">
-					有關地基工程
-				</div>
-				<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
-					普
-				</div>
-				<div class="col-xs-4 col-md-2 list-items text-center">
-					2016-06-26
-				</div>
-				<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
-					退件
-				</div>
-				<div class="col-xs-3 col-md-1 text-center list-items">
-					<div class="item-actionBtn">
-						<i class="fa fa-list-alt fa-lg mouse-pointer send-btn" onclick=""></i>
-						<i class="fa fa-print fa-lg send-btn mouse-pointer"></i>
-						<i class="fa fa-check-circle-o fa-lg send-btn mouse-pointer"></i>
-					</div>
-				</div>
-			</div>
-			
-			<!-- 列表內容結束 -->
-		</div>
-
-		<!-- 內容 -->
-		<div class="col-xs-12 col-md-12 tab-border totalTab-tab-content" id="isFinish-content">
-			<!-- 列表內容 -->
-			<div class="col-xs-12 col-md-12 list-item-title text-center">
-				<div class="col-xs-5 col-md-2 list-items">
-					文號
-				</div>
-				<div class="col-xs-4 col-md-2 list-items">
-					來文單位
-				</div>
-				<div class="col-xs-4 col-md-3 list-items">
-					主旨
-				</div>
-				<div class="col-xs-4 col-md-1 list-items">
-					速別
-				</div>
-				<div class="col-xs-4 col-md-1 list-items">
-					密等
-				</div>
-				<div class="col-xs-4 col-md-2 list-items">
-					完成日期
-				</div>
-				<div class="col-xs-3 col-md-1 list-items">
-					&nbsp;
-				</div>
-			</div>
-			<!-- 列表內容 -->
-			<div class="col-xs-12 col-md-12">
-				<div class="col-xs-5 col-md-2 list-items">
-					營0012346666
-				</div>
-				<div class="col-xs-4 col-md-2 list-items">
-					市政單位E
-				</div>
-				<div class="col-xs-4 col-md-3 list-items">
-					有關地基工程
-				</div>
-				<div class="col-xs-4 col-md-1 list-items text-center list-item-hide-text">
-					普
-				</div>
-				<div class="col-xs-4 col-md-1 list-items text-center">
-					普
-				</div>
-				<div class="col-xs-4 col-md-2 list-items text-center">
-					2016-06-15
-				</div>
-				<div class="col-xs-3 col-md-1 text-center list-items">
-					<div class="item-actionBtn">
-						<i class="fa fa-file-text-o fa-lg send-btn mouse-pointer" onclick=""></i>
 					</div>
 				</div>
 			</div>
