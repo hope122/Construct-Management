@@ -1,3 +1,6 @@
+var sys_code = userLoginInfo.sysCode;
+var userID = userLoginInfo.userID;
+
 $(function(){
     getOUData();
 });
@@ -5,12 +8,20 @@ $(function(){
 // 取得資料
 function getOUData(uid){
     loader($("#grid"));
-    var sendData = {}
+    var sendData = {
+        api: "AssTypePosition/GetData_AssTypePosition",
+        threeModal: true,
+        data:{
+            sys_code: sys_code
+        }
+    }
+
     if(uid != undefined){
-        sendData = { iUid : uid };
+        sendData.data.iUid = uid;
     }
     // ＡＰＩ呼叫
-    $.getJSON(ctrlAdminAPI + "GetData_AssTypePosition", sendData ).done(function(rs){
+    // $.getJSON(ctrlAdminAPI + "GetData_AssTypePosition", sendData ).done(function(rs){
+    $.getJSON(wrsUrl, sendData ).done(function(rs){
         $("#grid").empty();
         if(rs.Status){
             if(uid == null){
@@ -123,8 +134,8 @@ function insertDialog(uid, name, modifyItem){
           var option = {styleKind:"input",style:"text-help-only"};
           getStyle(option,function(insertPage){
             var insertPageObj = $.parseHTML(insertPage);
-
-            $(insertPageObj).find(".row").removeClass("row").addClass("contents");
+            
+            $(insertPageObj).removeClass("row").addClass("contents");
             $(insertPageObj).find(".control-label").text("職務名稱");
             $(insertPageObj).find("input:text").val(name);
             
@@ -164,30 +175,34 @@ function insertDialog(uid, name, modifyItem){
 
 // 儲存
 function saveData(modifyItem){
-    // console.log(modifyItem);
+    
     var name = $("#insertDialog").find("input:text").val(), 
     uid = $("#insertDialog").find("#uid").val();
     uid = (uid) ? parseInt(uid): 0;
     // console.log(uid);
-    var sendData = {
-        // stData:{
-            uid: uid,
-            name: name
-        // }
-    },
-    method = "Insert_AssTypePosition";
+    var method = "Insert_AssTypePosition";
+    
     // console.log(sendData);
     // return;
     if(uid != 0){
         method = "Update_AssTypePosition";
         modifyItem.html(name);
     }
-
-    $.post(ctrlAdminAPI + method,sendData,function(rs){
+    var sendData = {
+        api: "AssTypePosition/"+method,
+        threeModal: true,
+        data: {
+            uid: uid,
+            name: name,
+            sys_code: sys_code
+        }
+    }
+    $.post(wrsUrl,sendData,function(rs){
+        var rs = $.parseJSON(rs);
         // 新增
         if(uid == 0){
-            sendData.uid = rs.Data;
-            putDataToPage(sendData,true, rs);
+            sendData.data.uid = rs.Data;
+            putDataToPage(sendData.data, true, rs);
         }
     });
 }
@@ -195,29 +210,34 @@ function saveData(modifyItem){
 // 刪除
 function deleteData(uid, removeItem, name){
     var sendData = {
-        apiMethod: ctrlAdminDelAPI + "Delete_AssTypeOffice",
-        deleteObj:{
-            iUid: uid
+        api: "AssTypePosition/Delete_AssTypePosition",
+        threeModal: true,
+        data:{
+            uid: uid
         }
     };
-    // return;
-    $.post(configObject.deleteAPI,sendData,function(rs){
-        rs = $.parseJSON(rs);
-        if(rs.Status){
-            removeItem.remove();
-            if(!$("#grid").find(".dataContent").length){
-                var option = {styleKind:"system",style:"data-empty"};
-                getStyle(option,function(pageStyle){
-                    $("#grid").html(pageStyle);
-                });
+    $.ajax({
+        url:wrsUrl,
+        type:"DELETE",
+        data:sendData,
+        dataType: "JSON",
+        success: function(rs){
+            if(rs.Status){
+                removeItem.remove();
+                if(!$("#grid").find(".dataContent").length){
+                    var option = {styleKind:"system",style:"data-empty"};
+                    getStyle(option,function(pageStyle){
+                        $("#grid").html(pageStyle);
+                    });
+                }else{
+                    $("#grid").find(".dataContent").last().removeClass("list-items-bottom");
+
+                }
+
             }else{
-                $("#grid").find(".list-items-bottom").last().removeClass("list-items-bottom");
-
+                // 無法刪除
+                couldNotDeleteDialog(name);
             }
-
-        }else{
-            // 無法刪除
-            couldNotDeleteDialog(name);
         }
     });
 }

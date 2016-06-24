@@ -1,6 +1,6 @@
 var testData = [];
-// var sys_code = userLoginInfo.SysCode;
-var sys_code = 2;
+var sys_code = userLoginInfo.sysCode;
+var orgTreeChart;
 $(function(){
     getOrgData();
 });

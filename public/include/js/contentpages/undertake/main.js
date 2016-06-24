@@ -468,6 +468,8 @@ function signInfoAndDate(){
                     sendObj.end_date = end_date;
                     if(end_date){
                         sendObj.actionType = 1;
+                    console.log(end_date);
+                        
                         signWFSelect();
                         // $("#signInfoAndDateDialog").bsDialog("close");
 
