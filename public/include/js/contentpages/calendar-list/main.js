@@ -285,7 +285,7 @@ function putDataToPage(data, putArea, onlyData){
                 $(pageStyleObj).find(".fa-trash-o").click(function(){
                     // deleteData(content.uid, $(this).parents(".list-items").parent(), content.name);
                 });
-                if(content.Progress == 100){
+                if(content.CompletionDate){
                     $(pageStyleObj).find(".fa-pencil-square-o").remove();
                     $(pageStyleObj).find(".fa-check").remove();
                 }
