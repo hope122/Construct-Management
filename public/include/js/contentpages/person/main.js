@@ -67,7 +67,6 @@ function getAddrInfo(uid){
     }
     // $.getJSON(ctrlPersonAPI + "GetData_AssCommonAddress", {iCmid: uid, iAddr_type: -1} ).done(function(rs){
     $.getJSON(wrsUrl, sendData ).done(function(rs){
-        console.log(rs);
         $.each(rs.Data,function(index, content){
             $.each(content, function(cIndex, value){
                 if(content.addr_type == 0){
@@ -93,7 +92,7 @@ function getOrgInfo(uid){
     }
      
     $.getJSON(wrsUrl, sendData ).done(function(rs){
-        // console.log(rs);
+        console.log(rs);
         // 取得部門資料
         var orgid = rs.Data[0].orgid;
         var jobid = rs.Data[0].posid;
@@ -105,34 +104,36 @@ function getOrgInfo(uid){
                 iUid: orgid
             }
         };
-        // putOrgInfo(putArea,jobPutArea, orgID,listID)
-        
-        $.getJSON(wrsUrl, sendData ).done(function(rs){
-            if(jobid){
-                var iOfid = rs.Data[0].officeid;
+        if(orgid){
+            $.getJSON(wrsUrl, sendData ).done(function(rs){
+                console.log(jobid);
+                console.log(rs);
+                if(jobid){
+                    var iOfid = rs.Data[0].officeid;
 
-                // 取得職務資料
-                var sendData = {
-                    api: "AssPosition/GetData_AssPosition",
-                    threeModal:true,
-                    data:{
-                        sys_code: sys_code,
-                        iOfid: iOfid,
-                        iUid: jobid
+                    // 取得職務資料
+                    var sendData = {
+                        api: "AssPosition/GetData_AssPosition",
+                        threeModal:true,
+                        data:{
+                            sys_code: sys_code,
+                            iOfid: iOfid,
+                            iUid: jobid
+                        }
                     }
+                    $.getJSON(wrsUrl, sendData ).done(function(jobRs){
+                        if(jobRs.Status){
+                            putOrgInfo( $("#insertDialog").find("#orgInfo"), $("#insertDialog").find("#orgJobInfo"), rs.Data[0], jobRs.Data[0]);
+                        }else{
+                            putOrgInfo( $("#insertDialog").find("#orgInfo"), $("#insertDialog").find("#orgJobInfo"), rs.Data[0], null);
+                        }
+                    });
+                }else{
+                    putOrgInfo( $("#insertDialog").find("#orgInfo"), $("#insertDialog").find("#orgJobInfo"), rs.Data[0], null);
+
                 }
-            
-                $.getJSON(wrsUrl, sendData ).done(function(jobRs){
-                    putOrgInfo( $("#insertDialog").find("#orgInfo"), $("#insertDialog").find("#orgJobInfo"), rs.Data[0], jobRs.Data[0]);
-
-                });
-            }else{
-                putOrgInfo( $("#insertDialog").find("#orgInfo"), $("#insertDialog").find("#orgJobInfo"), rs.Data[0], null);
-
-            }
-        });
-        
-
+            });
+        }
     });
 }
 
@@ -293,7 +294,7 @@ function insertDialog(modifyObj, modifyItem){
 
                     saveData(sendObj, modifyItem);
                     // console.log(sendObj);
-                    // $("#insertDialog").bsDialog("close");
+                    $("#insertDialog").bsDialog("close");
                 }
             },
             {
