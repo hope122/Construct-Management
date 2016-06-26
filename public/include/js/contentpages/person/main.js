@@ -92,7 +92,6 @@ function getOrgInfo(uid){
     }
      
     $.getJSON(wrsUrl, sendData ).done(function(rs){
-        console.log(rs);
         // 取得部門資料
         var orgid = rs.Data[0].orgid;
         var jobid = rs.Data[0].posid;
@@ -106,8 +105,6 @@ function getOrgInfo(uid){
         };
         if(orgid){
             $.getJSON(wrsUrl, sendData ).done(function(rs){
-                console.log(jobid);
-                console.log(rs);
                 if(jobid){
                     var iOfid = rs.Data[0].officeid;
 
@@ -289,7 +286,7 @@ function insertDialog(modifyObj, modifyItem){
                         sendObj.census.cmid = modifyObj.uid;
                         sendObj.org.cmid = modifyObj.uid;
                     }
-                    console.log(sendObj);
+                    
                     // return;
 
                     saveData(sendObj, modifyItem);
@@ -818,7 +815,6 @@ function putOrgInfo(putArea,jobPutArea, orgObj, jobObj){
 
 function putJobInfo(jobPutArea, jobObj){
     var jobID = jobObj.uid;
-    console.log(jobObj);
     // 職務設置
     var jobContent = $("<div>").addClass("col-xs-12 col-md-12 jobItem");
     var text = $("<div>").addClass("col-xs-12 col-md-9");
