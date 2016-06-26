@@ -256,6 +256,12 @@ function putDataToPage(data, putArea, onlyData){
                     desiStr = "被指";
                 }else if(content.Designee.Uid == userID && content.Designee != null){
                     desiStr = "指派";
+                    $(pageStyleObj).find(".fa-check").remove();
+                }
+                var progressStr = content.Progress + "%";
+                if(content.Type.Uid == 1){
+                    $(pageStyleObj).find(".item-actionBtn").empty().text("-");
+                    progressStr = "-";
                 }
 
                 // 事項標題
@@ -268,7 +274,8 @@ function putDataToPage(data, putArea, onlyData){
                 $(pageStyleObj).find(".list-items").eq(2).text(content.MyKeypoint.EndDate);
                 
                 // 進度
-                $(pageStyleObj).find(".list-items").eq(3).text(content.Progress + "%");
+                $(pageStyleObj).find(".list-items").eq(3).text(progressStr);
+
                 // 修改
                 $(pageStyleObj).find(".fa-pencil-square-o").click(function(){
                     
@@ -282,6 +289,7 @@ function putDataToPage(data, putArea, onlyData){
                     $(pageStyleObj).find(".fa-pencil-square-o").remove();
                     $(pageStyleObj).find(".fa-check").remove();
                 }
+                
                 $(pageStyleObj).appendTo(putArea);
 
             });
