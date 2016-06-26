@@ -6,6 +6,7 @@ var orgTreeChart;
 // ----------測試用---------------
 showNoticeToast("test");
 $(function(){
+    getCalendarData();
     $("#testBs").bsDialog({
         autoShow:false,
         showFooterBtn:true,
@@ -202,6 +203,115 @@ function fileSelect(){
     fileInput.click();
 }
 // ----------測試用結束-----------
+
+function getCalendarData(type,areaID,uid){
+    if(type == undefined){
+        type = 1;
+    }
+
+    if(areaID == undefined){
+        areaID = "total-content";
+    }
+
+    var sendData = {
+        api: calendarAPI+"GetToDoList",
+        data:{
+            userId: userID,
+            type: type
+        }
+    };
+
+    // if(uid != undefined){
+
+    // }
+
+    $.getJSON(wrsUrl, sendData).done(function(rs){
+        console.log(rs);
+        if(rs.Status){
+            putDataToPage(rs.Data,$("#"+areaID));
+        }else{
+            putDataEmptyInfo($("#"+areaID));
+        }
+    });
+}
+
+
+// 放資料
+function putDataToPage(data, putArea, onlyData){
+    if(typeof onlyData == "undefined"){
+        onlyData = false;
+    }
+    // console.log(data);
+    // 畫面設定值
+    var option = {styleKind:"calendar-list",style:"normal"};
+    // 取得畫面樣式
+    getStyle(option,function(pageStyle){
+        if(!onlyData){
+            $.each(data, function(index,content){
+                var pageStyleObj = $.parseHTML(pageStyle);
+                $(pageStyleObj).addClass("dataContent");
+
+                var desiStr = "個人";
+                if(content.Designee.Uid != userID && content.Designee != null){
+                    desiStr = "被指";
+                }else if(content.Designee.Uid == userID && content.Designee != null){
+                    desiStr = "指派";
+                }
+
+                // 事項標題
+                $(pageStyleObj).find(".list-items").eq(0).text(content.Desc);
+
+                // 類型
+                $(pageStyleObj).find(".list-items").eq(1).text(desiStr);
+
+                // 迄日
+                $(pageStyleObj).find(".list-items").eq(2).text(content.MyKeypoint.EndDate);
+                
+                // 進度
+                $(pageStyleObj).find(".list-items").eq(3).text(content.Progress + "%");
+                // 修改
+                $(pageStyleObj).find(".fa-pencil-square-o").click(function(){
+                    
+                });
+
+                // 刪除
+                $(pageStyleObj).find(".fa-trash-o").click(function(){
+                    // deleteData(content.uid, $(this).parents(".list-items").parent(), content.name);
+                });
+                if(content.Progress == 100){
+                    $(pageStyleObj).find(".fa-pencil-square-o").remove();
+                    $(pageStyleObj).find(".fa-check").remove();
+                }
+                $(pageStyleObj).appendTo(putArea);
+
+            });
+        }else{
+            var pageStyleObj = $.parseHTML(pageStyle);
+            $(pageStyleObj).addClass("dataContent");
+            var firstItem = $(pageStyleObj).find(".list-items").eq(0);
+            firstItem.html(data.name);
+
+            // 修改
+            $(pageStyleObj).find(".fa-pencil-square-o").click(function(){
+                insertDialog(data, firstItem);
+                getAddrInfo(data.uid);
+            });
+
+            // 刪除
+            $(pageStyleObj).find(".fa-trash-o").click(function(){
+                deleteData(data.uid, $(this).parents(".list-items").parent(), data.name);
+            });
+
+            if(putArea.find("div").length){
+                putArea.find(".dataContent").eq(-1).addClass("list-items-bottom").after(pageStyleObj);
+            }else{
+                $(pageStyleObj).removeClass("list-items-bottom").appendTo("#grid");
+
+            }
+        }
+        putArea.find(".list-items-bottom").last().removeClass("list-items-bottom");
+    });
+}
 
 
 // 新增&修改Dialog

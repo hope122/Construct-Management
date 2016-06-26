@@ -1,2 +1,1 @@
-var waDrfAPI = "/api/dispatch/";
-var apdAPI = "ApdData/";
+var calendarAPI = "V201606/ToDo/api/ToDo/";
