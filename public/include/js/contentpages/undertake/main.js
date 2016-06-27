@@ -418,7 +418,7 @@ function signInfoAndDate(){
         autoShow:true,
         showFooterBtn:true,
         headerCloseBtn:false,
-        modalClass: "bsDialogWindow",
+        // modalClass: "bsDialogWindow",
         title: "設置簽核結束日期",
         start: function(){
             var option = {
@@ -434,7 +434,7 @@ function signInfoAndDate(){
                     buttonText: '<i class="fa fa-calendar fa-lg mouse-pointer send-btn"></i>',
                     onSelect: function(dateText, inst) {
                         // end_date_content
-                        $(pageStyleObj).find("#end_date_content").text(dateText);
+                        $(pageStyleObj).find("#end_date_content").removeClass("item-bg-danger").text(dateText);
 
                     },
                     minDate: 0
@@ -457,6 +457,9 @@ function signInfoAndDate(){
                         signWFSelect();
                         // $("#signInfoAndDateDialog").bsDialog("close");
 
+                    }else{
+                        $("#signInfoAndDateDialog").find("#end_date_content").text("尚未選擇日期").addClass("item-bg-danger");
+                        
                     }
                 }
             },
@@ -468,11 +471,11 @@ function signInfoAndDate(){
                     sendObj.end_date = end_date;
                     if(end_date){
                         sendObj.actionType = 1;
-                    console.log(end_date);
-                        
                         signWFSelect();
                         // $("#signInfoAndDateDialog").bsDialog("close");
 
+                    }else{
+                        $("#signInfoAndDateDialog").find("#end_date_content").text("尚未選擇日期").addClass("item-bg-danger");
                     }
                 }
             }
@@ -519,7 +522,7 @@ function signWFDialog( data ){
         autoShow:true,
         showFooterBtn:true,
         headerCloseBtn:false,
-        modalClass: "bsDialogWindow",
+        // modalClass: "bsDialogWindow",
         title: title,
         data: data,
         textTag: "name",
@@ -544,9 +547,11 @@ function signWFDialog( data ){
                         sendObj.wfID = wfID;
                         sendObj.userID = userID;
                         sendObj["sys_code"] = sys_code;
-                        console.log(sendObj);
+                        // console.log(sendObj);
                         saveSignData(sendObj);
                         // $("#signWFDialog").bsDialog("close");
+                    }else{
+                        
                     }
                 }
             }

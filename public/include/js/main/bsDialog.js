@@ -92,6 +92,7 @@
                 .html("&times;")
                 .click(function(){
                     $selector.off("showBSDialog");
+                    $selector.bsDialog("close");
                 })
                 .appendTo(bsModalHeader);
             }
