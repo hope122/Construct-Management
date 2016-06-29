@@ -225,7 +225,7 @@ function putDataToPage(data, putArea, onlyData){
 
                 // 刪除
                 $(pageStyleObj).find(".fa-trash-o").click(function(){
-                    deleteData(content.uid, $(this).parents(".list-items").parent());
+                    deleteData(content.Uid, $(this).parents(".list-items").parent());
                 });
                 if(content.CompletionDate){
                     $(pageStyleObj).find(".fa-pencil-square-o").remove();
@@ -238,24 +238,68 @@ function putDataToPage(data, putArea, onlyData){
         }else{
             var pageStyleObj = $.parseHTML(pageStyle);
             $(pageStyleObj).addClass("dataContent");
-            var firstItem = $(pageStyleObj).find(".list-items").eq(0);
-            firstItem.html(data.name);
+
+            var desiStr = "個人";
+            // 指派人
+            var DesigneeID = data.Designee.Uid;
+            // 承辦人
+            var PricipalID = data.Pricipal.Uid;
+
+            if(DesigneeID != PricipalID ){
+                if(DesigneeID == userID && PricipalID != userID){
+                    desiStr = "指派";
+                    $(pageStyleObj).find("#PricipalItem")
+                    .removeClass("fa-square-o")
+                    .addClass("fa-check-square-o");
+                }else{
+                    desiStr = "被指";
+                    $(pageStyleObj).find(".fa-trash-o").remove();
+                }
+            }
+
+            var progressStr = "0%";
+
+            if(data.CompletionDate){
+                $(pageStyleObj).find(".fa-trash-o").remove();
+            }
+            // 事項標題
+            $(pageStyleObj).find(".list-items").eq(0).text(data.Desc);
+
+            // 類型
+            $(pageStyleObj).find(".list-items").eq(1).text(desiStr);
+
+            // 迄日
+            $(pageStyleObj).find(".list-items").eq(2).text(data.EndDate);
+            
+            // 進度
+            $(pageStyleObj).find(".list-items").eq(3).text(progressStr);
 
             // 修改
             $(pageStyleObj).find(".fa-pencil-square-o").click(function(){
-                insertDialog(data, firstItem);
-                getAddrInfo(data.uid);
+                insertDialog( data, $(pageStyleObj) );
+            });
+
+            // 完成
+            $(pageStyleObj).find(".fa-check").click(function(){
+                finishList(data.Uid);
+                $(this).remove();
+                $(pageStyleObj).find(".fa-pencil-square-o").remove();
+                $(pageStyleObj).find(".fa-trash-o").remove();
             });
 
             // 刪除
             $(pageStyleObj).find(".fa-trash-o").click(function(){
-                deleteData(data.uid, $(this).parents(".list-items").parent(), data.name);
+                deleteData(data.Uid, $(this).parents(".list-items").parent());
             });
-
+            if(data.CompletionDate){
+                $(pageStyleObj).find(".fa-pencil-square-o").remove();
+                $(pageStyleObj).find(".fa-check").remove();
+            }
+            
             if(putArea.find("div").length){
                 putArea.find(".dataContent").eq(-1).addClass("list-items-bottom").after(pageStyleObj);
             }else{
-                $(pageStyleObj).removeClass("list-items-bottom").appendTo("#grid");
+                $(pageStyleObj).removeClass("list-items-bottom").appendTo(putArea);
 
             }
         }
@@ -387,9 +431,14 @@ function insertDialog(modifyObj, modifyItem){
                     $(insertPageObj).find("#StartDate_content").text(modifyObj.StartDate);
 
                     // 迄日
-                    $(insertPageObj).find("#EndDate").val(modifyObj.MyKeypoint.EndDate);
-                    $(insertPageObj).find("#EndDate_content").text(modifyObj.MyKeypoint.EndDate);
-
+                    var EndDate;
+                    if(modifyObj.MyKeypoint != undefined){
+                        EndDate = modifyObj.MyKeypoint.EndDate;
+                    }else{
+                        EndDate = modifyObj.EndDate;
+                    }
+                    $(insertPageObj).find("#EndDate").val(EndDate);
+                    $(insertPageObj).find("#EndDate_content").text(EndDate);
                     // 取得細項內容
                     var sendData = {
                         api: calendarAPI+"GetToDoList",
@@ -427,37 +476,75 @@ function insertDialog(modifyObj, modifyItem){
                 className: "btn-success",
                 click: function(){
                     var sendObj = getUserInput("insertDialog");
-                    console.log(sendObj);
-                    sendObj.MyKeypoint.EndDate = sendObj.EndDate;
+
+                    var isEmptyInput = false;
+                    $.each(sendObj, function(i, content){
+                        if(i != "Pricipal" && i != "Designee" && i != "Location"){
+                            if(!content){
+                                if(i != "StartDate" && i != "EndDate"){
+                                    $("#insertDialog").find("#"+i).addClass("item-bg-danger");
+                                }else{
+                                    $("#insertDialog").find("#"+i+"_content").addClass("item-bg-danger").text("尚未選擇日期");
+                                }
+                                isEmptyInput = true;
+                                console.log(i, content);
+                            }
+                        }
+                    });
+
+                    if(modifyObj != undefined){
+                        sendObj.Uid = modifyObj.Uid;
+                        sendObj.startDate = sendObj.StartDate;
+                        sendObj.endDate = sendObj.EndDate;
+                        sendObj.Trace = true;
+                    }else{
+                        sendObj.Fid = 0;
+                        sendObj.Creater = {
+                            Uid:userID
+                        };
+                        sendObj.Type = {
+                            Uid: 2
+                        };
+                    }
 
                     var PricipalItem = $("#insertDialog").find("#PricipalItem").prop("class").search("fa-check-square-o");                        
                     var DesigneeItem = $("#insertDialog").find("#DesigneeItem").prop("class").search("fa-check-square-o");
-                    
+                    // console.log(PricipalItem, DesigneeItem);
                     if(PricipalItem == -1 && DesigneeItem == -1){
+                        
+                        sendObj.Pricipal = {
+                            Uid: userID
+                        };
+
+                        sendObj.Designee = {
+                            Uid: userID
+                        };
                         
                     }else{
                         if(DesigneeItem != -1){
-
+                            sendObj.Designee = {
+                                Uid: sendObj.Designee
+                            }
                         }
                         if(PricipalItem != -1){
-
+                            sendObj.Pricipal = {
+                                Uid: sendObj.Pricipal
+                            }
                         }
                     }
-                    return;
+
+                    
+
+                   
+                    // console.log(sendObj);
+                    // return;
                     if(modifyObj == undefined){
                         $("#total-content").find(".date-empty").remove();
                     }
-                    
-
-                    if(modifyObj != undefined){
-                       
+                    if(!isEmptyInput){
+                        saveData(sendObj, modifyItem);
                     }
                     // console.log(sendObj);
-                    // return;
-
-                    saveData(sendObj, modifyItem);
-                    // console.log(sendObj);
-                    // $("#insertDialog").bsDialog("close");
                 }
             },
             {
@@ -575,7 +662,7 @@ function finishList(uid){
         api: calendarAPI+"CompleteToDoList",
         data:data
     };
-    console.log(sendData);
+    // console.log(sendData);
     $.ajax({
         url: wrsUrl,
         type: "PUT",
@@ -589,106 +676,65 @@ function finishList(uid){
 
 // 儲存
 function saveData(sendObj,modifyItem){
-    console.log(sendObj);
-    return;
-    method = "ToDo_InsertToDoList";
-    if(sendObj.userInfo.uid != undefined){
-        method = "ToDo_UpdateToDoList";
-        modifyItem.html(name);
+    
+    var method;
+    var type;
+    var data;
+    var contentType = "";
+    var changeJson = false;
+    if(sendObj.Uid != undefined){
+        method = "UpdateToDoList";
+        type = "PUT";
+        data = sendObj;
+    }else{
+        method = "InsertToDoList";
+        type = "POST";
+        data = [];
+        data.push(sendObj);
+        $("#insertDialog").find(".detail-item").each(function(){
+            var detailItemVal = $(this).find("input:text").val();
+            if(detailItemVal){
+                var tmpObj = $.extend({}, sendObj);
+                tmpObj.Desc = detailItemVal;
+                tmpObj.Fid = -1;
+                data.push(tmpObj);
+            }
+        });
+        contentType = "application/json";
+        changeJson = true;
     }
     var sendData ={
-        api: threeModelPersonAPI+method,
-        threeModal: true,
-        data: sendObj.userInfo
+        api: calendarAPI+method,
+        data: data,
+        contentType: contentType,
+        changeJson: changeJson
     };
-    // 先新增自然人資料
-    // $.post(ctrlPersonAPI + method, sendObj.userInfo, function(rs){
-    $.post(wrsUrl, sendData, function(rs){
-        var rs = $.parseJSON(rs);
+                    
+    console.log(sendData);
+    console.log(JSON.stringify(sendData));
 
-        // console.log(rs);
-        // 新增
-        if(rs.Status){
-
-            if(sendObj.userInfo.uid == undefined){
-                sendObj.userInfo.uid = rs.Data;
-                sendObj.census.cmid = rs.Data;
-                sendObj.communication.cmid = rs.Data;
-                sendObj.org.cmid = rs.Data;
-
-                // putDataToPage(sendObj, true);
-                // 地址修改ＡＰＩ
-                addrMethod = "Insert_AssCommonAddress";
-                acMethod = "Insert_AssUser";
-            }else{
-                addrMethod = "Update_AssCommonAddress";
-                acMethod = "Update_AssUser";
-                $(modifyItem).html(sendObj.userInfo.name);
-            }
-
-            // 之後放入地址資料
-            var sendData = {
-                api: "AssCommonAddress/"+addrMethod,
-                threeModal: true,
-                data: sendObj.census
-            }
-            // $.post(ctrlPersonAPI + addrMethod, sendObj.census, function(addressRs){
-            $.post(wrsUrl, sendData, function(addressRs){
-                var addressRs = $.parseJSON(addressRs);
-
-                if(addressRs.Status){
-                    if(addrMethod == "Insert_AssCommonAddress"){
-                        sendObj.census.uid = addressRs.Data;
-                    }
-                    var sendData = {
-                        api: "AssCommonAddress/"+addrMethod,
-                        threeModal: true,
-                        data: sendObj.communication
-                    };
-                    // $.post(ctrlPersonAPI + addrMethod, sendObj.communication, function(oRs){
-                    $.post(wrsUrl, sendData, function(oRs){
-                        var oRs = $.parseJSON(oRs);
-
-                        if(oRs.Status){
-
-                            if(addrMethod == "Insert_AssCommonAddress"){
-                                sendObj.communication.uid = oRs.Data;
-                            }
-                            
-                            
-                        }
-                        // 測試
-                        // acMethod = "Insert_AssUser";
-                        var posid = (sendObj.org.job.length)?sendObj.org.job[0]:"0";
-                        var sendData = {
-                            api: "AssUser/"+acMethod,
-                            threeModal: true,
-                            data: {
-                                cmid: sendObj.org.cmid,
-                                orgid: sendObj.org.org[0],
-                                posid: posid,
-                                uuid: userLoginUuid,
-                                sid: sendObj.userInfo.sid,
-                                sys_code: sys_code,
-                                userID: sendObj.userInfo.userID
-                            }
-                        };
-                        // 放入帳號設置的部分
-                        $.post(wrsUrl, sendData, function(rs){
-                            var rs = $.parseJSON(rs);
-                            if(rs.Status){
-                                sendObj.userInfo.userID = rs.Data;
-                                // putDataToPage(sendObj.userInfo, true);
-                            }
-                        });
-                    });
+    // return;
+    $.ajax({
+        url: wrsUrl,
+        data: sendData,
+        type: type,
+        dataType: "JSON",
+        success: function(rs){
+            console.log(rs);
+            if(rs.Status){
+                if(sendObj.Uid != undefined){
+                    // 事項標題
+                    $(modifyItem).find(".list-items").eq(0).text(sendObj.Desc);
+                    // 迄日
+                    $(modifyItem).find(".list-items").eq(2).text(sendObj.EndDate);
+                }else{
+                    sendObj.Uid = rs.Data[0];
+                    putDataToPage(sendObj, $("#total-content"), true);
                 }
-
-            });
-            
-            
-        }else{
-            alert("新增失敗");
+                $("#insertDialog").bsDialog("close");
+            }else{
+                errorDialog(rs.Data);
+            }
         }
     });
 }
@@ -698,15 +744,23 @@ function deleteData(uid, removeArea){
     data.push(uid);
     var sendData = {
         api: calendarAPI+"DeleteToDoList",
-        data:data
+        data:data,
+        contentType: "application/json",
+        changeJson: true
     };
     $.ajax({
         url: wrsUrl,
         type: "DELETE",
         data: sendData,
-        dataType: "JOSN",
         success: function(rs){
-            removeArea.removeClass();
+            var rs = $.parseJSON(rs);
+            if(!rs.Status){
+                errorDialog(rs.Data);
+            }else{
+                $(removeArea).remove();
+                $("#total-content").find("dataContent").last().removeClass("list-items-bottom");
+            }
+            
         }
     });
 }
@@ -726,7 +780,8 @@ function saveHistories(listID,Desc, area){
     var sendData = {
         api: calendarAPI+"InsertHistories",
         data:data,
-        contentType: "application/json"
+        contentType: "application/json",
+        changeJson: true
     };
     $.post(wrsUrl, sendData).done(function(rs){
         // console.log(rs);
