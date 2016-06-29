@@ -303,7 +303,7 @@ function putDataToPage(data, putArea, onlyData){
 
             }
         }
-        putArea.find(".list-items-bottom").last().removeClass("list-items-bottom");
+        putArea.find(".dataContent").last().removeClass("list-items-bottom");
     });
 }
 
@@ -709,10 +709,6 @@ function saveData(sendObj,modifyItem){
         contentType: contentType,
         changeJson: changeJson
     };
-                    
-    console.log(sendData);
-    console.log(JSON.stringify(sendData));
-
     // return;
     $.ajax({
         url: wrsUrl,
@@ -758,7 +754,7 @@ function deleteData(uid, removeArea){
                 errorDialog(rs.Data);
             }else{
                 $(removeArea).remove();
-                $("#total-content").find("dataContent").last().removeClass("list-items-bottom");
+                $("#total-content").find(".dataContent").last().removeClass("list-items-bottom");
             }
             
         }
