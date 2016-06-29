@@ -7,93 +7,15 @@ var orgTreeChart;
 // showNoticeToast("test");
 $(function(){
     getCalendarData();
-    $("#testBs").bsDialog({
-        autoShow:false,
-        showFooterBtn:true,
-        title: "新增待辦事項",
-        // modalClass: "bsDialogWindow",
-        button:[{
-            text: "取消",
-            click: function(){
+    $("#systems").click(function(){
+        getCalendarData(7,"systems-content");
 
-            }
-        },
-        {
-            text: "第二種",
-            className:"btn-success",
-            click: function(){
-                
-                testBs2Show();
-                // $(formObj).ajaxSubmit(options);
-            }
-        },
-        {
-            text: "新增",
-            className:"btn-success",
-            click: function(){
-                
-                // testBs2Show();
-                // $(formObj).ajaxSubmit(options);
-            }
-        }
-        ]
     });
-    $("#testBs2").bsDialog({
-        autoShow:false,
-        showFooterBtn:true,
-        title: "新增待辦事項-第二種",
-        // modalClass: "bsDialogWindow",
-        button:[{
-            text: "取消",
-            click: function(){
+    $("#total").click(function(){
+        getCalendarData(1,"total-content");
 
-            }
-        },
-        {
-            text: "第一種",
-            className:"btn-success",
-            click: function(){
-                
-                // testBsShow();
-                $("#testBs2").bsDialog("close");
-                // $(formObj).ajaxSubmit(options);
-            }
-        },
-        {
-            text: "確認",
-            className:"btn-success",
-            click: function(){
-                
-                // $(formObj).ajaxSubmit(options);
-            }
-        }
-        ]
     });
     tabCtrl("totalTab");
-    $("#testBs8").bsDialog({
-        autoShow:false,
-        showFooterBtn:true,
-        // modalClass: "bsDialogWindow",
-        title: "請選擇會簽部門",
-        button:[{
-            text: "取消",
-            // className: "btn-success",
-            click: function(){
-                // xhr.abort();
-                // $(formObj).ajaxFormUnbind();
-                $("#testBs8").bsDialog("close");
-            }
-        },{
-            text: "確定",
-            className: "btn-success",
-            click: function(){
-                // xhr.abort();
-                // $(formObj).ajaxFormUnbind();
-                $("#testBs8").bsDialog("close");
-            }
-        }
-        ]
-    });
     $("#testBs5").bsDialog({
         autoShow:false,
         showFooterBtn:true,
@@ -221,18 +143,14 @@ function getCalendarData(type,areaID,uid){
         }
     };
 
-    // loader($("#"+areaID));
-
-    // if(uid != undefined){
-
-    // }
-
     $.getJSON(wrsUrl, sendData).done(function(rs){
-        console.log(rs);
+        // console.log(rs);
+        $("#"+areaID).find(".dataContent").remove();
+        $("#"+areaID).find(".date-empty").remove();
         if(rs.Status){
             putDataToPage(rs.Data, $("#"+areaID));
         }else{
-            putDataEmptyInfo($("#"+areaID));
+            putEmptyInfo($("#"+areaID));
         }
     });
 }
@@ -262,8 +180,12 @@ function putDataToPage(data, putArea, onlyData){
                 if(DesigneeID != PricipalID ){
                     if(DesigneeID == userID && PricipalID != userID){
                         desiStr = "指派";
+                        $(pageStyleObj).find("#PricipalItem")
+                        .removeClass("fa-square-o")
+                        .addClass("fa-check-square-o");
                     }else{
                         desiStr = "被指";
+                        $(pageStyleObj).find(".fa-trash-o").remove();
                     }
                 }
 
@@ -273,6 +195,9 @@ function putDataToPage(data, putArea, onlyData){
                     progressStr = "-";
                 }
 
+                if(content.CompletionDate){
+                    $(pageStyleObj).find(".fa-trash-o").remove();
+                }
                 // 事項標題
                 $(pageStyleObj).find(".list-items").eq(0).text(content.Desc);
 
@@ -290,9 +215,17 @@ function putDataToPage(data, putArea, onlyData){
                     insertDialog( content, $(pageStyleObj) );
                 });
 
+                // 完成
+                $(pageStyleObj).find(".fa-check").click(function(){
+                    finishList(content.Uid);
+                    $(this).remove();
+                    $(pageStyleObj).find(".fa-pencil-square-o").remove();
+                    $(pageStyleObj).find(".fa-trash-o").remove();
+                });
+
                 // 刪除
                 $(pageStyleObj).find(".fa-trash-o").click(function(){
-                    // deleteData(content.uid, $(this).parents(".list-items").parent(), content.name);
+                    deleteData(content.uid, $(this).parents(".list-items").parent());
                 });
                 if(content.CompletionDate){
                     $(pageStyleObj).find(".fa-pencil-square-o").remove();
@@ -391,6 +324,55 @@ function insertDialog(modifyObj, modifyItem){
                 $(insertPageObj).find("#StartDate").datepicker(dateOptionStart);
                 $(insertPageObj).find("#EndDate").datepicker(dateOptionEnd);
 
+                // 指派
+                var putAreaArr = [];
+                var PricipalArea = $(insertPageObj).find("#Pricipal");
+                putAreaArr.push(PricipalArea);
+
+                // 回報
+                var DesigneeArea = $(insertPageObj).find("#Designee");
+                putAreaArr.push(DesigneeArea);
+
+                getUserList(putAreaArr);
+
+                $(insertPageObj).find("#PricipalItem").click(function(){
+                    var DesigneeItemCheck = $(insertPageObj).find("#DesigneeItem").prop("class").search("fa-check-square-o");
+                    $(insertPageObj).find("#Designee").hide();
+                    
+                    if(DesigneeItemCheck != -1){
+                        $(insertPageObj).find("#DesigneeItem").removeClass("fa-check-square-o").addClass("fa-square-o");
+                    }
+                    var thisItemCheck = $(this).prop("class").search("fa-check-square-o");
+
+                    if(thisItemCheck != -1){
+                        $(this).removeClass("fa-check-square-o").addClass("fa-square-o");
+                        $(insertPageObj).find("#Pricipal").hide();
+                    }else{
+                        $(this).removeClass("fa-square-o").addClass("fa-check-square-o");
+                        $(insertPageObj).find("#Pricipal").show();
+                    }
+                });
+
+                $(insertPageObj).find("#DesigneeItem").click(function(){
+                    var DesigneeItemCheck = $(insertPageObj).find("#PricipalItem").prop("class").search("fa-check-square-o");
+                    $(insertPageObj).find("#Pricipal").hide();
+                    
+                    if(DesigneeItemCheck != -1){
+                        $(insertPageObj).find("#PricipalItem").removeClass("fa-check-square-o").addClass("fa-square-o");                        
+                    }
+                    var thisItemCheck = $(this).prop("class").search("fa-check-square-o");
+
+                    if(thisItemCheck != -1){
+                        $(this).removeClass("fa-check-square-o").addClass("fa-square-o");
+                        $(insertPageObj).find("#Designee").hide();
+
+                    }else{
+                        $(this).removeClass("fa-square-o").addClass("fa-check-square-o");
+                        $(insertPageObj).find("#Designee").show();
+
+                    }
+                });
+
                 // 修改
                 if(modifyObj != undefined){
                     isModify = true;
@@ -420,16 +402,19 @@ function insertDialog(modifyObj, modifyItem){
                     $.getJSON(wrsUrl,sendData, function(rs){
                         if(rs.Status){
                             $.each(rs.Data,function(detailIndex, detailContent){
-                                createDetail(detailPage, detailContent.Desc, detailPutArea, isModify);
+                                createDetail(detailPage, detailContent, detailPutArea, isModify, true,true);
                             });
                         }
                     });
                 }
-
-                $(insertPageObj).find("#addDetail").click(function(){
-                    createDetail(detailPage, "", detailPutArea, isModify);
-                });
-
+                // 如果是編輯，無法新增細項
+                if(!isModify){
+                    $(insertPageObj).find("#addDetail").click(function(){
+                        createDetail(detailPage, "", detailPutArea, isModify, false, true);
+                    });
+                }else{
+                    $(insertPageObj).find("#addDetail").remove();
+                }
 
 
                 $(insertPageObj).appendTo($("#insertDialog").find(".modal-body"));
@@ -441,37 +426,31 @@ function insertDialog(modifyObj, modifyItem){
                 text: saveBtn,
                 className: "btn-success",
                 click: function(){
-                    // 基本資訊
-                    var userInfo = getUserInput("userInfo-content");
-                    // 通訊地址
-                    var census = getUserInput("census-content");
-                    census.addr_type = 0;
-                    // 通訊地址
-                    var communication = getUserInput("communication-content");
-                    communication.addr_type = 1;
+                    var sendObj = getUserInput("insertDialog");
+                    console.log(sendObj);
+                    sendObj.MyKeypoint.EndDate = sendObj.EndDate;
 
-                    // 取得部門&職務資訊
-                    var accountInfo = getOrgVal();
+                    var PricipalItem = $("#insertDialog").find("#PricipalItem").prop("class").search("fa-check-square-o");                        
+                    var DesigneeItem = $("#insertDialog").find("#DesigneeItem").prop("class").search("fa-check-square-o");
+                    
+                    if(PricipalItem == -1 && DesigneeItem == -1){
+                        
+                    }else{
+                        if(DesigneeItem != -1){
 
+                        }
+                        if(PricipalItem != -1){
 
+                        }
+                    }
+                    return;
                     if(modifyObj == undefined){
-                        $("#grid").find(".date-empty").remove();
+                        $("#total-content").find(".date-empty").remove();
                     }
-                    userInfo.sys_code = sys_code;
-                    var sendObj = {
-                        userInfo: userInfo,
-                        census:census,
-                        communication:communication,
-                        org: accountInfo,
-                        // sys_code: sys_code
-                    }
+                    
 
                     if(modifyObj != undefined){
-                        sendObj.userInfo.uid = modifyObj.uid;
-                        sendObj.userInfo.userID = modifyObj.userID;
-                        sendObj.communication.cmid = modifyObj.uid;
-                        sendObj.census.cmid = modifyObj.uid;
-                        sendObj.org.cmid = modifyObj.uid;
+                       
                     }
                     // console.log(sendObj);
                     // return;
@@ -494,32 +473,127 @@ function insertDialog(modifyObj, modifyItem){
 }
 
 // 創建細項或歷程
-function createDetail(detailStyle, value, putArea, isModify){
+function createDetail(detailStyle, content, putArea, isModify, isHistories, isDetail){
+    if(isHistories == undefined){
+        isHistories = false;
+    }
+    if(isDetail == undefined){
+        isDetail = false;
+    }
     var detailObj = $.parseHTML(detailStyle);
-
-    // 放內容
-    $(detailObj).find("input:text").val(value);
+    var historiesPutArea = $(detailObj).find(".histories");
+    
     // 刪除鈕
     $(detailObj).find(".fa-trash-o").click(function(){
-        $(this).parents(".detail-item").remove();
+        var removeArea = $(this).parents(".detail-item").eq(0);
+        removeArea.remove();
     });
-    if(isModify){
+    if(isDetail){
         // 加號，可新增歷程
         $(detailObj).find(".fa-plus").click(function(){
-
+            createDetail(detailStyle, content.Uid, historiesPutArea, isModify, true, false);
+            // console.log("T");
         });
+    }
+    // 目前沒有在編輯時新增細項的功能，所以應急先摘除
+    if(isModify){
+
+        if(isHistories){
+            if(typeof content == "object"){
+                $(detailObj).find("input:text").parent().html(content.Desc);
+                $(detailObj).find(".fa-trash-o").remove();
+
+                if(content.CompletionDate){
+                    $(detailObj).find(".fa-check").remove();
+                }
+                $.each(content.Histories,function(i,historiesContents){
+                    createDetail(detailStyle, historiesContents, historiesPutArea, isModify, false, false);
+                });
+
+            }else{
+                $(detailObj).find(".fa-plus").remove();
+                $(detailObj).find(".fa-check").removeClass("fa-check").addClass("fa-floppy-o").click(function(){
+                    // console.log(content,$(detailObj).find("input:text").val());
+                    var Desc = $(detailObj).find("input:text").val();
+                    var listID = content;
+                    saveHistories(listID, Desc, $(detailObj));
+
+                });
+            }
+        }else{
+            if(!isDetail){
+                // 辦況
+                $(detailObj).find("input:text").parent().html(content.Desc);
+                $(detailObj).find(".fa-plus").remove();
+                $(detailObj).find(".fa-check").remove();
+                $(detailObj).find(".histories").remove();
+                $(detailObj).find(".fa-trash-o").remove();
+            }
+        }
+        
+    }else{
+        // 放內容
+        $(detailObj).find("input:text").val(content.Desc);
+        $(detailObj).find(".fa-check").remove();
+        $(detailObj).find(".fa-plus").remove();
+
+
     }
     $(detailObj).appendTo(putArea);
 }
 
+// 取得回報和指派使用者列表
+function getUserList(putAreaArr){
+    var sendData = {
+        api: "AssCommon/GetData_AssCommon",
+        threeModal: true,
+        data:{
+            sys_code: sys_code
+        }
+    };
+    $.getJSON(wrsUrl, sendData,function(rs){
+        if(rs.Status){
+            $.each(putAreaArr,function(i,putArea){
+                $.each(rs.Data, function(dI, content){
+                    selectOptionPut(putArea,content.userID,content.name);
+                });
+            });
+        }else{
+            $.each(putAreaArr,function(i,putArea){
+                selectOptionPut(putArea,"","未有資料");
+            });
+        }
+    });
+    
+}
+
+// 完成事項
+function finishList(uid){
+    var data = [];
+    data.push(uid);
+    var sendData = {
+        api: calendarAPI+"CompleteToDoList",
+        data:data
+    };
+    console.log(sendData);
+    $.ajax({
+        url: wrsUrl,
+        type: "PUT",
+        data: sendData,
+        dataType: "JOSN",
+        success: function(rs){
+            console.log(rs);
+        }
+    });
+}
+
 // 儲存
 function saveData(sendObj,modifyItem){
-
-    method = "Insert_AssCommon";
-    // console.log(sendData);
-    // return;
+    console.log(sendObj);
+    return;
+    method = "ToDo_InsertToDoList";
     if(sendObj.userInfo.uid != undefined){
-        method = "Update_AssCommon";
+        method = "ToDo_UpdateToDoList";
         modifyItem.html(name);
     }
     var sendData ={
@@ -619,173 +693,52 @@ function saveData(sendObj,modifyItem){
     });
 }
 
-function putDataEmptyInfo(putArea){
-    // 畫面設定值
-    var option = {styleKind:"system",style:"data-empty"};
-    // 取得畫面樣式
-    getStyle(option,function(pageStyle){
-        // 相關設定
-        putArea.append(pageStyle);
-
-        putArea.find(".list-items-bottom").last().removeClass("list-items-bottom");
-    });
-}
-
-var sendObj = {};
-// 準備簽核前的視窗，顯示與設定最後結束日期
-function signInfoAndDate(){
-    $("#signInfoAndDateDialog").remove();
-    $("<div>").prop("id","signInfoAndDateDialog").appendTo("body");
-
-    $("#signInfoAndDateDialog").bsDialog({
-        autoShow:true,
-        showFooterBtn:true,
-        headerCloseBtn:false,
-        modalClass: "bsDialogWindow",
-        title: "設置簽核結束日期",
-        start: function(){
-            var option = {
-                styleKind: "received-issued",style:"undertake-dateandtype"
-            }
-            getStyle(option,function(pageStyle){
-                var pageStyleObj = $.parseHTML(pageStyle);
-
-                var dateOption = {
-                    dateFormat: "yy-mm-dd",
-                    
-                    showOn: "button",
-                    buttonText: '<i class="fa fa-calendar fa-lg mouse-pointer send-btn"></i>',
-                    onSelect: function(dateText, inst) {
-                        // end_date_content
-                        $(pageStyleObj).find("#end_date_content").text(dateText);
-
-                    },
-                    minDate: 0
-                }
-
-                $(pageStyleObj).find("#end_date").datepicker(dateOption);
-                
-                $(pageStyleObj).appendTo($("#signInfoAndDateDialog").find(".modal-body"));
-            });
-        },
-        button:[
-            {
-                text: "匯簽",
-                className: "btn-info",
-                click: function(){
-                    var end_date = $("#signInfoAndDateDialog").find("#end_date").val();
-                    sendObj.end_date = end_date;
-                    if(end_date){
-                        sendObj.actionType = 0;
-                        signWFSelect();
-                        // $("#signInfoAndDateDialog").bsDialog("close");
-
-                    }
-                }
-            },
-            {
-                text: "簽核",
-                className: "btn-success",
-                click: function(){
-                    var end_date = $("#signInfoAndDateDialog").find("#end_date").val();
-                    sendObj.end_date = end_date;
-                    if(end_date){
-                        sendObj.actionType = 1;
-                    console.log(end_date);
-                        
-                        signWFSelect();
-                        // $("#signInfoAndDateDialog").bsDialog("close");
-
-                    }
-                }
-            }
-        ]
-    });
-}
-
-// 簽核WF設定
-function signWFSelect(){
-    // actionType是該文件簽核類型（0:匯簽,1:簽核）
+function deleteData(uid, removeArea){
     var data = [];
+    data.push(uid);
     var sendData = {
-        api: "workflow/getWorkFlow",
-        threeModal: true,
-        data:{
-            sys_code:sys_code,
-            menu_code:menu_code
-        }
-    };
-
-    $.getJSON(wrsUrl,sendData,function(rs){
-        // $("#signDocDialog").find(".modal-body").append(orgChart);
-        if(rs.status){
-            data = rs.data;
-            signWFDialog(data);
-        }else{
-            errorDialog("尚未有簽核流程，請新增後再嘗試");
-        }
-    });
-}
-
-function signWFDialog( data ){
-    // console.log(sendObj);
-    $("#signWFDialog").remove();
-    $("<div>").prop("id","signWFDialog").appendTo("body");
-    var title = "";
-
-    if(sendObj.actionType){
-        title += "請選擇簽核流程";
-    }else{
-        title += "請選擇會簽流程";
-    }
-    var signWFDialog = $("#signWFDialog").bsDialogSelect({
-        autoShow:true,
-        showFooterBtn:true,
-        headerCloseBtn:false,
-        modalClass: "bsDialogWindow",
-        title: title,
-        data: data,
-        textTag: "name",
-        valeTag: "uid",
-        button:[
-            {
-                text: "返回",
-                // className: "btn-success",
-                click: function(){
-                
-                    $("#signWFDialog").bsDialog("close");
-                    
-                }
-            },
-            {
-                text: "確定",
-                className: "btn-success",
-                click: function(){
-                    var wfID = signWFDialog.getValue();
-                    // console.log(wfID);
-                    if(wfID){
-                        sendObj.wfID = wfID;
-                        sendObj.userID = userID;
-                        sendObj["sys_code"] = sys_code;
-                        console.log(sendObj);
-                        saveSignData(sendObj);
-                        // $("#signWFDialog").bsDialog("close");
-                    }
-                }
-            }
-        ]
-    });
-}
-
-function saveSignData(data){
-    data["doc_uid"] = 1;
-    var sendData = {
-        api: apdAPI+"Insert_ApdData",
-        threeModal: true,
+        api: calendarAPI+"DeleteToDoList",
         data:data
+    };
+    $.ajax({
+        url: wrsUrl,
+        type: "DELETE",
+        data: sendData,
+        dataType: "JOSN",
+        success: function(rs){
+            removeArea.removeClass();
+        }
+    });
+}
+
+function saveHistories(listID,Desc, area){
+    var floppy = $(area).find(".fa-floppy-o");
+    var trash = $(area).find(".fa-trash-o");
+    floppy.hide();
+    trash.hide();
+
+    var data = [];
+    var sendObj = {
+        ListId: listID,
+        Desc: Desc
     }
-    $.post(wrsUrl,sendData,function(rs){
-        console.log(rs);
+    data.push(sendObj);
+    var sendData = {
+        api: calendarAPI+"InsertHistories",
+        data:data,
+        contentType: "application/json"
+    };
+    $.post(wrsUrl, sendData).done(function(rs){
+        // console.log(rs);
+        var rs = $.parseJSON(rs);
+        if(rs.Status){
+            floppy.remove();
+            trash.remove();
+            $(area).find("input:text").parent().text(Desc);
+        }else{
+            floppy.show();
+            trash.show();
+        }
     });
 }
 
