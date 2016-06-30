@@ -3,8 +3,6 @@ var sys_code = userLoginInfo.sysCode;
 var userID = userLoginInfo.userID;
 var menu_code = "eab";
 var orgTreeChart;
-// ----------測試用---------------
-// showNoticeToast("test");
 $(function(){
     getCalendarData();
     $("#systems").click(function(){
@@ -16,117 +14,10 @@ $(function(){
 
     });
     tabCtrl("totalTab");
-    $("#testBs5").bsDialog({
-        autoShow:false,
-        showFooterBtn:true,
-        title: "事項預覽",
-        button:[{
-            text: "關閉",
-            // className: "btn-success",
-            click: function(){
-                // xhr.abort();
-                // $(formObj).ajaxFormUnbind();
-                $("#testBs5").bsDialog("close");
-            }
-        }
-        ]
-    });
-    $("#testBs6").bsDialog({
-        autoShow:false,
-        showFooterBtn:true,
-        title: "修改指派項目",
-        button:[{
-            text: "取消",
-            // className: "btn-success",
-            click: function(){
-                // xhr.abort();
-                // $(formObj).ajaxFormUnbind();
-                $("#testBs6").bsDialog("close");
-            }
-        },
-        {
-            text: "儲存",
-            className: "btn-success",
-            click: function(){
-                // xhr.abort();
-                // $(formObj).ajaxFormUnbind();
-                $("#testBs6").bsDialog("close");
-            }
-        }
-        ]
-    });
-    $("#testBs7").bsDialog({
-        autoShow:false,
-        showFooterBtn:true,
-        title: "被指派項目細項修改",
-        button:[{
-            text: "取消",
-            // className: "btn-success",
-            click: function(){
-                // xhr.abort();
-                // $(formObj).ajaxFormUnbind();
-                $("#testBs7").bsDialog("close");
-            }
-        },
-        {
-            text: "儲存",
-            className: "btn-success",
-            click: function(){
-                // xhr.abort();
-                // $(formObj).ajaxFormUnbind();
-                testBs8Show();
-                getOrgData();
-            }
-        }
-        ]
-    });
 });
-function testBsShow(){
-    $("#testBs").bsDialog("show");
-}
-function testBs2Show(){
-    $("#testBs2").bsDialog("show");
-    // formObj = $.parseHTML(formStr);
-}
-function testBs3Show(){
-    
-    $("#testBs3").bsDialog("show");
-}
-function testBs5Show(){
-    
-    $("#testBs5").bsDialog("show");
-}
-function testBs6Show(){
-    
-    $("#testBs6").bsDialog("show");
-}
-function testBs7Show(){
-    
-    $("#testBs7").bsDialog("show");
-}
-function testBs8Show(){
-    
-    $("#testBs8").bsDialog("show");
-}
-function fileSelect(){
-    var fileInput = $("<input>").prop("type","file").prop("name","files[]").prop("multiple",true).change(function(){
-        // console.log($(this).prop("files"));
-        var names = $.map($(this).prop("files"), function(val) { 
-            // return val.name; 
-            var infoDiv = $("<div>").addClass("col-xs-12 col-md-12").html(val.name);
-            $("#isSelectFile").find(".control-label").eq(1).append(infoDiv);
-        });
-
-        // console.log(names);
-        $(this).appendTo(formObj);
-        // console.log(formObj);
-        $("#isSelectFile").show();
-    });
-    fileInput.click();
-}
-// ----------測試用結束-----------
-
 function getCalendarData(type,areaID,uid){
+    $("#"+areaID).find(".dataContent").remove();
+    $("#"+areaID).find(".date-empty").remove();
     if(type == undefined){
         type = 1;
     }
@@ -145,10 +36,13 @@ function getCalendarData(type,areaID,uid){
 
     $.getJSON(wrsUrl, sendData).done(function(rs){
         // console.log(rs);
-        $("#"+areaID).find(".dataContent").remove();
-        $("#"+areaID).find(".date-empty").remove();
+        
         if(rs.Status){
-            putDataToPage(rs.Data, $("#"+areaID));
+            if(type == 1){
+                putDataToPage(rs.Data, $("#"+areaID));
+            }else{
+                putSysDataToPage(rs.Data, $("#"+areaID));
+            }
         }else{
             putEmptyInfo($("#"+areaID));
         }
@@ -271,7 +165,7 @@ function putDataToPage(data, putArea, onlyData){
             }
             // 事項標題可以點開觀看
             var Desc = $("<a>").prop("href","#").text(data.Desc).click(function(){
-                calendarView(content, $(pageStyleObj));
+                calendarView(data, $(pageStyleObj));
                 return false;
             });
 
@@ -320,6 +214,30 @@ function putDataToPage(data, putArea, onlyData){
     });
 }
 
+// 放資料
+function putSysDataToPage(data, putArea){
+    // 畫面設定值
+    var option = {styleKind:"calendar-list",style:"sys-tab"};
+    // 取得畫面樣式
+    getStyle(option,function(pageStyle){
+        
+        $.each(data, function(index,content){
+            var pageStyleObj = $.parseHTML(pageStyle);
+            $(pageStyleObj).addClass("dataContent");
+
+            // 事項標題
+            $(pageStyleObj).find(".list-items").eq(0).html(content.Desc);
+
+            // 迄日
+            $(pageStyleObj).find(".list-items").eq(2).text(content.MyKeypoint.EndDate);
+
+            $(pageStyleObj).appendTo(putArea);
+
+        });
+        
+        putArea.find(".dataContent").last().removeClass("list-items-bottom");
+    });
+}
 
 // 新增&修改Dialog
 function insertDialog(modifyObj, modifyItem){
@@ -630,6 +548,11 @@ function createDetail(detailStyle, content, putArea, isModify, isHistories, isDe
             createDetail(detailStyle, content.Uid, historiesPutArea, isModify, true, false);
             // console.log("T");
         });
+
+        $(detailObj).find(".fa-check").click(function(){
+            finishList(content.Uid);
+            $(this).remove();
+        });
     }
     // 目前沒有在編輯時新增細項的功能，所以應急先摘除
     if(isModify){
@@ -718,7 +641,7 @@ function finishList(uid){
         data: sendData,
         dataType: "JOSN",
         success: function(rs){
-            console.log(rs);
+            // console.log(rs);
         }
     });
 }
@@ -909,7 +832,7 @@ function calendarView(content, putArea){
                     });
                 
                 $(calendarViewObj).find("#addDetail").remove();
-                
+
                 var historiesArea = $(calendarViewObj).find(".list-items").eq(7).find(".control-label").eq(1);
                 if(content.Histories.length){
                     $.each(content.Histories, function(historiesIndex, historiesContent){
@@ -943,6 +866,33 @@ function calendarView(content, putArea){
     });
 }
 
+// 回報事項
+function returmWorkDialog(){
+    $("#returmWorkDialog").remove();
+    $("<div>").prop("id","returmWorkDialog").appendTo("body");
+
+    $("#returmWorkDialog").bsDialog({
+        autoShow:true,
+        showFooterBtn:true,
+        title: "回報事項",
+        start:function(){
+
+            var msgDiv = $("<div>").html(msg);
+            $("#returmWorkDialog").find(".modal-body").append(msgDiv);
+        },
+        button:[{
+            text: "關閉",
+            className: "btn-danger",
+            click: function(){
+                $("#returmWorkDialog").bsDialog("close");
+            }
+        }
+        ]
+    });
+}
+
+
+// 錯誤訊息
 function errorDialog(msg){
     $("#errorDialog").remove();
     $("<div>").prop("id","errorDialog").appendTo("body");
