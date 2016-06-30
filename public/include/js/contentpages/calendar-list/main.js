@@ -198,8 +198,15 @@ function putDataToPage(data, putArea, onlyData){
                 if(content.CompletionDate){
                     $(pageStyleObj).find(".fa-trash-o").remove();
                 }
+
+                // 事項標題可以點開觀看
+                var Desc = $("<a>").prop("href","#").text(content.Desc).click(function(){
+                    calendarView(content, $(pageStyleObj));
+                    return false;
+                });
+
                 // 事項標題
-                $(pageStyleObj).find(".list-items").eq(0).text(content.Desc);
+                $(pageStyleObj).find(".list-items").eq(0).html(Desc);
 
                 // 類型
                 $(pageStyleObj).find(".list-items").eq(1).text(desiStr);
@@ -262,8 +269,14 @@ function putDataToPage(data, putArea, onlyData){
             if(data.CompletionDate){
                 $(pageStyleObj).find(".fa-trash-o").remove();
             }
+            // 事項標題可以點開觀看
+            var Desc = $("<a>").prop("href","#").text(data.Desc).click(function(){
+                calendarView(content, $(pageStyleObj));
+                return false;
+            });
+
             // 事項標題
-            $(pageStyleObj).find(".list-items").eq(0).text(data.Desc);
+            $(pageStyleObj).find(".list-items").eq(0).html(Desc);
 
             // 類型
             $(pageStyleObj).find(".list-items").eq(1).text(desiStr);
@@ -455,6 +468,8 @@ function insertDialog(modifyObj, modifyItem){
                             });
                         }
                     });
+                }else{
+                    $(insertPageObj).find("#historiesArea").remove();
                 }
                 // 如果是編輯，無法新增細項
                 if(!isModify){
@@ -463,6 +478,22 @@ function insertDialog(modifyObj, modifyItem){
                     });
                 }else{
                     $(insertPageObj).find("#addDetail").remove();
+                    var historiesArea = $(insertPageObj).find(".list-items").eq(7).find(".control-label").eq(1);
+                    if(modifyObj.Histories.length){
+                        $.each(modifyObj.Histories, function(historiesIndex, historiesContent){
+                            createDetail(detailPage, historiesContent, historiesArea, isModify, false,false);
+                        });
+                    }
+
+                    // 增加辦況
+                    $(insertPageObj).find("#addHistories").click(function(){
+                        var tmpModifyObj = {
+                            modifyObj: modifyObj,
+                            modifyItem: modifyItem
+                        };
+                        createDetail(detailPage, modifyObj.Uid, historiesArea, isModify, true, false, tmpModifyObj);
+
+                    });
                 }
 
 
@@ -513,29 +544,42 @@ function insertDialog(modifyObj, modifyItem){
                     if(PricipalItem == -1 && DesigneeItem == -1){
                         
                         sendObj.Pricipal = {
-                            Uid: userID
+                            Uid: userID,
+                            Name: userLoginInfo.userName
                         };
 
                         sendObj.Designee = {
-                            Uid: userID
+                            Uid: userID,
+                            Name: userLoginInfo.userName
                         };
                         
                     }else{
                         if(DesigneeItem != -1){
+                            sendObj.Pricipal = {
+                                Uid: userID,
+                                Name: userLoginInfo.userName
+
+                            };
                             sendObj.Designee = {
-                                Uid: sendObj.Designee
+                                Uid: sendObj.Designee,
+                                Name: $("#insertDialog").find('#Pricipal :selected').text()
+
                             }
                         }
                         if(PricipalItem != -1){
+                            sendObj.Designee = {
+                                Uid: userID,
+                                Name: userLoginInfo.userName
+
+                            };
                             sendObj.Pricipal = {
-                                Uid: sendObj.Pricipal
+                                Uid: sendObj.Pricipal,
+                                Name: $("#insertDialog").find('#Pricipal :selected').text()
+
                             }
                         }
                     }
 
-                    
-
-                   
                     // console.log(sendObj);
                     // return;
                     if(modifyObj == undefined){
@@ -560,13 +604,18 @@ function insertDialog(modifyObj, modifyItem){
 }
 
 // 創建細項或歷程
-function createDetail(detailStyle, content, putArea, isModify, isHistories, isDetail){
+function createDetail(detailStyle, content, putArea, isModify, isHistories, isDetail, modifyObj){
     if(isHistories == undefined){
         isHistories = false;
     }
     if(isDetail == undefined){
         isDetail = false;
     }
+
+    if(modifyObj == undefined){
+        modifyObj = false;
+    }
+
     var detailObj = $.parseHTML(detailStyle);
     var historiesPutArea = $(detailObj).find(".histories");
     
@@ -603,7 +652,7 @@ function createDetail(detailStyle, content, putArea, isModify, isHistories, isDe
                     // console.log(content,$(detailObj).find("input:text").val());
                     var Desc = $(detailObj).find("input:text").val();
                     var listID = content;
-                    saveHistories(listID, Desc, $(detailObj));
+                    saveHistories(listID, Desc, $(detailObj), modifyObj);
 
                 });
             }
@@ -761,7 +810,7 @@ function deleteData(uid, removeArea){
     });
 }
 
-function saveHistories(listID,Desc, area){
+function saveHistories(listID,Desc, area, modifyObj){
     var floppy = $(area).find(".fa-floppy-o");
     var trash = $(area).find(".fa-trash-o");
     floppy.hide();
@@ -786,10 +835,111 @@ function saveHistories(listID,Desc, area){
             floppy.remove();
             trash.remove();
             $(area).find("input:text").parent().text(Desc);
+            if(modifyObj){
+                modifyObj.modifyObj.Histories.push(sendObj);
+                $(modifyObj.modifyItem).find(".fa-pencil-square-o").unbind("click").click(function(){
+                    insertDialog( modifyObj.modifyObj , $(modifyObj.modifyItem) );
+                });
+            }
         }else{
             floppy.show();
             trash.show();
         }
+    });
+}
+
+// 查看
+function calendarView(content, putArea){
+    $("#calendarViewDialog").remove();
+    var calendarViewDialog = $("<div>").prop("id","calendarViewDialog");
+    calendarViewDialog.appendTo("body");
+
+    $("#calendarViewDialog").bsDialog({
+        title: content.Desc+"項目檢視",
+        autoShow: true,
+        start: function(){
+          var option = {styleKind:"calendar-list",style:"view"};
+          getStyle(option,function(calendarView){
+            // 細項＆歷程用同一種
+            var option = {styleKind:"calendar-list",style:"detail"};
+            getStyle(option,function(detailPage){
+                var calendarViewObj = $.parseHTML(calendarView);
+                var isModify = true;
+                var detailPutArea = $(calendarViewObj).find(".list-items").eq(6).find(".control-label").eq(1)
+
+                
+                    // 事項
+                    $(calendarViewObj).find(".list-items").find("#Desc").text(content.Desc);
+
+                    // 地點
+                    $(calendarViewObj).find(".list-items").find("#Location").text(content.Location);
+
+                    // 起日
+                    $(calendarViewObj).find("#StartDate_content").text(content.StartDate);
+
+                    // 迄日
+                    var EndDate;
+                    var Pricipal;
+                    if(content.MyKeypoint != undefined){
+                        EndDate = content.MyKeypoint.EndDate;
+                        Pricipal = content.MyKeypoint.Pricipal.Name;
+                    }else{
+                        EndDate = content.EndDate;
+                        Pricipal = content.Pricipal.Name;
+                    }
+                    $(calendarViewObj).find("#EndDate_content").text(EndDate);
+
+                    $(calendarViewObj).find("#Pricipal").text(Pricipal);
+                    $(calendarViewObj).find("#Designee").text(content.Designee.Name);
+                    // 取得細項內容
+                    var sendData = {
+                        api: calendarAPI+"GetToDoList",
+                        data: {
+                            userId: userID,
+                            type: 1,
+                            fid: content.Uid
+                        }
+                    };
+                    $.getJSON(wrsUrl,sendData, function(rs){
+                        if(rs.Status){
+                            $.each(rs.Data,function(detailIndex, detailContent){
+                                createDetail(detailPage, detailContent, detailPutArea, isModify, true,true);
+                            });
+                        }
+                    });
+                
+                $(calendarViewObj).find("#addDetail").remove();
+                
+                var historiesArea = $(calendarViewObj).find(".list-items").eq(7).find(".control-label").eq(1);
+                if(content.Histories.length){
+                    $.each(content.Histories, function(historiesIndex, historiesContent){
+                        createDetail(detailPage, historiesContent, historiesArea, isModify, false,false);
+                    });
+                }
+
+                // 增加辦況
+                $(calendarViewObj).find("#addHistories").click(function(){
+                    var tmpModifyObj = {
+                        modifyObj: content,
+                        modifyItem: putArea
+                    };
+                    createDetail(detailPage, content.Uid, historiesArea, isModify, true, false, tmpModifyObj);
+
+                });
+
+                $(calendarViewObj).appendTo($("#calendarViewDialog").find(".modal-body"));
+            });
+          });
+        },
+        button:[
+            {
+                text: "關閉",
+                className: "btn-default-font-color",
+                click: function(){
+                    $("#calendarViewDialog").bsDialog("close");
+                }
+            },
+        ]
     });
 }
 

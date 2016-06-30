@@ -9,8 +9,8 @@ function checkUserLogin(){
             }
             userLoginInfo = rs;
 
-            $(".user-name").html(rs.userName);
             if(rs.sysCode && rs.userID){
+            	$(".user-name").html(userLoginInfo.userName);
        			//取得選單
        			getMenus(rs);
        			// 連線socket
@@ -50,9 +50,13 @@ function setUserSysCode(sysCode){
 			// }
 			userLoginInfo.sysCode = sysCode;
 			userLoginInfo.userID = rs.userID;
+			userLoginInfo.userName = rs.userName;
+
 			// 當admin使用者資料已有，則導入
 			if(rs.userID){
 				$(".topInfo").show();
+            	$(".user-name").html(userLoginInfo.userName);
+
 	   			//取得選單
 	   			getMenus(rs);
 				setSocket();

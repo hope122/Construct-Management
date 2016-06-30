@@ -45,11 +45,11 @@ class MenterController extends AbstractActionController
                     if($userPosition["status"]){
                         // 設置相關的帳號
                         $_SESSION["uuid"] = $userPosition["uuid"];
+                        $_SESSION["userAc"] = $userPosition["userAc"];
                         $_SESSION["menuPosition"] = $userPosition["menuPosition"];
                         $_SESSION["isAdmin"] = $userPosition["isAdmin"];
                         $_SESSION["sysList"] = $userPosition["sysList"];
                         $_SESSION["userIDList"] = $userPosition["userIDList"];
-                        $_SESSION["userName"] = $_POST["name"];
                         $action["msg"] = "驗證成功";
                         $action["sysList"] = $userPosition["sysList"];
                         $action["status"] = true;
@@ -101,10 +101,12 @@ class MenterController extends AbstractActionController
                                     $_SESSION["userID"] = $content["userID"];
                                 }
                             }
+                            $_SESSION["userName"] = $this->userName($_SESSION["userID"]);
+                            
                         }else{
                             $_SESSION["userID"] = 0;
                         }
-                        
+                        $action["userName"] = $_SESSION["userName"];
                         $_SESSION["projectID"] = null;
                         $action["userID"] = $_SESSION["userID"];
                         $action["status"] = true;
@@ -146,6 +148,8 @@ class MenterController extends AbstractActionController
                 if($_POST["userID"]){
                     if(!$_SESSION["userID"]){
                         $_SESSION["userID"] = $_POST["userID"];
+                        $_SESSION["userName"] = $this->userName($_SESSION["userID"]);
+                        $action["userName"] = $_SESSION["userName"];
                         $action["status"] = true;
                     }
                 }
@@ -212,5 +216,34 @@ class MenterController extends AbstractActionController
 		@session_destroy();
 		return new ViewModel();
 		
+    }
+
+    private function userName($userID){
+        $SysClass = new ctrlSystem;
+        // 預設不連資料庫
+        // $SysClass->initialization();
+        // 連線指定資料庫
+        // $SysClass->initialization("設定檔[名稱]",true); -> 即可連資料庫
+        // 連線預設資料庫
+        $SysClass->initialization(null,true);
+        try{
+            //-----BI開始-----
+            $userName = "";
+            $strSQL = "select t2.name from ass_user t1 ";
+            $strSQL .= "left join ass_common t2 on t1.cmid = t2.uid ";
+            $strSQL .= "where t1.uid = '".$userID."' ";
+
+            $data = $SysClass->QueryData($strSQL);
+
+            if(!empty($data)){
+                $userName = $data[0]["name"];
+            }
+            
+            return $userName;
+            //----BI結束----
+        }catch(Exception $error){
+            //依據Controller, Action補上對應位置, $error->getMessage()為固定部份
+            // $SysClass->WriteLog("MenterController", "setloginAction", $error->getMessage());
+        }
     }
 }
