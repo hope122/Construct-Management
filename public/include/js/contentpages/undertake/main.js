@@ -3,8 +3,11 @@ var sys_code = userLoginInfo.sysCode;
 var userID = userLoginInfo.userID;
 var menu_code = "eab";
 var orgTreeChart;
+// 標籤碼，1:收文，2:發文，3:退件
+var tabCode = 1;
 // ----------測試用---------------
 $(function(){
+    getData();
     $("#testBs").bsDialog({
         autoShow:false,
         showFooterBtn:true,
@@ -158,24 +161,285 @@ function testBs8Show(){
     
     $("#testBs8").bsDialog("show");
 }
-function fileSelect(){
-    var fileInput = $("<input>").prop("type","file").prop("name","files[]").prop("multiple",true).change(function(){
-        // console.log($(this).prop("files"));
-        var names = $.map($(this).prop("files"), function(val) { 
-            // return val.name; 
-            var infoDiv = $("<div>").addClass("col-xs-12 col-md-12").html(val.name);
-            $("#isSelectFile").find(".control-label").eq(1).append(infoDiv);
-        });
 
-        // console.log(names);
-        $(this).appendTo(formObj);
-        // console.log(formObj);
-        $("#isSelectFile").show();
-    });
-    fileInput.click();
-}
 // ----------測試用結束-----------
 
+function getData(areaID){
+    $("#pageInsertBtn").show();
+
+    if(areaID == undefined){
+        areaID = "received-content";
+    }
+
+    if(areaID == "received-content"){
+        tabCode = 1;
+    }else if(areaID == "sendDoc-content"){
+        tabCode = 2;
+    }else{
+        $("#pageInsertBtn").hide();
+    }
+    $("#"+areaID).find(".dataContent").remove();
+    $("#"+areaID).find(".date-empty").remove();
+
+    var sendData = {
+        api: referenceAPI+"getReference",
+        data:{
+            
+        }
+    };
+
+    $.getJSON(wrsUrl, sendData).done(function(rs){
+        // console.log(rs);
+        
+        if(rs.status){
+            putDataToPage(rs.data, $("#"+areaID));
+
+        }else{
+            putEmptyInfo($("#"+areaID));
+        }
+    });
+}
+
+
+// 放資料
+function putDataToPage(data, putArea, onlyData){
+    if(typeof onlyData == "undefined"){
+        onlyData = false;
+    }
+    // console.log(data);
+    // 畫面設定值
+    var option = {styleKind:"received-issued",style:"reference-list"};
+    // 取得畫面樣式
+    getStyle(option,function(pageStyle){
+        if(!onlyData){
+            $.each(data, function(index,content){
+                var pageStyleObj = $.parseHTML(pageStyle);
+                $(pageStyleObj).addClass("dataContent");
+
+                // 事項標題
+                $(pageStyleObj).find(".list-items").eq(0).html(content.referenceNumber);
+
+                // 類型
+                // $(pageStyleObj).find(".list-items").eq(1).text(content.summary);
+
+                // 迄日
+                // $(pageStyleObj).find(".list-items").eq(2).text(content.MyKeypoint.EndDate);
+                
+                // 進度
+                // $(pageStyleObj).find(".list-items").eq(3).text(progressStr);
+
+                // 修改
+                // $(pageStyleObj).find(".fa-pencil-square-o").click(function(){
+                //     insertDialog( content, $(pageStyleObj) );
+                // });
+
+                // 完成
+                $(pageStyleObj).find(".fa-check").click(function(){
+                    
+                    finishList(content.Uid, itemType);
+                    $(this).remove();
+                    $(pageStyleObj).find(".fa-pencil-square-o").remove();
+                    $(pageStyleObj).find(".fa-trash-o").remove();
+                });
+
+                // 刪除
+                $(pageStyleObj).find(".fa-trash-o").click(function(){
+                    deleteData(content.Uid, $(this).parents(".list-items").parent());
+                });
+                if(content.CompletionDate){
+                    $(pageStyleObj).find(".fa-pencil-square-o").remove();
+                    $(pageStyleObj).find(".fa-check").remove();
+                }
+                
+                $(pageStyleObj).appendTo(putArea);
+
+            });
+        }else{
+            var pageStyleObj = $.parseHTML(pageStyle);
+            $(pageStyleObj).addClass("dataContent");
+
+            var desiStr = "個人";
+            // 指派人
+            var DesigneeID = data.Designee.Uid;
+            // 承辦人
+            var PricipalID = data.Pricipal.Uid;
+            var itemType = 2;
+            if(DesigneeID != PricipalID ){
+                 itemType = 1;
+                if(DesigneeID == userID && PricipalID != userID){
+                    desiStr = "指派";
+                    $(pageStyleObj).find(".fa-check").remove();
+                }else{
+                    desiStr = "被指";
+                    $(pageStyleObj).find(".fa-trash-o").remove();
+                }
+            }
+
+            var progressStr = "0%";
+
+            if(data.CompletionDate){
+                $(pageStyleObj).find(".fa-trash-o").remove();
+            }
+            // 事項標題可以點開觀看
+            var Desc = $("<a>").prop("href","#").text(data.Desc).click(function(){
+                calendarView(data, $(pageStyleObj));
+                return false;
+            });
+
+            // 事項標題
+            $(pageStyleObj).find(".list-items").eq(0).html(Desc);
+
+            // 類型
+            $(pageStyleObj).find(".list-items").eq(1).text(desiStr);
+
+            // 迄日
+            $(pageStyleObj).find(".list-items").eq(2).text(data.EndDate);
+            
+            // 進度
+            $(pageStyleObj).find(".list-items").eq(3).text(progressStr);
+
+            // 修改
+            $(pageStyleObj).find(".fa-pencil-square-o").click(function(){
+                insertDialog( data, $(pageStyleObj) );
+            });
+
+            // 完成
+            $(pageStyleObj).find(".fa-check").click(function(){
+                finishList(data.Uid, itemType);
+                $(this).remove();
+                $(pageStyleObj).find(".fa-pencil-square-o").remove();
+                $(pageStyleObj).find(".fa-trash-o").remove();
+            });
+
+            // 刪除
+            $(pageStyleObj).find(".fa-trash-o").click(function(){
+                deleteData(data.Uid, $(this).parents(".list-items").parent());
+            });
+            if(data.CompletionDate){
+                $(pageStyleObj).find(".fa-pencil-square-o").remove();
+                $(pageStyleObj).find(".fa-check").remove();
+            }
+            
+            if(putArea.find("div").length){
+                putArea.find(".dataContent").eq(-1).addClass("list-items-bottom").after(pageStyleObj);
+            }else{
+                $(pageStyleObj).removeClass("list-items-bottom").appendTo(putArea);
+
+            }
+        }
+        putArea.find(".dataContent").last().removeClass("list-items-bottom");
+    });
+}
+
+// 新增類
+function tabInsert(){
+    if(tabCode == 1){
+        // 收文
+        referenceInsertDialog();
+    }else if(tabCode == 2){
+        insertDialog();
+    }
+}
+
+function referenceInsertDialog(modifyObj, modifyItem){
+    // console.log(modifyObj, modifyItem);
+    if(modifyItem == undefined){
+        modifyItem = null;
+    }
+    var saveBtn = "";
+    if(modifyObj != undefined){
+        title = "修改收文";
+        saveBtn = "修改";
+    }else{
+        title = "新增收文";
+        saveBtn = "新增";
+    }
+    $("#insertDialog").remove();
+    var insertDialog = $("<div>").prop("id","insertDialog");
+    insertDialog.appendTo("body");
+
+    $("#insertDialog").bsDialog({
+        title: title,
+        autoShow: true,
+        start: function(){
+          var option = {styleKind:"received-issued",style:"reference-insert"};
+          getStyle(option,function(insertPage){
+            var insertPageObj = $.parseHTML(insertPage);
+            $(insertPageObj).find(".fa-cloud-upload").click(function(){
+                var putFormArea = $(insertPageObj).find("#uploadFiles");
+                fileSelect(putFormArea);
+            });
+            // 修改
+            if(modifyObj != undefined){
+
+                // console.log("T");
+                $.each(modifyObj, function(index,content){
+                    if(index != "sex" ){
+                        $(insertPageObj).find("#"+index).val(content);
+                    }else{
+                        $(insertPageObj).find("[name=sex][value=" + content + "]").attr("checked",true).parent().addClass("active");
+                    }
+                });
+                var account = $(insertPageObj).find("#sid").val();
+                $(insertPageObj).find("#accountContent").text(account);
+            }else{
+                // 新增
+                $(insertPageObj).find("#sid").keyup(function(){
+                    var account = $(this).val();
+                    $(insertPageObj).find("#accountContent").text(account);
+                });
+            }
+            $(insertPageObj).appendTo($("#insertDialog").find(".modal-body"));
+            // getQCTableTypeList("tableTypeTab","tableType",true);
+
+          });
+        },
+        button:[
+            {
+                text: saveBtn,
+                className: "btn-success",
+                click: function(){
+                    // 基本資訊
+                    var sendObj = getUserInput("insertDialog");
+                    sendObj.userID = userID;
+                    var putFormArea = $("#insertDialog").find("#uploadFiles");
+                    // if(modifyObj == undefined){
+                    //     $("#grid").find(".date-empty").remove();
+                    // }
+                    // userInfo.sys_code = sys_code;
+                    // var sendObj = {
+                    //     userInfo: userInfo,
+                    //     census:census,
+                    //     communication:communication,
+                    //     org: accountInfo,
+                    //     // sys_code: sys_code
+                    // }
+
+                    // if(modifyObj != undefined){
+                    //     sendObj.userInfo.uid = modifyObj.uid;
+                    //     sendObj.userInfo.userID = modifyObj.userID;
+                    //     sendObj.communication.cmid = modifyObj.uid;
+                    //     sendObj.census.cmid = modifyObj.uid;
+                    //     sendObj.org.cmid = modifyObj.uid;
+                    // }
+                    // console.log(sendObj);
+                    // return;
+
+                    saveReferenceData(sendObj, modifyItem, putFormArea);
+                    // console.log(sendObj);
+                    // $("#insertDialog").bsDialog("close");
+                }
+            },
+            {
+                text: "取消",
+                className: "btn-default-font-color",
+                click: function(){
+                    $("#insertDialog").bsDialog("close");
+                }
+            },
+        ]
+    });
+}
 
 // 新增&修改Dialog
 function insertDialog(modifyObj, modifyItem){
@@ -287,6 +551,39 @@ function insertDialog(modifyObj, modifyItem){
         ]
     });
 
+}
+
+function saveReferenceData(sendObj, modifyItem, putFormArea){
+    // return
+    sendObj.typeID = 1;
+    sendObj.userName = userLoginInfo.userName;
+    var sendData = {
+        // api: docAPI+"setDocFileInsert",
+        api: referenceAPI+"setReferenceInsert",
+        data: sendObj
+    };
+    console.log(sendObj);
+
+    $.post(wrsUrl, sendData, function(rs){
+        console.log(rs);
+    });
+    // var options = {
+    //     url: wrsAPI+"uploaderAPI",
+    //     type:"POST",
+    //     data: sendData,
+    //     dataType:"JSON",
+    //     beforesend: function(xhr){
+    //         // testBs3Show(xhr);
+    //     },
+    //     uploadProgress: function(event, position, total, percentComplete) {
+    //        console.log(event, position, total, percentComplete);
+
+    //     },
+    //     success: function(rs) {
+    //        console.log(rs);
+    //     },
+    // };
+    // $(putFormArea).ajaxSubmit(options);
 }
 
 // 儲存
@@ -593,4 +890,23 @@ function errorDialog(msg){
         }
         ]
     });
+}
+
+// 多檔案上傳
+function fileSelect(putFormArea){
+    var fileInput = $("<input>").prop("type","file").prop("name","files[]").prop("multiple",true).change(function(){
+        // console.log($(this).prop("files"));
+        var names = $.map($(this).prop("files"), function(val) { 
+            // return val.name; 
+            // console.log(val)
+            var infoDiv = $("<div>").addClass("col-xs-12 col-md-12").html(val.name);
+            $("#insertDialog").find("#isSelectFile").find(".control-label").eq(1).append(infoDiv);
+        });
+
+        // console.log(names);
+        $(this).appendTo(putFormArea);
+        // console.log(formObj);
+        $("#insertDialog").find("#isSelectFile").show();
+    });
+    fileInput.click();
 }

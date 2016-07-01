@@ -398,7 +398,8 @@ function saveData(sendObj,modifyItem){
                             var rs = $.parseJSON(rs);
                             if(rs.Status){
                                 sendObj.userInfo.userID = rs.Data;
-                                // putDataToPage(sendObj.userInfo, true);
+                                putDataToPage(sendObj.userInfo, true);
+                                // getOUData();
                             }
                         });
                     });

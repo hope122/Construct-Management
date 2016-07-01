@@ -70,17 +70,21 @@ function putDataToPage(data, putArea, onlyData){
                 var DesigneeID = content.Designee.Uid;
                 // 承辦人
                 var PricipalID = content.MyKeypoint.Pricipal.Uid;
-
+                var itemType = 2;
                 if(DesigneeID != PricipalID ){
+                    itemType = 1;
                     if(DesigneeID == userID && PricipalID != userID){
                         desiStr = "指派";
-                        $(pageStyleObj).find("#PricipalItem")
-                        .removeClass("fa-square-o")
-                        .addClass("fa-check-square-o");
+                        // $(pageStyleObj).find(".fa-check")
+                        // .remove();
                     }else{
                         desiStr = "被指";
                         $(pageStyleObj).find(".fa-trash-o").remove();
                     }
+                }
+
+                if(DesigneeID != userID){
+                    $(pageStyleObj).find(".fa-pencil-square-o").remove();
                 }
 
                 var progressStr = content.Progress + "%";
@@ -118,7 +122,8 @@ function putDataToPage(data, putArea, onlyData){
 
                 // 完成
                 $(pageStyleObj).find(".fa-check").click(function(){
-                    finishList(content.Uid);
+                    
+                    finishList(content.Uid, itemType);
                     $(this).remove();
                     $(pageStyleObj).find(".fa-pencil-square-o").remove();
                     $(pageStyleObj).find(".fa-trash-o").remove();
@@ -145,13 +150,12 @@ function putDataToPage(data, putArea, onlyData){
             var DesigneeID = data.Designee.Uid;
             // 承辦人
             var PricipalID = data.Pricipal.Uid;
-
+            var itemType = 2;
             if(DesigneeID != PricipalID ){
+                 itemType = 1;
                 if(DesigneeID == userID && PricipalID != userID){
                     desiStr = "指派";
-                    $(pageStyleObj).find("#PricipalItem")
-                    .removeClass("fa-square-o")
-                    .addClass("fa-check-square-o");
+                    $(pageStyleObj).find(".fa-check").remove();
                 }else{
                     desiStr = "被指";
                     $(pageStyleObj).find(".fa-trash-o").remove();
@@ -188,7 +192,7 @@ function putDataToPage(data, putArea, onlyData){
 
             // 完成
             $(pageStyleObj).find(".fa-check").click(function(){
-                finishList(data.Uid);
+                finishList(data.Uid, itemType);
                 $(this).remove();
                 $(pageStyleObj).find(".fa-pencil-square-o").remove();
                 $(pageStyleObj).find(".fa-trash-o").remove();
@@ -298,6 +302,42 @@ function insertDialog(modifyObj, modifyItem){
 
                 $(insertPageObj).find("#StartDate").datepicker(dateOptionStart);
                 $(insertPageObj).find("#EndDate").datepicker(dateOptionEnd);
+                var selectWorkID;
+                if(modifyObj != undefined){
+                    // 指派人
+                    var DesigneeID = modifyObj.Designee.Uid;
+                    // 承辦人
+                    var PricipalID;
+                    if(modifyObj.MyKeypoint != undefined){
+                        PricipalID = modifyObj.MyKeypoint.Pricipal.Uid;
+                    }else{
+                        PricipalID = modifyObj.Pricipal.Uid;
+                    }
+
+                    if(DesigneeID != PricipalID ){
+                        if(DesigneeID == userID && PricipalID != userID){
+                            // desiStr = "指派";
+                            $(insertPageObj).find("#PricipalItem")
+                            .removeClass("fa-square-o")
+                            .addClass("fa-check-square-o");
+                            $(insertPageObj).find("#Pricipal").show();
+
+                            selectWorkID = PricipalID;
+                        }else{
+                            // desiStr = "被指";
+                            $(insertPageObj).find("#DesigneeItem")
+                            .removeClass("fa-square-o")
+                            .addClass("fa-check-square-o");
+                            $(insertPageObj).find("#Pricipal").show();
+
+                            selectWorkID = DesigneeID;   
+                        }
+                    }else{
+                        selectWorkID = null;
+                    }
+                }else{
+                    selectWorkID = null;
+                }
 
                 // 指派
                 var putAreaArr = [];
@@ -308,7 +348,8 @@ function insertDialog(modifyObj, modifyItem){
                 var DesigneeArea = $(insertPageObj).find("#Designee");
                 putAreaArr.push(DesigneeArea);
 
-                getUserList(putAreaArr);
+                getUserList(putAreaArr, selectWorkID);
+
 
                 $(insertPageObj).find("#PricipalItem").click(function(){
                     var DesigneeItemCheck = $(insertPageObj).find("#DesigneeItem").prop("class").search("fa-check-square-o");
@@ -550,7 +591,7 @@ function createDetail(detailStyle, content, putArea, isModify, isHistories, isDe
         });
 
         $(detailObj).find(".fa-check").click(function(){
-            finishList(content.Uid);
+            finishList(content.Uid, 2);
             $(this).remove();
         });
     }
@@ -602,7 +643,7 @@ function createDetail(detailStyle, content, putArea, isModify, isHistories, isDe
 }
 
 // 取得回報和指派使用者列表
-function getUserList(putAreaArr){
+function getUserList(putAreaArr, selectID){
     var sendData = {
         api: "AssCommon/GetData_AssCommon",
         threeModal: true,
@@ -616,6 +657,9 @@ function getUserList(putAreaArr){
                 $.each(rs.Data, function(dI, content){
                     selectOptionPut(putArea,content.userID,content.name);
                 });
+                if(selectID != null){
+                    $(putArea).val(selectID);
+                }
             });
         }else{
             $.each(putAreaArr,function(i,putArea){
@@ -627,17 +671,22 @@ function getUserList(putAreaArr){
 }
 
 // 完成事項
-function finishList(uid){
-    var data = [];
-    data.push(uid);
+function finishList(uid, itemType){
+    // var data = [];
+    // data.push(uid);
     var sendData = {
-        api: calendarAPI+"CompleteToDoList",
-        data:data
+        // api: calendarAPI+"CompleteToDoList",
+        api: calendarAPI+"ReturnToDoList",
+        data:{
+            Type: itemType,
+            ToDoId: uid
+        },
+        // changeJson: true
     };
     // console.log(sendData);
     $.ajax({
         url: wrsUrl,
-        type: "PUT",
+        type: "POST",
         data: sendData,
         dataType: "JOSN",
         success: function(rs){
