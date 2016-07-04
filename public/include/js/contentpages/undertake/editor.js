@@ -164,6 +164,9 @@ function referenceInsertStart(modifyObj, modifyItem){
             var putFormArea = $(insertPageObj).find("#uploadFiles");
             fileSelect(putFormArea);
         });
+        // 加載CKeditor
+        $(insertPageObj).find("#summary").ckeditor();
+        // CKEDITOR.replace( $(insertPageObj).find("#summary"), {});
         // 修改
         if(modifyObj != undefined){
 
@@ -186,6 +189,7 @@ function referenceInsertStart(modifyObj, modifyItem){
         }
         // 放到畫面中
         $(insertPageObj).appendTo($("#insertDialog").find(".modal-body"));
+        
         // getQCTableTypeList("tableTypeTab","tableType",true);
     });
 }
