@@ -20,21 +20,3 @@ jQuery(function($){
 	};
 	$.datepicker.setDefaults($.datepicker.regional['zh-TW']);
 });
-$.datepicker._phoenixGenerateMonthYearHeader = $.datepicker._generateMonthYearHeader;
-$.datepicker._generateMonthYearHeader = function(inst, drawMonth, drawYear, minDate, maxDate,secondary, monthNames, monthNamesShort) {
-	var result = $($.datepicker._phoenixGenerateMonthYearHeader(inst, drawMonth, drawYear, minDate, maxDate,
-	secondary, monthNames, monthNamesShort));
-
-	result.find('.ui-datepicker-year').children().each(function() {
-		$(this).text('民國'+($(this).text() - 1911) + '年');
-	})
-	result.find('.ui-datepicker-year').each(function() {
-		$(this).text('民國'+($(this).text() - 1911));
-	})
-
-	if( inst.yearshtml ){
-		var origyearshtml = inst.yearshtml;
-	}
-
-	return '<div class="ui-datepicker-title">'+result.html()+'</div>';
-};

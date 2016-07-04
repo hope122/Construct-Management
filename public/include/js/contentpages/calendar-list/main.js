@@ -169,6 +169,7 @@ function putDataToPage(data, putArea, onlyData){
             }
             // 事項標題可以點開觀看
             var Desc = $("<a>").prop("href","#").text(data.Desc).click(function(){
+                console.log(data);
                 calendarView(data, $(pageStyleObj));
                 return false;
             });
@@ -883,12 +884,13 @@ function calendarView(content, putArea){
                 $(calendarViewObj).find("#addDetail").remove();
 
                 var historiesArea = $(calendarViewObj).find(".list-items").eq(7).find(".control-label").eq(1);
-                if(content.Histories.length){
-                    $.each(content.Histories, function(historiesIndex, historiesContent){
-                        createDetail(detailPage, historiesContent, historiesArea, isModify, false,false);
-                    });
+                if(content.Histories != undefined){
+                    if(content.Histories.length){
+                        $.each(content.Histories, function(historiesIndex, historiesContent){
+                            createDetail(detailPage, historiesContent, historiesArea, isModify, false,false);
+                        });
+                    }
                 }
-
                 // 增加辦況
                 $(calendarViewObj).find("#addHistories").click(function(){
                     var tmpModifyObj = {
