@@ -186,18 +186,18 @@ function processMenuTreeDataOnly(treeData,options){
             node.id = node[options.idName];
         }
         
-        var contentTag = $("<a>").prop("href","#").addClass(node["class_name"]).html(node.title);
-        contentTag.click(function(){
-          if(node.url != "#"){
-            $("#pagescontent").empty();
-            loadPage(node.url,"pagescontent");
-          }
-          // 登出機制，只要再CLASS裡面有logout關鍵字的連結走這裡
-          if($(this).prop("class").search("logout") != -1){
-            logoutEven();
-          }
-          return false;
-        });
+        var contentTag = $("<a>").prop("href",node.url).addClass(node["class_name"]).html(node.title);
+        // contentTag.click(function(){
+        //   if(node.url != "#"){
+        //     $("#pagescontent").empty();
+        //     loadPage(node.url,"pagescontent");
+        //   }
+        //   // 登出機制，只要再CLASS裡面有logout關鍵字的連結走這裡
+        //   if($(this).prop("class").search("logout") != -1){
+        //     logoutEven();
+        //   }
+        //   return false;
+        // });
         // console.log(parent,putNodeID,contentTag);
         // tmpMenuObj[parent][putNodeID] = contentTag;
         tmpMenuArr.push(contentTag);

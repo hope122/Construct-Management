@@ -10,18 +10,18 @@ function getMenus(loginInfo){
   // console.log(meunData);
   $("#menus").empty();
   $.each(meunData,function(i, content){
-    // content.find("a").click(function(){
-    //   var thisHref = $(this).attr("href");
-    //   if(thisHref != "#"){
-    //     $("#pagescontent").empty();
-    //     loadPage($(this).attr("href"),"pagescontent");
-    //   }
-    //   // 登出機制，只要再CLASS裡面有logout關鍵字的連結走這裡
-    //   if($(this).prop("class").search("logout") != -1){
-    //     logoutEven();
-    //   }
-    //   return false;
-    // });
+    content.find("a").click(function(){
+      var thisHref = $(this).attr("href");
+      if(thisHref != "#"){
+        $("#pagescontent").empty();
+        loadPage($(this).attr("href"),"pagescontent");
+      }
+      // 登出機制，只要再CLASS裡面有logout關鍵字的連結走這裡
+      if($(this).prop("class").search("logout") != -1){
+        logoutEven();
+      }
+      return false;
+    });
     content.appendTo($("#menus"));
   });
  //  	getLan();
