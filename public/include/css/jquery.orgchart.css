@@ -65,7 +65,7 @@ div.orgChart tr.lines td.half { width : 50%; }
 div.orgChart td {
   text-align : center;
   vertical-align : top;
-  padding : 0px 2em;
+  /*padding : 0px 2em;*/
   /*padding : 0px;*/
 }
 
