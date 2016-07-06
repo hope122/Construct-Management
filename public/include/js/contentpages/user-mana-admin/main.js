@@ -103,6 +103,7 @@ function insertDialog(modifyObj, modifyItem){
     $("#insertDialog").bsDialog({
         title: title,
         headerCloseBtn: false,
+        autoShow: true,
         start: function(){
           var option = {styleKind:"person",style:"in_mo"};
           getStyle(option,function(insertPage){
@@ -112,7 +113,6 @@ function insertDialog(modifyObj, modifyItem){
             $(insertPageObj).find(".list-items").eq(1).find(".control-label").eq(1).remove();
             
             $(insertPageObj).appendTo($("#insertDialog").find(".modal-body"));
-            $("#insertDialog").bsDialog("show");
             tabCtrl("insertDialog");
             // getQCTableTypeList("tableTypeTab","tableType",true);
 
