@@ -49,7 +49,7 @@
                 $selector.off("showBSDialog");
             });
             
-            if(nowModalIn > 1){
+            if(nowModalIn > 1 && $(".modal.fade.in").length > 0){
                 $(".modal.fade.in").last().fadeOut(300);
             }
             
