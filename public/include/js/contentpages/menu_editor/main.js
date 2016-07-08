@@ -163,10 +163,15 @@ function insertDialog(treeViewData,clickObject,modifyStatus){
                             data.parent = treeViewData.uid;
                         }
                     }
-                    if(treeViewData.parent == 0){
-                        sequence = $(clickObject).index();
+
+                    if(treeViewData != undefined){
+                        if(treeViewData.parent == 0){
+                            sequence = $(clickObject).index();
+                        }else{
+                            sequence = $(clickObject.parent()).index();
+                        }
                     }else{
-                        sequence = $(clickObject.parent()).index()
+                        sequence = $(clickObject.parent()).index();
                     }
                     data.sequence = sequence;
                     // console.log(data);
