@@ -29,11 +29,7 @@ function getCalendarData(type,areaID,uid){
 
     $.getJSON(wrsUrl, sendData).done(function(rs){
         if(rs.Status){
-            if(type == 1){
-                putDataToPage(rs.Data, $("#"+areaID));
-            }else{
-                putSysDataToPage(rs.Data, $("#"+areaID));
-            }
+            putDataToPage(rs.Data, $("#"+areaID));
         }else{
             putEmptyInfo($("#"+areaID));
         }
