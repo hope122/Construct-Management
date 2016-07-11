@@ -7,10 +7,10 @@ var docTag;
 var mydate = new Date();
 var myMilliseconds = mydate.getTime();
 var prj_uid = 1;
-//$(document).ready(function(){ .....  });
+
 $(function(){ 
 	// selectCategory();
-	selectSort();
+	getTabData();
 
 	plusItemEvent();
 	$(".deleteItem").click(function(){
@@ -36,20 +36,21 @@ function plusItemEvent(){
 	}
 }
 // TAB 取大類別API
-function selectSort(){
-   	var sendObj = 
-   	{
-		api:DocApi+"GetDocTypeList",
-   		data:{prj_uid:prj_uid}
-   	};
+function getTabData(){
+ 	var sendObj = {
+    api: DocApi+"GetDocTypeList",
+ 	  data:{ 
+      prj_uid:prj_uid
+    }
+ 	};
 
 	$.getJSON(wrsUrl,sendObj,function(rs){
 		if(rs.status==true){
 			$("#tab-menu").empty();
 			var firstObj;
 			$.each(rs.data, function(Key , Val){
-				var tabObj = $("<li>");
-				var categoryObj = $("<a>").prop("id","category"+Val.uid);
+				var tabObj = $("<li>").prop("role","presentation");
+				var categoryObj = $("<a>").prop("href","#").prop("id","category"+Val.uid);
 				
 				$(categoryObj).click(function(){
 					getDocList(Val.uid, Val.edit);
@@ -65,7 +66,9 @@ function selectSort(){
 			});
 			tabCtrl("tab-menu");
 			firstObj.click();
-		}
+		}else{
+      putEmptyInfo($("#tab-menu"));
+    }
 	});
 }
 // 取放資料API

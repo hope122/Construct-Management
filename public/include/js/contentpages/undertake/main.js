@@ -1,8 +1,7 @@
-var testData = [];
 var sys_code = userLoginInfo.sysCode;
 var userID = userLoginInfo.userID;
 var menu_code = "eab";
-var orgTreeChart;
+
 // 標籤碼，1:收文，2:發文，3:退件
 var tabCode = 1;
 // ----------測試用---------------
@@ -219,8 +218,8 @@ function putDataToPage(data, putArea, onlyData){
                 // 事項標題
                 $(pageStyleObj).find(".list-items").eq(0).html(content.referenceNumber);
 
-                // 類型
-                // $(pageStyleObj).find(".list-items").eq(1).text(content.summary);
+                // 主旨
+                $(pageStyleObj).find(".list-items").eq(1).text(content.subject);
 
                 // 迄日
                 // $(pageStyleObj).find(".list-items").eq(2).text(content.MyKeypoint.EndDate);
@@ -232,6 +231,11 @@ function putDataToPage(data, putArea, onlyData){
                 // $(pageStyleObj).find(".fa-pencil-square-o").click(function(){
                 //     insertDialog( content, $(pageStyleObj) );
                 // });
+                
+                // 分文
+                $(pageStyleObj).find(".fa-sitemap").click(function(){
+                    orgTreeDialog();
+                });
 
                 // 完成
                 $(pageStyleObj).find(".fa-check").click(function(){
