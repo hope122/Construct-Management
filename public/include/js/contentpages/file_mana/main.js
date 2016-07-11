@@ -45,29 +45,33 @@ function getTabData(){
  	};
 
 	$.getJSON(wrsUrl,sendObj,function(rs){
-		if(rs.status==true){
+		if(rs.status){
 			$("#tab-menu").empty();
 			var firstObj;
-			$.each(rs.data, function(Key , Val){
-				var tabObj = $("<li>").prop("role","presentation");
-				var categoryObj = $("<a>").prop("href","#").prop("id","category"+Val.uid);
-				
-				$(categoryObj).click(function(){
-					getDocList(Val.uid, Val.edit);
-					docType = Val.uid;
-					$("#fileContentList").empty();
-				});
-				if(Key==0){
-					firstObj = $(categoryObj);
-				}
-				$(categoryObj).appendTo(tabObj);
-				$(tabObj).appendTo("#tab-menu");
-				$(categoryObj).text(Val.name);
-			});
-			tabCtrl("tab-menu");
-			firstObj.click();
+      if(rs.data != null){
+  			$.each(rs.data, function(Key , Val){
+  				var tabObj = $("<li>").prop("role","presentation");
+  				var categoryObj = $("<a>").prop("href","#").prop("id","category"+Val.uid);
+  				
+  				$(categoryObj).click(function(){
+  					getDocList(Val.uid, Val.edit);
+  					docType = Val.uid;
+  					$("#fileContentList").empty();
+  				});
+  				if(Key==0){
+  					firstObj = $(categoryObj);
+  				}
+  				$(categoryObj).appendTo(tabObj);
+  				$(tabObj).appendTo("#tab-menu");
+  				$(categoryObj).text(Val.name);
+  			});
+  			tabCtrl("tab-menu");
+  			firstObj.click();
+      }else{
+        putEmptyInfo( $("#fileContentList") );
+      }
 		}else{
-      putEmptyInfo($("#tab-menu"));
+      putEmptyInfo( $("#fileContentList") );
     }
 	});
 }
