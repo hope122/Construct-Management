@@ -111,11 +111,12 @@ function getData(areaID){
     if(areaID == undefined){
         areaID = "received-content";
     }
-
+    var method = "getReferenceList";
     if(areaID == "received-content"){
         tabCode = 1;
     }else if(areaID == "sendDoc-content"){
         tabCode = 2;
+        method = "getReferenceList";
     }else{
         $("#pageInsertBtn").hide();
     }
@@ -123,7 +124,7 @@ function getData(areaID){
     $("#"+areaID).find(".date-empty").remove();
 
     var sendData = {
-        api: referenceAPI+"getReferenceList",
+        api: referenceAPI + method,
         data:{
             userId:userID
         }
@@ -411,9 +412,8 @@ function putDataEmptyInfo(putArea){
     });
 }
 
-var sendObj = {};
 // 準備簽核前的視窗，顯示與設定最後結束日期
-function signInfoAndDate(){
+function signInfoAndDate(sendObj){
     $("#signInfoAndDateDialog").remove();
     $("<div>").prop("id","signInfoAndDateDialog").appendTo("body");
 
@@ -487,7 +487,7 @@ function signInfoAndDate(){
 }
 
 // 簽核WF設定
-function signWFSelect(){
+function signWFSelect(sendObj){
     // actionType是該文件簽核類型（0:匯簽,1:簽核）
     var data = [];
     var sendData = {
@@ -503,15 +503,15 @@ function signWFSelect(){
         // $("#signDocDialog").find(".modal-body").append(orgChart);
         if(rs.status){
             data = rs.data;
-            signWFDialog(data);
+            signWFDialog(data, sendObj);
         }else{
             errorDialog("尚未有簽核流程，請新增後再嘗試");
         }
     });
 }
 
-function signWFDialog( data ){
-    // console.log(sendObj);
+function signWFDialog( data, sendObj ){
+    console.log(sendObj);
     $("#signWFDialog").remove();
     $("<div>").prop("id","signWFDialog").appendTo("body");
     var title = "";
@@ -559,18 +559,6 @@ function signWFDialog( data ){
                 }
             }
         ]
-    });
-}
-
-function saveSignData(data){
-    data["doc_uid"] = 1;
-    var sendData = {
-        api: apdAPI+"Insert_ApdData",
-        threeModal: true,
-        data:data
-    }
-    $.post(wrsUrl,sendData,function(rs){
-        console.log(rs);
     });
 }
 

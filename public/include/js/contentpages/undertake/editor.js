@@ -111,7 +111,7 @@ function insertDialog(modifyObj, modifyItem, sampleData){
         saveBtn = "修改";
     }else{
         title = "新增擬文";
-        saveBtn = "新增";
+        saveBtn = "設定簽核";
     }
     $("#insertDialog").remove();
     var insertDialog = $("<div>").prop("id","insertDialog");
@@ -134,44 +134,38 @@ function insertDialog(modifyObj, modifyItem, sampleData){
                 text: saveBtn,
                 className: "btn-success",
                 click: function(){
-                    // 基本資訊
-                    var userInfo = getUserInput("userInfo-content");
-                    // 通訊地址
-                    var census = getUserInput("census-content");
-                    census.addr_type = 0;
-                    // 通訊地址
-                    var communication = getUserInput("communication-content");
-                    communication.addr_type = 1;
-
-                    // 取得部門&職務資訊
-                    var accountInfo = getOrgVal();
-
-
-                    if(modifyObj == undefined){
-                        $("#grid").find(".date-empty").remove();
+                    // 取得資訊
+                    var sendObj = getUserInput("insertDialog");
+                    // 檢查是否有選取正本，至少要一個
+                    var originalTarget = $("#insertDialog").find("#originalTarget .originalTargetID");
+                    var originalIDStr;
+                    if( originalTarget.length ){
+                        $.each(originalTarget, function(){
+                            originalIDStr += $(this).val() + ",";
+                        });
+                        originalIDStr = originalIDStr.subString(0, originalIDStr.length - 1);
                     }
-                    userInfo.sys_code = sys_code;
-                    var sendObj = {
-                        userInfo: userInfo,
-                        census:census,
-                        communication:communication,
-                        org: accountInfo,
-                        // sys_code: sys_code
-                    }
+                    sendObj.originalID = originalIDStr;
 
-                    if(modifyObj != undefined){
-                        sendObj.userInfo.uid = modifyObj.uid;
-                        sendObj.userInfo.userID = modifyObj.userID;
-                        sendObj.communication.cmid = modifyObj.uid;
-                        sendObj.census.cmid = modifyObj.uid;
-                        sendObj.org.cmid = modifyObj.uid;
+                    // 檢查是否有選取副本
+                    var duplicateTarget = $("#insertDialog").find("#originalTarget .duplicateTargetID");
+                    var duplicateTargetIDStr;
+                    if( duplicateTarget.length ){
+                        $.each(originalTarget, function(){
+                            duplicateTargetIDStr += $(this).val() + ",";
+                        });
+                        duplicateTargetIDStr = duplicateTargetIDStr.subString(0, duplicateTargetIDStr.length - 1);
                     }
-                    console.log(sendObj);
-                    // return;
+                    sendObj.duplicateTargetIDStr = duplicateTargetIDStr;
 
-                    saveData(sendObj, modifyItem);
-                    // console.log(sendObj);
-                    // $("#insertDialog").bsDialog("close");
+
+                    if(originalIDStr){
+                        signInfoAndDate(sendObj);
+                    $("#insertDialog").bsDialog("close");
+
+                    }else{
+                        $("#insertDialog").find("#originalTarget").addClass("item-bg-danger").text("尚未選擇受文對象");
+                    }
                 }
             }
         ]
@@ -313,7 +307,7 @@ function dispatchStart(modifyObj, modifyItem, sampleData){
         if(sampleData != undefined){
             $(insertPageObj).find("#content").val(sampleData.content);
             $(insertPageObj).find("#gist").val(sampleData.gist);
-            
+
         }
         // 承辦人的名字
         $(insertPageObj).find("#pointPeople").text(userLoginInfo.userName);
@@ -324,8 +318,31 @@ function dispatchStart(modifyObj, modifyItem, sampleData){
             fileSelect(putFormArea);
         });
 
+        // 正本新增鈕
+        $(insertPageObj).find(".list-items").eq(0).find(".fa-plus").click(function(){
+            var orgiginalPutArea = $(insertPageObj).find("#originalTarget");
+            originalAndDuplicateSelect(orgiginalPutArea, true);
+        });
+
+        // 副本新增鈕
+        $(insertPageObj).find(".list-items").eq(1).find(".fa-plus").click(function(){
+            var duplicatePutArea = $(insertPageObj).find("#duplicateTarget");
+            originalAndDuplicateSelect(duplicatePutArea, false);
+        });
+
+        // 取得速別
         getSpeedTypeAndSecretType($(insertPageObj).find("#speedType"));
+        // 取得密等
         getSpeedTypeAndSecretType($(insertPageObj).find("#secretType"), 2);
+
+        // 速別重整鈕
+        $(insertPageObj).find(".list-items").eq(2).find(".fa-refresh").click(function(){
+            getSpeedTypeAndSecretType($(insertPageObj).find("#speedType"));
+        });
+        // 密等重整鈕
+        $(insertPageObj).find(".list-items").eq(3).find(".fa-refresh").click(function(){
+            getSpeedTypeAndSecretType($(insertPageObj).find("#secretType"), 2);
+        });
 
         // // 修改
         // if(modifyObj != undefined){
@@ -357,6 +374,7 @@ function getSpeedTypeAndSecretType(putArea, typeID){
     if(typeID == undefined){
         typeID = 1;
     }
+    putArea.empty();
     var sendObj = {
         api: typeAPI+"getTypeList",
         data: {
@@ -367,6 +385,56 @@ function getSpeedTypeAndSecretType(putArea, typeID){
     $.getJSON(wrsUrl, sendObj, function(rs){
         if(rs.status && rs.data != null){
             $.each(rs.data, function(i, v){
+                selectOptionPut(putArea, v.uid, v.name);
+
+            });
+        }else{
+            selectOptionPut(putArea, "", "無資料");
+        }
+    });
+}
+
+// 創建正、副本相關選項
+function originalAndDuplicateSelect(putArea,isOriginal){
+    var siClass = "duplicateTargetID";
+    if(isOriginal){
+        siClass = "originalTargetID";
+    }
+    if(!$(putArea).find("."+siClass).length){
+        $(putArea).empty().removeClass("item-bg-danger");
+    }
+    var option = {styleKind:"received-issued",style:"sendDoc-originalAndDuplicate"};
+    getStyle(option,function(odPage){
+        var odPageObj = $.parseHTML(odPage);
+        var selectItem = $("<select>").addClass("form-control "+siClass);
+        
+        getSUOptionList(selectItem);
+
+        $(odPageObj).find(".control-label").eq(0).append(selectItem);
+        $(odPageObj).find(".fa-refresh").click(function(){
+            getSUOptionList(selectItem);
+        });
+        $(odPageObj).find(".fa-trash-o").click(function(){
+            $(odPageObj).remove();
+        });
+        $(odPageObj).appendTo(putArea);
+    });
+}
+
+function getSUOptionList(putArea){
+    putArea.empty();
+
+    var sendObj = {
+        api: "SuSupply/GetData_SuSupply",
+        threeModal: true,
+        data:{
+            sys_code: sys_code
+        }
+    };
+
+    $.getJSON(wrsUrl, sendObj, function(rs){
+        if(rs.Status){
+            $.each(rs.Data, function(i, v){
                 selectOptionPut(putArea, v.uid, v.name);
 
             });

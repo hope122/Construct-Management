@@ -1,34 +1,24 @@
 // 儲存收文新增/修改
 function saveReferenceData(sendObj, modifyItem, putFormArea){
-    // return
     sendObj.typeId = 5;
-    //sendObj.userName = userLoginInfo.userName;
-	sendObj.levelId= 1;
-	sendObj.isopycnicId=1;
-	sendObj.userName="test1";
-	// sendObj.uid=16;
+    sendObj.userName = userLoginInfo.userName;
+	sendObj.levelId = 1;
+	sendObj.isopycnicId = 1;
 	
-	var webapi="setReferenceInsert";
-	var url=wrsUrl;
-	if($(putFormArea).find("input:file").length>0){
-		url=wrsAPI + "uploaderAPI";
-		webapi="setReferenceDocInsert"
+	var method = "setReferenceInsert";
+	var processURL = wrsUrl;
+
+	if( $(putFormArea).find("input:file").length > 0){
+		processURL = wrsAPI + "uploaderAPI";
+		method = "setReferenceDocInsert"
 	}
 	var sendData = {
-        // api: docAPI+"setDocFileInsert",
-        api: referenceAPI+webapi,
+        api: referenceAPI + method,
         data: sendObj
     };
-     // console.log(sendData);
-
-    // $.post(wrsUrl, sendData, function(rs){
-        // console.log(rs);
-    // });
 	
     var options = {
-		//url:wrsAPI + "uploaderAPI",
-        // url: wrsUrl,
-		url:url,
+		url: processURL,
         type:"POST",
         data: sendData,
         dataType:"JSON",
@@ -45,4 +35,19 @@ function saveReferenceData(sendObj, modifyItem, putFormArea){
     };
     $(putFormArea).ajaxSubmit(options);
 
+}
+
+
+function saveSignData(sendObj){
+    console.log(sendObj);
+    return;
+    // data["doc_uid"] = 1;
+    var sendData = {
+        api: apdAPI+"Insert_ApdData",
+        threeModal: true,
+        data:data
+    }
+    $.post(wrsUrl,sendData,function(rs){
+        console.log(rs);
+    });
 }

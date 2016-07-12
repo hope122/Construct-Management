@@ -1,4 +1,4 @@
-function orgTreeDialog(){
+function orgTreeDialog(uid){
     $("#orgTreeDialog").remove();
     var orgTreeDialog = $("<div>").prop("id","orgTreeDialog");
     var orgChart = $("<div>").prop("id","orgTreeChart").addClass("modal-items");
@@ -29,3 +29,6 @@ function orgTreeDialog(){
         ]
     });
 }
+
+// sys_code
+// userID
