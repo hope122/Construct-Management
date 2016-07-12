@@ -214,6 +214,7 @@ function insertDialog(modifyObj, modifyItem){
 
     $("#insertDialog").bsDialog({
         title: title,
+        autoShow: true,
         start: function(){
           var option = {styleKind:"person",style:"in_mo"};
           getStyle(option,function(insertPage){
@@ -243,7 +244,6 @@ function insertDialog(modifyObj, modifyItem){
                 });
             }
             $(insertPageObj).appendTo($("#insertDialog").find(".modal-body"));
-            $("#insertDialog").bsDialog("show");
             tabCtrl("insertDialog");
             // getQCTableTypeList("tableTypeTab","tableType",true);
 

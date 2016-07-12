@@ -41,14 +41,20 @@
                 backdrop: 'static',
                 show: 'show'
             }).on("shown.bs.modal",function(event){
-
+                if($(".modal.fade.in").length == 1){
+                    if($(".modal.fade.in").last().css("display") == "none"){
+                        $(".modal.fade.in").last().fadeIn(300);
+                    }
+                }
             }).on("hidden.bs.modal",function(event){
                 // console.log($(".modal.fade.in"));
-                $(".modal.fade.in").eq(-1).fadeIn(300);
+                $(".modal.fade.in").eq(-1).fadeIn(300,function(){
+                    $("body").addClass("modal-open");
+                });
                 $selector.off("showbsDialogSelect");
             });
             
-            if(nowModalIn > 1){
+            if(nowModalIn > 1 && $(".modal.fade.in").length > 0){
                 $(".modal.fade.in").last().fadeOut(300);
             }
             

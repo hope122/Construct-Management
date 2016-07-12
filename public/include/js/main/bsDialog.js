@@ -41,6 +41,11 @@
                 // lastBackdrop.css("z-index",last2ItemBackdropZindex + 10);
                 // console.log($(".modal.fade.in").eq(-2).);
                 // option["start"]();
+                if($(".modal.fade.in").length == 1){
+                    if($(".modal.fade.in").last().css("display") == "none"){
+                        $(".modal.fade.in").last().fadeIn(300);
+                    }
+                }
             }).on("hidden.bs.modal",function(event){
                 // console.log($(".modal.fade.in"));
                 $(".modal.fade.in").eq(-1).fadeIn(300,function(){
@@ -49,7 +54,7 @@
                 $selector.off("showBSDialog");
             });
             
-            if(nowModalIn > 1){
+            if(nowModalIn > 1 && $(".modal.fade.in").length > 0){
                 $(".modal.fade.in").last().fadeOut(300);
             }
             

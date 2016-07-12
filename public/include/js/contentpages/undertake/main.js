@@ -1,72 +1,19 @@
-var testData = [];
 var sys_code = userLoginInfo.sysCode;
 var userID = userLoginInfo.userID;
 var menu_code = "eab";
-var orgTreeChart;
+
 // 標籤碼，1:收文，2:發文，3:退件
 var tabCode = 1;
 // ----------測試用---------------
 $(function(){
     getData();
-    $("#testBs").bsDialog({
-        autoShow:false,
-        showFooterBtn:true,
-        title: "擬文情境選擇",
-        // modalClass: "bsDialogWindow",
-        button:[{
-            text: "不使用",
-            click: function(){
-
-            }
-        },
-        {
-            text: "使用範本",
-            className:"btn-success",
-            click: function(){
-                
-                testBs2Show();
-                // $(formObj).ajaxSubmit(options);
-            }
-        }
-        ]
+    $("#totalTab").find("a").each(function(){
+        $(this).click(function(){
+            var id = $(this).prop("id");
+            getData(id+"-content");
+        });
     });
-    $("#testBs2").bsDialog({
-        autoShow:false,
-        showFooterBtn:true,
-        title: "擬文",
-        modalClass: "bsDialogWindow",
-        button:[{
-            text: "取消",
-            click: function(){
 
-            }
-        },
-        {
-            text: "確認",
-            className:"btn-success",
-            click: function(){
-                var options = {
-                    url: "http://127.0.0.1:88/uploaderAPI",
-                    type:"POST",
-                    // data: sendObj,
-                    // dataType:"JSON",
-                    beforesend: function(xhr){
-                        testBs3Show(xhr);
-                    },
-                    uploadProgress: function(event, position, total, percentComplete) {
-                       console.log(event, position, total, percentComplete);
-
-                    },
-                    success: function(rs) {
-                       console.log(rs);
-                    },
-                };
-                testBs7Show();
-                // $(formObj).ajaxSubmit(options);
-            }
-        }
-        ]
-    });
     tabCtrl("totalTab");
     
     $("#testBs5").bsDialog({
@@ -134,13 +81,7 @@ $(function(){
         ]
     });
 });
-function testBsShow(){
-    $("#testBs").bsDialog("show");
-}
-function testBs2Show(){
-    $("#testBs2").bsDialog("show");
-    // formObj = $.parseHTML(formStr);
-}
+
 function testBs3Show(){
     
     $("#testBs3").bsDialog("show");
@@ -219,8 +160,8 @@ function putDataToPage(data, putArea, onlyData){
                 // 事項標題
                 $(pageStyleObj).find(".list-items").eq(0).html(content.referenceNumber);
 
-                // 類型
-                // $(pageStyleObj).find(".list-items").eq(1).text(content.summary);
+                // 主旨
+                $(pageStyleObj).find(".list-items").eq(1).text(content.subject);
 
                 // 迄日
                 // $(pageStyleObj).find(".list-items").eq(2).text(content.MyKeypoint.EndDate);
@@ -232,6 +173,11 @@ function putDataToPage(data, putArea, onlyData){
                 // $(pageStyleObj).find(".fa-pencil-square-o").click(function(){
                 //     insertDialog( content, $(pageStyleObj) );
                 // });
+                
+                // 分文
+                $(pageStyleObj).find(".fa-sitemap").click(function(){
+                    orgTreeDialog();
+                });
 
                 // 完成
                 $(pageStyleObj).find(".fa-check").click(function(){
@@ -337,7 +283,8 @@ function tabInsert(){
         // 收文
         referenceInsertDialog();
     }else if(tabCode == 2){
-        insertDialog();
+        // insertDialog();
+        selectSampleDialog();
     }
 }
 

@@ -90,7 +90,15 @@ function addDialog(orgTreeChart, parentID){
         start: function(){
             loader( $("#addDialog").find(".contents") );
             // 取得組織資料
-            $.getJSON(ctrlAdminAPI + "GetData_AssTypeOffice").done(function(rs){
+            // ctrlAdminAPI + "GetData_AssTypeOffice"
+            var sendObj = {
+                api: "AssTypeOffice/GetData_AssTypeOffice",
+                threeModal:true,
+                data:{
+                    sys_code: sys_code,
+                }
+            };
+            $.getJSON(wrsUrl, sendObj).done(function(rs){
                 $("#addDialog").find(".contents").empty();
                 // console.log(rs);
                 if(rs.Status){
