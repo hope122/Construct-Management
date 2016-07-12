@@ -156,7 +156,7 @@ function insertDialog(modifyObj, modifyItem, sampleData){
                         });
                         duplicateTargetIDStr = duplicateTargetIDStr.substring(0, duplicateTargetIDStr.length - 1);
                     }
-                    sendObj.duplicateTargetIDStr = duplicateTargetIDStr;
+                    sendObj.duplicateTargetID = duplicateTargetIDStr;
 
 
                     if(originalIDStr){
