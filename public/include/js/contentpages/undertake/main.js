@@ -179,7 +179,7 @@ function putDataToPage(data, putArea, onlyData){
                 
                 // 分文
                 $(pageStyleObj).find(".fa-sitemap").click(function(){
-                    orgTreeDialog();
+                    orgTreeDialog(content.uid);
                 });
 
                 // 完成
