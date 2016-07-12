@@ -123,9 +123,9 @@ function getData(areaID){
     $("#"+areaID).find(".date-empty").remove();
 
     var sendData = {
-        api: referenceAPI+"getReference",
+        api: referenceAPI+"getReferenceList",
         data:{
-            
+            userId:userID
         }
     };
 
@@ -163,11 +163,14 @@ function putDataToPage(data, putArea, onlyData){
                 // 主旨
                 $(pageStyleObj).find(".list-items").eq(1).text(content.subject);
 
-                // 迄日
-                // $(pageStyleObj).find(".list-items").eq(2).text(content.MyKeypoint.EndDate);
+                // 速別
+                 $(pageStyleObj).find(".list-items").eq(2).text(content.levelName);
                 
-                // 進度
-                // $(pageStyleObj).find(".list-items").eq(3).text(progressStr);
+                // 預警
+                 $(pageStyleObj).find(".list-items").eq(3).text(content.endDate);
+				 
+				 // 狀態
+                 $(pageStyleObj).find(".list-items").eq(4).text(content.status);
 
                 // 修改
                 // $(pageStyleObj).find(".fa-pencil-square-o").click(function(){
