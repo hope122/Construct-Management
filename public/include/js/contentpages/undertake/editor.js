@@ -138,23 +138,23 @@ function insertDialog(modifyObj, modifyItem, sampleData){
                     var sendObj = getUserInput("insertDialog");
                     // 檢查是否有選取正本，至少要一個
                     var originalTarget = $("#insertDialog").find("#originalTarget .originalTargetID");
-                    var originalIDStr;
+                    var originalIDStr = "";
                     if( originalTarget.length ){
                         $.each(originalTarget, function(){
                             originalIDStr += $(this).val() + ",";
                         });
-                        originalIDStr = originalIDStr.subString(0, originalIDStr.length - 1);
+                        originalIDStr = originalIDStr.substring(0, originalIDStr.length - 1);
                     }
                     sendObj.originalID = originalIDStr;
 
                     // 檢查是否有選取副本
                     var duplicateTarget = $("#insertDialog").find("#originalTarget .duplicateTargetID");
-                    var duplicateTargetIDStr;
+                    var duplicateTargetIDStr = "";
                     if( duplicateTarget.length ){
                         $.each(originalTarget, function(){
                             duplicateTargetIDStr += $(this).val() + ",";
                         });
-                        duplicateTargetIDStr = duplicateTargetIDStr.subString(0, duplicateTargetIDStr.length - 1);
+                        duplicateTargetIDStr = duplicateTargetIDStr.substring(0, duplicateTargetIDStr.length - 1);
                     }
                     sendObj.duplicateTargetIDStr = duplicateTargetIDStr;
 

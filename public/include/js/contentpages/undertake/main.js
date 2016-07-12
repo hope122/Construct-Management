@@ -457,7 +457,7 @@ function signInfoAndDate(sendObj){
                     sendObj.end_date = end_date;
                     if(end_date){
                         sendObj.actionType = 0;
-                        signWFSelect();
+                        signWFSelect(sendObj);
                         // $("#signInfoAndDateDialog").bsDialog("close");
 
                     }else{
@@ -474,7 +474,7 @@ function signInfoAndDate(sendObj){
                     sendObj.end_date = end_date;
                     if(end_date){
                         sendObj.actionType = 1;
-                        signWFSelect();
+                        signWFSelect(sendObj);
                         // $("#signInfoAndDateDialog").bsDialog("close");
 
                     }else{
