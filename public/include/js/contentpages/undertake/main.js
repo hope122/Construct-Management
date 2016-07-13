@@ -180,16 +180,18 @@ function putDataToPage(data, putArea, onlyData){
                 
                 // 分文
                 $(pageStyleObj).find(".fa-sitemap").click(function(){
-                    orgTreeDialog(content.uid);
+                    if(content.status == 0){
+                        orgTreeDialog(content.uid);
+                    }else if(content.status == 1){
+                        userListData(content.uid);
+                    }
                 });
 
                 // 完成
-                $(pageStyleObj).find(".fa-check").click(function(){
+                $(pageStyleObj).find(".fa-check-circle-o").click(function(){
                     
-                    finishList(content.Uid, itemType);
-                    $(this).remove();
-                    $(pageStyleObj).find(".fa-pencil-square-o").remove();
-                    $(pageStyleObj).find(".fa-trash-o").remove();
+                    // $(this).remove();
+                    referenceCheckItemDialog();
                 });
 
                 // 刪除

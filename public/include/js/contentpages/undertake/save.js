@@ -51,3 +51,38 @@ function saveSignData(sendObj){
         console.log(rs);
     });
 }
+
+// 儲存收文確認事項
+function saveReferenceCheckItemData(sendObj, modifyItem, putFormArea){
+    return;
+    var method = "setReferenceInsert";
+    var processURL = wrsUrl;
+
+    if( $(putFormArea).find("input:file").length > 0){
+        processURL = wrsAPI + "uploaderAPI";
+        method = "setReferenceDocInsert"
+    }
+    var sendData = {
+        api: referenceAPI + method,
+        data: sendObj
+    };
+    
+    var options = {
+        url: processURL,
+        type:"POST",
+        data: sendData,
+        dataType:"JSON",
+        beforesend: function(xhr){
+            // testBs3Show(xhr);
+        },
+        uploadProgress: function(event, position, total, percentComplete) {
+          // console.log(event, position, total, percentComplete);
+
+        },
+        success: function(rs) {
+           console.log(rs);
+        },
+    };
+    $(putFormArea).ajaxSubmit(options);
+
+}
