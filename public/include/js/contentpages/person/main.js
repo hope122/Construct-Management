@@ -176,6 +176,7 @@ function putDataToPage(data, onlyData){
             $(pageStyleObj).find(".fa-pencil-square-o").click(function(){
                 insertDialog(data, firstItem);
                 getAddrInfo(data.uid);
+                getOrgInfo(data.userID);
             });
 
             // 刪除
@@ -196,7 +197,7 @@ function putDataToPage(data, onlyData){
 
 // 新增&修改Dialog
 function insertDialog(modifyObj, modifyItem){
-    // console.log(modifyObj, modifyItem);
+    console.log(modifyObj, modifyItem);
     if(modifyItem == undefined){
         modifyItem = null;
     }
@@ -251,6 +252,7 @@ function insertDialog(modifyObj, modifyItem){
                 }else{
                     $(this).removeClass("item-bg-danger");
                 }
+                $(this).val(typeVal);
             });
 
             // 性別按下後去除紅色筐
@@ -358,6 +360,12 @@ function insertDialog(modifyObj, modifyItem){
                             }
                         }
                     });
+                    
+                    if(!sendObj.org.org.length){
+                        isEmpty = true;
+                        $("#accountInfo").click();
+                        alert("帳號設定 > 尚未選擇部門");
+                    }
                     // return;
                     if(!isEmpty && modifyObj == undefined && checkSid(userInfo.sid)){
                         saveData(sendObj, modifyItem);
@@ -382,108 +390,22 @@ function insertDialog(modifyObj, modifyItem){
 
 // 儲存
 function saveData(sendObj,modifyItem){
-
-    method = "Insert_AssCommon";
-    // console.log(sendData);
-    // return;
+    sendObj.uuid = userLoginUuid;
+    sendObj.sys_code = sys_code;
+    var method = "Insert_AssUserComplex";
     if(sendObj.userInfo.uid != undefined){
-        method = "Update_AssCommon";
-        modifyItem.html(name);
+        method = "Update_AssUserComplex";
+        modifyItem.html(sendObj.userInfo.name);
     }
-    var sendData ={
-        api: threeModelPersonAPI+method,
-        threeModal: true,
-        data: sendObj.userInfo
-    };
-    // 先新增自然人資料
-    // $.post(ctrlPersonAPI + method, sendObj.userInfo, function(rs){
-    $.post(wrsUrl, sendData, function(rs){
+    $.post(wrsAPI+"userRegisteredAPI/"+method, sendObj, function(rs){
         var rs = $.parseJSON(rs);
-
-        // console.log(rs);
-        // 新增
         if(rs.Status){
-
             if(sendObj.userInfo.uid == undefined){
-                sendObj.userInfo.uid = rs.Data;
-                sendObj.census.cmid = rs.Data;
-                sendObj.communication.cmid = rs.Data;
-                sendObj.org.cmid = rs.Data;
-
-                // putDataToPage(sendObj, true);
-                // 地址修改ＡＰＩ
-                addrMethod = "Insert_AssCommonAddress";
-                acMethod = "Insert_AssUser";
-            }else{
-                addrMethod = "Update_AssCommonAddress";
-                acMethod = "Update_AssUser";
-                $(modifyItem).html(sendObj.userInfo.name);
+                sendObj.userInfo.userID = rs.userID;
+                sendObj.userInfo.uid = rs.cmid;
+                putDataToPage(sendObj.userInfo, true);
             }
-
-            // 之後放入地址資料
-            var sendData = {
-                api: "AssCommonAddress/"+addrMethod,
-                threeModal: true,
-                data: sendObj.census
-            }
-            // $.post(ctrlPersonAPI + addrMethod, sendObj.census, function(addressRs){
-            $.post(wrsUrl, sendData, function(addressRs){
-                var addressRs = $.parseJSON(addressRs);
-
-                if(addressRs.Status){
-                    if(addrMethod == "Insert_AssCommonAddress"){
-                        sendObj.census.uid = addressRs.Data;
-                    }
-                    var sendData = {
-                        api: "AssCommonAddress/"+addrMethod,
-                        threeModal: true,
-                        data: sendObj.communication
-                    };
-                    // $.post(ctrlPersonAPI + addrMethod, sendObj.communication, function(oRs){
-                    $.post(wrsUrl, sendData, function(oRs){
-                        var oRs = $.parseJSON(oRs);
-
-                        if(oRs.Status){
-
-                            if(addrMethod == "Insert_AssCommonAddress"){
-                                sendObj.communication.uid = oRs.Data;
-                            }
-                            
-                            
-                        }
-                        // 測試
-                        // acMethod = "Insert_AssUser";
-                        var posid = (sendObj.org.job.length)?sendObj.org.job[0]:"0";
-                        var sendData = {
-                            api: "AssUser/"+acMethod,
-                            threeModal: true,
-                            data: {
-                                cmid: sendObj.org.cmid,
-                                orgid: sendObj.org.org[0],
-                                posid: posid,
-                                uuid: userLoginUuid,
-                                sid: sendObj.userInfo.sid,
-                                sys_code: sys_code,
-                                userID: sendObj.userInfo.userID
-                            }
-                        };
-                        // 放入帳號設置的部分
-                        $.post(wrsUrl, sendData, function(rs){
-                            var rs = $.parseJSON(rs);
-                            if(rs.Status){
-                                sendObj.userInfo.userID = rs.Data;
-                                putDataToPage(sendObj.userInfo, true);
-                                // getOUData();
-                            }
-                        });
-                    });
-                }
-
-            });
-            
-            
-        }else{
-            alert(rs.msg);
+            // getOUData();
         }
     });
 }
