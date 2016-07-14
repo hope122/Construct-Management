@@ -133,7 +133,7 @@ function insertDialog(uid, name, modifyItem){
             var insertPageObj = $.parseHTML(insertPage);
 
             $(insertPageObj).removeClass("row").addClass("contents");
-            $(insertPageObj).find(".control-label").text("單位名稱");
+            $(insertPageObj).find(".control-label").text("名稱");
             $(insertPageObj).find("input:text").val(name);
             
             if(uid != undefined){

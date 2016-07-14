@@ -82,31 +82,34 @@ function addDialog(orgTreeChart, parentID){
         headerCloseBtn = false;
         $("#orgChart").empty();
     }
-
-    $("#addDialog").bsDialog({
-        autoShow:true,
-        headerCloseBtn: headerCloseBtn,
-        title: "組織單位選單",
-        start: function(){
-            loader( $("#addDialog").find(".contents") );
-            // 取得組織資料
-            // ctrlAdminAPI + "GetData_AssTypeOffice"
-            var sendObj = {
-                api: "AssTypeOffice/GetData_AssTypeOffice",
-                threeModal:true,
-                data:{
-                    sys_code: sys_code,
-                }
-            };
-            $.getJSON(wrsUrl, sendObj).done(function(rs){
-                $("#addDialog").find(".contents").empty();
-                // console.log(rs);
-                if(rs.Status){
+    var sendObj = {
+        api: "AssTypeOffice/GetData_AssTypeOffice",
+        threeModal:true,
+        data:{
+            sys_code: sys_code,
+        }
+    };
+    $.getJSON(wrsUrl, sendObj).done(function(rs){
+        // console.log(rs);
+        if(rs.Status){
+            $("#addDialog").bsDialog({
+                autoShow:true,
+                headerCloseBtn: headerCloseBtn,
+                title: "組織單位選單",
+                showFooterBtn:false,
+                start: function(){
+                    loader( $("#addDialog").find(".contents") );
+                    $("#addDialog").find(".contents").empty();
                     createOtgList(parentID, orgTreeChart, rs.Data, false);
-                }
+                },
             });
-        },
-        showFooterBtn:false,
+        }else{
+            $("#addDialog").remove();
+            errorDialog("未有組織單位，按下關閉後開始新增", function(){
+                loadPage("org-unit/org-list","pagescontent")
+            });
+            // loadPage("org-unit/org-list","pagescontent");
+        }
     });
 }
 
@@ -241,5 +244,36 @@ function deleteNode(uid){
         success: function(rs){
             // console.log(rs);
         }
+    });
+}
+
+// 錯誤提示
+function errorDialog(msg, closeCallBack){
+    if($("#errorDialog").length){
+        $("#errorDialog").remove();
+        $("body").find(".modal-backdrop.fade.in").last().remove();
+    }
+    $("<div>").prop("id","errorDialog").appendTo("body");
+
+    $("#errorDialog").bsDialog({
+        autoShow:true,
+        showFooterBtn:true,
+        title: "錯誤",
+        start:function(){
+
+            var msgDiv = $("<div>").html(msg);
+            $("#errorDialog").find(".modal-body").append(msgDiv);
+        },
+        button:[{
+            text: "關閉",
+            className: "btn-danger",
+            click: function(){
+                $("#errorDialog").bsDialog("close");
+                if(closeCallBack != undefined){
+                    closeCallBack();
+                }
+            }
+        }
+        ]
     });
 }
