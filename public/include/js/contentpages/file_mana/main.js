@@ -132,14 +132,18 @@ function selectCategory(pageStyleObj,contentObj){
    			typeid:docType
    		}
     };
+    $(pageStyleObj).empty();
     $.getJSON(wrsUrl,sendObj,function(rs){
-        if(rs.status){
+        if(rs.status && rs.data != null){
             $.each(rs.data,function(key,value){
                 selectOptionPut($(pageStyleObj).find("#SmallcategoryID"),value["uid"],value["name"]);
             });
             if(contentObj!=undefined){
                 $(pageStyleObj).find("#SmallcategoryID").val(contentObj.SmallcategoryID);
             }
+        }else{
+          selectOptionPut($(pageStyleObj).find("#SmallcategoryID"),"","無資料");
+
         }
 
         
