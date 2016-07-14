@@ -223,6 +223,56 @@ function insertDialog(modifyObj, modifyItem){
             $(insertPageObj).find(".fa-sitemap").click(function(){
                 orgChartDialog( $(insertPageObj).find("#orgInfo"), $(insertPageObj).find("#orgJobInfo"));
             });
+
+            var date = new Date();
+            var nowYear = date.getFullYear();
+            var dateOption = {
+                dateFormat: "yy-mm-dd",
+                
+                showOn: "button",
+                buttonText: '<i class="fa fa-calendar fa-lg mouse-pointer send-btn"></i>',
+                onSelect: function(dateText, inst) {
+                    // end_date_content
+                    $(insertPageObj).find("#birthday_content").removeClass("item-bg-danger").text(dateText);
+
+                },
+                maxDate: 0,
+                changeYear: true,
+                yearRange: '1950:'+nowYear
+            }
+
+            $(insertPageObj).find("#birthday").datepicker(dateOption);
+
+            // 身分證檢查
+            $(insertPageObj).find("#sid").keyup(function(){
+                var typeVal = $(this).val().toUpperCase();
+                if(!checkSid(typeVal)){
+                    $(this).removeClass("item-bg-danger").addClass("item-bg-danger");
+                }else{
+                    $(this).removeClass("item-bg-danger");
+                }
+            });
+
+            // 性別按下後去除紅色筐
+            $(insertPageObj).find("#sexBtn label").click(function(){
+                $(insertPageObj).find("#sexContent").removeClass("item-bg-danger").empty();
+            });
+
+            // 戶籍地點選亦同按鈕
+            $(insertPageObj).find("#census-same").click(function(){
+                var isCheck = $(this).prop("class").search("fa-check-square-o");
+                if(isCheck == -1){
+                    $(this).removeClass("fa-square-o").addClass("fa-check-square-o");
+                    $(insertPageObj).find("#census-content input:text").each(function(){
+                        var id = $(this).prop("id");
+                        var value = $(this).val();
+                        $(insertPageObj).find("#communication-content").find("#"+id).val(value);
+                    });
+                }else{
+                    $(this).removeClass("fa-check-square-o").addClass("fa-square-o");
+                }
+            });
+
             // 修改
             if(modifyObj != undefined){
 
@@ -286,12 +336,36 @@ function insertDialog(modifyObj, modifyItem){
                         sendObj.census.cmid = modifyObj.uid;
                         sendObj.org.cmid = modifyObj.uid;
                     }
-                    
-                    // return;
 
-                    saveData(sendObj, modifyItem);
-                    // console.log(sendObj);
-                    $("#insertDialog").bsDialog("close");
+                    var isEmpty = false;
+                    $.each(userInfo, function(i, v){
+                        if(i != "birthday" && i != "sex"){
+                            if(!$.trim(v)){
+                                $("#insertDialog").find("#"+i).addClass("item-bg-danger");
+                                isEmpty = true;
+                            }
+                        }else{
+                            if(i == "birthday"){
+                                if(!$.trim(v)){
+                                    $("#insertDialog").find("#birthday_content").text("尚未選擇生日").addClass("item-bg-danger");
+                                    isEmpty = true;
+                                }
+                            }else if(i == "sex"){
+                                if(v != "0" && v != "1"){
+                                    $("#insertDialog").find("#sexContent").text("尚未選擇性別").addClass("item-bg-danger");
+                                    isEmpty = true;
+                                }
+                            }
+                        }
+                    });
+                    // return;
+                    if(!isEmpty && modifyObj == undefined && checkSid(userInfo.sid)){
+                        saveData(sendObj, modifyItem);
+                        $("#insertDialog").bsDialog("close");
+                    }else if(!isEmpty && modifyObj != undefined){
+                        saveData(sendObj, modifyItem);
+                        $("#insertDialog").bsDialog("close");
+                    }
                 }
             },
             {
@@ -409,7 +483,7 @@ function saveData(sendObj,modifyItem){
             
             
         }else{
-            alert("新增失敗");
+            alert(rs.msg);
         }
     });
 }
@@ -830,4 +904,37 @@ function putJobInfo(jobPutArea, jobObj){
     setOrgJobVal.appendTo(jobContent);
     jobContent.appendTo(jobPutArea);
     
+}
+
+function checkSid(value){
+    var arr = value.split("");
+    var letters = /^[A-Z]+$/;
+    if(arr.length){
+        if(!arr[0].match(letters)){
+            return false;
+        }
+        var changeObj = {
+            "A": 10,"B": 11,"C": 12,"D": 13,"E": 14,"F": 15,"G": 16,"H": 17,"I": 34,"J": 18,"K": 19,"L": 20,"M": 21,
+            "N": 22,"O": 35,"P": 23,"Q": 24,"R": 25,"S": 26,"T": 27,"U": 28,"V": 29,"W": 32,"X": 30,"Y": 31,"Z": 33
+        };
+        var processNumber = {
+            "1": 8, "2": 7, "3": 6, "4": 5, "5": 4, "6":3, "7":2, "8": 1, "9": 1
+        }
+        var count = 0;
+        $.each(arr, function(i,v){
+            if(i>0){
+                count += v * processNumber[i];
+            }else{
+                var tmpStr = changeObj[v].toString();
+                var tmpArr = tmpStr.split("");
+                count += parseInt(tmpArr[0]);
+                count += parseInt(tmpArr[1]) * 9;
+            }
+        });
+        if(count % 10 != 0 || arr.length < 10){
+            return false;
+        }else{
+            return true;
+        }
+    }
 }
