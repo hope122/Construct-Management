@@ -187,6 +187,29 @@ function referenceInsertStart(modifyObj, modifyItem){
         });
         // 加載CKeditor
         $(insertPageObj).find("#summary").ckeditor();
+
+        // 取得來文對象資訊
+        getSUOptionList($(insertPageObj).find("#referenceTarget"));
+
+        // 來文對象資訊重整
+        $(insertPageObj).find("#referenceTargetRefresh").click(function(){
+            getSUOptionList($(insertPageObj).find("#referenceTarget"));
+        });
+
+        // 取得速別
+        getSpeedTypeAndSecretType($(insertPageObj).find("#speedType"));
+        // 取得密等
+        getSpeedTypeAndSecretType($(insertPageObj).find("#secretType"), 2);
+
+        // 速別重整鈕
+        $(insertPageObj).find(".list-items").eq(2).find(".fa-refresh").click(function(){
+            getSpeedTypeAndSecretType($(insertPageObj).find("#speedType"));
+        });
+        // 密等重整鈕
+        $(insertPageObj).find(".list-items").eq(3).find(".fa-refresh").click(function(){
+            getSpeedTypeAndSecretType($(insertPageObj).find("#secretType"), 2);
+        });
+
         // CKEDITOR.replace( $(insertPageObj).find("#summary"), {});
         // 修改
         if(modifyObj != undefined){

@@ -1,11 +1,52 @@
 <div class="contents">
 	<div class="col-xs-12 col-md-12 list-items">
 		<div class="form-group">
+		    <div class="col-xs-12 col-md-2 control-label font-lineHeight list-item-text-nowrap">
+		    	來文對象
+		    </div>
+		    <div class="col-xs-12 col-md-9">
+		    	<select id="referenceTarget" class="form-control"></select>
+		    </div>
+		    <div class="col-xs-12 col-md-1 control-label font-lineHeight">
+		    	<i class="fa fa-refresh send-btn mouse-pointer" id="referenceTargetRefresh"></i>
+		    </div>
+		</div>
+	</div>
+	<div class="col-xs-12 col-md-12 list-items">
+		<div class="form-group">
 		    <div class="col-xs-12 col-md-2 control-label font-lineHeight">
 		    	文號
 		    </div>
 		    <div class="col-xs-12 col-md-10">
 		      <input type="text" class="form-control userInput" id="referenceNumber">
+		    </div>
+		</div>
+	</div>
+	<div class="col-xs-12 col-md-12 list-items">
+		<div class="form-group">
+		    <div class="col-xs-12 col-md-2 control-label font-lineHeight">
+		    	速別
+		    </div>
+		    <div class="col-xs-10 col-md-9 control-label font-lineHeight">
+		    	<select class="form-control userInput" id="speedType">
+		    	</select>
+		    </div>
+		    <div class="col-xs-2 col-md-1 control-label font-lineHeight">
+		    	<i class="fa fa-refresh send-btn mouse-pointer"></i>
+		    </div>
+		</div>
+	</div>
+	<div class="col-xs-12 col-md-12 list-items">
+		<div class="form-group">
+		    <div class="col-xs-12 col-md-2 control-label font-lineHeight">
+		    	密等
+		    </div>
+		    <div class="col-xs-12 col-md-9 control-label font-lineHeight">
+		    	<select class="form-control userInput" id="secretType">
+		    	</select>
+		    </div>
+		    <div class="col-xs-2 col-md-1 control-label font-lineHeight">
+		    	<i class="fa fa-refresh send-btn mouse-pointer"></i>
 		    </div>
 		</div>
 	</div>
@@ -26,6 +67,19 @@
 		    </div>
 		    <div class="col-xs-12 col-md-12">
 		      <textarea class="form-control userInput" name="summary" id="summary"></textarea>
+		    </div>
+		</div>
+	</div>
+	<div class="col-xs-12 col-md-12 list-items">
+		<div class="form-group">
+		    <div class="col-xs-12 col-md-2 control-label font-lineHeight list-item-text-nowrap">
+		    	關鍵重點
+		    </div>
+		    <div class="col-xs-12 col-md-10">
+		      <input type="text" class="form-control userInput" id="keyword">
+		    </div>
+		    <div class="col-xs-12 col-md-12 control-label font-lineHeight">
+		      多個請以","進行分隔
 		    </div>
 		</div>
 	</div>

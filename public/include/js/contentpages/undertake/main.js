@@ -133,7 +133,7 @@ function getData(areaID){
     $.getJSON(wrsUrl, sendData).done(function(rs){
         // console.log(rs);
         
-        if(rs.status){
+        if(rs.status && rs.data != null){
             putDataToPage(rs.data, $("#"+areaID));
 
         }else{
