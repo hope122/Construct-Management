@@ -206,7 +206,7 @@ function creatOrgData(orgTreeChart,contentObj,parentID){
                 orgTreeChart.newNode( parentID, contentObj.name, rs.Data, contentObj.uid );
             }else{
                 // ROOT
-                createTreeData(rs.Data, contentObj.name, parentID, contentObj.officeid);
+                createTreeData(rs.Data, contentObj.name, parentID, contentObj.uid);
                 createTree();
             }
             // 關閉
