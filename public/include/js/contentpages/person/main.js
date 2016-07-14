@@ -360,11 +360,12 @@ function insertDialog(modifyObj, modifyItem){
                             }
                         }
                     });
-                    
-                    if(!sendObj.org.org.length){
-                        isEmpty = true;
-                        $("#accountInfo").click();
-                        alert("帳號設定 > 尚未選擇部門");
+                    if(!isEmpty){
+                        if(!sendObj.org.org.length){
+                            isEmpty = true;
+                            $("#accountInfo").click();
+                            alert("帳號設定 > 尚未選擇部門");
+                        }
                     }
                     // return;
                     if(!isEmpty && modifyObj == undefined && checkSid(userInfo.sid)){
