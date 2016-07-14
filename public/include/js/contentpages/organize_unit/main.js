@@ -127,6 +127,7 @@ function insertDialog(uid, name, modifyItem){
 
     $("#insertDialog").bsDialog({
         title:title,
+        autoShow: true,
         start: function(){
           var option = {styleKind:"input",style:"text-help-only"};
           getStyle(option,function(insertPage){
@@ -140,7 +141,6 @@ function insertDialog(uid, name, modifyItem){
                 $("<input>").attr("type","hidden").prop("id","uid").val(uid).appendTo(insertPageObj);
             }
             $("#insertDialog").find(".modal-body").html(insertPageObj);
-            $("#insertDialog").bsDialog("show");
             $("body").find(".modal-backdrop")
             // getQCTableTypeList("tableTypeTab","tableType",true);
 
