@@ -39,6 +39,7 @@
             // $(".modal.fade.in").eq(-2).fadeOut(300);
             $selector.modal({
                 backdrop: 'static',
+                keyboard: option.headerCloseBtn,
                 show: 'show'
             }).on("shown.bs.modal",function(event){
                 if($(".modal.fade.in").length == 1){

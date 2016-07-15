@@ -66,6 +66,12 @@ function addJobRank(putArea, orgID, jobTreeChart, parentID){
                 // console.log(rs);
                 if(rs.Status){
                     createJobList(putArea, parentID, jobTreeChart, rs.Data, orgID, false);
+                }else{
+                    var option = {styleKind:"system",style:"data-empty"};
+                    // 取得選單樣式
+                    getStyle(option,function(emptyStyle){
+                        $("#addJobRank").find(".modal-body").find(".contents").html(emptyStyle);
+                    });
                 }
             });
         },
@@ -107,7 +113,7 @@ function createJobList(putArea, parentID, jobTreeChart, data, orgID, isEmpty){
         var option = {styleKind:"system",style:"data-empty"};
         // 取得選單樣式
         getStyle(option,function(emptyStyle){
-            $("#addJobRank").find(".modal-body").find(".contents").html(insertPageObj);
+            $("#addJobRank").find(".modal-body").find(".contents").html(emptyStyle);
         });
     }
 }

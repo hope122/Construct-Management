@@ -6,7 +6,7 @@ function fileRename(filename,inputObj){
         title:"選擇檔案",headerCloseBtn:false,
         start: function(){
         	$("#addDialog").find($("#FileName")).text(filename);
-            var option = {styleKind:"upload",style:"in-mo"};
+            var option = {styleKind:"file-mana",style:"in-mo"};
                 // 取得畫面樣式
             getStyle(option,function(pageStyle){
                 //自訂要的欄位
@@ -112,7 +112,7 @@ function sendFile(inputObj,filename){
 		   	}
 		};
 	   	var options = {
-		    url: "http://211.21.170.18:88/uploaderAPI",
+		    url: wrsAPI + "uploaderAPI",
 		    type:"POST",
 		    data: sendObj,
 		    dataType:"JSON",

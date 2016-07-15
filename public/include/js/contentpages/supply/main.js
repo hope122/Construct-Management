@@ -7,22 +7,19 @@ $(function(){
 
 // 取得資料
 function getOUData(uid){
-    loader($("#grid"));
     var sendData = {
-        api: "AssTypePosition/GetData_AssTypePosition",
+        api: "SuSupply/GetData_SuSupply",
         threeModal: true,
         data:{
             sys_code: sys_code
         }
     }
-
     if(uid != undefined){
         sendData.data.iUid = uid;
     }
     // ＡＰＩ呼叫
-    // $.getJSON(ctrlAdminAPI + "GetData_AssTypePosition", sendData ).done(function(rs){
+    // $.getJSON(ctrlAdminAPI + "GetData_AssTypeOffice", sendData ).done(function(rs){
     $.getJSON(wrsUrl, sendData ).done(function(rs){
-        $("#grid").empty();
         if(rs.Status){
             if(uid == null){
                 putDataToPage(rs.Data);
@@ -70,7 +67,7 @@ function putDataToPage(data, onlyData, resultDAta){
                 firstItem.html(content.name);
                 // 修改
                 $(pageStyleObj).find(".fa-pencil-square-o").click(function(){
-                    insertDialog(content.uid, content.name, firstItem);
+                    insertDialog(content, firstItem);
                 });
 
                 // 刪除
@@ -89,7 +86,7 @@ function putDataToPage(data, onlyData, resultDAta){
 
             // 修改
             $(pageStyleObj).find(".fa-pencil-square-o").click(function(){
-                insertDialog(resultDAta.Data, data.name, firstItem);
+                insertDialog(data, firstItem);
             });
 
             // 刪除
@@ -109,19 +106,13 @@ function putDataToPage(data, onlyData, resultDAta){
 }
 
 // 新增&修改Dialog
-function insertDialog(uid, name, modifyItem){
-    if(name == undefined){
-        name = "";
-    }
-    if(modifyItem == undefined){
-        modifyItem = null;
-    }
+function insertDialog(modifyObj, modifyItem){
     var saveBtn = "";
-    if(uid != undefined){
-        title = "修改職務";
+    if(modifyObj != undefined){
+        title = "修改客戶";
         saveBtn = "修改";
     }else{
-        title = "新增職務";
+        title = "新增客戶";
         saveBtn = "新增";
     }
     $("#insertDialog").remove();
@@ -130,20 +121,24 @@ function insertDialog(uid, name, modifyItem){
 
     $("#insertDialog").bsDialog({
         title:title,
-        autoShow: true,
         start: function(){
-          var option = {styleKind:"input",style:"text-help-only"};
+          var option = {styleKind:"supply",style:"insert"};
           getStyle(option,function(insertPage){
             var insertPageObj = $.parseHTML(insertPage);
-            
-            $(insertPageObj).removeClass("row").addClass("contents");
-            $(insertPageObj).find(".control-label").text("職務名稱");
-            $(insertPageObj).find("input:text").val(name);
-            
-            if(uid != undefined){
-                $("<input>").attr("type","hidden").prop("id","uid").val(uid).appendTo(insertPageObj);
+            var nameArea = $(insertPageObj).find(".list-items").eq(0).find("input:text");
+            var ownerArea = $(insertPageObj).find(".list-items").eq(1).find("input:text");
+            var enameArea = $(insertPageObj).find(".list-items").eq(2).find("input:text");
+            var taxidArea = $(insertPageObj).find(".list-items").eq(3).find("input:text");
+
+            if(modifyObj != undefined){
+                nameArea.val(modifyObj.name);
+                ownerArea.val(modifyObj.owner);
+                enameArea.val(modifyObj.ename);
+                taxidArea.val(modifyObj.taxid);
             }
+            
             $("#insertDialog").find(".modal-body").html(insertPageObj);
+            $("#insertDialog").bsDialog("show");
             $("body").find(".modal-backdrop")
             // getQCTableTypeList("tableTypeTab","tableType",true);
 
@@ -154,11 +149,30 @@ function insertDialog(uid, name, modifyItem){
                 text: saveBtn,
                 className: "btn-success",
                 click: function(){
-                    if(uid == undefined){
-                        $("#grid").find(".date-empty").remove();
+                    var sendData = getUserInput("insertDialog");
+
+                    var isEmpty = false;
+                    $.each(sendData, function(i,v){
+                        if(i == "name" || i == "owner"){
+                            if(!$.trim(v)){
+                                isEmpty = true;
+                                $("#insertDialog").find("#"+i).addClass("item-bg-danger");
+                            }else{
+                                $("#insertDialog").find("#"+i).removeClass("item-bg-danger");
+                            }
+                        }
+                    });
+                    
+                    sendData.sys_code = sys_code;
+
+                    if(modifyObj != undefined){
+                        sendData.uid = modifyObj.uid;
                     }
-                    saveData(modifyItem);
-                    $("#insertDialog").bsDialog("close");
+
+                    if(!isEmpty){
+                        saveData(modifyItem, sendData);
+                        $("#insertDialog").bsDialog("close");
+                    }
                 }
             },
             {
@@ -174,35 +188,29 @@ function insertDialog(uid, name, modifyItem){
 }
 
 // 儲存
-function saveData(modifyItem){
+function saveData(modifyItem, sendData){
+    // console.log(modifyItem);
     
-    var name = $("#insertDialog").find("input:text").val(), 
-    uid = $("#insertDialog").find("#uid").val();
-    uid = (uid) ? parseInt(uid): 0;
     // console.log(uid);
-    var method = "Insert_AssTypePosition";
-    
+    var method = "Insert_SuSupply";
     // console.log(sendData);
     // return;
-    if(uid != 0){
-        method = "Update_AssTypePosition";
-        modifyItem.html(name);
+    if(sendData.uid){
+        method = "Update_SuSupply";
+        modifyItem.html(sendData.name);
     }
-    var sendData = {
-        api: "AssTypePosition/"+method,
+
+    var sendObj = {
+        api: "SuSupply/"+method,
         threeModal: true,
-        data: {
-            uid: uid,
-            name: name,
-            sys_code: sys_code
-        }
+        data: sendData
     }
-    $.post(wrsUrl,sendData,function(rs){
+    $.post(wrsUrl,sendObj,function(rs){
         var rs = $.parseJSON(rs);
         // 新增
-        if(uid == 0){
-            sendData.data.uid = rs.Data;
-            putDataToPage(sendData.data, true, rs);
+        if(sendData.uid == undefined){
+            sendObj.data.uid = rs.Data;
+            putDataToPage(sendObj.data,true, rs);
         }
     });
 }
@@ -210,7 +218,7 @@ function saveData(modifyItem){
 // 刪除
 function deleteData(uid, removeItem, name){
     var sendData = {
-        api: "AssTypePosition/Delete_AssTypePosition",
+        api: "SuSupply/Delete_SuSupply",
         threeModal: true,
         data:{
             uid: uid
