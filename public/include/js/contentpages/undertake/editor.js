@@ -186,28 +186,28 @@ function referenceInsertStart(modifyObj, modifyItem){
             fileSelect(putFormArea);
         });
         // 加載CKeditor
-        $(insertPageObj).find("#summary").ckeditor();
+        $(insertPageObj).find("#explanation").ckeditor();
 
         // 取得來文對象資訊
-        getSUOptionList($(insertPageObj).find("#referenceTarget"));
+        getSUOptionList($(insertPageObj).find("#come_from"));
 
         // 來文對象資訊重整
         $(insertPageObj).find("#referenceTargetRefresh").click(function(){
-            getSUOptionList($(insertPageObj).find("#referenceTarget"));
+            getSUOptionList($(insertPageObj).find("#come_from"));
         });
 
         // 取得速別
-        getSpeedTypeAndSecretType($(insertPageObj).find("#speedType"));
+        getSpeedTypeAndSecretType($(insertPageObj).find("#level_id"));
         // 取得密等
-        getSpeedTypeAndSecretType($(insertPageObj).find("#secretType"), 2);
+        getSpeedTypeAndSecretType($(insertPageObj).find("#isopycnic_id"), 2);
 
         // 速別重整鈕
         $(insertPageObj).find(".list-items").eq(2).find(".fa-refresh").click(function(){
-            getSpeedTypeAndSecretType($(insertPageObj).find("#speedType"));
+            getSpeedTypeAndSecretType($(insertPageObj).find("#level_id"));
         });
         // 密等重整鈕
         $(insertPageObj).find(".list-items").eq(3).find(".fa-refresh").click(function(){
-            getSpeedTypeAndSecretType($(insertPageObj).find("#secretType"), 2);
+            getSpeedTypeAndSecretType($(insertPageObj).find("#isopycnic_id"), 2);
         });
 
         // CKEDITOR.replace( $(insertPageObj).find("#summary"), {});
@@ -354,17 +354,17 @@ function dispatchStart(modifyObj, modifyItem, sampleData){
         });
 
         // 取得速別
-        getSpeedTypeAndSecretType($(insertPageObj).find("#speedType"));
+        getSpeedTypeAndSecretType($(insertPageObj).find("#level_id"));
         // 取得密等
-        getSpeedTypeAndSecretType($(insertPageObj).find("#secretType"), 2);
+        getSpeedTypeAndSecretType($(insertPageObj).find("#isopycnic_id"), 2);
 
         // 速別重整鈕
         $(insertPageObj).find(".list-items").eq(2).find(".fa-refresh").click(function(){
-            getSpeedTypeAndSecretType($(insertPageObj).find("#speedType"));
+            getSpeedTypeAndSecretType($(insertPageObj).find("#level_id"));
         });
         // 密等重整鈕
         $(insertPageObj).find(".list-items").eq(3).find(".fa-refresh").click(function(){
-            getSpeedTypeAndSecretType($(insertPageObj).find("#secretType"), 2);
+            getSpeedTypeAndSecretType($(insertPageObj).find("#isopycnic_id"), 2);
         });
 
         // // 修改

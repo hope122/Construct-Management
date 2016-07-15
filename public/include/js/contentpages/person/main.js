@@ -33,25 +33,13 @@ function getOUData(uid){
             }
         }else{
             // 放入空的
-            putDataEmptyInfo($("#grid"));
+            putEmptyInfo($("#grid"));
         }
         // console.log(rs);
     }).fail(function(){
         $("#grid").empty();
         // 放入空的
-        putDataEmptyInfo($("#grid"));
-    });
-}
-
-function putDataEmptyInfo(putArea){
-    // 畫面設定值
-    var option = {styleKind:"system",style:"data-empty"};
-    // 取得畫面樣式
-    getStyle(option,function(pageStyle){
-        // 相關設定
-        putArea.append(pageStyle);
-
-        putArea.find(".list-items-bottom").last().removeClass("list-items-bottom");
+        putEmptyInfo($("#grid"));
     });
 }
 
@@ -141,7 +129,7 @@ function putDataToPage(data, onlyData){
     }
     // console.log(data);
     // 畫面設定值
-    var option = {styleKind:"list",style:"1grid-modify"};
+    var option = {styleKind:"list",style:"2grid-modify"};
     // 取得畫面樣式
     getStyle(option,function(pageStyle){
         if(!onlyData){
@@ -150,6 +138,14 @@ function putDataToPage(data, onlyData){
                 $(pageStyleObj).addClass("dataContent");
                 var firstItem = $(pageStyleObj).find(".list-items").eq(0);
                 firstItem.html(content.name);
+                var isAdminCaption = $(pageStyleObj).find(".list-items").eq(1);
+
+                if(!parseInt(content.is_admin)){
+                    isAdminCaption.text("一般使用者");
+                }else{
+                    isAdminCaption.text("管理者");
+                }
+
                 // 修改
                 $(pageStyleObj).find(".fa-pencil-square-o").click(function(){
                     // 取地址資料
@@ -277,8 +273,10 @@ function insertDialog(modifyObj, modifyItem){
 
             // 修改
             if(modifyObj != undefined){
-
-                // console.log("T");
+                // 如果是管理員，先把帳號資訊先拿掉
+                if(parseInt(modifyObj.is_admin)){
+                    $(insertPageObj).find("#accountInfo-content").find(".list-items").eq(0).remove();
+                }
                 $.each(modifyObj, function(index,content){
                     if(index != "sex" ){
                         $(insertPageObj).find("#"+index).val(content);
@@ -302,6 +300,13 @@ function insertDialog(modifyObj, modifyItem){
           });
         },
         button:[
+            {
+                text: "取消",
+                className: "btn-default-font-color",
+                click: function(){
+                    $("#insertDialog").bsDialog("close");
+                }
+            },
             {
                 text: saveBtn,
                 className: "btn-success",
@@ -379,13 +384,7 @@ function insertDialog(modifyObj, modifyItem){
                     }
                 }
             },
-            {
-                text: "取消",
-                className: "btn-default-font-color",
-                click: function(){
-                    $("#insertDialog").bsDialog("close");
-                }
-            },
+            
         ]
     });
 
