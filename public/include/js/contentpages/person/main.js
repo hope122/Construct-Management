@@ -193,7 +193,6 @@ function putDataToPage(data, onlyData){
 
 // 新增&修改Dialog
 function insertDialog(modifyObj, modifyItem){
-    console.log(modifyObj, modifyItem);
     if(modifyItem == undefined){
         modifyItem = null;
     }
@@ -208,7 +207,8 @@ function insertDialog(modifyObj, modifyItem){
     $("#insertDialog").remove();
     var insertDialog = $("<div>").prop("id","insertDialog");
     insertDialog.appendTo("body");
-
+    // 身分證是否有被使用過
+    var sidIsNotUse;
     $("#insertDialog").bsDialog({
         title: title,
         autoShow: true,
@@ -246,7 +246,30 @@ function insertDialog(modifyObj, modifyItem){
                 if(!checkSid(typeVal)){
                     $(this).removeClass("item-bg-danger").addClass("item-bg-danger");
                 }else{
-                    $(this).removeClass("item-bg-danger");
+                    var removeAreaColor = $(this);
+                    var url = wrsAPI + "userVerifyAPI/verifyUserAccountBySID";
+                    var sendData = {
+                        sid: typeVal,
+                        uuid: userLoginUuid
+                    };
+                    var isNotUse = false;
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        data: sendData,
+                        dataType: "json",
+                        success: function(rs){
+                            
+                            if(rs.status){
+                                removeAreaColor.removeClass("item-bg-danger");
+                                sidIsNotUse = true;
+                            }else{
+                                removeAreaColor.removeClass("item-bg-danger").addClass("item-bg-danger");
+                                sidIsNotUse = false;
+                            }
+                        }
+                    });
+                    
                 }
                 $(this).val(typeVal);
             });
@@ -346,10 +369,12 @@ function insertDialog(modifyObj, modifyItem){
 
                     var isEmpty = false;
                     $.each(userInfo, function(i, v){
-                        if(i != "birthday" && i != "sex"){
+                        if(i != "birthday" && i != "sex" && i != "sid"){
                             if(!$.trim(v)){
                                 $("#insertDialog").find("#"+i).addClass("item-bg-danger");
                                 isEmpty = true;
+                            }else{
+                                $("#insertDialog").find("#"+i).removeClass("item-bg-danger");
                             }
                         }else{
                             if(i == "birthday"){
@@ -375,7 +400,7 @@ function insertDialog(modifyObj, modifyItem){
                         }
                     }
                     // return;
-                    if(!isEmpty && modifyObj == undefined && checkSid(userInfo.sid)){
+                    if(!isEmpty && modifyObj == undefined && checkSid(userInfo.sid) && sidIsNotUse){
                         saveData(sendObj, modifyItem);
                         $("#insertDialog").bsDialog("close");
                     }else if(!isEmpty && modifyObj != undefined){
