@@ -120,10 +120,9 @@ function createJobList(putArea, parentID, jobTreeChart, data, orgID, isEmpty){
 
 // 創建組織樹狀圖
 function createJobRankTree(putArea, orgID){
-    // console.log(jobData);
     jobTreeChart = putArea.orgChart({
         data: jobData,
-        // rootNodesDelete:true,
+        rootNodesDelete:true,
         showControls: true,
         allowEdit: false,
         newNodeText:"職務",
@@ -133,8 +132,7 @@ function createJobRankTree(putArea, orgID){
             addJobRank(putArea, orgID, jobTreeChart, parentID);
         },
         onDeleteNode: function(node){
-            jobDeleteNode(node.data.id);
-            jobTreeChart.deleteNode(node.data.id); 
+            jobDeleteNode(node.data, putArea, orgID);
         },
         onClickNode: function(node){
             // log('Clicked node '+node.data.id);
@@ -201,20 +199,30 @@ function createJobTreeData(ID, Name,parentID){
     jobData.push(treeObj);
 }
 // 刪除
-function jobDeleteNode(uid){
+function jobDeleteNode(data, putArea, orgID){
     var sendData = {
         api: "AssPosition/Delete_AssPosition",
         threeModal:true,
         data: {
-            iUid: uid
+            iUid: data.id
         }
     }; 
     $.ajax({
         url: wrsUrl,
         type: "DELETE",
         data: sendData,
+        dataType: "json",
         success: function(rs){
             // console.log(rs);
+            if(!rs.Status){
+                errorDialog("此職務已被使用，無法刪除");
+            }else{
+                if(data.parent == 0){
+                    getJobRank( putArea, orgID );
+                }else{
+                    jobTreeChart.deleteNode(data.id); 
+                }
+            }
         }
     });
 }
