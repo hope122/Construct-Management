@@ -436,10 +436,12 @@ function insertDialog(modifyObj, modifyItem){
                 }else{
                     $(insertPageObj).find("#addDetail").remove();
                     var historiesArea = $(insertPageObj).find(".list-items").eq(7).find(".control-label").eq(1);
-                    if(modifyObj.Histories.length){
-                        $.each(modifyObj.Histories, function(historiesIndex, historiesContent){
-                            createDetail(detailPage, historiesContent, historiesArea, isModify, false,false);
-                        });
+                    if(modifyObj.Histories != undefined){
+                        if(modifyObj.Histories.length){
+                            $.each(modifyObj.Histories, function(historiesIndex, historiesContent){
+                                createDetail(detailPage, historiesContent, historiesArea, isModify, false,false);
+                            });
+                        }
                     }
 
                     // 增加辦況
@@ -806,6 +808,9 @@ function saveHistories(listID,Desc, area, modifyObj){
             trash.remove();
             $(area).find("input:text").parent().text(Desc);
             if(modifyObj){
+                if(modifyObj.modifyObj.Histories == undefined){
+                    modifyObj.modifyObj.Histories = [];
+                }
                 modifyObj.modifyObj.Histories.push(sendObj);
                 $(modifyObj.modifyItem).find(".fa-pencil-square-o").unbind("click").click(function(){
                     insertDialog( modifyObj.modifyObj , $(modifyObj.modifyItem) );
