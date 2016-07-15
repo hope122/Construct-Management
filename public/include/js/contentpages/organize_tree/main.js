@@ -92,6 +92,15 @@ function addDialog(orgTreeChart, parentID){
     $.getJSON(wrsUrl, sendObj).done(function(rs){
         // console.log(rs);
         if(rs.Status){
+            var tmpDataArr = $.grep(rs.Data,function(v, i){
+                if(v.faid != "0"){
+                    return v;
+                }
+            });
+            var isEmpty = false;
+            if(!tmpDataArr.length){
+                isEmpty = true;
+            }
             $("#addDialog").bsDialog({
                 autoShow:true,
                 headerCloseBtn: headerCloseBtn,
@@ -100,9 +109,10 @@ function addDialog(orgTreeChart, parentID){
                 start: function(){
                     loader( $("#addDialog").find(".contents") );
                     $("#addDialog").find(".contents").empty();
-                    createOtgList(parentID, orgTreeChart, rs.Data, false);
+                    createOtgList(parentID, orgTreeChart, tmpDataArr, isEmpty);
                 },
             });
+            
         }else{
             $("#addDialog").remove();
             errorDialog("未有組織單位，按下關閉後開始新增", function(){
@@ -179,7 +189,7 @@ function createOtgList(parentID, orgTreeChart,data,isEmpty){
         var option = {styleKind:"system",style:"data-empty"};
         // 取得選單樣式
         getStyle(option,function(emptyStyle){
-            $("#addDialog").find(".modal-body").find(".contents").html(insertPageObj);
+            $("#addDialog").find(".modal-body").find(".contents").html(emptyStyle);
         });
     }
 }
