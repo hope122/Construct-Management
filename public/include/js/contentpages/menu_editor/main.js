@@ -166,15 +166,22 @@ function insertDialog(treeViewData,clickObject,modifyStatus){
 
                     if(treeViewData != undefined){
                         if(treeViewData.parent == 0){
-                            sequence = $(clickObject).index();
+                            $(clickObject).find(".treeViewContent").filter(function(){
+                                var parent = $(this).parent().prop("class").search("roots");
+                                if(parent != -1){
+                                    sequence++;
+                                }
+                            });
                         }else{
                             sequence = $(clickObject.parent()).index();
+
                         }
                     }else{
                         sequence = $(clickObject.parent()).index();
                     }
                     data.sequence = sequence;
                     // console.log(data);
+                    // return;
                     // if(uid != undefined){
                     //     data.uid = uid;
                     //      // console.log(data);
