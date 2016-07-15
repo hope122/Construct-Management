@@ -364,7 +364,9 @@ function insertDialog(modifyObj, modifyItem){
                         if(!sendObj.org.org.length){
                             isEmpty = true;
                             $("#accountInfo").click();
-                            alert("帳號設定 > 尚未選擇部門");
+                            // alert("帳號設定 > 尚未選擇部門");
+                            var emptySelect = $("<div>").addClass("item-bg-danger emptySelect").text("尚未選擇部門");
+                            $("#insertDialog").find("#orgInfo").append(emptySelect);
                         }
                     }
                     // return;
