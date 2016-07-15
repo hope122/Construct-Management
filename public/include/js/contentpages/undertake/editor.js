@@ -329,7 +329,7 @@ function dispatchStart(modifyObj, modifyItem, sampleData){
         $(insertPageObj).find("#content").ckeditor();
         if(sampleData != undefined){
             $(insertPageObj).find("#content").val(sampleData.content);
-            $(insertPageObj).find("#gist").val(sampleData.gist);
+            $(insertPageObj).find("#subject").val(sampleData.subject);
 
         }
         // 承辦人的名字
