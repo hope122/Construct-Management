@@ -1,1 +1,1 @@
-var calendarAPI = "V201606/ToDo/api/ToDo/";
+var announcementAPI = "V201606/News/api/News/";
