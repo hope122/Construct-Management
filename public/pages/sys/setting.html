@@ -9,6 +9,26 @@
 			<h3 class="col-xs-12 col-md-12">系統設定</h3>
 		</div>
 		<div class="col-xs-12 col-md-12 item-border" id="grid">
+			<div class="col-xs-12 col-md-12 list-items" id="adminHomeCalendar">
+				<div class="form-group">
+				    <div class="col-xs-12 col-md-4 control-label font-lineHeight f-right">
+				    	首頁待辦提醒(系統預設)
+				    </div>
+				    <div class="col-xs-12 col-md-1 control-label font-lineHeight f-right">
+				      距
+				    </div>
+				    <div class="col-xs-12 col-md-2 control-label font-lineHeight">
+				      <input type="text" class="form-control text-center" id="defaultHomeCalendar">
+				    </div>
+				    <div class="col-xs-12 col-md-1 control-label font-lineHeight">
+				      天
+				    </div>
+				    <div class="col-xs-12 col-md-2 control-label font-lineHeight">
+				    	<i class="fa fa-refresh fa-lg mouse-pointer send-btn" id="defaultHomeCalendarRefreshBtn"></i>
+				    	<i class="fa fa-floppy-o fa-lg mouse-pointer send-btn" id="defaultHomeCalendarSaveBtn"></i>
+				    </div>
+				</div>
+			</div>
 			<div class="col-xs-12 col-md-12 list-items">
 				<div class="form-group">
 				    <div class="col-xs-12 col-md-4 control-label font-lineHeight f-right">
@@ -18,12 +38,13 @@
 				      距
 				    </div>
 				    <div class="col-xs-12 col-md-2 control-label font-lineHeight">
-				      <input type="text" class="form-control">
+				      <input type="text" class="form-control text-center" id="homeCalendar">
 				    </div>
 				    <div class="col-xs-12 col-md-1 control-label font-lineHeight">
 				      天
 				    </div>
 				    <div class="col-xs-12 col-md-2 control-label font-lineHeight">
+				    	<i class="fa fa-refresh fa-lg mouse-pointer send-btn" id="homeCalendarRefreshBtn"></i>
 				    	<i class="fa fa-floppy-o fa-lg mouse-pointer send-btn" id="homeCalendarSaveBtn"></i>
 				    </div>
 				</div>

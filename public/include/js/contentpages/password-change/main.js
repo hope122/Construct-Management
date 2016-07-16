@@ -7,6 +7,21 @@ $("#change").click(function(){
     var newPass = $("#newPass").val();
     var confirmPass = $("#confirmPass").val();
 
+    if($.trim(oldPass).length != oldPass.length){
+        msgDialog("舊密碼不可有空白");
+        return;
+    }
+
+    if($.trim(newPass).length != newPass.length){
+        msgDialog("新密碼不可有空白");
+        return;
+    }
+
+    if($.trim(confirmPass).length != confirmPass.length){
+        msgDialog("確認密碼不可有空白");
+        return;
+    }
+
     if(newPass == confirmPass && oldPass != newPass){
         changePass(oldPass, newPass);
     }else{
@@ -45,37 +60,5 @@ function changePass(oldPass, newPass){
         $("#oldPass").val("");
         $("#newPass").val("");
         $("#confirmPass").val("");
-    });
-}
-
-function msgDialog(msg, isError){
-    var title = "錯誤";
-    if(isError == undefined){
-        isError = true;
-    }
-
-    if(!isError){
-        title = "訊息";
-    }
-    $("#errorDialog").remove();
-    $("<div>").prop("id","errorDialog").appendTo("body");
-
-    $("#errorDialog").bsDialog({
-        autoShow:true,
-        showFooterBtn:true,
-        title: title,
-        start:function(){
-
-            var msgDiv = $("<div>").html(msg);
-            $("#errorDialog").find(".modal-body").append(msgDiv);
-        },
-        button:[{
-            text: "關閉",
-            className: "btn-danger",
-            click: function(){
-                $("#errorDialog").bsDialog("close");
-            }
-        }
-        ]
     });
 }
