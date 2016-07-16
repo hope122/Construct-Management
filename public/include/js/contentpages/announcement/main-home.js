@@ -84,10 +84,9 @@ function putAnnouncementDataToPage(data, putArea){
             $(pageStyleObj).appendTo(putArea);
 
         });
-        putArea.find(".dataContent").last().removeClass("list-items-bottom");
+        putArea.find(".dataContent").last().removeClass("list-items-bottom-dash");
     });
 }
-
 
 // 查看
 function announcementView(content, putArea){

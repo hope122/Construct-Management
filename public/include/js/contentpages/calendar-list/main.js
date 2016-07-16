@@ -206,7 +206,8 @@ function putDataToPage(data, putArea, onlyData){
             }
             
             if(putArea.find("div").length){
-                putArea.find(".dataContent").eq(-1).addClass("list-items-bottom").after(pageStyleObj);
+                // putArea.find(".dataContent").eq(-1).addClass("list-items-bottom").after(pageStyleObj);
+                putArea.find(".dataContent").eq(0).addClass("list-items-bottom").before(pageStyleObj);
             }else{
                 $(pageStyleObj).removeClass("list-items-bottom").appendTo(putArea);
 
