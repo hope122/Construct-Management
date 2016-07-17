@@ -210,6 +210,31 @@ function referenceInsertStart(modifyObj, modifyItem){
             getSpeedTypeAndSecretType($(insertPageObj).find("#isopycnic_id"), 2);
         });
 
+        // 類別、類型
+        $(insertPageObj).find("#category").change(function(){
+            var sampleTypePutArea = $(insertPageObj).find("#type_id");
+            getSampleListData(sampleTypePutArea, $(this).val());
+        });
+
+        var putArea = $(insertPageObj).find("#category");
+        putArea.empty();
+
+        getSampleListData(putArea);
+
+        // 類別重整鈕
+        $(insertPageObj).find("#categoryRefresh").click(function(){
+            var putArea = $(insertPageObj).find("#category");
+            putArea.empty();
+            getSampleListData(putArea);
+        });
+
+        // 類型重整鈕
+        $(insertPageObj).find("#typeRefresh").click(function(){
+            var categoryVal = $(insertPageObj).find("#category").val();
+            var sampleTypePutArea = $(insertPageObj).find("#type_id");
+            getSampleListData(sampleTypePutArea, categoryVal);
+        });
+
         // CKEDITOR.replace( $(insertPageObj).find("#summary"), {});
         // 修改
         if(modifyObj != undefined){
@@ -329,7 +354,7 @@ function dispatchStart(modifyObj, modifyItem, sampleData){
         $(insertPageObj).find("#content").ckeditor();
         if(sampleData != undefined){
             $(insertPageObj).find("#content").val(sampleData.content);
-            $(insertPageObj).find("#gist").val(sampleData.gist);
+            $(insertPageObj).find("#subject").val(sampleData.subject);
 
         }
         // 承辦人的名字
