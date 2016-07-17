@@ -15,6 +15,7 @@ $(function(){
     });
 });
 
+// 取得列表資料
 function getAnnouncementData(type){
     $("#home-announcementlist").empty();
     loader($("#home-announcementlist"));
@@ -72,7 +73,7 @@ function putAnnouncementDataToPage(data, putArea){
 
             // 事項標題可以點開觀看
             var Desc = $("<a>").prop("href","#").text(content.Title).click(function(){
-                calendarView(content, $(pageStyleObj));
+                announcementView(content);
                 return false;
             });
 
@@ -88,62 +89,5 @@ function putAnnouncementDataToPage(data, putArea){
     });
 }
 
-// 查看
-function announcementView(content, putArea){
-    $("#announcementViewDialog").remove();
-    var announcementViewDialog = $("<div>").prop("id","announcementViewDialog");
-    announcementViewDialog.appendTo("body");
 
-    $("#announcementViewDialog").bsDialog({
-        title: content.Desc+"項目檢視",
-        autoShow: true,
-        start: function(){
-          var option = {styleKind:"calendar-list",style:"view"};
-          getStyle(option,function(announcementView){
-            // 細項＆歷程用同一種
-            var option = {styleKind:"calendar-list",style:"detail"};
-            getStyle(option,function(detailPage){
-                var announcementViewObj = $.parseHTML(announcementView);
-                var isModify = true;
-                var detailPutArea = $(announcementViewObj).find(".list-items").eq(6).find(".control-label").eq(1)
-                
-                    // 事項
-                    $(announcementViewObj).find(".list-items").find("#Desc").text(content.Desc);
 
-                    // 地點
-                    $(announcementViewObj).find(".list-items").find("#Location").text(content.Location);
-
-                    // 起日
-                    $(announcementViewObj).find("#StartDate_content").text(content.StartDate);
-
-                    // 迄日
-                    var EndDate;
-                    var Pricipal;
-                    if(content.MyKeypoint != undefined){
-                        EndDate = content.MyKeypoint.EndDate;
-                        Pricipal = content.MyKeypoint.Pricipal.Name;
-                    }else{
-                        EndDate = content.EndDate;
-                        Pricipal = content.Pricipal.Name;
-                    }
-                    $(announcementViewObj).find("#EndDate_content").text(EndDate);
-
-                    $(announcementViewObj).find("#Pricipal").text(Pricipal);
-                    $(announcementViewObj).find("#Designee").text(content.Designee.Name);
-                 
-
-                $(calendarViewObj).appendTo($("#calendarViewDialog").find(".modal-body"));
-            });
-          });
-        },
-        button:[
-            {
-                text: "關閉",
-                className: "btn-default-font-color",
-                click: function(){
-                    $("#calendarViewDialog").bsDialog("close");
-                }
-            },
-        ]
-    });
-}
