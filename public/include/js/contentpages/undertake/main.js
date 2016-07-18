@@ -159,13 +159,13 @@ function putDataToPage(data, putArea, onlyData){
                 $(pageStyleObj).addClass("dataContent");
 
                 // 事項標題
-                $(pageStyleObj).find(".list-items").eq(0).html(content.referenceNumber);
+                $(pageStyleObj).find(".list-items").eq(0).html(content.doc_number);
 
                 // 主旨
                 $(pageStyleObj).find(".list-items").eq(1).text(content.subject);
 
                 // 速別
-                 $(pageStyleObj).find(".list-items").eq(2).text(content.levelName);
+                 $(pageStyleObj).find(".list-items").eq(2).text(content.level_name);
                 
                 // 預警
                  $(pageStyleObj).find(".list-items").eq(3).text(content.endDate);

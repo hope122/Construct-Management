@@ -1,9 +1,9 @@
 // 儲存收文新增/修改
 function saveReferenceData(sendObj, modifyItem, putFormArea){
-    sendObj.typeId = 5;
-    sendObj.userName = userLoginInfo.userName;
-	sendObj.levelId = 1;
-	sendObj.isopycnicId = 1;
+     sendObj.type_id = 7;
+    sendObj.user_name = userLoginInfo.userName;
+	sendObj.level_id = 1;
+	sendObj.isopycnic_id = 1;
 	
 	var method = "setReferenceInsert";
 	var processURL = wrsUrl;
@@ -16,9 +16,10 @@ function saveReferenceData(sendObj, modifyItem, putFormArea){
         api: referenceAPI + method,
         data: sendObj
     };
-	
+	console.log(sendObj);
     var options = {
 		url: processURL,
+		// url:"http://localhost:53285/api/reference/setReferenceInsert",
         type:"POST",
         data: sendData,
         dataType:"JSON",
@@ -33,7 +34,7 @@ function saveReferenceData(sendObj, modifyItem, putFormArea){
            console.log(rs);
         },
     };
-    $(putFormArea).ajaxSubmit(options);
+     $(putFormArea).ajaxSubmit(options);
 
 }
 
