@@ -16,21 +16,7 @@ $(function(){
 
     tabCtrl("totalTab");
     
-    $("#testBs5").bsDialog({
-        autoShow:false,
-        showFooterBtn:true,
-        title: "檢閱公文",
-        button:[{
-            text: "關閉",
-            // className: "btn-success",
-            click: function(){
-                // xhr.abort();
-                // $(formObj).ajaxFormUnbind();
-                $("#testBs5").bsDialog("close");
-            }
-        }
-        ]
-    });
+    
     $("#testBs6").bsDialog({
         autoShow:false,
         showFooterBtn:true,
@@ -85,10 +71,6 @@ $(function(){
 function testBs3Show(){
     
     $("#testBs3").bsDialog("show");
-}
-function testBs5Show(){
-    
-    $("#testBs5").bsDialog("show");
 }
 function testBs6Show(){
     
@@ -177,6 +159,11 @@ function putDataToPage(data, putArea, onlyData){
                 // $(pageStyleObj).find(".fa-pencil-square-o").click(function(){
                 //     insertDialog( content, $(pageStyleObj) );
                 // });
+
+                // 預覽
+                $(pageStyleObj).find(".fa-file-text-o").click(function(){
+                    referenceViewDialog(content);
+                });
                 
                 // 分文
                 $(pageStyleObj).find(".fa-sitemap").click(function(){
@@ -606,3 +593,4 @@ function fileSelect(putFormArea){
     });
     fileInput.click();
 }
+
