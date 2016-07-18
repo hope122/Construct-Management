@@ -70,13 +70,16 @@ function putDataToPage(data, onlyData, resultDAta){
                     insertDialog(content.uid, content.name, firstItem);
                 });
 
+                if(content.faid == 0){
+                    $(pageStyleObj).find(".fa-trash-o").remove();
+                }
+                
                 // 刪除
                 $(pageStyleObj).find(".fa-trash-o").click(function(){
                     deleteData(content.uid, $(this).parents(".list-items").parent(), content.name);
                 });
 
                 $(pageStyleObj).appendTo($("#grid"));
-
             });
         }else{
             var pageStyleObj = $.parseHTML(pageStyle);

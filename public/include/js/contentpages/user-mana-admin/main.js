@@ -140,6 +140,7 @@ function insertDialog(modifyObj, modifyItem){
                 }else{
                     $(this).removeClass("item-bg-danger");
                 }
+                $(this).val(typeVal);
             });
 
             // 性別按下後去除紅色筐
