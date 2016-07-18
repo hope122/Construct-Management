@@ -23,6 +23,7 @@ function orgTreeDialog(uid){
                 className: "btn-success",
                 click: function(){
                     var data = orgTreeChart.getSelectData();
+					saveOffice(uid,data.idStr)
                     console.log(data);
                 }
             }
@@ -47,7 +48,8 @@ function userListData(uid){
         }
     });
 }
-
+// sys_code
+// userID
 function userListDialog(data ,uid){
     $("#userListDialog").remove();
     var userListDialog = $("<div>").prop("id","userListDialog");
@@ -92,5 +94,19 @@ function userListDialog(data ,uid){
         });
 }
 
-// sys_code
-// userID
+function saveOffice(uid,officeId){
+	var data = [];
+	console.log(referenceAPI);
+    var sendData = {
+        api: referenceAPI+"setReferenceOffice",
+        data:{
+            uid:uid,
+            officeId:officeId
+        }
+    };
+    $.post(wrsUrl,sendData,function(rs){
+        console.log(rs);
+    });
+
+
+}
