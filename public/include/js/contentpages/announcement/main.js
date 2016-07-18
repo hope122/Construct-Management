@@ -19,7 +19,8 @@ function getAnnouncementData(type){
     var sendData = {
         api: announcementAPI+"GetNews",
         data:{
-            type: type
+            type: type,
+            sysCodeId: sys_code
         }
     };
 
