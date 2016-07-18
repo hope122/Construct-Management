@@ -69,7 +69,7 @@ function userListDialog(data ,uid){
                     // className: "btn-success",
                     click: function(){
                     
-                        $("#signWFDialog").bsDialog("close");
+                        $("#userListDialog").bsDialog("close");
                         
                     }
                 },
