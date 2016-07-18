@@ -19,7 +19,6 @@ function saveReferenceData(sendObj, modifyItem, putFormArea){
 	console.log(sendObj);
     var options = {
 		url: processURL,
-		// url:"http://localhost:53285/api/reference/setReferenceInsert",
         type:"POST",
         data: sendData,
         dataType:"JSON",
