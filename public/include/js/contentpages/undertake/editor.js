@@ -329,7 +329,7 @@ function getSampleData(sampleTypeID){
     var sendObj = {
         api: waDrfAPI + "getTemplate",
         data: {
-            docTypeid: sampleTypeID
+            sysCodeId: sampleTypeID
         }
     };
 

@@ -20,6 +20,7 @@ function getData(){
     var sendData = {
         api: dispatchAPI+"getTemplate",
         data:{
+            sysCodeId: sys_code
         }
     };
 
