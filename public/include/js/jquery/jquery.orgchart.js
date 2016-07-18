@@ -192,7 +192,9 @@
                 rootNodes.push(nodes[i]);
             }
             else{
-                nodes[nodes[i].data.parent].addChild(nodes[i]);
+                if(nodes[nodes[i].data.parent] != undefined){
+                    nodes[nodes[i].data.parent].addChild(nodes[i]);
+                }
             }
         }
 
