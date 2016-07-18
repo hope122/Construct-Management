@@ -171,7 +171,7 @@ function putDataToPage(data, putArea, onlyData){
                  $(pageStyleObj).find(".list-items").eq(3).text(content.endDate);
 				 
 				 // 狀態
-                 $(pageStyleObj).find(".list-items").eq(4).text(content.status);
+                 $(pageStyleObj).find(".list-items").eq(4).text(content.statusName);
 
                 // 修改
                 // $(pageStyleObj).find(".fa-pencil-square-o").click(function(){
