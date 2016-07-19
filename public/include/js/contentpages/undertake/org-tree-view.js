@@ -23,8 +23,11 @@ function orgTreeDialog(uid){
                 className: "btn-success",
                 click: function(){
                     var data = orgTreeChart.getSelectData();
+					// sendData={};
+					// sendData.uid=uid;
+					// sendData.officeId=data.idStr;
 					saveOffice(uid,data.idStr)
-                    console.log(data);
+                    //console.log(data);
                 }
             }
         ]
@@ -81,7 +84,6 @@ function userListDialog(data ,uid){
                         sendData = {};
                         sendData.userIDList = userIDList;
                         sendData.uid = uid;
-                        console.log(sendData);
                         if(userIDList){
                             setReferenceDateDailog(sendData);
                             // $("#userListDialog").bsDialog("close");
@@ -94,9 +96,12 @@ function userListDialog(data ,uid){
         });
 }
 
+// 儲存發文指派
 function saveOffice(uid,officeId){
 	var data = [];
-	console.log(referenceAPI);
+
+	// sendData.api=referenceAPI+"setReferenceOffice";
+		
     var sendData = {
         api: referenceAPI+"setReferenceOffice",
         data:{
@@ -104,12 +109,29 @@ function saveOffice(uid,officeId){
             officeId:officeId
         }
     };
+	console.log(sendData);
     $.post(wrsUrl,sendData,function(rs){
         console.log(rs);
     });
-
-
 }
+function saveDesignate(uid,pricipalId,endDate){
+	var data = [];
+	
+
+	var sendData = {
+        api: referenceAPI+"setReferenceDesignate",
+        data:{
+            uid:uid,
+            pricipalId:pricipalId,
+			endDate:endDate
+        }
+    };
+	console.log(sendData);
+    $.post(wrsUrl,sendData,function(rs){
+        console.log(rs);
+    });
+}
+
 
 // 設定預警日期
 function setReferenceDateDailog(sendData){
@@ -165,6 +187,7 @@ function setReferenceDateDailog(sendData){
                     var end_date = $("#setReferenceDateDailog").find("#end_date").val();
                     sendData.end_date = end_date;
                     console.log(sendData);
+					saveDesignate(sendData.uid,sendData.userIDList,end_date);
                     if(end_date){
                         
 
