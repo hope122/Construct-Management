@@ -50,7 +50,7 @@ function putDataToPage(data, putArea, onlyData){
                 $(pageStyleObj).addClass("dataContent");
 
                 // 標題
-                $(pageStyleObj).find(".list-items").eq(0).html(content.gist);
+                $(pageStyleObj).find(".list-items").eq(0).html(content.subject);
 
                 // 類別
                 $(pageStyleObj).find(".list-items").eq(1).text(desiStr);

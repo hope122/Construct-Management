@@ -192,7 +192,9 @@
                 rootNodes.push(nodes[i]);
             }
             else{
-                nodes[nodes[i].data.parent].addChild(nodes[i]);
+                if(nodes[nodes[i].data.parent] != undefined){
+                    nodes[nodes[i].data.parent].addChild(nodes[i]);
+                }
             }
         }
 
@@ -282,7 +284,7 @@
             if(opts.showControls){
                 var buttonsHtml = "<div class='org-add-button'><i class='fa fa-plus-circle'></i>"+opts.newNodeText+"</div>";
                 // It is Root, so could not del btn
-                buttonsHtml += (this.data.parent == 0 && !opts.rootNodesDelete)?"":"<div class='org-del-button'><i class='fa fa-minus-circle'></i></div>";
+                buttonsHtml += (this.data.parent == 0 && !opts.rootNodesDelete)?"":"<div class='org-del-button'><i class='fa fa-trash'></i></div>";
             }
             else{
                 buttonsHtml = '';

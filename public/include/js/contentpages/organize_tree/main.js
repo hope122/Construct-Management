@@ -44,8 +44,9 @@ function createTree(){
             addDialog(orgTreeChart, parentID);
         },
         onDeleteNode: function(node){
-            deleteNode(node.data.id);
-            orgTreeChart.deleteNode(node.data.id); 
+            deleteDialog(node)
+            // deleteNode(node.data.id);
+            // orgTreeChart.deleteNode(node.data.id); 
         },
         onClickNode: function(node){
             // log('Clicked node '+node.data.id);
@@ -284,6 +285,44 @@ function errorDialog(msg, closeCallBack){
                 }
             }
         }
+        ]
+    });
+}
+
+// 刪除提示
+function deleteDialog(node){
+    if($("#deleteDialog").length){
+        $("#deleteDialog").remove();
+        $("body").find(".modal-backdrop.fade.in").last().remove();
+    }
+    $("<div>").prop("id","deleteDialog").appendTo("body");
+
+    $("#deleteDialog").bsDialog({
+        autoShow:true,
+        showFooterBtn:true,
+        title: "刪除",
+        start:function(){
+            var str = "確定刪除「"+node.data.name+"」？";
+            var msgDiv = $("<div>").html(str);
+            $("#deleteDialog").find(".modal-body").append(msgDiv);
+        },
+        button:[
+            {
+                text: "取消",
+                // className: "btn-danger",
+                click: function(){
+                    $("#deleteDialog").bsDialog("close");
+                }
+            },
+            {
+                text: "確定",
+                className: "btn-danger",
+                click: function(){
+                    deleteNode(node.data.id);
+                    orgTreeChart.deleteNode(node.data.id); 
+                    $("#deleteDialog").bsDialog("close");
+                }
+            }
         ]
     });
 }

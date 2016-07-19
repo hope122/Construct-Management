@@ -19,13 +19,14 @@ function getAnnouncementData(type){
     var sendData = {
         api: announcementAPI+"GetNews",
         data:{
-            type: type
+            type: type,
+            sysCodeId: sys_code
         }
     };
 
     $.getJSON(wrsUrl, sendData).done(function(rs){
         $("#grid").empty();
-        if(rs.Status){
+        if(rs.Status && rs.Data.length){
             putAnnouncementDataToPage(rs.Data, $("#grid"));
         }else{
             putEmptyInfo($("#grid"));
