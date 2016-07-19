@@ -26,7 +26,7 @@ function getAnnouncementData(type){
 
     $.getJSON(wrsUrl, sendData).done(function(rs){
         $("#grid").empty();
-        if(rs.Status){
+        if(rs.Status && rs.Data.length){
             putAnnouncementDataToPage(rs.Data, $("#grid"));
         }else{
             putEmptyInfo($("#grid"));

@@ -35,7 +35,7 @@ function getAnnouncementData(type){
 
     $.getJSON(wrsUrl, sendData).done(function(rs){
         $("#home-announcementlist").empty();
-        if(rs.Status){
+        if(rs.Status && rs.Data.length){
             putAnnouncementDataToPage(rs.Data, $("#home-announcementlist"));
         }else{
             putEmptyInfo($("#home-announcementlist"));
