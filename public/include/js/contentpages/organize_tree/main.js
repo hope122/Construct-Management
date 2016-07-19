@@ -291,7 +291,6 @@ function errorDialog(msg, closeCallBack){
 
 // 刪除提示
 function deleteDialog(node){
-    console.log(node.data);
     if($("#deleteDialog").length){
         $("#deleteDialog").remove();
         $("body").find(".modal-backdrop.fade.in").last().remove();
