@@ -147,6 +147,7 @@ function jobRankTreeDialog(orgTreeChart, nodeData){
         title: nodeData.name + " 職務架構圖",
         modalClass: "bsDialogWindow",
         start: function(){
+            $("#jobRankTreeDialog").find(".contents").addClass("modal-items");
             loader( $("#jobRankTreeDialog").find(".contents") );
             getJobRank( $("#jobRankTreeDialog").find(".contents"), nodeData.listID );
         },
