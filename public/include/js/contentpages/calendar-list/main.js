@@ -69,14 +69,20 @@ function putDataToPage(data, putArea, onlyData){
                 var PricipalID = content.MyKeypoint.Pricipal.Uid;
                 var itemType = 2;
                 if(DesigneeID != PricipalID ){
-                    itemType = 1;
                     if(DesigneeID == userID && PricipalID != userID){
                         desiStr = "指派";
                         // $(pageStyleObj).find(".fa-check")
                         // .remove();
+                        if(!content.MyKeypoint.Complete || content.MyKeypoint.Complete == 2){
+                            $(pageStyleObj).find(".fa-check").remove();
+                        }
                     }else{
+                        itemType = 1;
                         desiStr = "被指";
                         $(pageStyleObj).find(".fa-trash-o").remove();
+                        if(content.MyKeypoint.Complete == 1 || content.MyKeypoint.Complete == 2){
+                            $(pageStyleObj).find(".fa-check").remove();
+                        }
                     }
                 }
 
@@ -130,7 +136,8 @@ function putDataToPage(data, putArea, onlyData){
                 $(pageStyleObj).find(".fa-trash-o").click(function(){
                     deleteData(content.Uid, $(this).parents(".list-items").parent());
                 });
-                if(content.CompletionDate){
+
+                if(content.MyKeypoint.Complete == 2){
                     $(pageStyleObj).find(".fa-pencil-square-o").remove();
                     $(pageStyleObj).find(".fa-check").remove();
                 }
@@ -166,7 +173,7 @@ function putDataToPage(data, putArea, onlyData){
             }
             // 事項標題可以點開觀看
             var Desc = $("<a>").prop("href","#").text(data.Desc).click(function(){
-                console.log(data);
+                // console.log(data);
                 calendarView(data, $(pageStyleObj));
                 return false;
             });
@@ -478,7 +485,7 @@ function insertDialog(modifyObj, modifyItem){
                                     $("#insertDialog").find("#"+i+"_content").addClass("item-bg-danger").text("尚未選擇日期");
                                 }
                                 isEmptyInput = true;
-                                console.log(i, content);
+                                // console.log(i, content);
                             }
                         }
                     });
