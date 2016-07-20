@@ -139,7 +139,7 @@ function insertDialog(modifyObj, modifyItem){
             var nameArea = $(insertPageObj).find("#name");
             if(modifyObj != undefined){
                 nameArea.val(modifyObj.name);
-                modifySetPositionBtn(modifyObj.uid, $(insertPageObj).find("#referencePositionBtn"));
+                modifySetPositionBtn(modifyObj.uid, $(insertPageObj));
 
             }
 
@@ -255,10 +255,12 @@ function modifySetPositionBtn(uid,itemObj){
     }
     $.getJSON(wrsUrl, sendObj, function(rs){
         if(rs.status){
-            if(parseInt(rs.data)){
-                itemObj.removeClass("fa-square-o").addClass("fa-check-square-o");
+            if(parseInt(rs.whether)){
+                itemObj.find("#referencePositionBtn").removeClass("fa-square-o").addClass("fa-check-square-o");
             }
         }
+        itemObj.find("#loader").remove();
+        itemObj.find("#postitonArea").show();
     });
 }
 
