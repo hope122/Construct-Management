@@ -86,7 +86,7 @@ function putAnnouncementDataToPage(data, putArea){
             $(pageStyleObj).appendTo(putArea);
 
         });
-        putArea.find(".dataContent").last().removeClass("list-items-bottom-dash");
+        // putArea.find(".dataContent").last().removeClass("list-items-bottom-dash");
     });
 }
 
