@@ -439,7 +439,7 @@ function signInfoAndDate(sendObj){
         },
         button:[
             {
-                text: "匯簽",
+                text: "會簽",
                 className: "btn-info",
                 click: function(){
                     var end_date = $("#signInfoAndDateDialog").find("#end_date").val();
