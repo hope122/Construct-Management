@@ -160,7 +160,9 @@ function insertDialog(modifyObj, modifyItem, sampleData){
 
 
                     if(originalIDStr){
-                        signInfoAndDate(sendObj);
+                        var putFormArea = $("#insertDialog").find("#uploadFiles");
+
+                        signInfoAndDate(sendObj, modifyItem, putFormArea);
                     $("#insertDialog").bsDialog("close");
 
                     }else{

@@ -38,8 +38,8 @@ function saveReferenceData(sendObj, modifyItem, putFormArea){
 }
 
 
-function saveSignData(sendObj){
-    console.log(sendObj);
+function saveSignData(sendObj, modifyItem, putFormArea){
+    console.log(sendObj, putFormArea);
     return;
     // data["doc_uid"] = 1;
     var sendData = {
