@@ -52,7 +52,7 @@
     line-height: 30px;
     margin-left: -50px;
     position: absolute;
-    top: 70%;
+    top: 75px;
 }
 /* Done / Active */
 .progressBar .bar.done,

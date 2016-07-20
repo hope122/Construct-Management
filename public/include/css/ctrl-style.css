@@ -508,3 +508,8 @@ textarea{
 .flowBtn{
 	display: inline-block;
 }
+.signstatusArea{
+	overflow-x: scroll;
+	overflow-y: hidden;
+    height: 130px;
+}
