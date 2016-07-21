@@ -75,7 +75,7 @@ function putDataToPage(data, putArea, onlyData){
                 $(pageStyleObj).addClass("dataContent");
 
                 // 事項標題
-                $(pageStyleObj).find(".list-items").eq(0).html(content.doc_number);
+                $(pageStyleObj).find(".list-items").eq(0).html(content["doc_number"]);
 
                 // 主旨
                 $(pageStyleObj).find(".list-items").eq(1).text(content.subject);
@@ -111,23 +111,23 @@ function putDataToPage(data, putArea, onlyData){
 
                 // 閱讀權限按鈕
                 if(!parseInt(content.pos_read)){
-                    readBtn.remove();
+                    // readBtn.remove();
                 }
                 // 分文按鈕
                 if(!parseInt(content.pos_setof)){
-                    readBtn.remove();
+                    pushDocBtn.remove();
                 }else{
                     if(content.status == 4 || content.status == 0){
-                        readBtn.remove();
+                        pushDocBtn.remove();
                     }
                 }
                 // 開始按鈕
                 if(!parseInt(content.pos_do)){
-                    readBtn.remove();
+                    startBtn.remove();
                 }
                 // 完成按鈕
                 if(!parseInt(content.pos_read)){
-                    readBtn.remove();
+                    finishBtn.remove();
                 }
 
                 // 預覽
@@ -482,3 +482,6 @@ function fileSelect(putFormArea){
     fileInput.click();
 }
 
+function chartToHtml(htmlString){
+    return htmlString.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+}
