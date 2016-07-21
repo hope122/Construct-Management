@@ -116,7 +116,22 @@ function putDataToPage(data, putArea, onlyData){
                 });
                 // 開始做的圖示
                 $(pageStyleObj).find(".fa-chain-broken").click(function(){
-                    
+					var sendObj = {
+					api: referenceAPI+"setReferenceWorkStatus",
+					
+						data:{
+							uid: content.uid,
+							status: 1
+						}
+					}
+				$.post(wrsUrl, sendObj, function(rs){
+					console.log(rs);
+				// if(rs.status){
+					// consoe.log (rs);
+				// }else{
+					// errorDialog("無法取得使用者列表");
+				// }
+				});
                 });
                 // 完成
                 $(pageStyleObj).find(".fa-check-circle-o").click(function(){
