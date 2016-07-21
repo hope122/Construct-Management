@@ -100,14 +100,43 @@ function putDataToPage(data, putArea, onlyData){
                 // $(pageStyleObj).find(".fa-pencil-square-o").click(function(){
                 //     insertDialog( content, $(pageStyleObj) );
                 // });
+                // 閱讀按鈕
+                var readBtn = $(pageStyleObj).find(".fa-file-text-o");
+                // 分文按鈕
+                var pushDocBtn = $(pageStyleObj).find(".fa-sitemap");
+                // 開始做按鈕
+                var startBtn = $(pageStyleObj).find(".fa-chain-broken");
+                // 完成按鈕
+                var finishBtn = $(pageStyleObj).find(".fa-check-circle-o");
+
+                // 閱讀權限按鈕
+                if(!parseInt(content.pos_read)){
+                    readBtn.remove();
+                }
+                // 分文按鈕
+                if(!parseInt(content.pos_setof)){
+                    readBtn.remove();
+                }else{
+                    if(content.status == 4 || content.status == 0){
+                        readBtn.remove();
+                    }
+                }
+                // 開始按鈕
+                if(!parseInt(content.pos_do)){
+                    readBtn.remove();
+                }
+                // 完成按鈕
+                if(!parseInt(content.pos_read)){
+                    readBtn.remove();
+                }
 
                 // 預覽
-                $(pageStyleObj).find(".fa-file-text-o").click(function(){
+                readBtn.click(function(){
                     referenceViewDialog(content);
                 });
                 
                 // 分文
-                $(pageStyleObj).find(".fa-sitemap").click(function(){
+                pushDocBtn.click(function(){
                     if(content.status == 0){
                         orgTreeDialog(content.uid);
                     }else if(content.status == 1){
@@ -115,7 +144,7 @@ function putDataToPage(data, putArea, onlyData){
                     }
                 });
                 // 開始做的圖示
-                $(pageStyleObj).find(".fa-chain-broken").click(function(){
+                startBtn.click(function(){
 					var sendObj = {
 					api: referenceAPI+"setReferenceWorkStatus",
 					
@@ -124,17 +153,17 @@ function putDataToPage(data, putArea, onlyData){
 							status: 1
 						}
 					}
-				$.post(wrsUrl, sendObj, function(rs){
-					console.log(rs);
-				// if(rs.status){
-					// consoe.log (rs);
-				// }else{
-					// errorDialog("無法取得使用者列表");
-				// }
-				});
+    				$.post(wrsUrl, sendObj, function(rs){
+    					console.log(rs);
+    				// if(rs.status){
+    					// consoe.log (rs);
+    				// }else{
+    					// errorDialog("無法取得使用者列表");
+    				// }
+    				});
                 });
                 // 完成
-                $(pageStyleObj).find(".fa-check-circle-o").click(function(){
+                finishBtn.click(function(){
                     
                     // $(this).remove();
                     referenceCheckItemDialog();
