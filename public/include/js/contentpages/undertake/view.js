@@ -44,7 +44,13 @@ function referenceViewStart(modifyObj){
 			
 			if(rs.status && rs.data != null){
 				$.each(rs.data[0], function(i, content){
-					 $(insertPageObj).find("#"+i).html(content);
+                    if(i!="explanation"){
+					   $(insertPageObj).find("#"+i).html(content);
+                    }else{
+                        console.log($.parseHTML(content));
+                        var string = $.parseHTML(content);
+                        $(insertPageObj).find("#"+i).html(string[0].data);
+                    }
 				})
 				
 			}

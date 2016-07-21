@@ -18,6 +18,8 @@
         editor: {},
         checkbox: true,
         selectedRturnDataIndex: "id",
+        title: "",
+        titleTextSplit: ""
 
     };
 
@@ -38,6 +40,16 @@
             var contentUL = $('<ul>');
             
             contentUL.addClass("treeViewContent");
+            // 其他的欄位
+            var otherTitle = [];
+            if(option.title){
+                if(option.title.search(",") != -1){
+                    var tmpTitle = $.trim(option.title).split(",");
+                    otherTitle = tmpTitle;
+                }else{
+                    otherTitle.push(option.title);
+                }
+            }
 
             $.each(option.data,function(index, nodesContent){
                 // console.log(nodesContent);
@@ -47,9 +59,19 @@
                 var thisLIContent = $('<li>').addClass("treeContent roots");
 
                 if(option.checkbox){
-                    contents.append(checkBox).append(contentText);
-                }else{
-                    contents.append(contentText);
+                    contents.append(checkBox);
+                }
+                contents.append(contentText);
+                if(otherTitle.length){
+                    $.each(otherTitle, function(titleIndex, titleContent){
+                        tmpContentText = $('<span>').text(nodesContent[titleContent]).addClass('otherTitle');
+                        contents.append(tmpContentText);
+                        if($.trim(option.titleTextSplit)){
+                            if(titleIndex+1 < otherTitle.length){
+                                $('<span>').text(option.titleTextSplit).addClass('otherTitleSplit').appendTo(contents);
+                            }
+                        }
+                    });
                 }
 
                 if(Object.size(option.editorBtn)){
@@ -90,7 +112,7 @@
                     }else{
                         thisLIContent.find(".treeViewText").before(expansion);
                     }
-                    createChild( thisLIContent, nodesContent.nodes, nodesContent.id, nodesContent, option, 1 );
+                    createChild( thisLIContent, nodesContent.nodes, nodesContent.id, nodesContent, option, 1, otherTitle );
 
                     checkBox.click(function(){
                         var isChecked = $(this).prop("checked");
@@ -177,7 +199,7 @@
         self.start();
     }
 
-    function createChild($selector,data, parentID, parentData, option, level){
+    function createChild($selector,data, parentID, parentData, option, level, otherTitle){
         
         $.each(data, function(index,cNodes){
             // console.log(index, data[index].nodes);
@@ -194,9 +216,20 @@
             var contentText = $('<span>').text(cNodes.title).addClass('treeViewText');
 
             if(option.checkbox){
-                contents.append(checkBox).append(contentText);
-            }else{
-                contents.append(contentText);
+                contents.append(checkBox);
+            }
+            contents.append(contentText);
+
+            if(otherTitle.length){
+                $.each(otherTitle, function(titleIndex, titleContent){
+                    tmpContentText = $('<span>').text(cNodes[titleContent]).addClass('otherTitle');
+                        contents.append(tmpContentText);
+                        if($.trim(option.titleTextSplit)){
+                            if(titleIndex+1 < otherTitle.length){
+                                $('<span>').text(option.titleTextSplit).addClass('otherTitleSplit').appendTo(contents);
+                            }
+                        }
+                });
             }
 
             if(Object.size(option.editorBtn)){
@@ -265,7 +298,7 @@
                         setPartentSelectStatus(parentID, parentData);
                     }
                 });
-                createChild(liContent, cNodes.nodes, cNodes.id, cNodes, option, level + 1);
+                createChild(liContent, cNodes.nodes, cNodes.id, cNodes, option, level + 1, otherTitle);
                 parentSelectStatus[cNodes.id] = cNodes.nodes.length;
                 childIsSelected[cNodes.id] = {};
                 parentItem[cNodes.id] = checkBox;
