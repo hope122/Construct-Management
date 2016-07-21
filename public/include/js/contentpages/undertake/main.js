@@ -111,24 +111,30 @@ function putDataToPage(data, putArea, onlyData){
 
                 // 閱讀權限按鈕
                 if(!parseInt(content.pos_read)){
-                    // readBtn.remove();
+                     readBtn.remove();
                 }
                 // 分文按鈕
                 if(!parseInt(content.pos_setof)){
                     pushDocBtn.remove();
                 }else{
-                    if(content.status == 4 || content.status == 0){
+                    if(content.status != 0 && content.status != 1){
                         pushDocBtn.remove();
                     }
                 }
                 // 開始按鈕
                 if(!parseInt(content.pos_do)){
                     startBtn.remove();
-                }
+                }else{
+					if(content.status !=2 )
+					startBtn.remove();
+				}
                 // 完成按鈕
                 if(!parseInt(content.pos_read)){
                     finishBtn.remove();
-                }
+                 }else{
+					if(content.status !=3 )
+					finishBtn.remove();
+				}
 
                 // 預覽
                 readBtn.click(function(){
