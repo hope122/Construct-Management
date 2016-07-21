@@ -30,9 +30,25 @@ function referenceViewStart(modifyObj){
         var insertPageObj = $.parseHTML(insertPage);
 
         $.each(modifyObj, function(i, content){
-            $(insertPageObj).find("#"+i).html(content);
+            // $(insertPageObj).find("#"+i).html(content);
         })
-        
+		var sendData = {
+			api: referenceAPI + "getReference",
+			data:{
+				uid:modifyObj.uid
+			}
+		};
+
+		$.getJSON(wrsUrl, sendData).done(function(rs){
+			console.log(rs.data[0]);
+			
+			if(rs.status && rs.data != null){
+				$.each(rs.data[0], function(i, content){
+					 $(insertPageObj).find("#"+i).html(content);
+				})
+				
+			}
+		});
         // 放到畫面中
         $(insertPageObj).appendTo($("#referenceViewDialog").find(".modal-body"));
 
