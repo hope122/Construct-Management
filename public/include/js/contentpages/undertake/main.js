@@ -114,7 +114,10 @@ function putDataToPage(data, putArea, onlyData){
                         userListData(content.uid);
                     }
                 });
-
+                // 開始做的圖示
+                $(pageStyleObj).find(".fa-chain-broken").click(function(){
+                    
+                });
                 // 完成
                 $(pageStyleObj).find(".fa-check-circle-o").click(function(){
                     
