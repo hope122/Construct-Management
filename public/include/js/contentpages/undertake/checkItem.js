@@ -1,3 +1,33 @@
+// 收文完成確認
+function referenceCheckItemFinishDialog(modifyObj,modifyItem){
+    $("#insertDialog").remove();
+    var insertDialog = $("<div>").prop("id","insertDialog");
+    insertDialog.appendTo("body");
+
+    $("#insertDialog").bsDialog({
+        title: "事項完成 - 辦況與附件設定",
+        autoShow: true,
+        start: referenceCheckItemStart(modifyObj,modifyItem),
+        button:[
+        
+            {
+                text: "取消",
+                className: "btn-default-font-color",
+                click: function(){
+                    $("#insertDialog").bsDialog("close");
+                }
+            },
+            {
+                text: "完成",
+                className: "btn-success",
+                click: function(){
+                    referenceCheckItemClickBtn(modifyItem);
+                }
+            }
+        ]
+    });
+}
+
 // 收文辦況確認
 function referenceCheckItemDialog(modifyObj,modifyItem){
     $("#insertDialog").remove();
