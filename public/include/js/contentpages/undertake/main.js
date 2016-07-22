@@ -1,10 +1,9 @@
 var sys_code = userLoginInfo.sysCode;
 var userID = userLoginInfo.userID;
-var menu_code = "eab";
 
 // 標籤碼，1:收文，2:發文，3:退件
 var tabCode = 1;
-// ----------測試用---------------
+
 $(function(){
     getData();
     $("#totalTab").find("a").each(function(){
@@ -106,8 +105,15 @@ function putDataToPage(data, putArea, onlyData){
                 var pushDocBtn = $(pageStyleObj).find(".fa-sitemap");
                 // 開始做按鈕
                 var startBtn = $(pageStyleObj).find(".fa-chain-broken");
+                // 辦況
+                var courseBtn = $(pageStyleObj).find(".fa-plus-circle");
                 // 完成按鈕
                 var finishBtn = $(pageStyleObj).find(".fa-check-circle-o");
+                
+                // 辦況
+                if(!parseInt(content.pos_do) || parseInt(content.status) < 3){
+                    courseBtn.remove();
+                }
 
                 // 閱讀權限按鈕
                 if(!parseInt(content.pos_read)){
@@ -121,19 +127,20 @@ function putDataToPage(data, putArea, onlyData){
                         pushDocBtn.remove();
                     }
                 }
+
                 // 開始按鈕
                 if(!parseInt(content.pos_do)){
                     startBtn.remove();
-                }else{
-					if(content.status !=2 )
-					startBtn.remove();
-				}
-                // 完成按鈕
-                if(!parseInt(content.pos_read)){
+                    // 完成按鈕
                     finishBtn.remove();
-                 }else{
-					if(content.status !=3 )
-					finishBtn.remove();
+                }else{
+					if(content.status != 2 ){
+					   startBtn.remove();
+                    }
+                    // 完成按鈕
+                    if(content.status != 3 ){
+                       finishBtn.remove();
+                    }
 				}
 
                 // 預覽
@@ -168,11 +175,18 @@ function putDataToPage(data, putArea, onlyData){
     				// }
     				});
                 });
+
+                // 辦況按鈕新增
+                courseBtn.click(function(){
+                    
+                    referenceCheckItemDialog();
+                });
+
                 // 完成
                 finishBtn.click(function(){
                     
                     // $(this).remove();
-                    referenceCheckItemDialog();
+                    // referenceCheckItemDialog();
                 });
 
                 // 簽核狀態預覽

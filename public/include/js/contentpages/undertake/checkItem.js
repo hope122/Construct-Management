@@ -1,11 +1,11 @@
-// 收文完成確認
+// 收文辦況確認
 function referenceCheckItemDialog(modifyObj,modifyItem){
     $("#insertDialog").remove();
     var insertDialog = $("<div>").prop("id","insertDialog");
     insertDialog.appendTo("body");
 
     $("#insertDialog").bsDialog({
-        title: "事項完成 - 辦況與附件設定",
+        title: "新增辦況與附件",
         autoShow: true,
         start: referenceCheckItemStart(modifyObj,modifyItem),
         button:[
@@ -18,7 +18,7 @@ function referenceCheckItemDialog(modifyObj,modifyItem){
                 }
             },
             {
-                text: "完成",
+                text: "儲存",
                 className: "btn-success",
                 click: function(){
                     referenceCheckItemClickBtn(modifyItem);
