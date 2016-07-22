@@ -186,7 +186,7 @@ function putDataToPage(data, putArea, onlyData){
                 finishBtn.click(function(){
                     
                     // $(this).remove();
-                    // referenceCheckItemDialog();
+                    referenceCheckItemFinishDialog();
                 });
 
                 // 簽核狀態預覽
