@@ -115,7 +115,7 @@ function putDataToPage(data, putArea, onlyData){
                         courseBtn.remove();
                     }
 
-                    if(parseInt(content.status) != 3 && parseInt(content.pos_setof)){
+                    if(parseInt(content.status) != 3 && !parseInt(content.pos_setof)){
                         // 辦況按鈕
                         doneListBtn.remove();
                     }
