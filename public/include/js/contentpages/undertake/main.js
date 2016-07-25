@@ -1,5 +1,6 @@
 var sys_code = userLoginInfo.sysCode;
 var userID = userLoginInfo.userID;
+var menu_code = "eab";
 
 // 標籤碼，1:收文，2:發文，3:退件
 var tabCode = 1;
@@ -107,12 +108,19 @@ function putDataToPage(data, putArea, onlyData){
                 var startBtn = $(pageStyleObj).find(".fa-chain-broken");
                 // 辦況
                 var courseBtn = $(pageStyleObj).find(".fa-plus-circle");
+                // 辦況列表
+                var doneListBtn = $(pageStyleObj).find(".fa-list-alt");
                 // 完成按鈕
                 var finishBtn = $(pageStyleObj).find(".fa-check-circle-o");
                 
                 // 辦況
                 if(!parseInt(content.pos_do) || parseInt(content.status) < 3){
                     courseBtn.remove();
+                }
+
+                if(parseInt(content.status) < 3 && parseInt(content.pos_setof)){
+                    // 辦況按鈕
+                    doneListBtn.remove();
                 }
 
                 // 閱讀權限按鈕
@@ -317,7 +325,7 @@ function signInfoAndDate(sendObj, modifyItem,putFormArea){
     $("#signInfoAndDateDialog").bsDialog({
         autoShow:true,
         showFooterBtn:true,
-        headerCloseBtn:false,
+        // headerCloseBtn:false,
         // modalClass: "bsDialogWindow",
         title: "設置簽核結束日期",
         start: function(){
@@ -421,7 +429,7 @@ function signWFDialog( data, sendObj, modifyItem,putFormArea ){
     var signWFDialog = $("#signWFDialog").bsDialogSelect({
         autoShow:true,
         showFooterBtn:true,
-        headerCloseBtn:false,
+        // headerCloseBtn:false,
         // modalClass: "bsDialogWindow",
         title: title,
         data: data,

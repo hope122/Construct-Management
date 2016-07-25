@@ -19,7 +19,7 @@ function referenceCheckItemFinishDialog(modifyObj,modifyItem){
             },
             {
                 text: "完成",
-                className: "btn-success",
+                className: "btn-danger",
                 click: function(){
                     referenceCheckItemClickBtn(modifyItem);
                 }
