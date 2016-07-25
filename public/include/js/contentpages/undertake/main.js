@@ -1,5 +1,6 @@
 var sys_code = userLoginInfo.sysCode;
 var userID = userLoginInfo.userID;
+var menu_code = "eab";
 
 // 標籤碼，1:收文，2:發文，3:退件
 var tabCode = 1;
