@@ -111,11 +111,11 @@ function putDataToPage(data, putArea, onlyData){
                     var finishBtn = $(pageStyleObj).find(".fa-check-circle-o");
                     
                     // 辦況
-                    if(!parseInt(content.pos_do) || parseInt(content.status) < 3){
+                    if(!parseInt(content.pos_do) || parseInt(content.status) != 3){
                         courseBtn.remove();
                     }
 
-                    if(parseInt(content.status) < 3 && parseInt(content.pos_setof)){
+                    if(parseInt(content.status) != 3 && parseInt(content.pos_setof)){
                         // 辦況按鈕
                         doneListBtn.remove();
                     }
