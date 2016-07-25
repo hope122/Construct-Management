@@ -39,8 +39,8 @@ function saveReferenceData(sendObj, modifyItem, putFormArea){
 
 
 function saveSignData(sendObj, modifyItem, putFormArea){
-    console.log(sendObj, putFormArea);
-    return;
+    // console.log(sendObj, putFormArea);
+    // return;
     // data["doc_uid"] = 1;
     var sendData = {
         api: apdAPI+"Insert_ApdData",
@@ -48,7 +48,7 @@ function saveSignData(sendObj, modifyItem, putFormArea){
         data:data
     }
     $.post(wrsUrl,sendData,function(rs){
-        console.log(rs);
+        // console.log(rs);
         var rs = $.parseJSON(rs);
         if(rs.status){
             $("#signWFDialog").bsDialogSelect('close');
@@ -57,11 +57,7 @@ function saveSignData(sendObj, modifyItem, putFormArea){
 }
 
 // 儲存收文確認事項
-function saveReferenceCheckItemData(sendObj, modifyItem, putFormArea){
-	sendObj.userName=userLoginInfo.userName;
-	sendObj.uid=3;
-	// console.log(sendObj);
-    // return;
+function saveReferenceCheckItemData(sendObj, modifyItem, putFormArea, isFinish){
     var method = "setReferenceHandlingInsert";
     var processURL = wrsUrl;
 
@@ -87,7 +83,29 @@ function saveReferenceCheckItemData(sendObj, modifyItem, putFormArea){
 
         },
         success: function(rs) {
-           console.log(rs);
+            if(isFinish){
+                // 完成事項
+                var sendData = {
+                    api: referenceAPI + "setReferenceWorkStatus",
+                    data:{
+                      "uid": sendObj.uid,
+                      "status": 2
+                    }
+                }
+                $.post(wrsUrl, sendData, function(rs){
+                    var rs = $.parseJSON(rs);
+                    // console.log(rs);
+                    if(rs.status){
+                        modifyItem.find(".fa-plus-circle").remove();
+                        modifyItem.find(".fa-check-circle-o").remove();
+
+                    }
+                });
+            }
+            if(rs.status){
+                $("#insertDialog").bsDialog("close");
+            }
+            // console.log(rs);
         },
     };
     $(putFormArea).ajaxSubmit(options);

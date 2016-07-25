@@ -348,6 +348,7 @@ function getSampleData(sampleTypeID){
 
 // 擬文新增/修改頁面相關
 function dispatchStart(modifyObj, modifyItem, sampleData){
+    // console.log(modifyObj);
     var option = {styleKind:"received-issued",style:"sendDoc-insert"};
     getStyle(option,function(insertPage){
         var insertPageObj = $.parseHTML(insertPage);
@@ -358,6 +359,10 @@ function dispatchStart(modifyObj, modifyItem, sampleData){
             $(insertPageObj).find("#content").val(sampleData.content);
             $(insertPageObj).find("#subject").val(sampleData.subject);
 
+        }
+        if(modifyObj != undefined){
+            $(insertPageObj).find("#content").val(modifyObj.content);
+            $(insertPageObj).find("#subject").val(modifyObj.subject);
         }
         // 承辦人的名字
         $(insertPageObj).find("#pointPeople").text(userLoginInfo.userName);

@@ -96,123 +96,122 @@ function putDataToPage(data, putArea, onlyData){
 				 // 狀態
                  $(pageStyleObj).find(".list-items").eq(4).text(content.statusName);
 
-                // 修改
-                // $(pageStyleObj).find(".fa-pencil-square-o").click(function(){
-                //     insertDialog( content, $(pageStyleObj) );
-                // });
-                // 閱讀按鈕
-                var readBtn = $(pageStyleObj).find(".fa-file-text-o");
-                // 分文按鈕
-                var pushDocBtn = $(pageStyleObj).find(".fa-sitemap");
-                // 開始做按鈕
-                var startBtn = $(pageStyleObj).find(".fa-chain-broken");
-                // 辦況
-                var courseBtn = $(pageStyleObj).find(".fa-plus-circle");
-                // 辦況列表
-                var doneListBtn = $(pageStyleObj).find(".fa-list-alt");
-                // 完成按鈕
-                var finishBtn = $(pageStyleObj).find(".fa-check-circle-o");
-                
-                // 辦況
-                if(!parseInt(content.pos_do) || parseInt(content.status) < 3){
-                    courseBtn.remove();
-                }
+                if(tabCode == 1){
+                    // 閱讀按鈕
+                    var readBtn = $(pageStyleObj).find(".fa-file-text-o");
+                    // 分文按鈕
+                    var pushDocBtn = $(pageStyleObj).find(".fa-sitemap");
+                    // 開始做按鈕
+                    var startBtn = $(pageStyleObj).find(".fa-chain-broken");
+                    // 辦況
+                    var courseBtn = $(pageStyleObj).find(".fa-plus-circle");
+                    // 辦況列表
+                    var doneListBtn = $(pageStyleObj).find(".fa-list-alt");
+                    // 完成按鈕
+                    var finishBtn = $(pageStyleObj).find(".fa-check-circle-o");
+                    
+                    // 辦況
+                    if(!parseInt(content.pos_do) || parseInt(content.status) != 3){
+                        courseBtn.remove();
+                    }
 
-                if(parseInt(content.status) < 3 && parseInt(content.pos_setof)){
-                    // 辦況按鈕
-                    doneListBtn.remove();
-                }
+                    if(parseInt(content.status) != 3 && !parseInt(content.pos_setof)){
+                        // 辦況按鈕
+                        doneListBtn.remove();
+                    }
 
-                // 閱讀權限按鈕
-                if(!parseInt(content.pos_read)){
-                     readBtn.remove();
-                }
-                // 分文按鈕
-                if(!parseInt(content.pos_setof)){
-                    pushDocBtn.remove();
-                }else{
-                    if(content.status != 0 && content.status != 1){
+                    // 閱讀權限按鈕
+                    if(!parseInt(content.pos_read)){
+                         readBtn.remove();
+                    }
+                    // 分文按鈕
+                    if(!parseInt(content.pos_setof)){
                         pushDocBtn.remove();
+                    }else{
+                        if(content.status != 0 && content.status != 1){
+                            pushDocBtn.remove();
+                        }
                     }
-                }
 
-                // 開始按鈕
-                if(!parseInt(content.pos_do)){
-                    startBtn.remove();
-                    // 完成按鈕
-                    finishBtn.remove();
-                }else{
-					if(content.status != 2 ){
-					   startBtn.remove();
-                    }
-                    // 完成按鈕
-                    if(content.status != 3 ){
-                       finishBtn.remove();
-                    }
-				}
+                    // 開始按鈕
+                    if(!parseInt(content.pos_do)){
+                        startBtn.remove();
+                        // 完成按鈕
+                        finishBtn.remove();
+                    }else{
+    					if(content.status != 2 ){
+    					   startBtn.remove();
+                        }
+                        // 完成按鈕
+                        if(content.status != 3 ){
+                           finishBtn.remove();
+                        }
+    				}
 
-                // 預覽
-                readBtn.click(function(){
-                    referenceViewDialog(content);
-                });
-                
-                // 分文
-                pushDocBtn.click(function(){
-                    if(content.status == 0){
-                        orgTreeDialog(content.uid);
-                    }else if(content.status == 1){
-                        userListData(content.uid);
-                    }
-                });
-                // 開始做的圖示
-                startBtn.click(function(){
-					var sendObj = {
-					api: referenceAPI+"setReferenceWorkStatus",
-					
-						data:{
-							uid: content.uid,
-							status: 1
-						}
-					}
-    				$.post(wrsUrl, sendObj, function(rs){
-    					console.log(rs);
-    				// if(rs.status){
-    					// consoe.log (rs);
-    				// }else{
-    					// errorDialog("無法取得使用者列表");
-    				// }
-    				});
-                });
-
-                // 辦況按鈕新增
-                courseBtn.click(function(){
+                    // 預覽
+                    readBtn.click(function(){
+                        referenceViewDialog(content);
+                    });
                     
-                    referenceCheckItemDialog();
-                });
+                    // 分文
+                    pushDocBtn.click(function(){
+                        if(content.status == 0){
+                            orgTreeDialog(content.uid);
+                        }else if(content.status == 1){
+                            userListData(content.uid);
+                        }
+                    });
+                    // 開始做的圖示
+                    startBtn.click(function(){
+    					var sendObj = {
+    					api: referenceAPI+"setReferenceWorkStatus",
+    					
+    						data:{
+    							uid: content.uid,
+    							status: 1
+    						}
+    					}
+        				$.post(wrsUrl, sendObj, function(rs){
+        					console.log(rs);
+        				// if(rs.status){
+        					// consoe.log (rs);
+        				// }else{
+        					// errorDialog("無法取得使用者列表");
+        				// }
+        				});
+                    });
 
-                // 完成
-                finishBtn.click(function(){
-                    
-                    // $(this).remove();
-                    referenceCheckItemFinishDialog();
-                });
+                    // 辦況按鈕新增
+                    courseBtn.click(function(){
+                        
+                        referenceCheckItemDialog(content, $(pageStyleObj));
+                    });
 
-                // 簽核狀態預覽
-                if(tabCode == 2){
+                    // 完成
+                    finishBtn.click(function(){
+                        
+                        // $(this).remove();
+                        referenceCheckItemFinishDialog(content, $(pageStyleObj));
+                    });
+
+                    // 刪除
+                    // $(pageStyleObj).find(".fa-trash-o").click(function(){
+                    //     deleteData(content.Uid, $(this).parents(".list-items").parent());
+                    // });
+                    if(content.CompletionDate){
+                        $(pageStyleObj).find(".fa-pencil-square-o").remove();
+                        $(pageStyleObj).find(".fa-check").remove();
+                    }
+                }else if(tabCode == 2){
+                    // 簽核狀態預覽
                     $(pageStyleObj).find(".fa-list-alt").click(function(){
                         signStatusViewDialog(content);
                     });
+                    // 修改
+                    $(pageStyleObj).find(".fa-pencil-square-o").click(function(){
+                        insertDialog( content, $(pageStyleObj) );
+                    });
                 }
-
-                // 刪除
-                $(pageStyleObj).find(".fa-trash-o").click(function(){
-                    deleteData(content.Uid, $(this).parents(".list-items").parent());
-                });
-                if(content.CompletionDate){
-                    $(pageStyleObj).find(".fa-pencil-square-o").remove();
-                    $(pageStyleObj).find(".fa-check").remove();
-                }
-                
                 $(pageStyleObj).appendTo(putArea);
 
             });
@@ -459,7 +458,7 @@ function signWFDialog( data, sendObj, modifyItem,putFormArea ){
                         saveSignData(sendObj, modifyItem, putFormArea);
                         // $("#signWFDialog").bsDialog("close");
                     }else{
-                        
+                        errorDialog("未選擇簽核流程");
                     }
                 }
             }
