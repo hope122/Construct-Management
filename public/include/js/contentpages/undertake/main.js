@@ -28,7 +28,7 @@ function getData(areaID){
         tabCode = 1;
     }else if(areaID == "sendDoc-content"){
         tabCode = 2;
-        method = waDrfAPI + "getDispatch";
+        method = waDrfAPI + "getDispatchList";
     }else{
         $("#pageInsertBtn").hide();
     }
