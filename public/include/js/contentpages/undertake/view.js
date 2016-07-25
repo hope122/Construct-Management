@@ -47,7 +47,7 @@ function referenceViewStart(modifyObj){
                     if(i!="explanation"){
 					   $(insertPageObj).find("#"+i).html(content);
                     }else{
-                        console.log($.parseHTML(content));
+                        // console.log($.parseHTML(content));
                         var string = $.parseHTML(content);
                         $(insertPageObj).find("#"+i).html(string[0].data);
                     }
