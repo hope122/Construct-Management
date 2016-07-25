@@ -115,7 +115,7 @@ function putDataToPage(data, putArea, onlyData){
                         courseBtn.remove();
                     }
 
-                    if(parseInt(content.status) != 3 && !parseInt(content.pos_setof)){
+                    if(parseInt(content.status) < 3 || !parseInt(content.pos_setof)){
                         // 辦況按鈕
                         doneListBtn.remove();
                     }
@@ -192,6 +192,11 @@ function putDataToPage(data, putArea, onlyData){
                         
                         // $(this).remove();
                         referenceCheckItemFinishDialog(content, $(pageStyleObj));
+                    });
+
+                    // 辦況歷史記錄
+                    doneListBtn.click(function(){
+                        referenceDoneListView(content);
                     });
 
                     // 刪除

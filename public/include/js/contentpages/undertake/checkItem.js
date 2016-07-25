@@ -88,3 +88,63 @@ function referenceCheckItemClickBtn(modifyObj,modifyItem, isFinish){
 
     saveReferenceCheckItemData(sendObj, modifyItem, putFormArea, isFinish);
 }
+
+// 收文取得歷史辦況列表
+function referenceDoneListView(itemObj){
+    $("#referenceDoneListView").remove();
+    var referenceDoneListView = $("<div>").prop("id","referenceDoneListView");
+    referenceDoneListView.appendTo("body");
+
+    $("#referenceDoneListView").bsDialog({
+        title: itemObj.doc_number + "歷史辦況",
+        autoShow: true,
+        start: referenceDoneListStart(itemObj),
+        button:[
+            {
+                text: "關閉",
+                className: "btn-default-font-color",
+                click: function(){
+                    $("#referenceDoneListView").bsDialog("close");
+                }
+            }
+        ]
+    });
+}
+
+// 歷史辦況列表起始畫面
+function referenceDoneListStart(modifyObj){
+    var pageContent = $("<div>").addClass("contents");
+    // 先取得資料
+    var sendObj = {
+        api: referenceAPI + "getReferenceHandling",
+        data: {
+            uid: modifyObj.uid
+        }
+    };
+
+    $.getJSON(wrsUrl, sendObj, function(rs){
+        if(rs.status && rs.data != null){
+            var option = {styleKind:"received-issued",style:"reference-doneList"};
+            getStyle(option,function(viewPage){
+
+                $.each(rs.data, function(i, content){
+                    var viewPageObj = $.parseHTML(viewPage);
+                    $(viewPageObj).addClass("dataContent");
+                    var contentString = $.parseHTML(content.content);
+
+                    $(viewPageObj).find(".list-items").eq(0).html(contentString[0].data);
+                    $(viewPageObj).find(".list-items").eq(1).text("沒有檔案");
+                    $(viewPageObj).find(".list-items").eq(2).text(content.date);
+
+                    // 放到畫面中
+                    $(viewPageObj).appendTo(pageContent);
+                });
+                pageContent.find(".dataContent").last().removeClass("list-items-bottom");
+                
+            });
+        }else{
+            putEmptyInfo(pageContent);
+        }
+        $("#referenceDoneListView").find(".modal-body").append(pageContent);
+    });
+}
