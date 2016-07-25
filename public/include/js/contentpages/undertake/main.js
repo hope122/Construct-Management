@@ -108,6 +108,8 @@ function putDataToPage(data, putArea, onlyData){
                 var startBtn = $(pageStyleObj).find(".fa-chain-broken");
                 // 辦況
                 var courseBtn = $(pageStyleObj).find(".fa-plus-circle");
+                // 辦況列表
+                var doneListBtn = $(pageStyleObj).find(".fa-list-alt");
                 // 完成按鈕
                 var finishBtn = $(pageStyleObj).find(".fa-check-circle-o");
                 
@@ -132,6 +134,8 @@ function putDataToPage(data, putArea, onlyData){
                 // 開始按鈕
                 if(!parseInt(content.pos_do)){
                     startBtn.remove();
+                    // 辦況按鈕
+                    doneListBtn.remove();
                     // 完成按鈕
                     finishBtn.remove();
                 }else{
