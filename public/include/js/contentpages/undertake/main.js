@@ -325,7 +325,7 @@ function signInfoAndDate(sendObj, modifyItem,putFormArea){
     $("#signInfoAndDateDialog").bsDialog({
         autoShow:true,
         showFooterBtn:true,
-        headerCloseBtn:false,
+        // headerCloseBtn:false,
         // modalClass: "bsDialogWindow",
         title: "設置簽核結束日期",
         start: function(){
@@ -429,7 +429,7 @@ function signWFDialog( data, sendObj, modifyItem,putFormArea ){
     var signWFDialog = $("#signWFDialog").bsDialogSelect({
         autoShow:true,
         showFooterBtn:true,
-        headerCloseBtn:false,
+        // headerCloseBtn:false,
         // modalClass: "bsDialogWindow",
         title: title,
         data: data,
