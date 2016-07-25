@@ -348,7 +348,7 @@ function getSampleData(sampleTypeID){
 
 // 擬文新增/修改頁面相關
 function dispatchStart(modifyObj, modifyItem, sampleData){
-    console.log(modifyObj);
+    // console.log(modifyObj);
     var option = {styleKind:"received-issued",style:"sendDoc-insert"};
     getStyle(option,function(insertPage){
         var insertPageObj = $.parseHTML(insertPage);

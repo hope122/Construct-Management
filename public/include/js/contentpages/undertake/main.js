@@ -184,14 +184,14 @@ function putDataToPage(data, putArea, onlyData){
                     // 辦況按鈕新增
                     courseBtn.click(function(){
                         
-                        referenceCheckItemDialog(content);
+                        referenceCheckItemDialog(content, $(pageStyleObj));
                     });
 
                     // 完成
                     finishBtn.click(function(){
                         
                         // $(this).remove();
-                        referenceCheckItemFinishDialog(content);
+                        referenceCheckItemFinishDialog(content, $(pageStyleObj));
                     });
 
                     // 刪除
