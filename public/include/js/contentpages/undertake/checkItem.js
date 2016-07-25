@@ -21,7 +21,7 @@ function referenceCheckItemFinishDialog(modifyObj,modifyItem){
                 text: "完成",
                 className: "btn-danger",
                 click: function(){
-                    referenceCheckItemClickBtn(modifyItem);
+                    referenceCheckItemClickBtn(modifyObj,modifyItem);
                 }
             }
         ]
@@ -51,7 +51,7 @@ function referenceCheckItemDialog(modifyObj,modifyItem){
                 text: "儲存",
                 className: "btn-success",
                 click: function(){
-                    referenceCheckItemClickBtn(modifyItem);
+                    referenceCheckItemClickBtn(modifyObj,modifyItem);
                 }
             }
         ]
@@ -78,10 +78,12 @@ function referenceCheckItemStart(modifyObj,modifyItem){
 }
 
 // 收文按下新增或修改按鈕要做的事情
-function referenceCheckItemClickBtn(modifyItem){
+function referenceCheckItemClickBtn(modifyObj,modifyItem){
     // 基本資訊
     var sendObj = getUserInput("insertDialog");
     sendObj.userID = userID;
+    sendObj.uid = modifyObj.uid;
+    sendObj.userName = userLoginInfo.userName;
     var putFormArea = $("#insertDialog").find("#uploadFiles");
 
     saveReferenceCheckItemData(sendObj, modifyItem, putFormArea);

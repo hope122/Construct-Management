@@ -58,10 +58,7 @@ function saveSignData(sendObj, modifyItem, putFormArea){
 
 // 儲存收文確認事項
 function saveReferenceCheckItemData(sendObj, modifyItem, putFormArea){
-	sendObj.userName=userLoginInfo.userName;
-	sendObj.uid=3;
-	// console.log(sendObj);
-    // return;
+    
     var method = "setReferenceHandlingInsert";
     var processURL = wrsUrl;
 
