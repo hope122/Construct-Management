@@ -49,6 +49,10 @@ function saveSignData(sendObj, modifyItem, putFormArea){
     }
     $.post(wrsUrl,sendData,function(rs){
         console.log(rs);
+        var rs = $.parseJSON(rs);
+        if(rs.status){
+            $("#signWFDialog").bsDialogSelect('close');
+        }
     });
 }
 
