@@ -118,6 +118,11 @@ function putDataToPage(data, putArea, onlyData){
                     courseBtn.remove();
                 }
 
+                if(parseInt(content.status) < 3 && parseInt(content.pos_setof)){
+                    // 辦況按鈕
+                    doneListBtn.remove();
+                }
+
                 // 閱讀權限按鈕
                 if(!parseInt(content.pos_read)){
                      readBtn.remove();
@@ -134,8 +139,6 @@ function putDataToPage(data, putArea, onlyData){
                 // 開始按鈕
                 if(!parseInt(content.pos_do)){
                     startBtn.remove();
-                    // 辦況按鈕
-                    doneListBtn.remove();
                     // 完成按鈕
                     finishBtn.remove();
                 }else{
