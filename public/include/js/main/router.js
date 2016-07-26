@@ -48,6 +48,11 @@ function loadPage(page,contentID,removeHead,popstate){
 	if(typeof removeHead == "undefined"){
 		removeHead = true;
 	}
+	// 把不相關的標籤清除
+	$("body").removeClass("modal-open");
+	$("body").find(".modal-backdrop").remove();
+	$("body").find(".modal").remove();
+    $(".ui-datepicker").remove();
 	loader(contentID);
 	$.ajax({
     	url: loadPage, 

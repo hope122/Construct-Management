@@ -85,7 +85,10 @@ function tabInsert(){
 }
 
 // 確認資料顯示的內容
-function listDataInfoToShow(putArea, pageStyleObj, content){
+function listDataInfoToShow(putArea, pageStyleObj, content, isPutToPage){
+    if(isPutToPage == undefined){
+        isPutToPage = true;
+    }
     $(pageStyleObj).addClass("dataContent");
 
     // 事項標題
@@ -103,12 +106,11 @@ function listDataInfoToShow(putArea, pageStyleObj, content){
     }
     $(pageStyleObj).find(".list-items").eq(2).text(str);
 
-    
     // 預警
-     $(pageStyleObj).find(".list-items").eq(3).text(content.endDate);
+    $(pageStyleObj).find(".list-items").eq(3).text(content.endDate);
      
-     // 狀態
-     $(pageStyleObj).find(".list-items").eq(4).text(content.statusName);
+    // 狀態
+    $(pageStyleObj).find(".list-items").eq(4).text(content.statusName);
 
     if(tabCode == 1){
         // 閱讀按鈕
@@ -170,14 +172,14 @@ function listDataInfoToShow(putArea, pageStyleObj, content){
         // 分文
         pushDocBtn.click(function(){
             if(content.status == 0){
-                orgTreeDialog(content.uid);
+                orgTreeDialog(content, $(pageStyleObj));
             }else if(content.status == 1){
-                userListData(content.uid);
+                userListData(content, $(pageStyleObj));
             }
         });
         // 開始做的圖示
         startBtn.click(function(){
-            processItem(content);
+            processItem($(pageStyleObj), content);
         });
 
         // 辦況按鈕新增
@@ -211,11 +213,55 @@ function listDataInfoToShow(putArea, pageStyleObj, content){
             insertDialog( content, $(pageStyleObj) );
         });
     }
-    $(pageStyleObj).appendTo(putArea);
+    if(isPutToPage){
+        $(pageStyleObj).appendTo(putArea);
+    }
+}
+
+// 重新放置單筆資料
+function renewListData(pageObjArea, content){
+    // 先取得資料
+
+    var method = referenceAPI + "getReferenceList";
+    var style = "reference-list";
+
+    if(tabCode == 2){
+        method = waDrfAPI + "getDispatchList";
+        style = "sendDoc-list";
+    }
+
+    var sendObj = {
+        api: method,
+        data: {
+            userId: userID,
+            uid: content.uid
+        }
+    }
+    $.getJSON(wrsUrl, sendObj).done(function(rs){
+        // console.log(rs);
+        
+        if(rs.status && rs.data != null){
+            // 畫面設定值
+            var option = {styleKind:"received-issued",style:style};
+            // 取得畫面樣式
+            getStyle(option,function(pageStyle){
+                var pageStyleObj = $.parseHTML(pageStyle);
+                var itemActionBtn = $(pageStyleObj).find(".item-actionBtn").clone();
+                $(pageObjArea).find(".item-actionBtn").html(itemActionBtn);
+                $.blockUI();
+                listDataInfoToShow("", pageObjArea, rs.data[0], false);
+                $.unblockUI();
+
+            });
+        }else{
+            msgDialog(rs.Message);
+        }
+    });
+    
 }
 
 // 開始做事項
-function processItem(content){
+function processItem(pageObjArea, content){
     var sendObj = {
         api: referenceAPI+"setReferenceWorkStatus",
         data:{
@@ -228,6 +274,7 @@ function processItem(content){
         var rs = $.parseJSON(rs);
         if(rs.status){
             msgDialog("「"+content["doc_number"]+"」開始辦理", false);
+            renewListData(pageObjArea, content);
         }else{
             msgDialog(rs.Message);
         }
@@ -249,6 +296,8 @@ function putDataEmptyInfo(putArea){
 // 準備簽核前的視窗，顯示與設定最後結束日期
 function signInfoAndDate(sendObj, modifyItem,putFormArea){
     $("#signInfoAndDateDialog").remove();
+    $("#setReferenceDateDailog").remove();
+
     $("<div>").prop("id","signInfoAndDateDialog").appendTo("body");
 
     $("#signInfoAndDateDialog").bsDialog({
@@ -263,21 +312,22 @@ function signInfoAndDate(sendObj, modifyItem,putFormArea){
             }
             getStyle(option,function(pageStyle){
                 var pageStyleObj = $.parseHTML(pageStyle);
-
+                
+                $(".ui-datepicker").remove();
                 var dateOption = {
                     dateFormat: "yy-mm-dd",
-                    
-                    showOn: "button",
-                    buttonText: '<i class="fa fa-calendar fa-lg mouse-pointer send-btn"></i>',
                     onSelect: function(dateText, inst) {
-                        // end_date_content
                         $(pageStyleObj).find("#end_date_content").removeClass("item-bg-danger").text(dateText);
-
+                        $(pageStyleObj).find("#end_date").hide();
                     },
                     minDate: 0
-                }
+                };
 
-                $(pageStyleObj).find("#end_date").datepicker(dateOption);
+                $(pageStyleObj).find("#end_date").hide().datepicker(dateOption);
+
+                $(pageStyleObj).find("#end_calendar").click(function(){
+                    $(pageStyleObj).find("#end_date").show();
+                });
                 
                 $(pageStyleObj).appendTo($("#signInfoAndDateDialog").find(".modal-body"));
             });

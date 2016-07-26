@@ -523,3 +523,6 @@ textarea{
 	overflow-y: hidden;
     height: 130px;
 }
+.dateSelectArea{
+	padding-left: 25%;
+}
