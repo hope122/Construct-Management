@@ -60,7 +60,7 @@ function saveSignData(sendObj, modifyItem, putFormArea){
 function saveReferenceCheckItemData(sendObj, modifyItem, putFormArea, isFinish){
     var method = "setReferenceHandlingInsert";
     var processURL = wrsUrl;
-
+    $.blockUI();
     if( $(putFormArea).find("input:file").length > 0){
         processURL = wrsAPI + "uploaderAPI";
         method = "setReferenceHandlingDocInsert"
@@ -98,12 +98,19 @@ function saveReferenceCheckItemData(sendObj, modifyItem, putFormArea, isFinish){
                     if(rs.status){
                         modifyItem.find(".fa-plus-circle").remove();
                         modifyItem.find(".fa-check-circle-o").remove();
-
+                        $("#insertDialog").bsDialog("close");
+                    }else{
+                        msgDialog(rs.Message);
                     }
+                    $.unblockUI();
                 });
-            }
-            if(rs.status){
-                $("#insertDialog").bsDialog("close");
+            }else{
+                if(rs.status){
+                    $("#insertDialog").bsDialog("close");
+                }else{
+                    msgDialog(rs.Message);
+                }
+                $.unblockUI();
             }
             // console.log(rs);
         },
