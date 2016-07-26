@@ -85,7 +85,6 @@ function referenceCheckItemClickBtn(modifyObj,modifyItem, isFinish){
     sendObj.uid = modifyObj.uid;
     sendObj.userName = userLoginInfo.userName;
     var putFormArea = $("#insertDialog").find("#uploadFiles");
-
     saveReferenceCheckItemData(sendObj, modifyItem, putFormArea, isFinish);
 }
 
