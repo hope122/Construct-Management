@@ -83,6 +83,9 @@ function loader(itemObject,itemClass){
 
 function getRouterContent(rsContent,removeHead){
 	var tmpBody,tmpHead;
+	if(removeHead == undefined){
+		removeHead = true;
+	}
 	if(removeHead){
 		$("head :not(.keep)").remove();
 	}
