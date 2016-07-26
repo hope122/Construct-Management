@@ -177,22 +177,7 @@ function listDataInfoToShow(putArea, pageStyleObj, content){
         });
         // 開始做的圖示
         startBtn.click(function(){
-            var sendObj = {
-            api: referenceAPI+"setReferenceWorkStatus",
-            
-                data:{
-                    uid: content.uid,
-                    status: 1
-                }
-            }
-            $.post(wrsUrl, sendObj, function(rs){
-                console.log(rs);
-                // if(rs.status){
-                //     msgDialog(msg, false);
-                // }else{
-                //     errorDialog("無法取得使用者列表");
-                // }
-            });
+            processItem(content);
         });
 
         // 辦況按鈕新增
@@ -229,6 +214,25 @@ function listDataInfoToShow(putArea, pageStyleObj, content){
     $(pageStyleObj).appendTo(putArea);
 }
 
+// 開始做事項
+function processItem(content){
+    var sendObj = {
+        api: referenceAPI+"setReferenceWorkStatus",
+        data:{
+            uid: content.uid,
+            status: 1
+        }
+    };
+
+    $.post(wrsUrl, sendObj, function(rs){
+        var rs = $.parseJSON(rs);
+        if(rs.status){
+            msgDialog("「"+content["doc_number"]+"」開始辦理", false);
+        }else{
+            msgDialog(rs.Message);
+        }
+    });
+}
 
 function putDataEmptyInfo(putArea){
     // 畫面設定值
