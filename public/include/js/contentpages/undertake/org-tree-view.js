@@ -23,17 +23,13 @@ function orgTreeDialog(uid){
                 className: "btn-success",
                 click: function(){
                     var data = orgTreeChart.getSelectData();
-					// sendData={};
-					// sendData.uid=uid;
-					// sendData.officeId=data.idStr;
-					saveOffice(uid,data.idStr)
-                    //console.log(data);
+					saveOffice(uid, data.idStr);
                 }
             }
         ]
     });
 }
-
+// 使用者列表
 function userListData(uid){
     var sendObj = {
         api: "AssUser/GetData_OrgAssUser",
@@ -47,7 +43,7 @@ function userListData(uid){
         if(rs.Data){
             userListDialog(rs.Data ,uid);
         }else{
-            errorDialog("無法取得使用者列表");
+            msgDialog("無法取得使用者列表");
         }
     });
 }
@@ -88,7 +84,7 @@ function userListDialog(data ,uid){
                             setReferenceDateDailog(sendData);
                             // $("#userListDialog").bsDialog("close");
                         }else{
-                            
+                            msgDialog("尚未選擇使用者"); 
                         }
                     }
                 }
@@ -98,10 +94,6 @@ function userListDialog(data ,uid){
 
 // 儲存發文指派
 function saveOffice(uid,officeId){
-	var data = [];
-
-	// sendData.api=referenceAPI+"setReferenceOffice";
-		
     var sendData = {
         api: referenceAPI+"setReferenceOffice",
         data:{
@@ -109,15 +101,20 @@ function saveOffice(uid,officeId){
             officeId:officeId
         }
     };
-	console.log(sendData);
     $.post(wrsUrl,sendData,function(rs){
-        console.log(rs);
+        var rs = $.parseJSON(rs);
+        if(rs.status){
+            msgDialog(rs.Message, false);
+            $("#orgTreeDialog").bsDialog('close');
+        }else{
+            msgDialog(rs.Message);
+        }
+        // console.log(rs);
     });
 }
-function saveDesignate(uid,pricipalId,endDate){
-	var data = [];
-	
 
+// 指派＆設置預警後存取
+function saveDesignate(uid,pricipalId,endDate){
 	var sendData = {
         api: referenceAPI+"setReferenceDesignate",
         data:{
@@ -126,9 +123,15 @@ function saveDesignate(uid,pricipalId,endDate){
 			endDate:endDate
         }
     };
-	console.log(sendData);
     $.post(wrsUrl,sendData,function(rs){
-        console.log(rs);
+        var rs = $.parseJSON(rs);
+        if(rs.status){
+            msgDialog(rs.Message, false);
+            $("#userListDialog").bsDialog('close');
+            $("#setReferenceDateDailog").bsDialog('close');
+        }else{
+            msgDialog(rs.Message);
+        }
     });
 }
 
@@ -186,11 +189,9 @@ function setReferenceDateDailog(sendData){
                 click: function(){
                     var end_date = $("#setReferenceDateDailog").find("#end_date").val();
                     sendData.end_date = end_date;
-                    console.log(sendData);
-					saveDesignate(sendData.uid,sendData.userIDList,end_date);
+					
                     if(end_date){
-                        
-
+                        saveDesignate(sendData.uid,sendData.userIDList,end_date);
                     }else{
                         $("#setReferenceDateDailog").find("#end_date_content").text("尚未選擇日期").addClass("item-bg-danger");
                     }

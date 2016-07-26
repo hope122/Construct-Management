@@ -187,11 +187,11 @@ function listDataInfoToShow(putArea, pageStyleObj, content){
             }
             $.post(wrsUrl, sendObj, function(rs){
                 console.log(rs);
-            // if(rs.status){
-                // consoe.log (rs);
-            // }else{
-                // errorDialog("無法取得使用者列表");
-            // }
+                // if(rs.status){
+                //     msgDialog(msg, false);
+                // }else{
+                //     errorDialog("無法取得使用者列表");
+                // }
             });
         });
 
