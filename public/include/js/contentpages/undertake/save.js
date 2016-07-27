@@ -42,18 +42,47 @@ function saveSignData(sendObj, modifyItem, putFormArea){
     // console.log(sendObj, putFormArea);
     // return;
     // data["doc_uid"] = 1;
-    var sendData = {
-        api: apdAPI+"Insert_ApdData",
-        threeModal: true,
-        data:data
-    }
-    $.post(wrsUrl,sendData,function(rs){
-        // console.log(rs);
-        var rs = $.parseJSON(rs);
-        if(rs.status){
-            $("#signWFDialog").bsDialogSelect('close');
-        }
-    });
+    // var sendData = {
+        // api: apdAPI+"Insert_ApdData",
+        // threeModal: true,
+        // data:sendObj
+    // }
+    // $.post(wrsUrl,sendData,function(rs){
+        // // console.log(rs);
+        // var rs = $.parseJSON(rs);
+        // if(rs.status){
+            // $("#signWFDialog").bsDialogSelect('close');
+        // }
+    // });
+	var method = "setDispatchInsert";
+	var processURL = wrsUrl;
+
+	if( $(putFormArea).find("input:file").length > 0){
+		processURL = waDrfAPI + "uploaderAPI";
+		method = "setDispatchDocInsert"
+	}
+	var sendData = {
+        api: waDrfAPI + method,
+        data: sendObj
+    };
+	// console.log(sendObj);
+    var options = {
+		url: processURL,
+        type:"POST",
+        data: sendData,
+        dataType:"JSON",
+        beforesend: function(xhr){
+            // testBs3Show(xhr);
+        },
+        uploadProgress: function(event, position, total, percentComplete) {
+          // console.log(event, position, total, percentComplete);
+
+        },
+        success: function(rs) {
+           console.log(rs);
+        },
+    };
+     $(putFormArea).ajaxSubmit(options);
 }
 
 // 儲存收文確認事項
