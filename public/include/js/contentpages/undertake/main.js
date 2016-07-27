@@ -39,6 +39,7 @@ function getData(areaID){
         api: method,
         data:{
             userId:userID
+            sysCodeId:sys_code
         }
     };
 
