@@ -44,8 +44,9 @@ function createTree(){
             addDialog(orgTreeChart, parentID);
         },
         onDeleteNode: function(node){
-            deleteNode(node.data.id);
-            orgTreeChart.deleteNode(node.data.id); 
+            deleteDialog(node)
+            // deleteNode(node.data.id);
+            // orgTreeChart.deleteNode(node.data.id); 
         },
         onClickNode: function(node){
             // log('Clicked node '+node.data.id);
@@ -82,31 +83,44 @@ function addDialog(orgTreeChart, parentID){
         headerCloseBtn = false;
         $("#orgChart").empty();
     }
-
-    $("#addDialog").bsDialog({
-        autoShow:true,
-        headerCloseBtn: headerCloseBtn,
-        title: "組織單位選單",
-        start: function(){
-            loader( $("#addDialog").find(".contents") );
-            // 取得組織資料
-            // ctrlAdminAPI + "GetData_AssTypeOffice"
-            var sendObj = {
-                api: "AssTypeOffice/GetData_AssTypeOffice",
-                threeModal:true,
-                data:{
-                    sys_code: sys_code,
-                }
-            };
-            $.getJSON(wrsUrl, sendObj).done(function(rs){
-                $("#addDialog").find(".contents").empty();
-                // console.log(rs);
-                if(rs.Status){
-                    createOtgList(parentID, orgTreeChart, rs.Data, false);
+    var sendObj = {
+        api: "AssTypeOffice/GetData_AssTypeOffice",
+        threeModal:true,
+        data:{
+            sys_code: sys_code,
+        }
+    };
+    $.getJSON(wrsUrl, sendObj).done(function(rs){
+        // console.log(rs);
+        if(rs.Status){
+            var tmpDataArr = $.grep(rs.Data,function(v, i){
+                if(v.faid != "0"){
+                    return v;
                 }
             });
-        },
-        showFooterBtn:false,
+            var isEmpty = false;
+            if(!tmpDataArr.length){
+                isEmpty = true;
+            }
+            $("#addDialog").bsDialog({
+                autoShow:true,
+                headerCloseBtn: headerCloseBtn,
+                title: "組織單位選單",
+                showFooterBtn:false,
+                start: function(){
+                    loader( $("#addDialog").find(".contents") );
+                    $("#addDialog").find(".contents").empty();
+                    createOtgList(parentID, orgTreeChart, tmpDataArr, isEmpty);
+                },
+            });
+            
+        }else{
+            $("#addDialog").remove();
+            errorDialog("未有組織單位，按下關閉後開始新增", function(){
+                loadPage("org-unit/org-list","pagescontent")
+            });
+            // loadPage("org-unit/org-list","pagescontent");
+        }
     });
 }
 
@@ -133,6 +147,7 @@ function jobRankTreeDialog(orgTreeChart, nodeData){
         title: nodeData.name + " 職務架構圖",
         modalClass: "bsDialogWindow",
         start: function(){
+            $("#jobRankTreeDialog").find(".contents").addClass("modal-items");
             loader( $("#jobRankTreeDialog").find(".contents") );
             getJobRank( $("#jobRankTreeDialog").find(".contents"), nodeData.listID );
         },
@@ -176,7 +191,7 @@ function createOtgList(parentID, orgTreeChart,data,isEmpty){
         var option = {styleKind:"system",style:"data-empty"};
         // 取得選單樣式
         getStyle(option,function(emptyStyle){
-            $("#addDialog").find(".modal-body").find(".contents").html(insertPageObj);
+            $("#addDialog").find(".modal-body").find(".contents").html(emptyStyle);
         });
     }
 }
@@ -203,7 +218,7 @@ function creatOrgData(orgTreeChart,contentObj,parentID){
                 orgTreeChart.newNode( parentID, contentObj.name, rs.Data, contentObj.uid );
             }else{
                 // ROOT
-                createTreeData(rs.Data, contentObj.name, parentID, contentObj.officeid);
+                createTreeData(rs.Data, contentObj.name, parentID, contentObj.uid);
                 createTree();
             }
             // 關閉
@@ -241,5 +256,74 @@ function deleteNode(uid){
         success: function(rs){
             // console.log(rs);
         }
+    });
+}
+
+// 錯誤提示
+function errorDialog(msg, closeCallBack){
+    if($("#errorDialog").length){
+        $("#errorDialog").remove();
+        $("body").find(".modal-backdrop.fade.in").last().remove();
+    }
+    $("<div>").prop("id","errorDialog").appendTo("body");
+
+    $("#errorDialog").bsDialog({
+        autoShow:true,
+        showFooterBtn:true,
+        title: "錯誤",
+        start:function(){
+
+            var msgDiv = $("<div>").html(msg);
+            $("#errorDialog").find(".modal-body").append(msgDiv);
+        },
+        button:[{
+            text: "關閉",
+            className: "btn-danger",
+            click: function(){
+                $("#errorDialog").bsDialog("close");
+                if(closeCallBack != undefined){
+                    closeCallBack();
+                }
+            }
+        }
+        ]
+    });
+}
+
+// 刪除提示
+function deleteDialog(node){
+    if($("#deleteDialog").length){
+        $("#deleteDialog").remove();
+        $("body").find(".modal-backdrop.fade.in").last().remove();
+    }
+    $("<div>").prop("id","deleteDialog").appendTo("body");
+
+    $("#deleteDialog").bsDialog({
+        autoShow:true,
+        showFooterBtn:true,
+        title: "刪除",
+        start:function(){
+            var str = "確定刪除「"+node.data.name+"」？";
+            var msgDiv = $("<div>").html(str);
+            $("#deleteDialog").find(".modal-body").append(msgDiv);
+        },
+        button:[
+            {
+                text: "取消",
+                // className: "btn-danger",
+                click: function(){
+                    $("#deleteDialog").bsDialog("close");
+                }
+            },
+            {
+                text: "確定",
+                className: "btn-danger",
+                click: function(){
+                    deleteNode(node.data.id);
+                    orgTreeChart.deleteNode(node.data.id); 
+                    $("#deleteDialog").bsDialog("close");
+                }
+            }
+        ]
     });
 }

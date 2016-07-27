@@ -230,7 +230,7 @@ function InitChart(option,svg, contentGtag){
                 'y': 12
             })
             .style({
-                'font-size':'15px',
+                // 'font-size':'15px',
                 // "text-anchor": "end"
             });;
 

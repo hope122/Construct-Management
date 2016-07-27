@@ -213,3 +213,43 @@ function putEmptyInfo(putArea){
         putArea.find(".list-items-bottom").last().removeClass("list-items-bottom");
     });
 }
+
+// 訊息提示
+function msgDialog(msg, isError, closeCallBack){
+    var title = "訊息";
+    if(isError == undefined){
+      isError = true;
+    }
+
+    if(isError){
+      title = "錯誤";
+    }
+
+    if($("#msgDialog").length){
+        $("#msgDialog").remove();
+        $("body").find(".modal-backdrop.fade.in").last().remove();
+    }
+    $("<div>").prop("id","msgDialog").appendTo("body");
+
+    $("#msgDialog").bsDialog({
+        autoShow:true,
+        showFooterBtn:true,
+        title: title,
+        start:function(){
+
+            var msgDiv = $("<div>").html(msg);
+            $("#msgDialog").find(".modal-body").append(msgDiv);
+        },
+        button:[{
+            text: "關閉",
+            className: "btn-danger",
+            click: function(){
+                $("#msgDialog").bsDialog("close");
+                if(closeCallBack != undefined){
+                    closeCallBack();
+                }
+            }
+        }
+        ]
+    });
+}

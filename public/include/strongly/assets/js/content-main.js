@@ -89,6 +89,9 @@
 							$("body").removeClass("navPanel-visible");
 							loadPage($(this).attr("href"),"pagescontent");
 						}
+						if($(this).prop("class").search("logout") != -1){
+					    	logoutEven();
+					    }
 						return false;
 					});
 

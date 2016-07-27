@@ -155,23 +155,33 @@ function insertDialog(treeViewData,clickObject,modifyStatus){
                     var sequence = 0;
                     if(modifyStatus){
                         data.parent = treeViewData.parent;
-                        data.uid = treeViewData.uid;
-                        if(treeViewData.parent == 0){
-                            sequence = $(clickObject).index();
-                        }else{
-                            sequence = $(clickObject.parent()).index()
-                        }
-                        
+                        data.uid = treeViewData.uid;                        
                     }else{
                         if(treeViewDataIsNull){
-                            sequence = $( $("#treeArea").find(".treeViewContent")[0] ).find(".roots").length;
                             data.parent = 0;
                         }else{
                             data.parent = treeViewData.uid;
                         }
                     }
+
+                    if(treeViewData != undefined){
+                        if(treeViewData.parent == 0){
+                            $(clickObject).find(".treeViewContent").filter(function(){
+                                var parent = $(this).parent().prop("class").search("roots");
+                                if(parent != -1){
+                                    sequence++;
+                                }
+                            });
+                        }else{
+                            sequence = $(clickObject.parent()).index();
+
+                        }
+                    }else{
+                        sequence = $(clickObject.parent()).index();
+                    }
                     data.sequence = sequence;
-                    console.log(data);
+                    // console.log(data);
+                    // return;
                     // if(uid != undefined){
                     //     data.uid = uid;
                     //      // console.log(data);

@@ -13,6 +13,16 @@
   margin-left: -100px;
   margin-top: -100px;
 }
+
+.loading-img-small{
+  position: absolute;
+  top:50%;
+  left: 50%;
+  width: 50px;
+  margin-left: -50px;
+  margin-top: -25px;
+}
+
 .content-loading-img{
 	position: absolute;
 	top:50%;
@@ -36,6 +46,10 @@
 
 .f20{
 	font-size: 20px;
+}
+
+.f25{
+	font-size: 25px;
 }
 
 .f30{
@@ -503,4 +517,12 @@ textarea{
 }
 .flowBtn{
 	display: inline-block;
+}
+.signstatusArea{
+	overflow-x: scroll;
+	overflow-y: hidden;
+    height: 130px;
+}
+.dateSelectArea{
+	padding-left: 25%;
 }

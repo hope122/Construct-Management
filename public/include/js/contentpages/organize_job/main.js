@@ -20,7 +20,6 @@ function getOUData(uid){
         sendData.data.iUid = uid;
     }
     // ＡＰＩ呼叫
-    // $.getJSON(ctrlAdminAPI + "GetData_AssTypePosition", sendData ).done(function(rs){
     $.getJSON(wrsUrl, sendData ).done(function(rs){
         $("#grid").empty();
         if(rs.Status){
@@ -53,11 +52,11 @@ function putDataEmptyInfo(putArea){
 }
 
 // 放資料
-function putDataToPage(data, onlyData, resultDAta){
+function putDataToPage(data, onlyData){
     if(typeof onlyData == "undefined"){
         onlyData = false;
     }
-    // console.log(data);
+
     // 畫面設定值
     var option = {styleKind:"list",style:"1grid-modify"};
     // 取得畫面樣式
@@ -70,7 +69,7 @@ function putDataToPage(data, onlyData, resultDAta){
                 firstItem.html(content.name);
                 // 修改
                 $(pageStyleObj).find(".fa-pencil-square-o").click(function(){
-                    insertDialog(content.uid, content.name, firstItem);
+                    insertDialog(content, firstItem);
                 });
 
                 // 刪除
@@ -89,7 +88,7 @@ function putDataToPage(data, onlyData, resultDAta){
 
             // 修改
             $(pageStyleObj).find(".fa-pencil-square-o").click(function(){
-                insertDialog(resultDAta.Data, data.name, firstItem);
+                insertDialog(data, firstItem);
             });
 
             // 刪除
@@ -109,7 +108,7 @@ function putDataToPage(data, onlyData, resultDAta){
 }
 
 // 新增&修改Dialog
-function insertDialog(uid, name, modifyItem){
+function insertDialog(modifyObj, modifyItem){
     if(name == undefined){
         name = "";
     }
@@ -117,7 +116,7 @@ function insertDialog(uid, name, modifyItem){
         modifyItem = null;
     }
     var saveBtn = "";
-    if(uid != undefined){
+    if(modifyObj != undefined){
         title = "修改職務";
         saveBtn = "修改";
     }else{
@@ -130,20 +129,30 @@ function insertDialog(uid, name, modifyItem){
 
     $("#insertDialog").bsDialog({
         title:title,
+        autoShow: true,
         start: function(){
-          var option = {styleKind:"input",style:"text-help-only"};
+          var option = {styleKind:"org-job",style:"insert"};
           getStyle(option,function(insertPage){
             var insertPageObj = $.parseHTML(insertPage);
             
             $(insertPageObj).removeClass("row").addClass("contents");
-            $(insertPageObj).find(".control-label").text("職務名稱");
-            $(insertPageObj).find("input:text").val(name);
-            
-            if(uid != undefined){
-                $("<input>").attr("type","hidden").prop("id","uid").val(uid).appendTo(insertPageObj);
+            var nameArea = $(insertPageObj).find("#name");
+            if(modifyObj != undefined){
+                nameArea.val(modifyObj.name);
+                modifySetPositionBtn(modifyObj.uid, $(insertPageObj));
+
             }
+
+            $(insertPageObj).find("#referencePositionBtn").click(function(){
+                var isClick = $(this).prop("class").search("fa-check-square-o");
+                if(isClick == -1){
+                    $(this).removeClass("fa-square-o").addClass("fa-check-square-o");
+                }else{
+                    $(this).removeClass("fa-check-square-o").addClass("fa-square-o");
+                }
+            });
+            
             $("#insertDialog").find(".modal-body").html(insertPageObj);
-            $("#insertDialog").bsDialog("show");
             $("body").find(".modal-backdrop")
             // getQCTableTypeList("tableTypeTab","tableType",true);
 
@@ -154,11 +163,31 @@ function insertDialog(uid, name, modifyItem){
                 text: saveBtn,
                 className: "btn-success",
                 click: function(){
-                    if(uid == undefined){
-                        $("#grid").find(".date-empty").remove();
+                    var sendData = getUserInput("insertDialog");
+                    isEmpty = false;
+                    $.each(sendData, function(i, content){
+                        if( i== "name"){
+                            if(!$.trim(content)){
+                                $("#insertDialog").find("#"+i).addClass("item-bg-danger");
+                                isEmpty = true;
+                            }
+                        }
+                    });
+                    if(!isEmpty){
+                        sendData.sys_code = sys_code;
+
+                        if(modifyObj == undefined){
+                            $("#grid").find(".date-empty").remove();
+                        }else{
+                            sendData.uid = modifyObj.uid;
+                        }
+
+                        // 分文權限
+                        var referencePosition = $("#insertDialog").find("#referencePositionBtn").prop("class").search("fa-check-square-o");
+                        sendData.referencePosition = referencePosition
+                        saveData(sendData, modifyItem);
+                        $("#insertDialog").bsDialog("close");
                     }
-                    saveData(modifyItem);
-                    $("#insertDialog").bsDialog("close");
                 }
             },
             {
@@ -174,36 +203,64 @@ function insertDialog(uid, name, modifyItem){
 }
 
 // 儲存
-function saveData(modifyItem){
-    
-    var name = $("#insertDialog").find("input:text").val(), 
-    uid = $("#insertDialog").find("#uid").val();
-    uid = (uid) ? parseInt(uid): 0;
-    // console.log(uid);
+function saveData(sendData, modifyItem){
     var method = "Insert_AssTypePosition";
     
-    // console.log(sendData);
-    // return;
-    if(uid != 0){
+    if(sendData.uid != undefined){
         method = "Update_AssTypePosition";
-        modifyItem.html(name);
+        modifyItem.html(sendData.name);
     }
-    var sendData = {
+    var sendObj = {
         api: "AssTypePosition/"+method,
         threeModal: true,
-        data: {
-            uid: uid,
-            name: name,
-            sys_code: sys_code
-        }
+        data: sendData
     }
-    $.post(wrsUrl,sendData,function(rs){
+    $.post( wrsUrl, sendObj, function(rs){
         var rs = $.parseJSON(rs);
         // 新增
-        if(uid == 0){
-            sendData.data.uid = rs.Data;
-            putDataToPage(sendData.data, true, rs);
+        if(sendData.uid == undefined){
+            sendData.uid = rs.Data;
+            putDataToPage(sendData, true);
         }
+        setPosition(sendData);
+    });
+}
+
+function setPosition(sendData){
+    var method = "setReferencePositionInsert";
+    
+    if(sendData.referencePosition == -1){
+        method = "setReferencePositionDelete";
+    }
+
+    var sendObj = {
+        api: referenceAPI+method,
+        data: {
+            pos_id: sendData.uid,
+            code_id: sys_code,
+            createId: userID
+        }
+    }
+    $.post( wrsUrl, sendObj, function(rs){
+        var rs = $.parseJSON(rs);
+    });
+}
+
+function modifySetPositionBtn(uid,itemObj){
+    var sendObj = {
+        api: referenceAPI+"getReferencePosition",
+        data: {
+            pos_id: uid,
+        }
+    }
+    $.getJSON(wrsUrl, sendObj, function(rs){
+        if(rs.status){
+            if(parseInt(rs.whether)){
+                itemObj.find("#referencePositionBtn").removeClass("fa-square-o").addClass("fa-check-square-o");
+            }
+        }
+        itemObj.find("#loader").remove();
+        itemObj.find("#postitonArea").show();
     });
 }
 

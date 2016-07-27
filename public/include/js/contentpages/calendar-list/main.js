@@ -69,14 +69,20 @@ function putDataToPage(data, putArea, onlyData){
                 var PricipalID = content.MyKeypoint.Pricipal.Uid;
                 var itemType = 2;
                 if(DesigneeID != PricipalID ){
-                    itemType = 1;
                     if(DesigneeID == userID && PricipalID != userID){
                         desiStr = "指派";
                         // $(pageStyleObj).find(".fa-check")
                         // .remove();
+                        if(!content.MyKeypoint.Complete || content.MyKeypoint.Complete == 2){
+                            $(pageStyleObj).find(".fa-check").remove();
+                        }
                     }else{
+                        itemType = 1;
                         desiStr = "被指";
                         $(pageStyleObj).find(".fa-trash-o").remove();
+                        if(content.MyKeypoint.Complete == 1 || content.MyKeypoint.Complete == 2){
+                            $(pageStyleObj).find(".fa-check").remove();
+                        }
                     }
                 }
 
@@ -130,7 +136,8 @@ function putDataToPage(data, putArea, onlyData){
                 $(pageStyleObj).find(".fa-trash-o").click(function(){
                     deleteData(content.Uid, $(this).parents(".list-items").parent());
                 });
-                if(content.CompletionDate){
+
+                if(content.MyKeypoint.Complete == 2){
                     $(pageStyleObj).find(".fa-pencil-square-o").remove();
                     $(pageStyleObj).find(".fa-check").remove();
                 }
@@ -166,7 +173,7 @@ function putDataToPage(data, putArea, onlyData){
             }
             // 事項標題可以點開觀看
             var Desc = $("<a>").prop("href","#").text(data.Desc).click(function(){
-                console.log(data);
+                // console.log(data);
                 calendarView(data, $(pageStyleObj));
                 return false;
             });
@@ -206,7 +213,8 @@ function putDataToPage(data, putArea, onlyData){
             }
             
             if(putArea.find("div").length){
-                putArea.find(".dataContent").eq(-1).addClass("list-items-bottom").after(pageStyleObj);
+                // putArea.find(".dataContent").eq(-1).addClass("list-items-bottom").after(pageStyleObj);
+                putArea.find(".dataContent").eq(0).addClass("list-items-bottom").before(pageStyleObj);
             }else{
                 $(pageStyleObj).removeClass("list-items-bottom").appendTo(putArea);
 
@@ -271,15 +279,14 @@ function insertDialog(modifyObj, modifyItem){
                 var insertPageObj = $.parseHTML(insertPage);
                 var isModify = false;
                 var detailPutArea = $(insertPageObj).find(".list-items").eq(6).find(".control-label").eq(1);
-
+                
+                $(".ui-datepicker").remove();
                 var dateOptionStart = {
                     dateFormat: "yy-mm-dd",
-                    
-                    showOn: "button",
-                    buttonText: '<i class="fa fa-calendar fa-lg mouse-pointer send-btn"></i>',
                     onSelect: function(dateText, inst) {
                         // end_date_content
                         $(insertPageObj).find("#StartDate_content").removeClass("item-bg-danger").text(dateText);
+                        $(insertPageObj).find("#StartDate").hide();
 
                     },
                     minDate: 0
@@ -287,19 +294,24 @@ function insertDialog(modifyObj, modifyItem){
 
                 var dateOptionEnd = {
                     dateFormat: "yy-mm-dd",
-                    
-                    showOn: "button",
-                    buttonText: '<i class="fa fa-calendar fa-lg mouse-pointer send-btn"></i>',
                     onSelect: function(dateText, inst) {
                         // end_date_content
                         $(insertPageObj).find("#EndDate_content").removeClass("item-bg-danger").text(dateText);
-
+                        $(insertPageObj).find("#EndDate").hide();
                     },
                     minDate: 0
                 };
 
-                $(insertPageObj).find("#StartDate").datepicker(dateOptionStart);
-                $(insertPageObj).find("#EndDate").datepicker(dateOptionEnd);
+                $(insertPageObj).find("#StartDate").hide().datepicker(dateOptionStart);
+                $(insertPageObj).find("#EndDate").hide().datepicker(dateOptionEnd);
+
+                $(insertPageObj).find("#StartDateCalendar").click(function(){
+                    $(insertPageObj).find("#StartDate").show();
+                });
+                $(insertPageObj).find("#EndDateCalendar").click(function(){
+                    $(insertPageObj).find("#EndDate").show();
+                });
+
                 var selectWorkID;
                 if(modifyObj != undefined){
                     // 指派人
@@ -436,10 +448,12 @@ function insertDialog(modifyObj, modifyItem){
                 }else{
                     $(insertPageObj).find("#addDetail").remove();
                     var historiesArea = $(insertPageObj).find(".list-items").eq(7).find(".control-label").eq(1);
-                    if(modifyObj.Histories.length){
-                        $.each(modifyObj.Histories, function(historiesIndex, historiesContent){
-                            createDetail(detailPage, historiesContent, historiesArea, isModify, false,false);
-                        });
+                    if(modifyObj.Histories != undefined){
+                        if(modifyObj.Histories.length){
+                            $.each(modifyObj.Histories, function(historiesIndex, historiesContent){
+                                createDetail(detailPage, historiesContent, historiesArea, isModify, false,false);
+                            });
+                        }
                     }
 
                     // 增加辦況
@@ -460,6 +474,13 @@ function insertDialog(modifyObj, modifyItem){
         },
         button:[
             {
+                text: "取消",
+                className: "btn-default-font-color",
+                click: function(){
+                    $("#insertDialog").bsDialog("close");
+                }
+            },
+            {
                 text: saveBtn,
                 className: "btn-success",
                 click: function(){
@@ -475,7 +496,7 @@ function insertDialog(modifyObj, modifyItem){
                                     $("#insertDialog").find("#"+i+"_content").addClass("item-bg-danger").text("尚未選擇日期");
                                 }
                                 isEmptyInput = true;
-                                console.log(i, content);
+                                // console.log(i, content);
                             }
                         }
                     });
@@ -547,14 +568,7 @@ function insertDialog(modifyObj, modifyItem){
                     }
                     // console.log(sendObj);
                 }
-            },
-            {
-                text: "取消",
-                className: "btn-default-font-color",
-                click: function(){
-                    $("#insertDialog").bsDialog("close");
-                }
-            },
+            }
         ]
     });
 
@@ -806,6 +820,9 @@ function saveHistories(listID,Desc, area, modifyObj){
             trash.remove();
             $(area).find("input:text").parent().text(Desc);
             if(modifyObj){
+                if(modifyObj.modifyObj.Histories == undefined){
+                    modifyObj.modifyObj.Histories = [];
+                }
                 modifyObj.modifyObj.Histories.push(sendObj);
                 $(modifyObj.modifyItem).find(".fa-pencil-square-o").unbind("click").click(function(){
                     insertDialog( modifyObj.modifyObj , $(modifyObj.modifyItem) );
