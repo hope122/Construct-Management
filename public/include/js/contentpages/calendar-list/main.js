@@ -279,15 +279,14 @@ function insertDialog(modifyObj, modifyItem){
                 var insertPageObj = $.parseHTML(insertPage);
                 var isModify = false;
                 var detailPutArea = $(insertPageObj).find(".list-items").eq(6).find(".control-label").eq(1);
-
+                
+                $(".ui-datepicker").remove();
                 var dateOptionStart = {
                     dateFormat: "yy-mm-dd",
-                    
-                    showOn: "button",
-                    buttonText: '<i class="fa fa-calendar fa-lg mouse-pointer send-btn"></i>',
                     onSelect: function(dateText, inst) {
                         // end_date_content
                         $(insertPageObj).find("#StartDate_content").removeClass("item-bg-danger").text(dateText);
+                        $(insertPageObj).find("#StartDate").hide();
 
                     },
                     minDate: 0
@@ -295,19 +294,24 @@ function insertDialog(modifyObj, modifyItem){
 
                 var dateOptionEnd = {
                     dateFormat: "yy-mm-dd",
-                    
-                    showOn: "button",
-                    buttonText: '<i class="fa fa-calendar fa-lg mouse-pointer send-btn"></i>',
                     onSelect: function(dateText, inst) {
                         // end_date_content
                         $(insertPageObj).find("#EndDate_content").removeClass("item-bg-danger").text(dateText);
-
+                        $(insertPageObj).find("#EndDate").hide();
                     },
                     minDate: 0
                 };
 
-                $(insertPageObj).find("#StartDate").datepicker(dateOptionStart);
-                $(insertPageObj).find("#EndDate").datepicker(dateOptionEnd);
+                $(insertPageObj).find("#StartDate").hide().datepicker(dateOptionStart);
+                $(insertPageObj).find("#EndDate").hide().datepicker(dateOptionEnd);
+
+                $(insertPageObj).find("#StartDateCalendar").click(function(){
+                    $(insertPageObj).find("#StartDate").show();
+                });
+                $(insertPageObj).find("#EndDateCalendar").click(function(){
+                    $(insertPageObj).find("#EndDate").show();
+                });
+
                 var selectWorkID;
                 if(modifyObj != undefined){
                     // 指派人
@@ -470,6 +474,13 @@ function insertDialog(modifyObj, modifyItem){
         },
         button:[
             {
+                text: "取消",
+                className: "btn-default-font-color",
+                click: function(){
+                    $("#insertDialog").bsDialog("close");
+                }
+            },
+            {
                 text: saveBtn,
                 className: "btn-success",
                 click: function(){
@@ -557,14 +568,7 @@ function insertDialog(modifyObj, modifyItem){
                     }
                     // console.log(sendObj);
                 }
-            },
-            {
-                text: "取消",
-                className: "btn-default-font-color",
-                click: function(){
-                    $("#insertDialog").bsDialog("close");
-                }
-            },
+            }
         ]
     });
 
