@@ -38,7 +38,7 @@ function getData(areaID){
     var sendData = {
         api: method,
         data:{
-            userId:userID,
+            userId:userID
             sysCodeId:sys_code
         }
     };
