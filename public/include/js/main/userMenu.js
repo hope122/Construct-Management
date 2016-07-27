@@ -7,6 +7,7 @@ function getMenus(loginInfo){
   }
 
   meunData = processMenuTreeDataOnly(menus.data,options);
+  // console.log(meunData);
   $("#menus").empty();
   $.each(meunData,function(i, content){
     content.find("a").click(function(){

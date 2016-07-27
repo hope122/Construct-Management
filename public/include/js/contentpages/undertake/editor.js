@@ -154,6 +154,8 @@ function insertDialog(modifyObj, modifyItem){
 
 }
 
+// ---------以上為擬文動作----------------
+
 // 收文新增時開啟的動作要做的事情
 function referenceInsertStart(modifyObj, modifyItem){
     var option = {styleKind:"received-issued",style:"reference-insert"};
@@ -189,7 +191,7 @@ function referenceInsertStart(modifyObj, modifyItem){
         }
         // 放到畫面中
         $(insertPageObj).appendTo($("#insertDialog").find(".modal-body"));
-        
+
         // getQCTableTypeList("tableTypeTab","tableType",true);
     });
 }

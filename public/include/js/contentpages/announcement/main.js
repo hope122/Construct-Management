@@ -1,16 +1,8 @@
 var sys_code = userLoginInfo.sysCode;
 var userID = userLoginInfo.userID;
 $(function(){
-    getCalendarData();
-    $("#systems").click(function(){
-        getCalendarData(7,"systems-content");
-
-    });
-    $("#total").click(function(){
-        getCalendarData(1,"total-content");
-
-    });
-    tabCtrl("totalTab");
+    // getCalendarData();
+    tabContentCtrl($("#announcementTab"));
 });
 function getCalendarData(type,areaID,uid){
     $("#"+areaID).find(".dataContent").remove();

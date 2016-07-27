@@ -27,3 +27,20 @@ function tabCtrl(itemID,option){
         return false;
     });
 }
+
+// 共用顯示區域
+function tabContentCtrl(itemID){
+	//設定功能頁籤
+	var item;
+	if(typeof itemID == "string"){
+	  	item = $("#"+itemID);
+  	}else{
+  		item = $(itemID);
+  	}
+  	item.find("li a").click(function(){
+  		var contentID = $(this).prop("id");
+        item.find("li").removeClass("active");
+        $(this).parent().addClass("active");
+        return false;
+    });
+}
