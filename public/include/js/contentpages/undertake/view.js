@@ -1,6 +1,6 @@
 // 收文預覽
 function referenceViewDialog(modifyObj){
-    console.log(modifyObj);
+    // console.log(modifyObj);
     $("#referenceViewDialog").remove();
     var referenceViewDialog = $("<div>").prop("id","referenceViewDialog");
     referenceViewDialog.appendTo("body");
@@ -25,6 +25,7 @@ function referenceViewDialog(modifyObj){
 
 // 收文預覽時開啟的動作要做的事情
 function referenceViewStart(modifyObj){
+    console.log(modifyObj);
     var option = {styleKind:"received-issued",style:"reference-view"};
     getStyle(option,function(insertPage){
         var insertPageObj = $.parseHTML(insertPage);
@@ -40,7 +41,7 @@ function referenceViewStart(modifyObj){
 		};
 
 		$.getJSON(wrsUrl, sendData).done(function(rs){
-			console.log(rs.data[0]);
+			// console.log(rs.data[0]);
 			
 			if(rs.status && rs.data != null){
 				$.each(rs.data[0], function(i, content){
@@ -53,7 +54,10 @@ function referenceViewStart(modifyObj){
                     }
 				})
 				
-			}
+			}else{
+                msgDialog("無法取得「"+modifyObj.subject+"」內容");
+                $("#referenceViewDialog").bsDialog("close");
+            }
 		});
         // 放到畫面中
         $(insertPageObj).appendTo($("#referenceViewDialog").find(".modal-body"));
