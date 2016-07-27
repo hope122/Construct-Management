@@ -44,7 +44,7 @@ function getData(areaID){
     };
 
     $.getJSON(wrsUrl, sendData).done(function(rs){
-        // console.log(rs);
+        console.log(rs);
         
         if(rs.status && rs.data != null){
             putDataToPage(rs.data, $("#"+areaID));
@@ -52,6 +52,8 @@ function getData(areaID){
         }else{
             putEmptyInfo($("#"+areaID));
         }
+    }).fail(function(){
+        putEmptyInfo($("#"+areaID));
     });
 }
 
@@ -113,9 +115,11 @@ function listDataInfoToShow(putArea, pageStyleObj, content, isPutToPage){
     // 狀態
     $(pageStyleObj).find(".list-items").eq(4).text(content.statusName);
 
+    // 閱讀按鈕-共通的
+    var readBtn = $(pageStyleObj).find(".fa-file-text-o");
+
     if(tabCode == 1){
-        // 閱讀按鈕
-        var readBtn = $(pageStyleObj).find(".fa-file-text-o");
+        
         // 分文按鈕
         var pushDocBtn = $(pageStyleObj).find(".fa-sitemap");
         // 開始做按鈕
@@ -209,6 +213,12 @@ function listDataInfoToShow(putArea, pageStyleObj, content, isPutToPage){
         $(pageStyleObj).find(".fa-list-alt").click(function(){
             signStatusViewDialog(content);
         });
+
+        // 文件預覽
+        readBtn.click(function(){
+            sendDocViewDialog(content);
+        });
+
         // 修改
         $(pageStyleObj).find(".fa-pencil-square-o").click(function(){
             insertDialog( content, $(pageStyleObj) );
@@ -313,7 +323,7 @@ function signInfoAndDate(sendObj, modifyItem,putFormArea){
             }
             getStyle(option,function(pageStyle){
                 var pageStyleObj = $.parseHTML(pageStyle);
-                
+
                 $(".ui-datepicker").remove();
                 var dateOption = {
                     dateFormat: "yy-mm-dd",
